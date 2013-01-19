@@ -1,0 +1,98 @@
+"------------------------------------------------------------------------------------- 
+" コンパイラーオプション
+let s:mingw = 'E:/MinGW/lib/gcc/mingw32/4.7.2/include'
+let mingwdir = 
+		\s:mingw.','.
+		\s:mingw.'/c++,'.
+		\s:mingw.'/c++/mingw32,'.
+		\s:mingw.'/c++/backward,'.
+		\'E:/MinGW/include,'
+let widgetdir = '
+		\E:/MinGW/msys/1.0/local/include/wx-2.9,
+		\E:/MinGW/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9,
+		\'
+let localdir = 	'
+		\E:/MinGW/msys/1.0/local/include,
+		\'
+let Qtdir = '
+		\E:/Qt/4.8.1/include,
+		\E:/Qt/4.8.1/include/ActiveQt,
+		\E:/Qt/4.8.1/include/Qt,
+		\E:/Qt/4.8.1/include/Qt3Support,
+		\E:/Qt/4.8.1/include/QtCore,
+		\E:/Qt/4.8.1/include/QtDBus,
+		\E:/Qt/4.8.1/include/QtDeclarative,
+		\E:/Qt/4.8.1/include/QtDesigner,
+		\E:/Qt/4.8.1/include/QtGui,
+		\E:/Qt/4.8.1/include/QtHelp,
+		\E:/Qt/4.8.1/include/QtMeeGoGraphicsSystemHelper,
+		\E:/Qt/4.8.1/include/QtMultimedia,
+		\E:/Qt/4.8.1/include/QtNetwork,
+		\E:/Qt/4.8.1/include/QtOpenGL,
+		\E:/Qt/4.8.1/include/QtOpenVG,
+		\E:/Qt/4.8.1/include/QtScript,
+		\E:/Qt/4.8.1/include/QtScriptTools,
+		\E:/Qt/4.8.1/include/QtSql,
+		\E:/Qt/4.8.1/include/QtSvg,
+		\E:/Qt/4.8.1/include/QtTest,
+		\E:/Qt/4.8.1/include/QtUiTools,
+		\E:/Qt/4.8.1/include/QtWebKit,
+		\E:/Qt/4.8.1/include/QtXml,
+		\E:/Qt/4.8.1/include/QtXmlPatterns,
+		\E:/Qt/4.8.1/include/phonon,
+		\E:/Qt/4.8.1/include/phonon_compat,
+		\'
+let mingwoption = 
+		\' -I '.s:mingw.
+		\' -I '.s:mingw.'/c++'.
+		\' -I '.s:mingw.'/c++/mingw32'.
+		\' -I '.s:mingw.'/c++/backward'.
+		\' -I E:/MinGW/include'
+let msvcoption = '
+		\ -I "C:/Program Files/Microsoft Visual Studio 10.0/VC/include"
+		\ -I "C:/Program Files/Microsoft SDKs/Windows/v7.0A/Include"
+		\ -I "C:/Program Files/Microsoft Visual Studio 10.0/VC/atlmfc/include"
+		\ -I "C:/Program Files/Microsoft SDKs/Microsoft Sync Framework/v1.0/include"
+		\ -DWIN32 -D_WINDOWS -DNDEBUG -D_MSC_VER=1600 -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500
+		\ -fms-extensions -fmsc-version=1600 -fgnu-runtime
+		\'
+let widgetoption = '
+		\ -I E:/MinGW/msys/1.0/local/include/wx-2.9
+		\ -I E:/MinGW/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9
+		\'
+let localoption ='
+		\ -I E:/MinGW/msys/1.0/local/include
+		\'
+		
+let Qtoption = '
+		\ -I E:/Qt/4.8.1/include
+		\ -I E:/Qt/4.8.1/include/ActiveQt
+		\ -I E:/Qt/4.8.1/include/Qt
+		\ -I E:/Qt/4.8.1/include/Qt3Support
+		\ -I E:/Qt/4.8.1/include/QtCore
+		\ -I E:/Qt/4.8.1/include/QtDBus
+		\ -I E:/Qt/4.8.1/include/QtDeclarative
+		\ -I E:/Qt/4.8.1/include/QtDesigner
+		\ -I E:/Qt/4.8.1/include/QtGui
+		\ -I E:/Qt/4.8.1/include/QtHelp
+		\ -I E:/Qt/4.8.1/include/QtMeeGoGraphicsSystemHelper
+		\ -I E:/Qt/4.8.1/include/QtMultimedia
+		\ -I E:/Qt/4.8.1/include/QtNetwork
+		\ -I E:/Qt/4.8.1/include/QtOpenGL
+		\ -I E:/Qt/4.8.1/include/QtOpenVG
+		\ -I E:/Qt/4.8.1/include/QtScript
+		\ -I E:/Qt/4.8.1/include/QtScriptTools
+		\ -I E:/Qt/4.8.1/include/QtSql
+		\ -I E:/Qt/4.8.1/include/QtSvg
+		\ -I E:/Qt/4.8.1/include/QtTest
+		\ -I E:/Qt/4.8.1/include/QtUiTools
+		\ -I E:/Qt/4.8.1/include/QtWebKit
+		\ -I E:/Qt/4.8.1/include/QtXml
+		\ -I E:/Qt/4.8.1/include/QtXmlPatterns
+		\ -I E:/Qt/4.8.1/include/QtXmlPatterns
+		\ -I E:/Qt/4.8.1/include/phonon
+		\ -I E:/Qt/4.8.1/include/phonon_compat
+		\'
+
+let includecppdir = mingwdir.widgetdir.localdir.Qtdir
+let includecppoption = mingwoption.widgetoption.localoption.Qtoption

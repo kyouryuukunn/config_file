@@ -1,0 +1,87 @@
+"入力モード時、ステータスラインのカラーを変更
+augroup InsertHook
+	autocmd!
+	autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
+	autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
+augroup END
+"ステータスラインに状態表示
+set laststatus=2
+set statusline=%<%f\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=\ (%v,%l)/%L%8P\ 
+"不可視文字の表示
+set list listchars=tab:^_,trail:_
+" ビープの代わりにビジュアルベル（画面フラッシュ）を使う--------------------
+set visualbell
+"日本語の行の連結時には空白を入力しない。
+set formatoptions+=mM
+"タブ数
+set tabpagemax=1000
+" 折り返し検索をしない
+set nowrapscan
+"バッファを隠す
+set hidden
+"行番号表示
+set number
+"タイトル表示
+set title
+"コマンド表示
+set showcmd
+"ルーラー表示
+set ruler
+"クリップボード共有
+set clipboard+=unnamed
+set display=lastline
+set ambiwidth=double
+set ignorecase
+set smartcase
+set incsearch
+set wildmenu
+" 改行時にコメントしない
+set formatoptions-=ro
+
+set backspace=indent,eol,start
+"l を <Right>に置き換えて、折りたたみを l で開くことができるようにする。
+if has('folding')
+  nnoremap <expr> l foldlevel(line('.')) ? "\<Right>zo" : "\<Right>"
+endif
+"括弧等を補完。
+inoremap <buffer> " ""<LEFT>
+inoremap <buffer> ' ''<LEFT>
+inoremap <buffer> ( ()<LEFT>
+inoremap <buffer> [ []<LEFT>
+"inoremap { {}<LEFT>
+"ビジュアルモードでのインデント操作を楽に
+vnoremap < <gv
+vnoremap > >gv
+"検索で勝手に飛ばないようにする
+nnoremap * *N
+nnoremap # #N
+"ハイライト停止
+nnoremap <ESC><ESC> :nohlsearch<CR>
+"終了
+";と;を入れ替える
+nnoremap : ;
+nnoremap ; :
+vnoremap : ;
+vnoremap ; :
+"貼り付け
+inoremap <C-v> <C-o>p
+nnoremap ,w :w<CR>
+"grep=======================================================================
+set grepprg=jvgrep
+"set grepprg=grep\ -nH
+"自動でQuickfixを開く
+"autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
+"Quickfix用設定
+autocmd FileType qf nnoremap <buffer> q :ccl<CR>
+"Quickfix
+noremap <C-w>, :copen<CR>
+"連番機能coで起動===========================================================
+nnoremap <silent> co :ContinuousNumber <C-a><CR>
+vnoremap <silent> co :ContinuousNumber <C-a><CR>
+command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
+"十進数優先にする。必要ならset nf=octal,hex
+set nf=alpha
+
+iab <expr> lin repeat('-',90 - col('.'))
+
+set whichwrap=b,s,h,l,<,>,[,]

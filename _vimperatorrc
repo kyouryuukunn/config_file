@@ -1,0 +1,3 @@
+noremap B :dialog bookmarks<CR>
+"site:åüçı
+noremap <S-K> y tsite:<C-v> 
