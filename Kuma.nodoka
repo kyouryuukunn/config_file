@@ -121,7 +121,7 @@ key M0-*CircumflexAccent = *F12
 Key M0-*a                = C-S-Esc
 Key M0-*s                = $WindowSelectOpen
 Key M0-*d                = *Tab
-Key M0-*f                = &WindowClose
+Key M0-*f                = A-F4
 Key M0-*g                = *End
 Key M0-*b                = *Home
 Key M0-*Semicolon        = *PageDown
@@ -159,7 +159,7 @@ window mintty /mintty\.exe/ : Global
 key C-*V = S-Insert
 #key M7-*MButton = S-Insert
 #------------------------------------------------------------------------------------- 
-window gvim /gvim\.exe/ : Global # {{{
+#window gvim /gvim\.exe/ : Global # {{{
 #key M8-C-I = C-I
 #key M8-M9-C-S-I = C-S-I
 #key M8-M6-C-I = C-I

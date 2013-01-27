@@ -24,9 +24,10 @@ set columns=120
 if has('win32')
   " Windows用
   "set guifont=Meiryoke_Gothic:h11:cSHIFTJIS
-  "set guifont=Ricty:h13:cSHIFTJIS
+  set guifont=Ricty:h12:cSHIFTJIS
+  "set guifontwide=Ricty:h13:cSHIFTJIS
   "set guifont=MS_Mincho:h12:cSHIFTJIS
-  set guifont=Osaka－等幅-NBAA:h12
+  "set guifont=Osaka－等幅-NBAA:h12
   " 行間隔の設定
   set linespace=3
   " 一部のUCS文字の幅を自動計測して決める

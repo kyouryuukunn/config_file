@@ -488,7 +488,7 @@ let g:watchdogs_check_BufWritePost_enables.d = 1
 nnoremap <Leader>w :W3mSplit <C-R><C-W><CR>
 augroup w3m
 	autocmd!
-	autocmd FileType w3m nnoremap q :W3mClose<CR>
+	autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
 	autocmd FileType text	nnoremap <buffer><silent> <C-k> :<C-u>W3mSplit alc <C-r><C-w><CR>
 	autocmd FileType python	nnoremap <buffer><silent> <C-k> :<C-u>W3mSplit python <C-r><C-w><CR>
 augroup end " }}}
@@ -1002,8 +1002,11 @@ autocmd FileType qf nnoremap <buffer> R :Qfreplace<CR>
 autocmd FileType qfreplace nnoremap <buffer> <Space>w :w<CR>:close<CR>:cclose<CR>
 " --------------------------------------------------------------------------
 "easy-motion
-let g:EasyMotion_leader_key = '!'
+let g:EasyMotion_leader_key = '<tab>'
 "------------------------------------------------------------------------------
+" powerline
+"source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim
+" --------------------------------------------------------------------------
 "}}}
 "------------------------------------------------------------------------------
 " skk {{{
