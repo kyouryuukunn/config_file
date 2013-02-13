@@ -9,11 +9,12 @@ if has('win32') || has('win64')
   let $HELP = $DOTVIM.'/help'
   let $LLVM = expand('e:/llvm/bin')
   "let $DMD = expand('e:/dmd2/windows/bin')
+  let $PYTHON2 = expand('C:/Python27;C:/Python27/Scripts')
   let $PYTHON3 = expand('C:/Python33;C:/Python33/Scripts')
   let $GIT = expand('e:/Soft/Git/bin')
   let $MSYS = expand('e:/MinGW/bin')
   let $CYGWIN = expand('e:/cygwin/bin')
-  let $PATH = $PATH . ";".$MSYS.";".$LLVM.';'.$PYTHON3.';'.$GIT.';'.$CYGWIN
+  let $PATH = $PATH . ";".$MSYS.";".$LLVM.';'.$PYTHON2.';'.$GIT.';'.$CYGWIN
 else
   let $DROPBOX = expand('~/Dropbox/etc')
   let $DOTVIM = expand('~/.vim')
@@ -35,13 +36,18 @@ augroup END
 set laststatus=2
 set statusline=%F\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%y[buffer:%n]%=\ (%v,%l)/%L%8P\
 "不可視文字の表示
-"set list listchars=tab:^_,trail:_  " }}}
+set list listchars=tab:^_,trail:_  " }}}
 "------------------------------------------------------------------------------
 "スワップ,バックアップ保存場所 {{{
 if !g:portable
 	set backup
-	set backupdir=D:/App/back
-	set directory=D:/App/swap
+	if has('win32') || has('win64')
+		set backupdir=D:/App/back
+		set directory=D:/App/swap
+	else
+		set backupdir=~/back
+		set directory=~/swap
+	endif
 	"永続アンドゥ
 	set undofile
 	" アンドゥの保存場所(7.3)
@@ -347,8 +353,17 @@ augroup END " }}}
 " 常に開いているファイルと同じディレクトリをカレントディレクトリにする {{{
 augroup group_vimrc_cd
     autocmd!
-    autocmd BufEnter * execute ":lcd " . (isdirectory(expand("%:p:h")) ? expand("%:p:h") : "")
-augroup END " }}}
+    autocmd BufEnter * call s:MoveNowDir()
+augroup END
+
+function! s:MoveNowDir()
+	if isdirectory(expand("%:p:h"))
+		if getcwd() == expand("%:p:h") || getcwd() == expand("$VIM")
+			exec ":lcd ". expand("%:p:h")
+		endif
+	endif
+endfunction
+ " }}}
 "-------------------------------------------------------------------------------------
 "" 外部ファイル読み込み {{{
 source $DROPBOX/_includevim

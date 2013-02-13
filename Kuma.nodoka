@@ -35,6 +35,8 @@ key e = W-_6
 key n = W-_7
 key s = W-_8
 key d = W-_9
+key d = W-_9
+key Semicolon = &ShellExecute("open", "E:\Soft\Sylpheed\sylpheed.exe",,, ShowNormal) #mail
 
 key *h = W-*Left
 key *j = W-*Down
@@ -72,9 +74,14 @@ key M0-M1-C-*Apps        = Apps
 #key *–³•ÏŠ·             = Enter
 #key C-*–³•ÏŠ·           = C-Enter
 #key S-*–³•ÏŠ·           = S-Enter
-#key C-S-*–³•ÏŠ·         = C-S-Enter
-key M0-M7-C-–³•ÏŠ·       = –³•ÏŠ·
-key M0-A-*‚Ð‚ç‚ª‚È       = ‚Ð‚ç‚ª‚È
+#key C-S-*–³•ÏŠ·      = C-S-Enter
+key M0-M1-*•ÏŠ·       = –³•ÏŠ·
+key M0-M1-*–³•ÏŠ·     = Enter
+key M0-M1-C-*–³•ÏŠ·   = C-Enter
+key M0-M1-A-*–³•ÏŠ·   = A-Enter
+key M0-M1-S-*–³•ÏŠ·   = S-Enter
+key M0-M1-S-C-*–³•ÏŠ· = C-S-Enter
+key M0-M1-A-*‚Ð‚ç‚ª‚È = ‚Ð‚ç‚ª‚È
 
 key M8-C-*I              = Tab
 key M8-M9-C-S-I          = S-Tab
@@ -121,7 +128,7 @@ key M0-*CircumflexAccent = *F12
 Key M0-*a                = C-S-Esc
 Key M0-*s                = $WindowSelectOpen
 Key M0-*d                = *Tab
-Key M0-*f                = A-F4
+Key M0-*f                = &WindowClose
 Key M0-*g                = *End
 Key M0-*b                = *Home
 Key M0-*Semicolon        = *PageDown
@@ -169,6 +176,7 @@ key C-*V = S-Insert
 # }}}
 #------------------------------------------------------------------------------------- 
 window window-select /:window-select:SysListView32$/ : Global # {{{
+key M0-M1-*–³•ÏŠ·     = &PostMessage(ToParentWindow, 0x8001, 0, 0)
 key M7-C-*Apps = &PostMessage(ToParentWindow, 0x8001, 0, 0)
 key M8-C-*LCtrl = &PostMessage(ToParentWindow, 0x8002, 0, 0)
 Key M0-d    = &PostMessage(ToParentWindow, 0x8003, -1, 0)
@@ -177,21 +185,23 @@ Key M0-~S-s = &PostMessage(ToParentWindow, 0x8003, +1, 0)
 key M0-~S-d = &PostMessage(ToParentWindow, 0x8003, +1, 0)
 # }}}
 #------------------------------------------------------------------------------------- 
-window Nscripter /NScripter/ :Global
+window Novel :Global #{{{}
 key *WheelBackward = Enter
+key D-*XButton1 = D-RCtrl
+key U-*XButton1 = U-RCtrl
+#}}}
+window Nscripter /NScripter/ :Novel
 #------------------------------------------------------------------------------------- 
-window pcsx2 /pcsx2-r4600\.exe/ :Global
-key *WheelBackward = Down
-key *WheelForward = Up
+#window pcsx2 /pcsx2-r4600\.exe/ :Global
+#key *WheelBackward = Down
+#key *WheelForward = Up
 #------------------------------------------------------------------------------------- 
-window kazoku /KIZUNAR\.EXE/ :Global
-key *WheelBackward = Enter
+window kazoku /KIZUNAR\.EXE/ :Novel
 #------------------------------------------------------------------------------------- 
-window kazokuR /KZ_N\.EXE/ :Global
-key *WheelBackward = Enter
+window kazokuR /KZ_N\.EXE/ :Novel
 #------------------------------------------------------------------------------------- 
-window KirikiriDevelop ( /Vim/ && /\.ks/ ) :Global
-key C-*K = C-K &Wait(500) W-_2
+#window KirikiriDevelop ( /Vim/ && /\.ks/ ) :Global
+#key C-*K = C-K &Wait(500) W-_2
 #------------------------------------------------------------------------------------- 
 window MBAA /MBAA\.exe/ : Global #{{{
 key N = C

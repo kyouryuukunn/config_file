@@ -1,7 +1,7 @@
 scriptencoding utf-8
 ""--------------------------------------------------------------------------------------
 " neocomplcache {{{
-let g:neocomplcache_enable_at_startup = 1 " 起動時に有効化
+let g:neocomplcache_enable_at_startup = 1 "  起動時に有効化
 let g:neocomplcache_enable_auto_select = 1
 let g:neocomplcache_enable_wildcard = 1
 let g:neocomplcache_enable_smart_case = 1
@@ -123,6 +123,7 @@ let g:unite_source_history_yank_enable = 1
 let g:unite_source_history_yank_limit = 30
 "  インザートモードで開始する
 let g:unite_enable_start_insert = 1
+let g:unite_winwidth = 20
 " line
 nnoremap <silent> <Space>l :<C-u>Unite line -create<CR>
 "  レジスタ一覧
@@ -131,11 +132,13 @@ nnoremap <silent> <Space>l :<C-u>Unite line -create<CR>
 nnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 history/yank<CR>
 xnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 history/yank<CR>
 "  バッファ一覧
-nnoremap <silent> <Space>b :<C-u>Unite -vertical -create -toggle buffer<CR>
+nnoremap <silent> <Space>b :<C-u>Unite -create -toggle buffer<CR>
 " tab一覧
-nnoremap <silent> <Space>t :<C-u>Unite -vertical -create tab<CR>
+nnoremap <silent> <Space>t :<C-u>Unite -create tab<CR>
 "  最近使用したファイル一覧
-nnoremap <silent> <Space>m :<C-u>Unite -vertical -create -default-action=tabopen file_mru<CR>
+nnoremap <silent> <Space>m :<C-u>Unite -create -default-action=tabopen file_mru<CR>
+"File
+nnoremap ,f :<C-U>Unite -vertical -create file<CR>
 "  ウィンドウを分割して開く
 au FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 au FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
@@ -312,7 +315,7 @@ nnoremap <Space>o :Unite -vertical -winwidth=60 -create -no-quit outline:!<CR>
 " VimFiler {{{
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
-nnoremap ,f :<C-u>VimFilerExplorer<CR>
+"nnoremap ,f :<C-u>VimFilerExplorer<CR>
 " }}}
 "--------------------------------------------------------------------------- 
 " QuickRun {{{
@@ -648,7 +651,7 @@ augroup END
 endfunction " }}}
 "------------------------------------------------------------------------------
 " showmarks {{{
-let showmarks_include = "abcdefghijklmnorstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+"let showmarks_include = "abcdefghijklmnorstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 " }}}
 ""------------------------------------------------------------------------------
 " savevers.vim {{{
@@ -665,7 +668,7 @@ let versdiff_no_resize=1 " }}}
 nmap T <Plug>ToggleN
 "imap T <Plug>ToggleI
 vmap T <Plug>ToggleV
-let g:toggle_pairs = { '1':'0', '0':'1', 'True':'False', 'False':'True' }
+let g:toggle_pairs = { '1':'0', '0':'1', 'True':'False', 'False':'True', 'true':'false', 'false':'true' }
 " }}}
 "--------------------------------------------------------------------------- 
 " 吉里吉里用 {{{
@@ -996,6 +999,14 @@ vnoremap <F4> :ExciteTranslate<CR>
 " vim-visualstar
 map * <Plug>(visualstar-*)N
 map # <Plug>(visualstar-#)N
+" powerline
+"source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim
+" --------------------------------------------------------------------------
+" powerline-vim
+let g:Powerline_cache_dir = expand('~/.powerline-cache')
+"let g:Powerline_symbols = 'fancy'
+set t_Co=256
+"call Pl#Theme#InsertSegment('pwd', 'after', 'fileinfo')
 "------------------------------------------------------------------------------------- 
 " Qfreplace
 autocmd FileType qf nnoremap <buffer> R :Qfreplace<CR>
@@ -1003,10 +1014,14 @@ autocmd FileType qfreplace nnoremap <buffer> <Space>w :w<CR>:close<CR>:cclose<CR
 " --------------------------------------------------------------------------
 "easy-motion
 let g:EasyMotion_leader_key = '<tab>'
+"nerdcommenter
+map <tab>cc <plug>NERDCommenterComment
+map <tab>cn <plug>NERDCommenterNested
+map <tab>cm <plug>NERDCommenterMinimal
+map <tab>cs <plug>NERDCommenterSexy
+map <tab>c<Space> <plug>NERDCommenterToggle
+map <tab>cu <plug>NERDCommenterUncomment
 "------------------------------------------------------------------------------
-" powerline
-"source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim
-" --------------------------------------------------------------------------
 "}}}
 "------------------------------------------------------------------------------
 " skk {{{
@@ -2171,7 +2186,7 @@ endfunction
 "" }}}
 "--------------------------------------------------------------------------- 
 " MyMoveWord
-let MyMoveWord_enable_WBE = 1
-let g:MyMoveWord_JpSep = '　。、．，／！？「」'
+"let MyMoveWord_enable_WBE = 1
+"let g:MyMoveWord_JpSep = '　。、．，／！？「」'
 "--------------------------------------------------------------------------- 
 " vim: nowrap foldmethod=marker textwidth=0 ft=vim
