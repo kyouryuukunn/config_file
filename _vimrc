@@ -6,7 +6,7 @@ let g:portable = 0
 if has('win32') || has('win64')
   let $DOTVIM = $VIM.'/vimfiles'
   let $DROPBOX = expand('d:/Box/Workspace/Dropbox/etc')
-  let $HELP = $DOTVIM.'/help'
+  let $HELP = $DOTVIM.'bundle/config_file/help'
   let $LLVM = expand('e:/llvm/bin')
   "let $DMD = expand('e:/dmd2/windows/bin')
   let $PYTHON2 = expand('C:/Python27;C:/Python27/Scripts')
@@ -14,11 +14,11 @@ if has('win32') || has('win64')
   let $GIT = expand('e:/Soft/Git/bin')
   let $MSYS = expand('e:/MinGW/bin')
   let $CYGWIN = expand('e:/cygwin/bin')
-  let $PATH = $PATH . ";".$MSYS.";".$LLVM.';'.$PYTHON2.';'.$GIT.';'.$CYGWIN
+  let $PATH = $PATH . ";".$MSYS.";".$LLVM.';'.$PYTHON3.';'.$GIT.';'.$CYGWIN
 else
   let $DROPBOX = expand('~/Dropbox/etc')
   let $DOTVIM = expand('~/.vim')
-  let $HELP = $DOTVIM.'/help'
+  let $HELP = $DOTVIM.'bundle/config_file/help'
   let $LLVM = expand('/usr/local/bin')
 endif " }}}
 "set migemo
@@ -45,8 +45,8 @@ if !g:portable
 		set backupdir=D:/App/back
 		set directory=D:/App/swap
 	else
-		set backupdir=~/back
-		set directory=~/swap
+		set backupdir=~/.back
+		set directory=~/.swap
 	endif
 	"永続アンドゥ
 	set undofile

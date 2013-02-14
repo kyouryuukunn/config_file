@@ -76,10 +76,10 @@ let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
 " }}}
 ""------------------------------------------------------------------------------
 " スニペット {{{
-let g:neosnippet#snippets_directory = $DOTVIM.'/snippets'
+let g:neosnippet#snippets_directory = $DOTVIM.'/bundle/config_file/snippets'
 imap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neocomplcache_snippets_jump)" : "\<Esc>\<Tab>"
 smap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
-noremap <Space>s :VimFilerTab $DOTVIM/snippets<CR>
+noremap <Space>s :VimFilerTab $DOTVIM/bundle/config_file/snippets<CR>
 " For snippet_complete marker.
 "if has('conceal')
 	"set conceallevel=2 concealcursor=i
@@ -179,7 +179,7 @@ let g:unite_source_menu_menus.bookmark.candidates = {
       \       'renpy'  	   : 'VimFilerExplorer d:/Box/Workspace/renpy',
       \       'git'  	   : 'VimFilerExplorer d:/Box/Workspace/git',
       \       'kirikiri'   : 'VimFilerExplorer d:/Box/Workspace/kirikiri/practice/data/scenario',
-      \       'snippet'    : 'VimFilerExplorer $DOTVIM/snippets',
+      \       'snippet'    : 'VimFilerExplorer $DOTVIM/bundle/config_file/snippets',
       \       'outline'    : 'VimFilerExplorer $DOTVIM/autoload/unite/sources/outline',
       \       'bundle'     : 'VimFilerExplorer $DOTVIM/bundle',
       \       'kn'	   : 'tabe $DOTVIM/bundle/kirikiri_neocomplcache/autoload/neocomplcache/sources/kirikiri_complete.vim',
@@ -920,11 +920,11 @@ let QFixHowm_Key = 'g'
 " タイトル記号
 let QFixHowm_Title = '='
 " メモファイルの保存場所
-let howm_dir               = $DOTVIM.'/howm'
+let howm_dir               = $DROPBOX.'/howm'
 " ペアファイル保存場所
 let QFixHowm_PairLinkDir   = 'pairlink'
 " キーワード保存ファイル
-let QFixHowm_keywordfile   = $DOTVIM.'/howm/howm-keys'
+let QFixHowm_keywordfile   = $DROPBOX.'/howm/howm-keys'
 "クイックメモのファイル名
 let QFixHowm_QuickMemoFile = "QMem/QMem-00-0000-00-00-000000.howm"
 "日記のファイル名

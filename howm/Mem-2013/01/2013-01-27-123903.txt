@@ -1,5 +1,0 @@
-= 非公開コメント 
-.comment-notes,.comment-form-email{display:none;}
-.comment-form-url{display:none;}
-[2013-01-27 12:39]
-
