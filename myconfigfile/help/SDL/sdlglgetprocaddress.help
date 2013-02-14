@@ -1,0 +1,35 @@
+TITLE : SDL_GL_GetProcAddress
+
+SDL Library Documentation
+PrevNext
+
+SDL_GL_GetProcAddress
+
+Name
+
+SDL_GL_GetProcAddress --  GL 関数のアドレスを取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+void *SDL_GL_GetProcAddress(const char* proc);
+
+Description
+
+
+GL 関数 proc のアドレスを、 関数が見つからない場合は NULL を返します。 GL ライブラリが SDL_GL_LoadLibrary によって実行時にロードされる場合は、 すべての GL 関数はこのようにして検索されなければ いけません。 普通はこれは OpenGL 拡張に対する関数へのポインタを検索する事に使われます。
+
+
+Example
+
+
+typedef void (*GL_ActiveTextureARB_Func)(unsigned int); GL_ActiveTextureARB_Func glActiveTextureARB_ptr = 0; int has_multitexture=1; . . . /* 関数へのポインタを取得 */ glActiveTextureARB_ptr=(GL_ActiveTextureARB_Func) SDL_GL_GetProcAddress("glActiveTextureARB"); /* 正当なポインタかどうかをチェック */ if(!glActiveTextureARB_ptr){ fprintf(stderr, "マルチテクスチャ拡張はありません。\n"); has_multitexture=0; } . . . . if(has_multitexture){ glActiveTextureARB_ptr(GL_TEXTURE0_ARB); . . } else{ . . }
+
+
+See Also
+
+SDL_GL_LoadLibrary
+
+PrevHomeNext
+SDL_GL_LoadLibraryUpSDL_GL_GetAttribute

@@ -1,0 +1,131 @@
+TITLE : C言語関数辞典 - exit
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdlib.h ≫ exit
+
+exit
+
+プログラムを正常終了します．
+
+
+#include <stdlib.h>
+
+
+
+void exit(
+    int status
+);
+
+
+exit 関数は正常プログラム終了を発生させます．プログラムが 2 回以上 exit 関数の呼び出しを行った場合の動作は未定義です．
+
+exit 関数の動作順序は以下の通りです．
+
+  1.atexit 関数で登録されたすべての関数を登録の逆順で呼び出します．ただし，その関数よりも前に登録されている関数のうちで，その関数の登録時点で既に呼び出されているものに対しては，それらの呼び出しよりも後の呼び出しとなります．登録された関数の呼び出しの途中で longjmp 関数の呼び出し (登録された関数の呼び出しを終了させる) がある場合，その動作は未定義となります．
+  2.書き出されていないバッファリング (buffering) されたデータをもつ，すべてのオープンしているストリーム (stream) をフラッシュ & クローズし，tmpfile 関数で生成したすべてのファイルを削除します．
+  3.プログラムを終了します．status の値が 0 or EXIT_SUCCESS の場合には成功終了状態を，status の値が EXIT_FAILURE の場合には失敗終了状態を処理系定義の形式で返します．
+
+引数
+
+  * status: ステータス
+
+C言語サンプルプログラム
+
+atexit 関数のサンプルプログラムをご覧下さい．
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

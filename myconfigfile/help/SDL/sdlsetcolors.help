@@ -1,0 +1,49 @@
+TITLE : SDL_SetColors
+
+SDL Library Documentation
+PrevNext
+
+SDL_SetColors
+
+Name
+
+SDL_SetColors --  与えられた 8 bit サーフェスのカラーマップの一部をセットします。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_SetColors(SDL_Surface *surface, SDL_Color *colors, int firstcolor, int ncolors);
+
+Description
+
+
+与えられた 8 bit サーフェスのカラーマップの一部をセットします。
+
+
+surface が現在の表示と関連付けられたサーフェスの場合は、 表示カラーマップは要求された色で更新されます。 SDL_SetVideoMode フラグに SDL_HWPALETTE がセットされていた場合は、 SDL_SetColors は常に 1 を返し、 ウィンドウのカラーマップが歪められていたり、エミュレーションの下で動いている場合でも、 パレットはあなたが望んだ通りにセットされることが保証されています。
+
+
+SDL_Color 構造体の 色チャンネルのサイズは 8 bit であり、 合計で 2563 =16777216 色を提供します。
+
+
+SDL_HWPALETTE がセットされた、パレット化された(8 bit) 画面サーフェスには 2 種類のパレット、すなわち サーフェスに対する(あるいはサーフェスからの)マッピング blit に 使われる論理パレットと、 ハードウェアが色を画面にどうマッピングするかを決定する物理パレット とがあります。 SDL_SetColors は(存在するなら)双方のパレットを変更します。 これは (SDL_LOGPAL | SDL_PHYSPAL) を flags にセットして SDL_SetPalette を呼ぶのと同等です。
+
+
+Return Value
+
+
+surface がパレット化されたサーフェスではない場合は、 この関数は何もせず、0 を返します。 全ての色が SDL_SetColors に 渡した通りにセットされた場合は、1 を返します。 必ずしも全ての色エントリが与えられた通りにセットされた訳ではない場合は、 0 を返すので、 実際の色パレットを決めるサーフェスパレットを見る必要があります。
+
+Example
+
+
+/* グレースケールのパレットでサーフェスを作成 */ SDL_Surface *screen; SDL_Color colors[256]; int i; . . . /* 色情報で埋める */ for(i=0;i<256;i++){ colors[i].r=i; colors[i].g=i; colors[i].b=i; } /* 表示サーフェスを作成 */ screen=SDL_SetVideoMode(640, 480, 8, SDL_HWPALETTE); if(!screen){ printf("ビデオモードが設定できませんでした: %s\n", SDL_GetError()); exit(-1); } /* パレットのセット */ SDL_SetColors(screen, colors, 0, 256); . . . .
+
+
+See Also
+
+SDL_Color SDL_Surface, SDL_SetPalette, SDL_SetVideoMode
+
+PrevHomeNext
+SDL_FlipUpSDL_SetPalette

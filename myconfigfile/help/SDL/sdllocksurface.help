@@ -1,0 +1,43 @@
+TITLE : SDL_LockSurface
+
+SDL Library Documentation
+PrevNext
+
+SDL_LockSurface
+
+Name
+
+SDL_LockSurface --  直接アクセスのためにサーフェスをロックします。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_LockSurface(SDL_Surface *surface);
+
+Description
+
+
+SDL_LockSurface は ピクセルに直接アクセスためにサーフェスを設定します。 SDL_LockSurface と SDL_UnlockSurface の呼び出しの間、 surface->format に格納されたピクセルフォーマットを使って surface->pixels に書いたり読んだりすることができます。 ひとたびサーフェスへのアクセスが終了したら、 SDL_UnlockSurface を使って解放する必要があります。
+
+
+すべてのサーフェスがロックを必要とする訳ではありません。 SDL_MUSTLOCK(surface) の評価が 0 ならば いつでも読み書きすることができ、 サーフェスのピクセルフォーマットは変更されません。
+
+
+この時間の間にクリティカルなシステムロックが行われることがあるため、 ロック/アンロック間では、いかなる OS システムコールやライブラリコールも 呼ばれるべきではありません。
+
+
+明記しておくべきことに、 SDL 1.1.8 以降ではサーフェスのロックは再帰的である、という点があります。 これは複数のサーフェスロックをかけることができるということですが、 個々のロックには対応するアンロックがなければいけません。 
+ . . SDL_LockSurface( surface ); . /* サーフェスはロックされている */ /* ここでサーフェス上の直接ピクセルアクセス */ . SDL_LockSurface( surface ); . /* さらにサーフェス上の直接ピクセルアクセス */ . SDL_UnlockSurface( surface ); /* サーフェスはまだロックされている */ /* 注記: バージョンが 1.1.8 以下の場合は、*/ /* この段階でサーフェスはもうロックされていない */ . SDL_UnlockSurface( surface ); /* サーフェスは今アンロックされている */ . .
+
+Return Value
+
+
+SDL_LockSurface は 0 を 返すか、またはサーフェスのロックができなかった時は -1 を返します。
+
+See Also
+
+SDL_UnlockSurface
+
+PrevHomeNext
+SDL_FreeSurfaceUpSDL_UnlockSurface

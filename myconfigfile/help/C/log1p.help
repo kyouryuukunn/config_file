@@ -1,0 +1,194 @@
+TITLE : C言語関数辞典 - log1p, log1pf, log1pl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ log1p, log1pf, log1pl
+
+The log1p functions (C99) - log1p, log1pf, log1pl
+
+引数に 1 を加えた自然対数 (loge) を計算します．
+
+log1p (C99)
+
+
+#include <math.h>
+
+
+
+double log1p(
+    double x
+);
+
+
+log1p 関数は引数に 1 を加えた自然対数 (loge) を計算し，double 型で返します．
+
+log1pf (C99)
+
+
+#include <math.h>
+
+
+
+float log1pf(
+    float x
+);
+
+
+log1pf 関数は引数に 1 を加えた自然対数 (loge) を計算し，float 型で返します．
+
+log1pl (C99)
+
+
+#include <math.h>
+
+
+
+long double log1pl(
+    long double x
+);
+
+
+log1pl 関数は引数に 1 を加えた自然対数 (loge) を計算し，long double 型で返します．
+
+log1p，log1pf，log1pl 関数は，x が -1 より小さい場合に定義域エラー (domain error) が発生します．また，x が -1 の場合に値域エラー (range error) が発生することがあります．
+
+戻り値
+
+  * loge(x + 1) の値
+
+数学上の表記
+
+C言語サンプルプログラム
+
+以下にlog1p，log1pf，log1pl 関数それぞれを使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* macros */
+#define PI 3.14159265
+
+/* main */
+int main(void) {
+    double d_angle = PI / 6.0, d_result;
+    float f_angle = PI / 4.0, f_result;
+    long double ld_angle = PI / 3.0L, ld_result;
+
+    d_result = log1p(d_angle);
+    f_result = log1pf(f_angle);
+    ld_result = log1pl(ld_angle);
+
+    printf("log1p(pi / 6): %.8f\n", d_result);
+    printf("log1pf(pi / 4): %.8f\n", f_result);
+    printf("log1pl(pi / 3): %.8Lf\n", ld_result);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+log1p(2.0) = 1.09861229
+log1pf(3.0) = 1.38629436
+log1pl(4.0) = 1.60943791
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

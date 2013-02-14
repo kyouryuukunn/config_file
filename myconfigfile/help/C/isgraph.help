@@ -1,0 +1,168 @@
+TITLE : C言語関数辞典 - isgraph
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ ctype.h ≫ isgraph
+
+isgraph
+
+文字が空白 (' ') を除く表示文字 (printing character) かどうかをチェックします．
+
+
+#include <ctype.h>
+
+
+
+int isgraph(
+    int c /* int 型の文字 */
+);
+
+
+isgraph 関数は文字 c が空白 (' ') を除く表示文字であれば真を返します．
+
+戻り値
+
+  * c が空白を除く表示文字であるとき: 真 (0 以外)
+  * c が空白を除く表示文字以外であるとき: 偽 (0)
+
+C言語サンプルプログラム
+
+isgraph 関数を使用して，入力された文字が空白を除く表示文字どうかをチェックするサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+/* main */
+int main(void) {
+    int c[] = {' ', '\t', '\f', '\n', '\r', '\v', 'a', '9'};
+    char s[][16] = {
+        "空白", "水平タブ", "書式送り",
+        "改行", "復帰", "垂直タブ",
+        "文字 'a'", "数字 '9'"
+    };
+    int i;
+
+    for ( i = 0; i < 8; i++ ) {
+        /* 文字チェック */
+        if ( isgraph(c[i])) {
+            printf("%s ==> 真\n", s[i]);
+        } else {
+            printf("%s ==> 偽\n", s[i]);
+        }
+    }
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+空白 ==> 偽
+水平タブ ==> 偽
+書式送り ==> 偽
+改行 ==> 偽
+復帰 ==> 偽
+垂直タブ ==> 偽
+文字 'a' ==> 真
+数字 '9' ==> 真
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

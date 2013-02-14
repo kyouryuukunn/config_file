@@ -1,0 +1,191 @@
+TITLE : C言語関数辞典 - fma, fmaf, fmal
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ fma, fmaf, fmal
+
+The fma functions (C99) - fma, fmaf, fmal
+
+(x * y) + z を 1 個の 3 項演算子としてまとめて計算します．
+
+fma (C99)
+
+
+#include <math.h>
+
+
+
+double fma(
+    double x,
+    double y,
+    double z
+);
+
+
+fma 関数は (x * y) + z を 1 個の 3 項演算子としてまとめて計算し，結果を double 型で返します．
+
+fmaf (C99)
+
+
+#include <math.h>
+
+
+
+float fmaf(
+    float x,
+    float y,
+    float z
+);
+
+
+fmaf 関数は (x * y) + z を 1 個の 3 項演算子としてまとめて計算し，結果を float 型で返します．
+
+fmal (C99)
+
+
+#include <math.h>
+
+
+
+long double fmal(
+    long double x,
+    long double y,
+    long double z
+);
+
+
+fmaf 関数は (x * y) + z を 1 個の 3 項演算子としてまとめて計算し，結果を long double 型で返します．
+
+fma，fmaf，fmal 関数は，その値を無限の精度であるものとして計算し，FLT_ROUNDS の値が示す丸めモードにしたがって，結果の形式に 1 回だけ丸めます．
+
+戻り値
+
+  * (x * y) + z の計算結果
+
+C言語サンプルプログラム
+
+以下に fma 関数を使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* main */
+int main(void) {
+    double x1, x2, x3;
+    double y;
+
+    x1 = 2.0;
+    x2 = 3.0;
+    x3 = 1.0;
+
+    y = fma(x1, x2, x3);
+    printf("(%.1lf * %.1lf) + %.1lf = %.1lf\n", x1, x2, x3, y);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+(2.0 * 3.0) + 1.0 = 7.0
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

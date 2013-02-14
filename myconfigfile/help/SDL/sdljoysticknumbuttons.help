@@ -1,0 +1,33 @@
+TITLE : SDL_JoystickNumButtons
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickNumButtons
+
+Name
+
+SDL_JoystickNumButtons --  ジョイスティックのボタンの数を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_JoystickNumButtons(SDL_Joystick *joystick);
+
+Description
+
+
+前もってオープンされた SDL_Joystick から 利用可能なボタンの数を返します。
+
+Return Value
+
+
+ボタンの数。
+
+See Also
+
+SDL_JoystickGetButton, SDL_JoystickOpen
+
+PrevHomeNext
+SDL_JoystickNumHatsUpSDL_JoystickUpdate

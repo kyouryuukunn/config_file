@@ -1,0 +1,28 @@
+TITLE : SDL_FreeSurface
+
+SDL Library Documentation
+PrevNext
+
+SDL_FreeSurface
+
+Name
+
+SDL_FreeSurface --  SDL_Surface を解放(削除)します。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_FreeSurface(SDL_Surface *surface);
+
+Description
+
+
+前に作成された SDL_Surface によって使われた リソースを解放します。 サーフェスが SDL_CreateRGBSurfaceFrom を使って作られたものである場合は、ピクセルデータは解放されません。
+
+See Also
+
+SDL_CreateRGBSurface SDL_CreateRGBSurfaceFrom
+
+PrevHomeNext
+SDL_CreateRGBSurfaceFromUpSDL_LockSurface

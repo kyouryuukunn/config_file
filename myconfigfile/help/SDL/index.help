@@ -1,0 +1,265 @@
+TITLE : 
+
+
+Table of Contents
+I. SDL Guide
+  
+
+Preface
+  
+
+About SDL
+About SDLdoc
+Credits
+
+1. The Basics
+  
+
+Introduction
+Initializing SDL
+
+2. Graphics and Video
+  
+
+Introduction to SDL Video
+Using OpenGL With SDL
+
+3. Input handling
+  
+
+Handling Joysticks
+Handling the Keyboard
+
+4. Examples
+  
+
+Introduction
+Event Examples
+Audio Examples
+CDROM Examples
+Time Examples
+
+II. SDL Reference
+  
+
+5. General
+  
+
+SDL_Init -- SDLを初期化します。
+SDL_InitSubSystem -- サブシステムを初期化します。
+SDL_QuitSubSystem -- サブシステムをシャットダウンします。
+SDL_Quit -- SDLをシャットダウンします。
+SDL_WasInit -- サブシステムが初期化されているかどうかをチェックします。
+SDL_GetError -- SDLのエラーを文字列で得ます。
+
+6. Video
+  
+
+SDL_GetVideoSurface --  現在の表示サーフェスへのポインタを返します。
+SDL_GetVideoInfo --  ビデオハードウェアについての情報の構造体へのポインタを返します。
+SDL_VideoDriverName --  ビデオドライバの名前を取得します。
+SDL_ListModes --  与えられたフォーマットとビデオのフラグに対し、 利用可能な画面モードの配列へのポインタを返します。
+SDL_VideoModeOK --  ある特定のビデオモードがサポートされているかチェックします。
+SDL_SetVideoMode --  指定された横幅・高さ・ピクセル深度を用いてビデオモードを設定します。
+SDL_UpdateRect --  与えられた領域の画面を更新します。
+SDL_UpdateRects --  与えられた矩形リストに従い、画面を更新します。
+SDL_Flip --  スクリーンバッファを交換します。
+SDL_SetColors --  与えられた 8 bit サーフェスのカラーマップの一部をセットします。
+SDL_SetPalette --  8 ビットサーフェスのパレットに色をセットします。
+SDL_SetGamma --  表示用のカラーガンマ関数をセットします。
+SDL_GetGammaRamp --  表示のためのカラーガンマ値の変換テーブルを取得します。
+SDL_SetGammaRamp --  表示用にカラーガンマの参照テーブルをセットします。
+SDL_MapRGB --  RGB カラー値をピクセルフォーマットに写像します。
+SDL_MapRGBA --  RGBA カラー値をピクセルフォーマットに写像します。
+SDL_GetRGB --  指定されたピクセルフォーマット内のピクセルから RGB 値を取得します。
+SDL_GetRGBA --  指定されたピクセルフォーマット内のピクセルから RGBA 値を取得します。
+SDL_CreateRGBSurface --  空の SDL_Surface を生成します。
+SDL_CreateRGBSurfaceFrom --  ピクセルデータから SDL_Surface を生成します。
+SDL_FreeSurface --  SDL_Surface を解放(削除)します。
+SDL_LockSurface --  直接アクセスのためにサーフェスをロックします。
+SDL_UnlockSurface --  以前にロックされたサーフェスのロックを解除します。
+SDL_LoadBMP --  Windows の BMP ファイルを SDL_Surface にロードします。
+SDL_SaveBMP --  SDL_Surface を Windows の BMP ファイルとしてセーブします。
+SDL_SetColorKey --  blit 転送可能なサーフェスのカラーキー(透明ピクセル)と、 RLE アクセラレーションをセットします。
+SDL_SetAlpha --  サーフェスのアルファ値を調整します。
+SDL_SetClipRect --  サーフェスのクリッピング矩形をセットします。
+SDL_GetClipRect --  サーフェスのクリッピング矩形を取得します。
+SDL_ConvertSurface --  サーフェスを別サーフェスとして指定されたフォーマットに変換します。
+SDL_BlitSurface --  転送元サーフェスから転送先サーフェスへ高速 blit 転送を行います
+SDL_FillRect --  この関数は与えられた矩形領域と色で高速な塗り潰しを行います。
+SDL_DisplayFormat --  サーフェスを表示フォーマットに変換します。
+SDL_DisplayFormatAlpha --  サーフェスを表示フォーマットに変換します。
+SDL_WarpMouse --  マウスカーソルの位置をセットします。
+SDL_CreateCursor --  新しいマウスカーソルを作ります。
+SDL_FreeCursor --  SDL_CreateCursor で作られたカーソルを解放します。
+SDL_SetCursor --  現在アクティブなマウスカーソルを設定します。
+SDL_GetCursor --  現在アクティブなマウスカーソルを取得します。
+SDL_ShowCursor --  カーソルが画面に表示されるかされないかを切り替えます。
+SDL_GL_LoadLibrary --  OpenGL ライブラリを指定します。
+SDL_GL_GetProcAddress --  GL 関数のアドレスを取得します。
+SDL_GL_GetAttribute --  特殊な SDL/OpenGL 属性の値を取得します。
+SDL_GL_SetAttribute --  特殊な SDL/OpenGL 属性をセットします。
+SDL_GL_SwapBuffers --  OpenGL のフレームバッファを入れ替えます/表示を更新します。
+SDL_CreateYUVOverlay --  YUV ビデオオーバレイを生成します。
+SDL_LockYUVOverlay --  オーバーレイをロックします。
+SDL_UnlockYUVOverlay --  オーバレイのロックを解除します。
+SDL_DisplayYUVOverlay --  オーバレイを表示画面に blit 転送します。
+SDL_FreeYUVOverlay --  YUV ビデオオーバーレイを解放します。
+SDL_GLattr --  SDL の GL 属性
+SDL_Rect --  矩形領域を定義します。
+SDL_Color --  フォーマットに依存しない色表現
+SDL_Palette --  8 ビットピクセルフォーマット用のカラーパレット
+SDL_PixelFormat --  ピクセルフォーマット情報を格納します。
+SDL_Surface --  絵のサーフェスの構造体
+SDL_VideoInfo --  ビデオターゲットの情報
+SDL_Overlay --  YUV のビデオオーバレイ
+
+7. Window Management
+  
+
+SDL_WM_SetCaption --  ウィンドウのタイトルとアイコン名をセットします。
+SDL_WM_GetCaption --  ウィンドウのタイトルとアイコン名を取得します
+SDL_WM_SetIcon --  表示ウィンドウにアイコンをセットします。
+SDL_WM_IconifyWindow --  ウィンドウをアイコン化/最小化します。
+SDL_WM_ToggleFullScreen --  フルスクリーンモードを切り換えます。
+SDL_WM_GrabInput --  マウスとキーボード入力をつかんで離さないようにます。
+
+8. Events
+  
+
+Introduction
+SDL Event Structures.
+Event Functions.
+
+9. Joystick
+  
+
+SDL_NumJoysticks --  利用可能なジョイスティックの数を数えます。
+SDL_JoystickName --  ジョイスティック名を取得します。
+SDL_JoystickOpen --  ジョイスティックを使うためオープンします。
+SDL_JoystickOpened --  ジョイスティックがオープンされているかどうかを調べます。
+SDL_JoystickIndex --  SDL_Joystick のインデックス番号を返します。
+SDL_JoystickNumAxes --  ジョイスティックの軸の数を取得します。
+SDL_JoystickNumBalls --  ジョイスティックのトラックボールの数を取得します。
+SDL_JoystickNumHats --  ジョイスティックのハットスイッチの数を取得します。
+SDL_JoystickNumButtons --  ジョイスティックのボタンの数を取得します。
+SDL_JoystickUpdate --  すべてのジョイスティックの状態を更新します。
+SDL_JoystickGetAxis --  軸の現在の状態を取得します。
+SDL_JoystickGetHat --  ジョイスティックのハットスイッチの現在の状態を取得します。
+SDL_JoystickGetButton --  指定されたジョイスティックの指定されたボタンの現在の情報を返します。
+SDL_JoystickGetBall --  トラックボールの相対的な動きを取得します。
+SDL_JoystickClose --  前もってオープンされたジョイスティックをクローズします。
+
+10. Audio
+  
+
+SDL_AudioSpec -- オーディオの仕様を定める構造体
+SDL_OpenAudio -- 指定された条件でオーディオデバイスを開きます。
+SDL_PauseAudio -- コールバックの処理を一時停止/解除します。
+SDL_GetAudioStatus -- 現在のオーディオの状態を返します。
+SDL_LoadWAV -- WAVEファイルをロードします。
+SDL_FreeWAV -- オープンされたWAVデータを解放します
+SDL_AudioCVT -- オーディオ変換用構造体
+SDL_BuildAudioCVT -- SDL_AudioCVT構造体を初期化します。
+SDL_ConvertAudio -- オーディオデータを望みのフォーマットに変換します。
+SDL_MixAudio -- オーディオデータをミックスします。
+SDL_LockAudio -- コールバック関数の呼び出しを禁止します。
+SDL_UnlockAudio -- コールバック関数呼び出し禁止を解除します。
+SDL_CloseAudio -- オーディオの処理を終了し、デバイスをクローズします。
+
+11. CD-ROM
+  
+
+SDL_CDNumDrives --  システム上の CD-ROM の数を返します。
+SDL_CDName --  CD-ROM について、人間に読めるシステム非依存の ID を返します。
+SDL_CDOpen --  CD-ROM ドライブにアクセスするためにオープンします。
+SDL_CDStatus --  指定されたドライブの現在の状態を返します。
+SDL_CDPlay --  CD を再生します。
+SDL_CDPlayTracks --  指定された CD トラックを再生します。
+SDL_CDPause --  CD-ROM の再生を一時停止します。
+SDL_CDResume --  CD-ROM の再生を再開します。
+SDL_CDStop --  CD-ROM の再生を停止します。
+SDL_CDEject --  CD-ROM を取り出します。
+SDL_CDClose --  SDL_CD ハンドルをクローズします。
+SDL_CD --  CD-ROM ドライブの情報
+SDL_CDtrack --  CD トラック情報の構造体
+
+12. Multi-threaded Programming
+  
+
+SDL_CreateThread -- 親の属性を共有した新しいスレッドを作成します。
+SDL_ThreadID -- 32ビットで表現された現在のスレッド識別子を得ます。
+SDL_GetThreadID -- SDL_ThreadのSDL内のスレッドIDを得ます。
+SDL_WaitThread -- スレッドが終了するのを待ちます。
+SDL_KillThread -- スレッドを無理矢理に終了させます。
+SDL_CreateMutex -- mutexを作成します。
+SDL_DestroyMutex -- mutexを破棄します。
+SDL_mutexP -- mutexをロックします。
+SDL_mutexV -- mutexのロックを解除します。
+SDL_CreateSemaphore -- 新しいセマフォを作成し、初期値を設定します。
+SDL_DestroySemaphore -- SDL_CreateSemaphoreによって作成されたセマフォを破棄します。
+SDL_SemWait -- セマフォをロックし、セマフォの値が0のときはスレッドを停止します。
+SDL_SemTryWait -- スレッドを停止せずにセマフォのロックを試みます。
+SDL_SemWaitTimeout -- 制限時間つきでセマフォをロックします。
+SDL_SemPost -- セマフォのロックを解除します。
+SDL_SemValue -- セマフォの現在の値を返します。
+SDL_CreateCond -- 条件変数を作成します。
+SDL_DestroyCond -- 条件変数を破棄します。
+SDL_CondSignal -- 条件変数を待っているスレッドを再開します。
+SDL_CondBroadcast -- 条件変数を待っている全てのスレッドを再開します。
+SDL_CondWait -- 条件変数を待ちます。
+SDL_CondWaitTimeout -- 条件変数を制限時間つきで待ちます。
+
+13. Time
+  
+
+SDL_GetTicks --  SDLライブラリの初期化からの経過ミリ秒数を取得します。
+SDL_Delay --  指定されたミリ秒間停止して復帰します。
+SDL_AddTimer --  タイマを追加します。タイマは指定ミリ秒間経過した後にコールバックを呼び出します。
+SDL_RemoveTimer --  SDL_AddTimerで追加したタイマを削除します。
+SDL_SetTimer --  指定されたミリ秒が経過した後に実行するコールバックを設定します。
+
+List of Tables
+8-1. SDLのキーシンボルの定義
+8-2. SDLモディファイヤの定義
+
+List of Examples
+1-1. SDLの初期化
+2-1. 
+ビデオ表示の初期化
+2-2. 
+最良のビデオモードの初期化
+2-3. 
+BMP ファイルのロードと表示
+2-4. getpixel()
+2-5. putpixel()
+2-6. 
+putpixel() を使う
+2-7. 
+OpenGL と一緒に SDL を初期化する
+2-8. 
+SDL と OpenGL
+3-1. 
+ジョイスティックサポートを伴う SDL の初期化
+3-2. 
+利用可能なジョイスティック数の問い合わせ
+3-3. 
+ジョイスティックのオープン
+3-4. 
+ジョイスティックの軸イベント
+3-5. 
+さらなるジョイスティック軸イベント
+3-6. 
+ジョイスティックのボタンイベント
+3-7. 
+ジョイスティックのボールイベント
+3-8. 
+ジョイスティックのハットスイッチイベント
+3-9. 
+ジョイスティックの特徴の問い合わせ
+3-10. キーボードイベント読み出し
+3-11. キーイベント情報を解釈する
+3-12. 正しいゲームの処理
+
+  Next
+  SDL Guide

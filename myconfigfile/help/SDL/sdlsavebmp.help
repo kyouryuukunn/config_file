@@ -1,0 +1,33 @@
+TITLE : SDL_SaveBMP
+
+SDL Library Documentation
+PrevNext
+
+SDL_SaveBMP
+
+Name
+
+SDL_SaveBMP --  SDL_Surface を Windows の BMP ファイルとしてセーブします。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_SaveBMP(SDL_Surface *surface, const char *file);
+
+Description
+
+
+SDL_Surface の surface を Windows の BMP ファイル file にセーブします。
+
+Return Value
+
+
+成功の場合は 0 を、 エラーがあった場合は -1 を返します。
+
+See Also
+
+SDL_LoadBMP
+
+PrevHomeNext
+SDL_LoadBMPUpSDL_SetColorKey

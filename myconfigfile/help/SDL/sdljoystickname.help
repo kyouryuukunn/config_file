@@ -1,0 +1,38 @@
+TITLE : SDL_JoystickName
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickName
+
+Name
+
+SDL_JoystickName --  ジョイスティック名を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+const char *SDL_JoystickName(int index);
+
+Description
+
+
+実装に依存するジョイスティック名を取得します。 index パラメータは システム上のジョイスティック番号を指します。
+
+Return Value
+
+
+ジョイスティック名を指す char へのポインタを返します。
+
+Examples
+
+
+/* 接続された全てのジョイスティックの名前を表示 */ int num_joy, i; num_joy=SDL_NumJoysticks(); printf("%d 本のジョイスティックが見つかりました\n", num_joy); for(i=0;i<num_joy;i++) printf("%s\n", SDL_JoystickName(i));
+
+See Also
+
+SDL_JoystickOpen
+
+PrevHomeNext
+SDL_NumJoysticksUpSDL_JoystickOpen

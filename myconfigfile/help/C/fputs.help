@@ -1,0 +1,164 @@
+TITLE : C言語関数辞典 - fputs
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ fputs
+
+fputs
+
+ストリーム (stream) に指定した文字列を書き込みます．
+
+
+#include <stdio.h>
+
+
+
+int fputs (
+    const char * restrict s,
+    FILE * restrict stream
+);
+
+
+fputs 関数は stream が指すストリームに s が指す文字列を書き込みます．(終端ナル文字 ('\0') の書き込みは行いません．)
+
+引数
+
+  * s: ストリームに書き込みたい文字列
+  * stream: ストリーム
+
+戻り値
+
+  * 書き込み成功時: 正の値
+  * 書き込み失敗時: EOF
+
+C言語サンプルプログラム
+
+fputs 関数を使用して文字列をファイルに書き込むサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+
+/* main */
+int main(void) {
+    FILE *fp;
+    char *filename = "maxim.txt";
+
+    /* ファイルのオープン */
+    if ((fp = fopen(filename, "r")) == NULL) {
+        fprintf(stderr, "%sのオープンに失敗しました.\n", filename);
+        exit(EXIT_FAILURE);
+    }
+
+    /* ファイルに文字列を書き込む */
+    fputs("SOMETIMES I WONDER HOW YOU CAN STAND BEING JUST A DOG..", fp);
+
+    /* ファイルのクローズ */
+    fclose(fp);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+maxim.txt には以下のように書き込まれます．
+
+
+SOMETIMES I WONDER HOW YOU CAN STAND BEING JUST A DOG..
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,40 @@
+TITLE : SDL_CDtrack
+
+SDL Library Documentation
+PrevNext
+
+SDL_CDtrack
+
+Name
+
+SDL_CDtrack --  CD トラック情報の構造体
+
+Structure Definition
+
+typedef struct{ Uint8 id; Uint8 type; Uint32 length; Uint32 offset; } SDL_CDtrack;
+
+
+Structure Data
+
+id
+トラック番号 (0-99)
+type
+SDL_AUDIO_TRACK か SDL_DATA_TRACK
+length
+このトラックの長さ(フレーム単位)
+offset
+このトラックの最初からのフレームのオフセット値
+
+Description
+
+
+SDL_CDtrack は CD の各トラックのデータを格納し、 そのフィールドはそれ自身とても説明的です。 それは SDL_CD 構造体の メンバーです。
+
+Note: フレームは標準の時間に変換することができます。 1 秒あたり CD_FPS フレームなので、 SDL_CDtrack.length/CD_FPS=長さ(秒) となります。
+
+See Also
+
+SDL_CD
+
+PrevHomeNext
+SDL_CDUpMulti-threaded Programming

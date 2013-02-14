@@ -1,0 +1,33 @@
+TITLE : Audio
+
+SDL Library Documentation
+PrevNext
+
+Chapter 10. Audio
+
+Table of Contents
+SDL_AudioSpec -- オーディオの仕様を定める構造体
+SDL_OpenAudio -- 指定された条件でオーディオデバイスを開きます。
+SDL_PauseAudio -- コールバックの処理を一時停止/解除します。
+SDL_GetAudioStatus -- 現在のオーディオの状態を返します。
+SDL_LoadWAV -- WAVEファイルをロードします。
+SDL_FreeWAV -- オープンされたWAVデータを解放します
+SDL_AudioCVT -- オーディオ変換用構造体
+SDL_BuildAudioCVT -- SDL_AudioCVT構造体を初期化します。
+SDL_ConvertAudio -- オーディオデータを望みのフォーマットに変換します。
+SDL_MixAudio -- オーディオデータをミックスします。
+SDL_LockAudio -- コールバック関数の呼び出しを禁止します。
+SDL_UnlockAudio -- コールバック関数呼び出し禁止を解除します。
+SDL_CloseAudio -- オーディオの処理を終了し、デバイスをクローズします。
+
+
+コンピュータで音を扱うには、耳で聞くことができる音波を 数値の集まり、サンプルとして表現しなければいけません。 サンプルの各々の数値は、音波の振幅を示しています。 サンプル値の集まりがサウンドカードに送られると 元の波形が再現されて出力されます。振幅を表すビット数が多くなればなるほど、 また、サンプル間隔を小さくすればするほど、元の音を忠実に再現することができ、 音質が向上します。
+
+
+このライブラリでは、8ビット、16ビット、符号あり、符号なしの、いずれの フォーマットもサポートしています。11025Hzから44100Hzまでの周波数を サポートしますが、ハードウエアの性能に依存します。 もしハードウエアが指定したフォーマットや周波数をサポートしていない 場合は、必要に応じてエミュレートすることができます (SDL_OpenAudio()の 項を御覧下さい)。
+
+
+16ビット、22050Hzのフォーマットは一般的にサポートされていることが多いです。
+
+PrevHomeNext
+SDL_JoystickCloseUpSDL_AudioSpec

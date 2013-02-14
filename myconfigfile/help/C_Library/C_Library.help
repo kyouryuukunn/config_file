@@ -1,0 +1,862 @@
+
+目次
+
+    assert.h - 診断機能
+    complex.h - 複素数計算 [C99]
+    ctype.h - 文字操作
+    errno.h - エラー
+    fenv.h - 浮動小数点環境 [C99]
+    float.h - 浮動小数点型の特性
+    inttypes.h - 整数型書式 [C99]
+    iso646.h - 代替つづり [C95]
+    limits.h - 整数型の大きさ
+    locale.h - 文化圏固有操作
+    math.h - 数学
+    setjmp.h - 非局所分岐
+    signal.h - シグナル操作
+    stdarg.h - 可変個数の実引数
+    stdbool.h - 論理型および論理値 [C99]
+    stddef.h - 共通の定義
+    stdint.h - 整数型 [C99]
+    stdio.h - 入出力
+    stdlib.h - 一般ユーティリティ
+    string.h - 文字列操作
+    tgmath.h - 型総称数学関数 [C99]
+    time.h - 日付及び時間
+    wchar.h - ワイド文字 [C95]
+    wctype.h - ワイド文字変換 [C95]
+
+
+
+assert.h-------------------------------------
+
+assert.h には assert マクロが定義されています．
+
+マクロ名	概要
+assert	プログラム中に診断機能を付け加える
+
+complex.h (C99)-------------------------------------
+
+
+complex.h には複素数計算を行うための関数が宣言されています．
+
+関数名	概要
+double 		float 		long double
+
+cacos 		cacosf 		cacosl 	複素数の逆余弦 (arccos) を計算する
+casin 		casinf 		casinl 	複素数の逆正弦 (arcsin) を計算する
+catan 		catanf 		catanl 	複素数の逆正接 (arctan) を計算する
+ccos 		ccosf 		ccosl 	複素数の余弦 (cos) を計算する
+csin 		csinf 		csinl 	複素数の正弦 (sin) を計算する
+ctan 		ctanf 		ctanl 	複素数の正接 (tan) を計算する
+cacosh 		cacoshf 	cacoshl 複素数の双曲線逆余弦 (arccosh) を計算する
+casinh 		casinhf 	casinhl 複素数の双曲線逆正弦 (arcsinh) を計算する
+catanh 		catanhf 	catanhl 複素数の双曲線逆正接 (arctanh) を計算する
+ccosh 		ccoshf 		ccoshl 	複素数の双曲線余弦 (cosh) を計算する
+csinh 		csinhf 		csinhl 	複素数の双曲線正弦 (sinh) を計算する
+ctanh 		ctanhf 		ctanhl 	複素数の双曲線正接 (tanh) を計算する
+cexp 		cexpf 		cexpl 	底がネイピア数 e である指数関数 (指数は複素数) を計算する
+clog 		clogf 		clogl 	複素数自然対数を計算する
+cabs 		cabsf 		cabsl 	複素数の絶対値を取得する
+cpow 		cpowf 		cpowl 	複素数のべき乗を計算する
+csqrt 		csqrtf 		csqrtl 	複素数の平方根を計算する
+carg 		cargf 		cargl 	複素平面上の偏角 (argument) を計算する
+cimag 		cimagf 		cimagl 	複素数の虚部 (imaginary part) を返す
+conj 		conjf 		conjl 	共役複素数 (conjugate complex number) を返す
+cproj 		cprojf 		cprojl 	リーマン球面 (riemann sphere) 上への射影 (projection) を計算する
+creal 		crealf 		creall 	複素数の実部 (real part) を返す
+
+マクロ名	概要
+complex	_Complex を表す
+_Complex_I	虚数単位の値を持つ型 const float _Complex を表す
+imaginary	_Imaginary を表す
+_Imaginary_I	虚数単位の値を持つ型 const float _Imaginary を表す
+
+ctype.h-------------------------------------
+ctype.h には文字の種類の判定や，文字の変換を行うための関数が宣言されています．
+
+関数名	概要	備考
+isalnum		文字がアルファベットもしくは数字かどうかをチェックする	
+isalpha		文字がアルファベットかどうかをチェックする	
+isblank		文字が標準ブランク文字かどうかをチェックする	C99
+iscntrl		文字が制御文字 (control character) かどうかをチェックする	
+isdigit		文字が10進数の数字かどうかをチェックする	
+isgraph		文字が空白 (' ') を除く表示文字 (printing character) かどうかをチェックする	
+islower		文字がアルファベットの小文字かどうかをチェックする	
+isprint		文字が表示文字かどうかをチェックする	
+ispunct		文字が区切り文字 (punctuation character) かどうかをチェックする	
+isspace		文字が標準空白類文字かどうかをチェックする	
+isupper		文字がアルファベットの大文字かどうかをチェックする	
+isxdigit	文字が16進数の数字かどうかをチェックする	
+tolower		大文字を小文字に変換する	
+toupper		小文字を大文字に変換する	
+
+errno.h-------------------------------------
+errno.h にはエラー条件の報告に関するいくつかのマクロが定義されています．
+
+マクロ名	概要
+EDOM		定義域エラー (domain error) を表す
+EILSEQ		多バイト文字 (multi-byte character) の不正な並びを表す
+ERANGE		値域エラー (range error) を表す
+errno		エラー番号を表す
+
+fenv.h (C99)-------------------------------------
+
+
+fenv.h には浮動小数点環境 (floating-point environment) へのアクセス手段を提供するためのいくつかの関数とマクロが定義されています．
+
+関数名	概要
+feclearexcept		引数が表すサポートされている浮動小数点例外 (floating-point exception) のクリアを行う
+fegetexceptflag		浮動小数点状態フラグ (floating-point status flag) の状態をオブジェクトへ格納する
+feraiseexcept		引数が表す浮動小数点例外の生成を行う
+fesetexceptflag		浮動小数点状態フラグの状態を設定する
+fetestexcept		現在設定されている浮動小数点例外フラグを調べる
+fegetround		現在の丸め方向を取得する
+fesetround		丸め方向を設定する
+fegetenv		現在の浮動小数点環境 (floating-point environment) をオブジェクトに格納する
+feholdexcept		現在の浮動小数点環境をオブジェクトに保存する
+fesetenv		現在の浮動小数点環境を設定する
+feupdateenv		現在の浮動小数点環境を設定する
+
+マクロ名		概要
+FE_DIVBYZERO		ゼロによる除算による例外
+FE_INEXACT		不正確による例外
+FE_INVALID		不正操作による例外
+FE_OVERFLOW		オーバーフローによる例外
+FE_UNDERFLOW		アンダーフローによる例外
+FE_ALL_EXCEPT		処理系が定義するすべての例外
+FE_DOWNWARD		負の無限大の方向へ丸める
+FE_TONEAREST		最も近い値へ丸める
+FE_TOWARDZERO		0 の方向へ丸める
+FE_UPWARD		正の無限大の方向へ丸める
+FE_DFL_ENV		デフォルトの浮動小数点環境
+
+float.h-------------------------------------
+
+float.h には標準浮動小数点型の限界及び，パラメータに関するいくつかのマクロが定義されています．
+
+マクロ名		概要	備考
+FLT_ROUNDS		浮動小数点型の丸め方向	
+FLT_EVAL_METHOD		浮動小数点演算の結果の値などの精度	C99
+FLT_RADIX		浮動小数点型の内部表現に使用される基数.	
+FLT_MANT_DIG		float 型の FLT_RADIX を基数とした仮数部の桁数.	
+DBL_MANT_DIG		double 型の FLT_RADIX を基数とした仮数部の桁数.	
+LDBL_MANT_DIG		long double 型の FLT_RADIX を基数とした仮数部の桁数.	
+DECIMAL_DIG		浮動小数点型で表現できる最大の 10 進数桁数.	C99
+FLT_DIG			float 型の浮動小数点数に丸めることができ, それを正確に元の 10 進数に戻すことができる桁数.	
+DBL_DIG			double 型の浮動小数点数に丸めることができ, それを正確に元の 10 進数に戻すことができる桁数.	
+LDBL_DIG		long double 型の浮動小数点数に丸めることができ, それを正確に元の 10 進数に戻すことができる桁数.	
+FLT_MIN_EXP		float 型における FLT_RADIX を基数とした指数部の最小値.	
+DBL_MIN_EXP		double 型における FLT_RADIX を基数とした指数部の最小値.	
+LDBL_MIN_EXP		long double 型における FLT_RADIX を基数とした指数部の最小値.	
+FLT_MIN_10_EXP		float 型における 10 を基数とした指数部の最小値.	
+DBL_MIN_10_EXP		double 型における 10 を基数とした指数部の最小値.	
+LDBL_MIN_10_EXP		long double 型における 10 を基数とした指数部の最小値.	
+FLT_MAX_EXP		float 型における FLT_RADIX を基数とした指数部の最大値.	
+DBL_MAX_EXP		double 型における FLT_RADIX を基数とした指数部の最大値.	
+LDBL_MAX_EXP		long double 型における FLT_RADIX を基数とした指数部の最大値.	
+FLT_MAX_10_EXP		float 型における 10 を基数とした指数部の最大値.	
+DBL_MAX_10_EXP		double 型における 10 を基数とした指数部の最大値.	
+LDBL_MAX_10_EXP		long double 型における 10 を基数とした指数部の最大値.	
+FLT_MAX			float 型の最大値.	
+DBL_MAX			double 型の最大値.	
+LDBL_MAX		long double 型の最大値.	
+FLT_EPSILON		float 型で表現可能な 1 より大きい最小値と 1 との差.	
+DBL_EPSILON		double 型で表現可能な 1 より大きい最小値と 1 との差.	
+LDBL_EPSILON		long double 型で表現可能な 1 より大きい最小値と 1 との差.	
+FLT_MIN			float 型の正の値の最小値.	
+DBL_MIN			double 型の正の値の最小値.	
+LDBL_MIN		long double 型の最小値.	
+
+inttypes.h (C99)-------------------------------------
+
+inttypes.h は，主に stdint.h を拡張するためのヘッダファイルです．
+
+
+関数名		概要
+imaxabs		intmax_t 型の整数の絶対値を取得する
+imaxdiv		商と剰余を取得する
+strtoimax	文字列を intmax_t 型に変換する
+strtoumax	文字列を uintmax_t 型に変換する
+wcstoimax	ワイド文字列を intmax_t 型に変換する
+wcstoumax	ワイド文字列を uintmax_t 型に変換する
+PRIdN		printf 関数などで使用される intN_t 型用の印刷書式設定オプション
+PRIiN
+PRIdLEASTN	printf 関数などで使用される int_leastN_t 型用の印刷書式設定オプション
+PRIiLEASTN
+PRIdFASTN	printf 関数などで使用される int_fastN_t 型用の印刷書式設定オプション
+PRIiFASTN
+PRIdMAX		printf 関数などで使用される intmax_t 型用の印刷書式設定オプション
+PRIiMAX
+PRIdPTR		printf 関数などで使用される intptr_t 型用の印刷書式設定オプション
+PRIiPTR
+PRIoN		printf 関数などで使用される uintN_t 型用の印刷書式設定オプション
+PRIuN
+PRIxN
+PRIXN
+PRIoLEASTN	printf 関数などで使用される uint_leastN_t 型用の印刷書式設定オプション
+PRIuLEASTN
+PRIxLEASTN
+PRIXLEASTN
+PRIoFASTN	printf 関数などで使用される uint_fastN_t 型用の印刷書式設定オプション
+PRIuFASTN
+PRIxFASTN
+PRIXFASTN
+PRIoMAX		printf 関数などで使用される uintmax_t 型用の印刷書式設定オプション
+PRIuMAX
+PRIxMAX
+PRIXMAX
+PRIoPTR		printf 関数などで使用される uintptr_t 型用の印刷書式設定オプション
+PRIuPTR
+PRIxPTR
+PRIXPTR
+SCNdN		scanf 関数などで使用される intN_t 型用の書式設定オプション
+SCNiN
+SCNdLEASTN	scanf 関数などで使用される int_leastN 型用の書式設定オプション
+SCNiLEASTN
+SCNdFASTN	scanf 関数などで使用される int_fastN_t 型用の書式設定オプション
+SCNiFASTN
+SCNdMAX		scanf 関数などで使用される intmax_t 型用の書式設定オプション
+SCNiMAX
+SCNdPTR		scanf 関数などで使用される intptr_t 型用の書式設定オプション
+SCNiPTR
+SCNoN		scanf 関数などで使用される uintN_t 型用の書式設定オプション
+SCNuN
+SCNxN
+SCNoLEASTN	scanf 関数などで使用される uint_leastN 型用の書式設定オプション
+SCNuLEASTN
+SCNxLEASTN
+SCNoFASTN	scanf 関数などで使用される uint_fastN_t 型用の書式設定オプション
+SCNuFASTN
+SCNxFASTN
+SCNoMAX		scanf 関数などで使用される uintmax_t 型用の書式設定オプション
+SCNuMAX
+SCNxMAX
+SCNoPTR		scanf 関数などで使用される uintptr_t 型用の書式設定オプション
+SCNuPTR
+SCNxPTR
+
+iso646.h (C95)-------------------------------------
+
+
+iso646.h には演算子に対応する 11 個のマクロが定義されています．マクロと対応する演算子の一覧は以下の通りです．
+
+
+マクロ名	対応する演算子
+and	&&
+and_eq	&=
+bitand	&
+bitor	|
+compl	~
+not	!
+not_eq	!=
+or	||
+or_eq	|=
+xor	^
+xor_eq	^=
+
+limits.h-------------------------------------
+
+limits.h には標準整数型の限界およびパラメータに展開するいくつかのマクロが定義されています．
+
+
+
+マクロ名	概要	備考
+CHAR_BIT	char 型を構成するビット数 (8 以上)	
+SCHAR_MAX	signed char 型の最大値 (127 以上)	
+SCHAR_MIN	signed char 型の最小値 (-127 以下)	
+UCHAR_MAX	unsigned char 型の最大値 (255 以上)	
+CHAR_MAX	char 型の最大値 (SCHAR_MAX の値. 符号無しの場合は UCHAR_MAX の値)	
+CHAR_MIN	char 型の最小値 (SCHAR_MIN の値. 符号無しの場合は 0 )	
+MB_LEN_MAX	サポートするロケール (locale) に対する多バイト文字 (multi-byte character) の最大バイト数 (1 以上)	
+SHRT_MAX	short 型の最大値 (32767 以上)	
+SHRT_MIN	short 型の最小値 (-32767 以下)	
+USHRT_MAX	unsigned short 型の最大値 (65535 以上)	
+INT_MAX		int 型の最大値 (32767 以上)	
+INT_MIN		int 型の最小値 (-32767 以下)	
+UINT_MAX	unsigned int 型の最大値 (65535 以上)	
+LONG_MAX	long 型の最大値 (2147483647 以上)	
+LONG_MIN	long 型の最小値 (-2147483647 以下)	
+ULONG_MAX	unsigned long 型の最大値 (4294967295 以上)	
+LLONG_MAX	long long 型の最大値 (9223372036854775807 以上)	C99
+LLONG_MIX	long long 型の最小値 (-9223372036854775807 以下)	C99
+ULLONG_MAX	unsigned long long 型の最小値 (18446744073709551615 以上)	C99
+
+locale.h-------------------------------------
+
+error.h にはエラー条件の報告に関するいくつかのマクロが定義されています．
+
+
+
+関数名		概要
+setlocale	ロケール (locale)情報を設定する
+localeconv	ロケール情報を取得する
+
+マクロ名	概要
+LC_ALL		すべてのカテゴリ
+LC_COLLATE	文字列の比較や変換 (strcoll 関数, strxfrm 関数の動作などに影響)
+LC_CTYPE	文字列 (ワイド文字列) 操作関数の動作に影響
+LC_MONETARY	通貨の形式
+LC_NUMERIC	数値の形式 (小数点文字など)
+LC_TIME		時刻と日付けの形式 (strftime 関数の動作などに影響)
+NULL		空ポインタ定数 (null pointer constant) を表す
+
+構造体名	概要
+lconv 構造体	ロケール (locale) 情報を格納する構造体
+
+math.h-------------------------------------
+
+math.h には，引数や戻り値の型の違う同機能の関数がそれぞれ 3 種類宣言されています．また，多くのマクロも定義されています．
+
+
+関数名				概要	備考
+double 	  float    long double
+acos 	  acosf    acosl 	逆余弦 (arccos) を計算する 	
+asin 	  asinf    asinl 	逆正弦 (arcsin) を計算する 	
+atan 	  atanf    atanl 	逆正接 (arctan) を計算する 	
+atan2 	  atan2f   atan2l 	y / x の逆正接 (arctan) を計算する 	
+cos 	  cosf 	   cosl 	余弦 (cos) を計算する 	
+sin 	  sinf 	   sinl 	正弦 (sin) を計算する 	
+tan 	  tanf 	   tanl 	正接 (tan) を計算する 	
+acosh 	  acoshf   acoshl 	双曲線逆余弦 (arccosh) を計算する C99
+asinh 	  asinhf   asinhl 	双曲線逆正弦 (arcsinh) を計算する C99
+atanh 	  atanhf   atanhl 	双曲線逆正接 (arctanh) を計算する C99
+cosh 	  coshf    coshl 	双曲線余弦 (cosh) を計算する 	
+sinh 	  sinhf    sinhl 	双曲線正弦 (sinh) を計算する 	
+tanh 	  tanhf    tanhl 	双曲線正接 (tanh) を計算する 	
+exp 	  expf 	   expl 	底がネイピア数 e である指数関数 (exp) を計算する 	
+exp2 	  exp2f    exp2l 	2 の引数乗を計算する C99
+expm1 	  expm1f   expm1l 	底がネイピア数 e である指数関数 (exp) - 1 を計算する C99
+frexp 	  frexpf   frexpl 	引数を正規化小数と指数に分解する 	
+ilogb 	  ilogbf   ilogbl 	符号付き int の値として引数の指数を抽出する C99
+ldexp 	  ldexpf   ldexpl 	浮動小数点数と 2 の整数べき乗の乗算を計算する 	
+log 	  logf 	   logl 	自然対数 (loge) を計算する 	
+log10 	  log10f   log10l 	常用対数 (log10) を計算する 	
+log1p 	  log1pf   log1pl 	引数に 1 を加えた自然対数 (loge) を計算する C99
+log2 	  log2f    log2l 	2 を底とする対数 (log2) を計算する C99
+logb 	  logbf    logbl 	浮動小数点形式における符号付き整数の値として引数の指数を抽出する C99
+modf 	  modff    modfl 	引数を整数部と小数部に分割する 	
+scalbn 	  scalbnf  scalbnl 	効率よく x * FLT_RADIX^n を計算する C99
+scalbln   scalblnf scalblnl 	効率よく x * FLT_RADIX^n を計算する C99
+cbrt 	  cbrtf    cbrtl 	立方根を計算する C99
+fabs 	  fabsf    fabsl 	絶対値を取得する 	
+hypot 	  hypotf   hypotl 	x の 2 乗と y の 2 乗の和の平方根を計算する C99
+pow 	  powf 	   powl 	べき乗を計算する 	
+sqrt 	  sqrtf    sqrtl 	平方根を計算する 	
+erf 	  erff 	   erfl 	誤差関数を計算す C99
+erfc 	  erfcf    erfcl 	余誤差関数を計算する C99
+lgamma 	  lgammaf  lgammal 	ガンマ関数の絶対値の自然対数 (loge) を計算する C99
+tgamma 	  tgammaf  tgammal  	ガンマ関数を計算する C99
+ceil 	  ceilf    ceill        天井関数 (ceiling function) を計算する 	
+floor 	  floorf   floorl       床関数 (floor function) を計算する 	
+near	  near	   near		その時点の丸め方向に従って，引数を整数値に丸める ("不正確例外" 浮動小数点例外を生成しない) C99
+byint	  byintf   byintl
+rint 	  rintf	   rintl 	その時点の丸め方向に従って，引数を整数値に丸める ("不正確例外" 浮動小数点例外を生成する) C99
+lrint 	  lrintf   lrintl 	その時点の丸め方向に従って，引数を最も近い整数値に丸める C99
+llrint 	  llrintf  llrintl 	その時点の丸め方向に従って，引数を最も近い整数値に丸める C99
+round 	  roundf   roundl 	引数を四捨五入する C99
+lround 	  lroundf  lroundl 	引数を四捨五入する C99
+llround   llroundf llroundl 	引数を四捨五入する C99
+trunc 	  truncf   truncl 	引数を最も近い整数値に丸めます (ただし，その絶対値が引数の絶対値より大きくない値) C99
+fmod 	  fmodf    fmodl 	剰余を計算する 	
+rem	  rem	   rem		IEEE 60559 が要求する余剰 x REM y を計算する C99
+ainder 	  ainderf  ainderl	
+remquo 	  remquof  remquol 	IEEE 60559 が要求する余剰 x REM y を計算する C99
+copysign  copysignf copysignl 	x の絶対値に y の符号を付加して返す C99
+nan 	  nanf     nanl 	文字列を NaN (非数) に変換する C99
+next	  next	   next		指定された形式で表現可能な y 方向にある x の次の値を返す. C99
+after 	  afterf   afterl
+next 	  next	   next		指定された形式で表現可能な y 方向にある x の次の値を返す C99
+toward	  towardf  towardl
+fdim 	  fdimf    fdiml 	2 つの引数の正の差を計算する C99
+fmax 	  fmaxf    fmaxl 	2 つの引数の大きいほうの値を返す C99
+fmin 	  fminf    fminl 	2 つの引数の小さいほうの値を返す C99
+fma 	  fmaf 	   fmal 	(x * y) + z を 1 個の 3 項演算子としてまとめて計算する C99
+
+マクロ名	概要	備考
+fpclassify	引数の値をカテゴリに分類する	C99
+isfinite	引数の値が有限の値かどうかを判定する	C99
+isinf		引数の値が無限大かどうかを判定する	C99
+isnan		引数の値が NaN (非数) かどうかを判定する	C99
+isnormal	引数の値が正規化数かどうかを判定する	C99
+signbit		引数の符号が負かどうかを判定する	C99
+isgreater	1 番目の引数が 2 番目の引数より大きいかどうかを判定する	C99
+isgreaterequal	1 番目の引数が 2 番目の引数より大きい，または等しいかどうかを判定する	C99
+isless		1 番目の引数が 2 番目の引数より小さいかどうかを判定する	C99
+islessequal	1 番目の引数が 2 番目の引数より小さい，または等しいかどうかを判定する	C99
+islessgreater	1 番目の引数が 2 番目の引数より小さい，または大きいかどうかを判定する	C99
+isunordered	引数が順序付けられていないかどうかを判定します	C99
+HUGE_VAL	正の double 型の式	C99
+HUGE_VALF	正の float 型の式	C99
+HUGE_VALL	正の long double 型の式	C99
+INFINITY	無限大を表す float 型の定数式，あるいはコンパイル時においてオーバーフローする float 型の正の定数
+(無限大をサポートしている処理系では正か符号なしの無限大)	C99
+NAN		qNaN (quiet NaN) を表す float 型の定数
+(処理系が float 型の qNaN (quiet NaN) をサポートしている場合のみ定義される)	C99
+FP_INFINITE	正または負の無限大を表す	C99
+FP_NAN		NaN (非数) を表す	C99
+FP_ZERO	0 	を表す	C99
+FP_SUBNORMAL	非正規化数を表す (値が小さすぎて正規化形式で表現できない数)	C99
+FP_NORMAL	正規化数を表す (正常に表せる浮動小数点数)	C99
+FP_FAST_FMA	fma 関数が普通に (x * y) + z と計算するよりも，同じか，より早く実行されることを表す	C99
+FP_FAST_FMAF	fmaf 関数が普通に (x * y) + z と計算するよりも，同じか，より早く実行されることを表す	C99
+FP_FAST_FMAL	fmal 関数が普通に (x * y) + z と計算するよりも，同じか，より早く実行されることを表す	C99
+FP_ILOGB0	ilogb 関数の引数が 0 の場合に返される値	C99
+FP_ILOGBNAN	ilogb 関数の引数が NaN (非数) の場合に返される値	C99
+MATH_ERRNO	整数定数 1 に展開する	C99
+MATH_ERREXCEPT	整数定数 2 に展開する	C99
+math_errhandling MATH_ERRNOか，MATH_ERREXCEPT，または両方のビット単位の論理和のいずれかの式	C99
+
+setjmp.h-------------------------------------
+
+setjmp.h には 分岐 (ジャンプ) を制御するための 1 つの関数と，1 つのマクロが定義されています．
+
+
+関数名	概要
+longjmp	最後に呼び出された setjmp マクロによって保存された環境を復元する
+
+マクロ名	概要
+setjmp	呼出し時の実行コンテキストを jmp_buf に保存する
+
+signal.h-------------------------------------
+
+signal.h にはシグナル (signal) を操作するための 2 つの関数と，いくつかのマクロが定義されています．
+
+
+関数		概要
+signal		シグナル (signal) をキャッチする
+raise		シグナル を他のプロセスに送信する
+
+マクロ名	概要
+SIG_DFL		シグナル (signal) に対するデフォルトの操作を行う
+SIG_IGN		シグナル を無視する
+SIG_ERR		エラー
+SIGABRT		異常終了 (Abort)
+SIGFPE		誤った算術演算 ( 0 除算やオーバーフローなど)
+SIGILL		不正な関数イメージの検出 (不正命令など)
+SIGINT		対話的なアテンションシグナルの受け取り (Interrupt)
+SIGSEGV		記憶域への不正なアクセス
+SIGTERM		プログラムへ送信された終了要求
+
+stdarg.h-------------------------------------
+
+stdarg.h には可変長引数 (variable arguments) を処理するためのマクロが定義されています．
+
+
+マクロ名	概要	備考
+va_arg		可変長引数 (variable arguments)から引数を1つ取得する	
+va_copy		可変長引数をコピーする	C99
+va_end		可変長引数を参照している関数からの正常な復帰を可能にする	
+va_start	可変長引数を初期化する	
+
+stdbool.h (C99)-------------------------------------
+
+
+stdbool.h には 4 つのマクロが定義されています．
+
+
+マクロ名	概要
+bool	_Bool に展開する
+true	整数定数 1 に展開する
+false	整数定数 0 に展開する
+__bool_true_false_are_defined	整数定数 1 に展開する
+
+stddef.h-------------------------------------
+
+stddef.h には以下の 2 種類のマクロが定義されています．
+
+
+マクロ名	概要
+NULL		空ポインタ定数 (null pointer constant) を表す
+offsetof	構造体のメンバのオフセット (offset) を返す
+
+stdint.h (C99)-------------------------------------
+
+
+stdint.h には，型の最小値と最大値を示すマクロが定義されています．
+
+
+マクロ名	概要
+INTN_MIN	幅指定符号付き整数型の最小値 (-(2N-1))
+INTN_MAX	幅指定符号付き整数型の最大値 (2N-1-1)
+UINTN_MAX	幅指定符号無し整数型の最大値 (2N-1)
+INT_LEASTN_MIN	最小幅指定符号付き整数型の最小値 (-(2N-1-1))
+INT_LEASTN_MAX	最小幅指定符号付き整数型の最大値 (2N-1-1)
+UINT_LEASTN_MAX	最小幅指定符号無し整数型の最大値 (2N-1)
+INT_FASTN_MIN	最速最小幅指定符号付き整数型の最小値 (-(2N-1-1))
+INT_FASTN_MAX	最速最小幅指定符号付き整数型の最大値 (2N-1-1)
+UINT_FASTN_MAX	最速最小幅指定符号無し整数型の最大値 (2N-1)
+INTPTR_MIN	ポインタ保持可能な符号付き整数型の最小値 (-(215-1))
+INTPTR_MAX	ポインタ保持可能な符号付き整数型の最大値 (215-1)
+UINTPTR_MAX	ポインタ保持可能な符号付き整数型の最大値 (216-1)
+INTMAX_MIN	最大幅符号付き整数型の最小値 (-(263-1))
+INTMAX_MAX	最大幅符号付き整数型の最大値 (263-1)
+UINTMAX_MAX	最大幅符号無し整数型の最大値 (264-1)
+PTRDIFF_MIN	ptrdiff_t の限界値下限 (-65535)
+PTRDIFF_MAX	ptrdiff_t の限界値上限 (+65535)
+SIG_ATOMIC_MIN	sig_atomic_t の限界値下限 (符号付き: -127 以下，符号無し: 0)
+SIG_ATOMIC_MAX	sig_atomic_t の限界値上限 (符号付き: 127 以上，符号無し: 255 以上)
+SIZE_MAX	size_t の限界値 (65535)
+WCHAR_MIN	wchar_t の限界値下限 (符号付き: -127 以下，符号無し: 0)
+WCHAR_MAX	wchar_t の限界値上限 (符号付き: 127 以上，符号無し: 255 以上)
+WINT_MIN	wint_t の限界値下限 (符号付き: -32767 以下，符号無し: 0)
+WINT_MAX	wint_t の限界値上限 (符号付き: 32767 以上，符号無し: 65535 以上)
+INTN_C(値)	値 を int_leastN_t に対応する整数定数式に展開
+UINTN_C(値)	値 を uint_leastN_t に対応する整数定数式に展開
+INTMAX_C(値)	値 を intmax_t である整数定数式に展開
+UINTMAX_C(値)	値 を uintmax_t である整数定数式に展開
+
+stdio.h-------------------------------------
+
+stdio.h には入出力に関する関数が定義されています．
+
+
+関数名		概要	備考
+remove		ファイルを削除する	
+rename		ファイル名を変更する	
+tmpfile		一時的なバイナリファイルを生成する	
+tmpnam		既存のファイル名と一致しない文字列を生成する	
+fclose		ファイルをクローズ (close) する	
+fflush		バッファ (buffer) をフラッシュ (データの吐き出し) する	
+fopen		ファイルをオープン (open) する	
+freopen		ストリーム (stream) をクローズしてから新しいストリームをオープンする	
+setbuf		入出力用の バッファ を設定する	
+setvbuf		入出力用の バッファ を設定する	
+fprintf		書式文字列に従ってストリーム に出力する	
+fscanf		ストリームから書式文字列に従ってデータを読込む	
+printf		書式文字列に従って標準出力 (standard output) に出力する	
+scanf		標準入力 (standard input) から書式文字列に従ってデータを読込む	
+snprintf	書式文字列に従って指定文字数分だけ文字配列に書き込む	C99
+sprintf		書式文字列に従って文字配列に書き込む	
+sscanf		指定した文字列から書式文字列に従ってデータを取得する	
+vfprintf	可変長引数リストのデータを書式文字列に従ってストリームに出力する	
+vfscanf		ストリーム から可変長引数リストを用いてデータを読込む	C99
+vprintf		可変長引数リストのデータを書式文字列に従って標準出力 に出力する	
+vscanf		標準入力 から可変長引数リストを用いてデータを読み込む	C99
+vsnprintf	可変長引数リストのデータを書式文字列に従って指定文字数分だけ文字配列に書き込む	C99
+vsprintf	可変長引数リストのデータを書式文字列に従って文字配列に書き込む	
+vsscanf		指定した文字列から可変長引数リストを用いてデータを取得する	C99
+fgetc		ストリーム から 1 文字単位で文字を読み取る	
+fgets		ストリーム から 1 行単位で文字列を読み取る	
+fputc		ストリーム に指定した文字を書き込む	
+fputs		ストリーム に指定した文字列を書き込む	
+getc		ストリーム から 1 文字単位で文字を読み取る	
+getchar		標準入力 から 1 文字単位で文字を読み取る	
+gets		標準入力 から文字列を読み取る	
+putc		ストリーム に指定した文字を書き込む.	
+putchar		標準出力 に指定した文字を書き込む	
+puts		標準出力 に指定した文字列を書き込む	
+ungetc		入力ストリーム に文字を戻す	
+fread		ブロック単位でファイルを読み込む	
+fwrite		ブロック単位でファイルを書き込む	
+fgetpos		ストリーム の解析状態および，現在のファイル位置表示子 (file position indicator) の値を取得する	
+fseek		ファイル位置表示子を変更する	
+fsetpos		mbstate_t オブジェクトおよび，ファイル位置表示子を設定する	
+ftell		ファイル位置表示子の値を取得する	
+rewind		ファイル位置表示子をそのファイルの始めに位置付ける	
+clearerr	ファイル位置表示子，ファイル終了表示子 (end-of-file indicator)，エラー表示子 (error indicator) をクリアする	
+feof		ストリーム のファイル終了表示子を判定する	
+ferror		ストリームのエラー表示子を判定する	
+perror		エラー番号に対応するエラーメッセージを標準エラー出力 (standard error) に出力する	
+
+マクロ名	概要
+_IOFBF		入出力を完全バッファリング (fully buffered) する
+_IOLBF		入出力を行バッファリング (line buffered) する
+_IONBF		入出力をバッファリングなし (unbuffered) しない
+BUFSIZ		setbuf 関数によって使われるバッファ (buffer) の大きさを表す
+L_tmpnam	tmpnam 関数によって生成される一時ファイル名を保持するのに，char 型の配列が必要とする十分な大きさを表す整数定数式
+TMP_MAX		tmpnam 関数によって生成されるファイル名の最大個数を表す
+SEEK_CUR	その時点のファイル位置表示子 (file position indicator) の値
+SEEK_END	ファイルの終わり
+SEEK_SET	ファイルの始め
+stderr		標準エラー出力 (standard error)
+stdin		標準入力 (standard input)
+stdout		標準出力 (standard output)
+EOF		ファイルの終わり (end-of-file) を示すための，int 型の負の値を表す
+FOPEN_MAX	同時にオープン (open) できるファイル数の最小値を表す整数定数式を表す
+FILENAME_MAX	オープンできるファイル名の長さを表す整数定数式を表す
+NULL		空ポインタ定数 (null pointer constant) を表す
+
+stdlib.h-------------------------------------
+
+stdlib.h にはいくつかの一般ユーティリティ関数とマクロが定義されています．
+
+
+関数名		概要	備考
+atof		文字列を double 型に変換する	
+atoi		文字列を int 型に変換する	
+atol		文字列を long 型に変換する	
+atoll		文字列を long long 型に変換する	C99
+strtod		文字列を double 型に変換する	
+strtof		文字列を float 型に変換する	C99
+strtold		文字列を long double 型に変換する	C99
+strtol		基数を指定して文字列を long 型に変換する	
+strtoll		基数を指定して文字列を long long 型に変換する	C99
+strtoul		基数を指定して文字列を unsigned long 型に変換する	
+strtoull	基数を指定して文字列を unsigned long long 型に変換する	C99
+rand		擬似乱数を発生させる	
+srand		乱数種 (シード) を設定する	
+calloc		指定バイト分のメモリ領域を確保し，その領域を 0 で初期化する	
+free		メモリ領域を解放する	
+malloc		指定バイト分のメモリ領域を確保する	
+realloc		確保したメモリ領域のサイズを変更する	
+abort		プログラムを異常終了する	
+atexit		プログラム正常終了時に呼び出される関数を登録する	
+exit		プログラムを終了する	
+_Exit		プログラムを終了する	C99
+getenv		環境変数の値を取得する	
+system		コマンドプロセッサ (command processor) へコマンドを渡す	
+bsearch		整列 (sort) 済みの配列から値を探索する	
+qsort		配列を整列する	
+abs		絶対値を取得し，結果を int 型で返す	
+labs		絶対値を取得し，結果を long 型で返す	
+llabs		絶対値を取得し，結果を long long 型で返す	C99
+div		商と剰余を取得し，結果を div_t 型で返す	
+ldiv		商と剰余を取得し，結果を ldiv_t 型で返す	
+lldiv		商と剰余を取得し，結果を lldiv_t 型で返す	C99
+mblen		多バイト文字 (multibyte character) のバイト長を取得する	
+mbtowc		多バイト文字をワイド文字 (wide character) に変換する	
+wctomb		ワイド文字を多バイト文字に変換する	
+mbstowcs	多バイト文字列 (multibyte string) をワイド文字列 (wide string) に変換する	
+wcstombs	ワイド文字列を多バイト文字列に変換する	
+
+マクロ名	概要
+NULL		空ポインタ定数 (null pointer constant) を表す
+EXIT_SUCCESS	成功終了状態を表す
+EXIT_FAILURE	失敗終了状態を表す
+RAND_MAX	rand 関数が返す最大の値を表す
+MB_CUR_MAX	多バイト文字の最大バイト数を表す (size_t型の整数式)
+
+string.h-------------------------------------
+
+string.h には文字列操作に関する関数が定義されています．
+
+
+関数名		概要
+memcpy 		オブジェクトを指定文字数分コピーする
+memmove		オブジェクトを指定文字数分コピーする
+strcpy		文字列をコピーする
+strncpy		文字列を指定文字数分コピーする
+strcat		文字列を連結する
+strncat		文字列を指定文字数分連結する
+memcmp 		オブジェクトを指定文字数分比較する
+strcmp		文字列を比較する
+strcoll		文字列の比較をその時点のロケール (loclae) に従って行う
+strncmp		文字列を指定文字数分比較する
+strxfrm		文字列の変換を行う
+memchr		オブジェクトから文字を探索する
+strchr		文字列の先頭から文字を探索する
+strcspn		文字列中の指定文字列を含まない先頭部分の長さを求める
+strpbrk		文字列から、指定したいずれかの文字を探索する
+strrchr		文字列の最後から文字を探索する
+strspn		文字列中の指定文字列を含む先頭部分の長さを求める
+strstr		文字列から文字列を探索する
+strtok		文字列を区切り文字で分割する
+memset		オブジェクトの先頭から指定文字数分文字をセットする
+strerror	エラー番号に対応するエラーメッセージを取得する
+strlen		文字列の長さを取得する
+
+マクロ名	概要
+NULL		空ポインタ定数 (null pointer constant) を表す
+
+tgmath.h (C99)-------------------------------------
+
+
+tgmath.h には引数の型に応じて math.h か complex.h の関数を呼び出すマクロが定義されています．なお，tgmath.h をインクルードすると math.h と complex.h も自動的にインクルードされます．
+マクロとそのマクロによって呼び出される関数の一覧は以下の通りです．
+
+
+math.h と complex.h のどちらか一方から関数を呼び出すマクロ
+マクロ名	呼び出される関数 (math.h)	呼び出される関数 (complex.h)
+	double 	float 	long double 	double complex 	float complex 	long double complex
+acos 	acos 	acosf 	acosl 		cacos 		cacosf 		cacosl
+asin 	asin 	asinf 	asinl 		casin 		casinf 		casinl
+atan 	atan 	atanf 	atanl 		catan 		catanf 		catanl
+acosh 	acosh 	acoshf 	acoshl 		cacosh 		cacoshf 	cacoshl
+asinh 	asinh 	asinhf 	asinhl 		casinh 		casinhf 	casinhl
+atanh 	atanh 	atanhf 	atanhl 		catanh 		catanhf 	catanhl
+cos 	cos 	cosf 	cosl 		ccos 		ccosf 		ccosl
+sin 	sin 	sinf 	sinl 		csin 		csinf 		csinl
+tan 	tan 	tanf 	tanl 		ctan 		ctanf 		ctanl
+cosh 	cosh 	coshf 	coshl 		ccosh 		ccoshf 		ccoshl
+sinh 	sinh 	sinhf 	sinhl 		csinh 		csinhf 		csinhl
+tanh 	tanh 	tanhf 	tanhl 		ctanh 		ctanhf 		ctanhl
+exp 	exp 	expf 	expl 		cexp 		cexpf 		cexpl
+log 	log 	logf 	logl 		clog 		clogf 		clogl
+pow 	pow 	powf 	powl 		cpow 		cpowf 		cpowl
+sqrt 	sqrt 	sqrtf 	sqrtl 		csqrt 		csqrtf 		csqrtl
+fabs 	fabs 	fabsf 	fabsl 		cabs 		cabsf 		cabsl
+
+math.h から関数を呼び出すマクロ
+マクロ名	呼び出される関数 (math.h)
+		double 		float 		long double
+atan2 		atan2 		atan2f 		atan2l
+cbrt 		cbrt 		cbrtf 		cbrtl
+ceil 		ceil 		ceilf 		ceill
+copysign 	copysign 	copysignf 	copysignl
+erf 		erf 		erff 		erfl
+erfc 		erfc 		erfcf 		erfcl
+exp2 		exp2 		exp2f 		exp2l
+expm1 		expm1 		expm1f 		expm1l
+fdim 		fdim 		fdimf 		fdiml
+floor 		floor 		floorf 		floorl
+fma 		fma 		fmaf 		fmal
+fmax 		fmax 		fmaxf 		fmaxl
+fmin 		fmin 		fminf 		fminl
+fmod 		fmod 		fmodf 		fmodl
+frexp 		frexp 		frexpf 		frexpl
+hypot 		hypot 		hypotf 		hypotl
+ilogb 		ilogb 		ilogbf 		ilogbl
+ldexp 		ldexp 		ldexpf 		ldexpl
+lgamma 		lgamma 		lgammaf 	lgammal
+llrint 		llrint 		llrintf 	llrintl
+llround 	llround 	llroundf 	llroundl
+log10 		log10 		log10f 		log10l
+log1p 		log1p 		log1pf 		log1pl
+log2 		log2 		log2f 		log2l
+logb 		logb 		logbf 		logbl
+lrint 		lrint 		lrintf 		lrintl
+lround 		lround 		lroundf 	lroundl
+nearbyint 	nearbyint 	nearbyintf 	nearbyintl
+nextafter 	nextafter 	nextafterf 	nextafterl
+nexttoward 	nexttoward 	nexttowardf 	nexttowardl
+remainder 	remainder 	remainderf 	remainderl
+remquo 		remquo 		remquof 	remquol
+rint 		rint 		rintf 		rintl
+round 		round 		roundf 		roundl
+scalbn 		scalbn 		scalbnf 	scalbnl
+scalbln 	scalbln 	scalblnf 	scalblnl
+tgamma 		tgamma 		tgammaf 	tgammal
+trunc 		trunc 		truncf 		truncl
+
+complex.h から関数を呼び出すマクロ
+マクロ名	呼び出される関数 (complex.h)
+		double complex	float complex 	long double complex
+carg 		carg 		cargf 		cargl
+cimag 		cimag 		cimagf 		cimagl
+conj 		conj 		conjf 		conjl
+cproj 		cproj 		cprojf 		cprojl
+creal 		creal 		crealf 		creall
+
+time.h-------------------------------------
+
+time.h には主に時間を扱うための関数が定義されています．
+
+
+関数名		概要
+clock		使用したプロセッサ時間を取得する
+difftime	2 つの暦時刻 (calendar time) の差を求める
+mktime		tm 構造体を time_t 型に変換する
+time		現在の暦時刻を取得する
+asctime		tm 構造体の要素別の時刻を文字列に変換する
+ctime		暦時刻 (calendar time) を文字列形式の地方時に変換する
+gmtime		暦時刻を協定世界時 (utc) に変換する
+localtime	暦時刻を地方時 (local time) に変換する
+strftime 	時間や日時情報を指定された書式に従って変換し，文字配列に格納する
+
+マクロ名	概要
+NULL		空ポインタ定数 (null pointer constant) を表す
+CLOCKS_PER_SEC	clock 関数が返す値の単位 (1 秒当たりの個数) を表す
+
+構造体名	概要
+tm 構造体	暦時刻 (calendar time) の要素を格納する構造体
+
+wchar.h (C95)-------------------------------------
+
+
+wchar.h にはワイド文字 (wide character) を扱うためのいつくつかの関数が定義されています．
+
+関数名		概要	備考
+fwprintf	書式ワイド文字列に従ってストリーム (stream) に出力する	
+fwscanf		ストリームから書式ワイド文字列に従ってデータを読込む	
+swprintf	書式ワイド文字列に従ってワイド文字 (wide character) 配列に書き込む	
+swscanf		指定したワイド文字列 (wide string) から書式ワイド文字列に従ってデータを取得する	
+vfwprintf	可変長引数リストのデータを書式ワイド文字列に従ってストリームに出力する	
+vfwscanf	ストリームから可変長引数リストを用いてデータを読込む	C99
+vswprintf	可変長引数リストのデータを書式ワイド文字列に従ってワイド文字配列に書き込む	
+vswscanf	指定したワイド文字列から可変長引数リストを用いてデータを取得する	C99
+vwprintf	可変長引数リストのデータを書式ワイド文字列に従って標準出力 (standard output) に出力する	
+vwscanf		標準入力 (standard input) から可変長引数リストを用いてデータを読み込む	C99
+wprintf		書式ワイド文字列に従って標準出力に出力する	
+wscanf		標準入力から書式ワイド文字列に従ってデータを読込む	
+fgetwc		ストリーム から 1 文字単位でワイド文字 を読み取る	
+fgetws		ストリームから 1 行単位でワイド文字列 を読み取る	
+fputwc		ストリームに指定したワイド文字を書き込む	
+fputws		ストリームに指定したワイド文字列を書き込む	
+fwide		ストリームの入出力単位を決定する	
+getwc		ストリームから 1 文字単位でワイド文字を読み取る	
+getwchar	標準入力 から 1 文字単位でワイド文字を読み取る	
+putwc		ストリームに指定したワイド文字を書き込む	
+putwchar	標準出力 に指定したワイド文字を書き込む	
+ungetwc		入力ストリームにワイド文字を戻す	
+wcstod		ワイド文字列 を double 型に変換する	
+wcstof		ワイド文字列を float 型に変換する	C99
+wcstold		ワイド文字列を long double 型に変換する	C99
+wcstol		基数を指定してワイド文字列を long 型に変換する	
+wcstoll		基数を指定してワイド文字列を long long 型に変換する	C99
+wcstoul		基数を指定してワイド文字列を unsigned long 型に変換する	
+wcstoull	基数を指定してワイド文字列を unsigned long long 型に変換する	C99
+wcscpy		ワイド文字列 をコピーする	
+wcsncpy		ワイド文字列を指定文字数分コピーする	
+wmemcpy		オブジェクトを指定ワイド文字数分コピーする	
+wmemmove	オブジェクトを指定ワイド文字数分コピーする	
+wcscat		ワイド文字列 を連結する	
+wcsncat		ワイド文字列を指定文字数分連結する	
+wcscmp		ワイド文字列 を比較する	
+wcscoll		ワイド文字列の比較をその時点のロケール (locale) に従って行う	
+wcsncmp		ワイド文字列を指定文字数分比較する	
+wcsxfrm		ワイド文字列の変換を行う	
+wmemcmp		オブジェクトを指定ワイド文字数分比較する	
+wcschr		ワイド文字列 の先頭からワイド文字 を探索する	
+wcscspn		ワイド文字列中の指定ワイド文字列を含まない先頭部分の長さを求める	
+wcspbrk		ワイド文字列から指定したいずれかのワイド文字を探索する	
+wcsrchr		ワイド文字列の最後からワイド文字を探索する	
+wcsspn		ワイド文字列中の指定ワイド文字列を含む先頭部分の長さを求める	
+wcsstr		ワイド文字列からワイド文字列を探索する	
+wcstok		ワイド文字列を区切りワイド文字で分割する	
+wmemchr		オブジェクトからワイド文字を探索する	
+wcslen		ワイド文字列 の長さを取得する	
+wmemset		オブジェクトの先頭から指定文字数分ワイド文字 をセットする	
+wcsftime	時間や日時情報を指定された書式に従って変換しワイド文字 配列に格納する	
+btowc		1 バイト文字をワイド文字 に変換する	
+wctob		ワイド文字を 1 バイト文字に変換する	
+mbsinit		mbstate_t オブジェクトが初期変換状態を表すかどうかを判定する	
+mbrlen		多バイト文字 (multibyte character) のバイト長を取得する	
+mbrtowc		多バイト文字をワイド文字 に変換する	
+wcrtomb		ワイド文字を多バイト文字に変換する	
+mbsrtowcs	多バイト文字列 (multibyte string) をワイド文字列 に変換する	
+wcsrtombs	ワイド文字列を多バイト文字列に変換する	
+
+マクロ名	概要
+NULL		空ポインタ定数 (null pointer constant) を表す
+WCHAR_MIN	wchar_t 型の最小値を表す
+WCHAR_MAX	wchar_t 型の最大値を表す
+WEOF		ファイルの終わり (end-of-file) を示すための wint_t 型の値を表す
+
+wctype.h (C95)-------------------------------------
+
+
+wctype.h にはワイド文字 (wide character) の種類の判定や，ワイド文字の変換を行うための関数が定義されています．
+
+関数名		概要	備考
+iswalnum	文字が英数字に対応するワイド文字 (wide character) かどうかを判定する	
+iswalpha	文字が英文字に対応するワイド文字かどうかを判定する	
+iswblank	文字が標準ブランクワイド文字かどうかを判定する	C99
+iswcntrl	文字が制御ワイド文字 (control wide character) かどうかを判定する	
+iswdigit	文字が 10 進数字に対応するワイド文字かどうかを判定する	
+iswgraph	文字が空白類ワイド文字を除く表示ワイド文字 (printing wide character) かどうかを判定する	
+iswlower	文字が英小文字に対応するワイド文字かどうかを判定する	
+iswprint	文字が表示ワイド文字かどうかを判定する	
+iswpunct	文字が区切り文字 (punctuation character) に対応するワイド文字かどうかを判定する	
+iswspace	文字が文化圏固有の空白類ワイド文字かどうかを判定する	
+iswupper	文字が英大文字に対応するワイド文字かどうかを判定する	
+iswxdigit	文字が 16 進数字に対応するワイド文字かどうかを判定する	
+iswctype	指定したワイド文字 が指定した種別に属するかどうかを判定する	
+wctype		ワイド文字の種別を取得する	
+towlower	ワイド文字 の小文字を大文字に変換する	
+towupper	ワイド文字の大文字を小文字に変換する	
+towctrans	指定した写像を用いてワイド文字を変換する	
+wctrans		ワイド文字間の写像を表す wctrans_t 型の値を生成する	
+
+マクロ名	概要
+WEOF		ファイルの終わり (end-of-file) を示すための wint_t 型の値を表す

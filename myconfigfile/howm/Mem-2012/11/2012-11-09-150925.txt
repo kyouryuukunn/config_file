@@ -1,0 +1,59 @@
+= <span style="color:#FF9933;font-size:x-large;">吉里吉里をいじっていくなかで作っ...
+
+<span style="color:#FF9933;font-size:x-large;">吉里吉里をいじっていくなかで作ったプラグインを公開します</span>
+
+
+自分のために作ったものですが、いったい何回車輪の再発明を繰り返すのかというぐらい多くの
+人が作ってきたものでしょうからここに公開しておきます。
+基本的にはkagで書かれているので初心者のひとも改造は比較的楽かと。バグがあったら報告お願いします。
+
+もしも使いたい人がいたなら好きに使ってください
+改変、再配布は自由、使用を明記する必要も報告する必要もないけど報告をくれるとうれしいです。
+詳しい使い方は同封のreadmeにて、ダウンロードはページのいちばんしたにまとめてあります。
+
+各プラグインは変数の設定でかなり自由かつ簡単にレイアウトを変更できるようにしています。
+また、マウスホイールによるページ移動にも対応しています。
+
+<span style="color:#FF9933;font-size:large;">Musicモードプラグイン</span>
+よくあるミュージックモードを実装するプラグイン。このへんはあまり説明入らないと思う。
+<a href="http://akakyouryuu.blog.fc2.com/img/music_sample.png/" target="_blank"><img src="http://blog-imgs-55.fc2.com/a/k/a/akakyouryuu/music_sample.png" alt="music_mode_sample" border="0" width="632" height="480" /></a>
+
+
+<span style="color:#FF9933;font-size:large;"><strong>CGモードプラグイン</strong></span>
+名前どおりCGモードを実装する。画面より大きい画像には対応していない
+<a href="http://akakyouryuu.blog.fc2.com/img/cg_mode.png/" target="_blank"><img src="http://blog-imgs-55.fc2.com/a/k/a/akakyouryuu/cg_mode.png" alt="cg_mode_sample" border="0" width="640" height="478" /></a>
+
+<span style="color:#FF9933;font-size:large;"><strong>セーブ、ロードモードプラグイン</strong></span>
+そのまんまセーブ、ロード画面を実装します。
+<a href="http://akakyouryuu.blog.fc2.com/img/save_mode1.png/" target="_blank"><img src="http://blog-imgs-55.fc2.com/a/k/a/akakyouryuu/save_mode1.png" alt="save_mode_sample1" border="0" width="640" height="476" /></a>
+
+変数を変えるだけでこんなふうにできます。
+<a href="http://akakyouryuu.blog.fc2.com/img/save_mode2.png/" target="_blank"><img src="http://blog-imgs-55.fc2.com/a/k/a/akakyouryuu/save_mode2.png" alt="save_mode_sample2" border="0" width="640" height="476" /></a>
+
+<span style="color:#FF9933;font-size:large;"><strong>シーン管理プラグイン</strong></span>
+フェイトや俺つばにあるようなシーン毎のスキップを実装するプラグイン
+実装方法はシーン毎にセーブを取っておき、後で変数のつじつまを合わせる
+という簡単なものです。それにともなってフラグ管理もしています。
+回想モードを簡単に実装するためのマクロも用意
+
+<span style="color:#FF9933;font-size:large;"><strong>メッセージレイヤの濃度変更プラグイン</strong></span>
+ゲーム中に文字をクリアせずにメッセージレイヤの濃度を変更できる
+プラグイン
+
+<span style="color:#FF9933;font-size:large;"><strong>メニュープラグイン</strong></span>
+表示位置を上端と右端から選べるマウスオンメニュー、右クリックメニュー
+またメッセージレイヤに表示するボタン形式の３つを選べるメニューと
+それにともなうコンフィグ、セーブ、ロード画面がセットになったもの
+改造前提プラグインというよりサンプル
+
+<span style="color:#FF9933;font-size:large;"><strong>カメラワークマクロ</strong></span>
+tjsに挑戦!にて公開されているexmoveをラップして吉里吉里でYU-RISのような
+カメラ機能を使おうとしたもの。単純にすべてのレイヤーを同じ方向に移動し
+同じ点を中心に回転させて実行している。
+バグが多過ぎるので画面の中心以外を回転軸にはしてはいけいない
+
+
+全部入りサンプルと個別のプラグインをskydriveで公開している
+<a href="https://skydrive.live.com/?cid=8F8EF4D2142F33D4&amp;amp;id=8F8EF4D2142F33D4!257#cid=8F8EF4D2142F33D4&amp;id=8F8EF4D2142F33D4!257" target="_blank" title="ダウンロード"><span style="color:#FF9933;font-size:large;">ダウンロード</span></a>
+[2012-11-09 15:09]
+

@@ -1,0 +1,47 @@
+TITLE :         BohYoh.com【Ｃ言語講座】標準ライブラリ qrost    
+
+　bsearch
+Ｃ言語 標準ライブラリ   アルファベット順索引   ヘッダ別索引   ホームページへ　Ｃ言語講座のページ
+
+探索・整列ユーティリティ
+bsearch
+ヘッダ  #include <stdlib.h>
+形　式  void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
+機　能  先頭要素をbaseが指している、要素数がnmemb個で要素の大きさがsizeであるオブジェクトの配列からkeyが指すオブジェクトに一致する要素を探索する。
+comparが指す比較関数は、keyオブジェクトへのポインタを第１引数とし、配列要素へのポインタを第２引数として呼び出される。その関数は、keyオブジェクトが配列要素より小さい／一致する／大きいとみなされると、それぞれ0より小さい／等しい／大きい整数を返すこと。
+配列は、keyオブジェクトと比較して、小さい要素だけの部分、等しい要素だけの部分及び大きい要素だけの部分から構成され、これら三つの部分が、この順序で存在していなければならない。
+返却値  配列中の一致する要素へのポインタを返す。一致する要素がなければ、空ポインタを返す。二つの要素が等しいとき、どちらの要素と一致するかは規定されない。
+
+■実装例■
+
+#include <stdlib.h>
+
+/*--- 要素の大きさがsizeで要素数がnmembの配列baseからkeyと一致する要素を
+      比較関数comparを用いて２分探索 ---*/
+void *bsearch(const void *key, const void *base, size_t nmemb, size_t size,
+              int (*compar)(const void *, const void *))
+{
+    size_t pl = 0;                          /* 探索範囲先頭の添字 */
+    size_t pr = nmemb - 1;                  /* 探索範囲末尾の添字 */
+    char  *x = (char *)base;
+
+    if (nmemb > 0) {
+        while (1) {
+            size_t pc = (pl + pr) / 2;      /* 探索範囲中央の添字 */
+            int  comp = compar((const void *)&x[pc * size], key);
+
+            if (comp == 0)                  /* 探索成功 */
+                return (&x[pc * size]);
+            else if (pl == pr)
+                break;
+            else if (comp < 0)
+                pl = pc + 1;                /* 探索範囲を後半に絞り込む */
+            else 
+                pr = pc - 1;                /* 探索範囲を前半に絞り込む */
+        }
+    }
+
+    return (NULL);                          /* 探索失敗 */
+}
+
+-------------------------------------------------------------------------------

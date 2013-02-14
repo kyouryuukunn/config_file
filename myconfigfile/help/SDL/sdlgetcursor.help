@@ -1,0 +1,28 @@
+TITLE : SDL_GetCursor
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetCursor
+
+Name
+
+SDL_GetCursor --  現在アクティブなマウスカーソルを取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_Cursor *SDL_GetCursor(void);
+
+Description
+
+
+現在アクティブなマウスカーソルを返します。
+
+See Also
+
+SDL_SetCursor, SDL_CreateCursor, SDL_ShowCursor
+
+PrevHomeNext
+SDL_SetCursorUpSDL_ShowCursor

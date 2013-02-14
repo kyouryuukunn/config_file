@@ -1,0 +1,39 @@
+TITLE : SDL_SetGamma
+
+SDL Library Documentation
+PrevNext
+
+SDL_SetGamma
+
+Name
+
+SDL_SetGamma --  表示用のカラーガンマ関数をセットします。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_SetGamma(float redgamma, float greengamma, float bluegamma);
+
+Description
+
+
+各カラーチャンネルについて、表示用の「ガンマ関数」をセットします。 ガンマは画面に表示される色の明るさ・コントラストを制御します。 ガンマ値 1.0 は単位元です。 (つまり、何の調整も行われません)
+
+
+この関数は「ガンマ関数」のパラメータに基いてガンマを調整します。 SDL_SetGammaRamp を使うと、 ガンマ調整の参照テーブルを直接指定することができます。
+
+
+全ての表示ハードウェアがガンマを変更することができるわけではありません。
+
+Return Value
+
+
+失敗(あるいはガンマ調整がサポートされていない)のときは -1 を返します。
+
+See Also
+
+SDL_GetGammaRamp SDL_SetGammaRamp
+
+PrevHomeNext
+SDL_SetPaletteUpSDL_GetGammaRamp

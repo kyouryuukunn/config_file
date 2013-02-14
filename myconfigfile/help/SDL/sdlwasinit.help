@@ -1,0 +1,40 @@
+TITLE : SDL_WasInit
+
+SDL Library Documentation
+PrevNext
+
+SDL_WasInit
+
+Name
+
+SDL_WasInit -- サブシステムが初期化されているかどうかをチェックします。
+
+Synopsis
+
+#include "SDL.h"
+
+Uint32 SDL_WasInit(Uint32 flags);
+
+Description
+
+
+SDL_WasInit は、どのSDLサブシステムが 初期化されているかを報告します。 flagsには、調べたいサブシステムの論理和を 指定します(指定できるサブシステムのフラグについては SDL_Init の項を参照してください)。
+
+Return Value
+
+
+SDL_WasInit は、初期化されているサブシステムの論理和を返します。
+
+Examples
+
+
+ /* SDL_WasInit() の使いかたの例 */ /* 全てのサブシステムの初期化状態を得ます */ Uint32 subsystem_init; subsystem_init=SDL_WasInit(SDL_INIT_EVERYTHING); if(subsystem_init&SDL_INIT_VIDEO) printf("ビデオは初期化されています。\n"); else printf("ビデオは初期化されていません。\n"); /* 1つのサブシステムだけをチェックします */ if(SDL_WasInit(SDL_INIT_VIDEO)!=0) printf("ビデオは初期化されています。\n"); else printf("ビデオは初期化されていません。\n"); /* 2つのサブシステムをチェックします */ Uint32 subsystem_mask=SDL_INIT_VIDEO|SDL_INIT_AUDIO; if(SDL_WasInit(subsystem_mask)==subsystem_mask) printf("ビデオとオーディオはどちらも初期化されています。\n"); else printf("ビデオとオーディオのどちらか、または両方が初期化されていません。\n");
+
+
+
+See Also
+
+SDL_Init, SDL_Subsystem
+
+PrevHomeNext
+SDL_QuitUpSDL_GetError

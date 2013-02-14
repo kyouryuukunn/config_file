@@ -1,0 +1,30 @@
+TITLE : SDL_Delay
+
+SDL Library Documentation
+PrevNext
+
+SDL_Delay
+
+Name
+
+SDL_Delay --  指定されたミリ秒間停止して復帰します。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_Delay(Uint32 ms);
+
+Description
+
+
+指定されたミリ秒間停止して復帰します。SDL_Delayは少くとも指定されたミリ秒間停止します。しかしOSのスケジューリングによってはもっと長くなることもあります。
+
+Note: 少くとも10ミリ秒の遅延を考えて下さい。 プラットフォームによってはもっと短かい時間の場合もありますが、この値が最も一般的です。
+
+See Also
+
+SDL_AddTimer
+
+PrevHomeNext
+SDL_GetTicksUpSDL_AddTimer

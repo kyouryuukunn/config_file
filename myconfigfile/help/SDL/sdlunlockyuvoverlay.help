@@ -1,0 +1,28 @@
+TITLE : SDL_UnlockYUVOverlay
+
+SDL Library Documentation
+PrevNext
+
+SDL_UnlockYUVOverlay
+
+Name
+
+SDL_UnlockYUVOverlay --  オーバレイのロックを解除します。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_UnlockYUVOverlay(SDL_Overlay *overlay);
+
+Description
+
+
+SDL_LockYUVOverlay と逆で、以前にロックされたオーバレイのロックを解除します。 オーバレイは表示される前にロックを解除しなければいけません。
+
+See Also
+
+SDL_UnlockYUVOverlay, SDL_CreateYUVOverlay, SDL_Overlay
+
+PrevHomeNext
+SDL_LockYUVOverlayUpSDL_DisplayYUVOverlay

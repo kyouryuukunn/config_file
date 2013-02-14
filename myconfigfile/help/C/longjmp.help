@@ -1,0 +1,167 @@
+TITLE : C言語関数辞典 - longjmp
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ setjmp.h ≫ longjmp
+
+longjmp
+
+同じプログラム中の最後に呼び出された setjmp マクロによって保存された環境を復元します．
+
+
+#include <setjmp.h>
+
+
+
+void longjmp(
+    jmp_buf env,
+    int val
+);
+
+
+longjmp 関数は，同じプログラム中で対応する jmp_buf 型の引数をもって最後に呼び出された setjmp マクロによって保存された環境を復元します．
+
+longjmp が完了すると，対応する setjmp が引数 val で指定された値を返したものとしてプログラムを続行します． ただし，setjmp に 0 を返させることはできません． (引数 val に 0 を指定した場合は 1 を返します)
+
+
+
+以下の場合の動作は未定義です．
+
+  * longjmp が呼び出される前に，setjmp が呼び出されていない場合
+  * setjmp の呼び出しを含む関数が実行を既に終了している場合
+  * setjmp の呼出しが可変修飾型をもつ識別子の有効範囲内にあり，実行が途中でその有効範囲から離れた場合
+
+C言語サンプルプログラム
+
+以下に longjmp 関数を使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <setjmp.h>
+
+/* main */
+int main(void) {
+    jmp_buf env;
+    int retVal = 0;
+
+    /* jmp_bufに実行コンテキストを保存 */
+    if ( (retVal = setjmp(env)) == 0 ) { /* :-) */
+        printf("%d\n", retVal);
+
+        /* :-) に復帰. 復帰後の setjmp は 1 を返す */
+        longjmp(env, 1);
+
+    } else {
+        printf("%d\n", retVal);
+        return EXIT_SUCCESS;
+
+    }
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+0
+1
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,212 @@
+TITLE : C言語関数辞典 - vfprintf
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ vfprintf
+
+vfprintf
+
+可変長引数リストのデータを書式文字列に従ってストリーム (stream) に出力します．
+
+
+#include <stdio.h>
+#include <stdarg.h>
+
+
+
+int vfprintf(
+    FILE * restrict stream,
+    const char * restrict format,
+    va_list arg
+);
+
+
+vfprintf 関数は可変長引数リスト arg のデータを format が指す書式文字列に従って，stream が指すストリームへ書き込みを行います．
+
+vfprintf の呼び出し前には va_start マクロで引数 arg を初期化しておく必要があります．また，vfprintf は va_end マクロを呼び出しません．したがってユーザーが手動で va_end を呼び出す必要があります．
+
+vfprintf の動作は可変長引数 (variable arguments) を arg に置き換えた fprintf と同じです．
+
+引数
+
+  * stream: ストリーム
+  * format: 書式文字列 (詳しくは printf の書式文字列を参照してください)
+  * arg: 変換するパラメータのリスト (可変長引数リスト)
+
+戻り値
+
+  * 成功した場合: 書き出された文字数
+  * 失敗した場合: 負の値
+
+C言語サンプルプログラム
+
+vfprintf 関数を使用して可変長引数リストのデータをストリームに出力するサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+/* functions */
+void inputError(char *function, char *format, ...);
+
+/* main */
+int main(void) {
+    int sex, age;
+
+    /* 性別の入力 */
+    puts("性別を入力してください。(1:男性 2:女性)");
+    scanf("%d", &sex);
+    if ( sex != 1 && sex != 2 ) {
+        inputError("main", "性別は1か2で入力してください. (入力値: %d)\n", sex);
+        return EXIT_FAILURE;
+    }
+
+    /* 年齢の入力 */
+    puts("年齢を入力してください.");
+    scanf("%d", &age);
+    if ( age < 0 || age > 150 ) {
+        inputError("main", "嘘はいけません.(入力値: %d)\n", age);
+        return EXIT_FAILURE;
+    }
+
+    puts("分かりました.");
+
+    return EXIT_SUCCESS;
+}
+
+/**
+ * @brief エラー処理を行う
+ * @param[IN] function 関数名
+ * @param[IN] format 書式文字列
+ * @param[IN] ... 可変長引数
+ */
+void inputError(char *function, char *format, ...) {
+    va_list arg;
+    va_start(arg, format);
+
+    /* エラーが発生した関数名を表示 */
+    fprintf(stderr, "エラーが発生した関数: %s\n", function);
+
+    /* エラーメッセージを表示 */
+    vfprintf(stderr, format, arg);
+
+    va_end(arg);
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります.
+
+
+性別を入力してください. (1:男性 2:女性)
+(3 を入力)
+
+エラーが発生した関数: main
+性別は1か2で入力してください. (入力値: 3)
+
+
+性別を入力してください. (1:男性 2:女性)
+(1 を入力)
+年齢を入力してください.
+(-1 を入力)
+
+エラーが発生した関数: main
+嘘はいけません. (入力値: -1)
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

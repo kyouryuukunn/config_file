@@ -1,0 +1,180 @@
+TITLE : C言語関数辞典 - feof
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ feof
+
+feof
+
+ストリーム (stream) のファイル終了表示子 (end-of-file indicator) を判定します．
+
+
+#include <stdio.h>
+
+
+
+int feof(
+    FILE *stream
+);
+
+
+feof 関数は stream が指すストリームのファイル終了表示子を判定します． ファイル終了表示子がセットされている場合には真を返し，そうでない場合には偽を返します．
+
+引数
+
+  * stream: ストリーム
+
+戻り値
+
+  * ファイル終了表示子がセットされている場合: 真 (0 以外)
+  * 上記以外: 偽 (0)
+
+C言語サンプルプログラム
+
+feof 関数を使用したサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* macros */
+#define N 256
+
+/* main */
+int main(void) {
+    FILE *fp;
+    char *filename = "sample.txt";
+    char readline[N] = {'\0'};
+
+    if ((fp = fopen(filename, "r")) == NULL) {
+        fprintf (stderr, "%sのオープンに失敗: %s\n",
+                filename, strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    /* ファイル終了表示子のチェック */
+    printf("読込み前: feof(fp) = %d\n", feof(fp));
+
+    /* ファイルの終端まで文字を読み取る */
+    while ( fgets(readline, N, fp) != NULL );
+
+    /* ファイル終了表示子のチェック */
+    printf("読込み後: feof(fp) = %d\n", feof(fp));
+
+    /* ファイル終了表示子のクリア */
+    clearerr(fp);
+
+    /* ファイル終了表示子のチェック */
+    printf("クリア後: feof(fp) = %d\n", feof(fp));
+
+    fclose(fp);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+読込み前: feof(fp) = 0
+読込み後: feof(fp) = 16
+クリア後: feof(fp) = 0
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

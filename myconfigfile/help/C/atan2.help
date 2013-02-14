@@ -1,0 +1,209 @@
+TITLE : C言語関数辞典 - atan2, atan2f, atan2l
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ atan2, atan2f, atan2l
+
+The atan2 functions - atan2, atan2f, atan2l
+
+y / x の逆正接 (arctan) を計算します．
+
+atan2
+
+
+#include <math.h>
+
+
+
+double atan2(
+    double y,
+    double x
+);
+
+
+atan2 関数は y / x の逆正接 (arctan) を計算し，結果を double 型で返します．
+
+atan2f (C99)
+
+
+#include <math.h>
+
+
+
+float atan2f(
+    float y,
+    float x
+);
+
+
+atan2f 関数は y / x の逆正接 (arctan) を計算し，結果を float 型で返します．
+
+atan2l (C99)
+
+
+#include <math.h>
+
+
+
+long double atan2l(
+    long double y,
+    long double x
+);
+
+
+atan2l 関数は y / x の逆正接 (arctan) を計算し，結果を long double 型で返します．
+
+atan2，atan2f，atan2l 関数は，x，y 両方の実引数が 0 の場合，定義域エラー (domain error) が発生することがあります．
+
+戻り値
+
+  * 区間 [-pi, +pi] ラジアンのy / x の逆正接値
+
+数学上の表記
+
+C言語サンプルプログラム
+
+以下に atan2 関数を使用して偏角を取得するサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* functions */
+double to_deg(double);
+
+/* main */
+int main(void) {
+    double rad1, rad2, rad3;
+    double deg1, deg2, deg3;
+
+    rad1 = atan2(1.0, 0.0);
+    rad2 = atan2(1.0, sqrt(3.0));
+    rad3 = atan2(sqrt(3.0), 1.0);
+
+    /* 度数法に変換する */
+    deg1 = to_deg(rad1);
+    deg2 = to_deg(rad2);
+    deg3 = to_deg(rad3);
+
+    printf("偏角1: %.5f[rad]，%.1f[deg]\n", rad1, deg1);
+    printf("偏角2: %.5f[rad]，%.1f[deg]\n", rad2, deg2);
+    printf("偏角3: %.5f[rad]，%.1f[deg]\n", rad3, deg3);
+
+    return EXIT_SUCCESS;
+}
+
+/**
+ * 弧度法表記を度数法表記に変換する
+ * @param[in] r 角度[rad]
+ * @return 角度[deg]
+ */
+double to_deg(double r) {
+    return r * 180.0 / (atan(1.0) * 4.0);
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+偏角1: 1.57080[rad]，90.0[deg]
+偏角2: 0.52360[rad]，30.0[deg]
+偏角3: 1.04720[rad]，60.0[deg]
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

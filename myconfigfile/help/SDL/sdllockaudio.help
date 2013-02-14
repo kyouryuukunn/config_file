@@ -1,0 +1,28 @@
+TITLE : SDL_LockAudio
+
+SDL Library Documentation
+PrevNext
+
+SDL_LockAudio
+
+Name
+
+SDL_LockAudio -- コールバック関数の呼び出しを禁止します。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_LockAudio(void);
+
+Description
+
+
+これらの関数によって操作されるロックは、コールバック関数の呼び出しを 制御します。 LockAudio期間中は、コールバック関数が呼び出されないことが保証されます。 デッドロックを引き起こしますので、これらの関数をコールバック 関数の中から呼び出さないでください。
+
+See Also
+
+SDL_OpenAudio
+
+PrevHomeNext
+SDL_MixAudioUpSDL_UnlockAudio

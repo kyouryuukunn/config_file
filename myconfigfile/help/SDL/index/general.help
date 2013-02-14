@@ -1,0 +1,23 @@
+TITLE : General
+
+SDL Library Documentation
+PrevNext
+
+Chapter 5. General
+
+Table of Contents
+SDL_Init -- SDLを初期化します。
+SDL_InitSubSystem -- サブシステムを初期化します。
+SDL_QuitSubSystem -- サブシステムをシャットダウンします。
+SDL_Quit -- SDLをシャットダウンします。
+SDL_WasInit -- サブシステムが初期化されているかどうかをチェックします。
+SDL_GetError -- SDLのエラーを文字列で得ます。
+
+
+SDLを使う前には必ず SDL_Initで初期化する必要があります。SDL_Initは、 ユーザの指定したすべてのサブシステム(ビデオ、オーディオ、ジョイスティック、 タイマー、CD-ROMのいずれかあるいは全部)を初期化することができます。 SDL_InitでSDLが初期化された後は、 各々のサブシステムは SDL_InitSubSystemと SDL_QuitSubSystemを 使うことで自由に初期化またはシャットダウンすることができます。
+
+
+プログラムが終了するときにも、SDLの終了処理が確実に実行される 必要があります。SDL_Quitを 呼ぶと、すべてのサブシステムがシャットダウンされ、 SDLのために確保された全てのリソースが解放されます。
+
+PrevHomeNext
+SDL ReferenceUpSDL_Init

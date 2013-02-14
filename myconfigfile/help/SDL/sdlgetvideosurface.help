@@ -1,0 +1,28 @@
+TITLE : SDL_GetVideoSurface
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetVideoSurface
+
+Name
+
+SDL_GetVideoSurface --  現在の表示サーフェスへのポインタを返します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_Surface *SDL_GetVideoSurface(void);
+
+Description
+
+
+この関数は現在の表示サーフェスへのポインタを返します。 SDL が表示サーフェス上でフォーマット変換を行っている場合は、 この関数は実際のビデオサーフェスではなく、(SDL を使う側に見せている) 変換前のサーフェスを返します。
+
+See Also
+
+SDL_Surface
+
+PrevHomeNext
+VideoUpSDL_GetVideoInfo

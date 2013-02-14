@@ -1,0 +1,190 @@
+TITLE : C言語関数辞典 - ctan, ctanf, ctanl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ complex.h ≫ ctan, ctanf, ctanl
+
+The ctan functions (C99) - ctan, ctanf, ctanl
+
+複素数の正接 (tan) を計算します．
+
+ctan (C99)
+
+
+#include <complex.h>
+
+
+
+double complex ctan(
+    double complex z
+);
+
+
+ctan 関数は，z の複素数正接を計算し，結果を double complex 型で返します．
+
+ctanf (C99)
+
+
+#include <complex.h>
+
+
+
+float complex ctanf(
+    float complex z
+);
+
+
+ctanf 関数は，z の複素数正接を計算し，結果を float complex 型で返します．
+
+ctanl (C99)
+
+
+#include <complex.h>
+
+
+
+long double complex ctanl(
+    long double complex z
+);
+
+
+ctanl 関数は，z の複素数正接を計算し，結果を long double complex 型で返します．
+
+戻り値
+
+  * 複素数正接値
+
+C言語サンプルプログラム
+
+以下に ctan 関数を使用して複素数正接を計算するサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <complex.h>
+
+/* main */
+int main(void) {
+    double complex z = 3.0 + 2.0 * I;
+    double complex ctan_z01, ctan_z02;
+    double re = creal(z);
+    double im = cimag(z);
+
+    /* 複素数正接を求める */
+    ctan_z01 = ctan(z);
+    ctan_z02 = (sin(2.0 * re) + I * sinh(2.0 * im)) / (cos(2.0 * re) + cosh(2 * im));
+
+    /* 表示 */
+    printf("ctan 関数で求めた値:    %.10f + %.10fi\n",
+        creal(ctan_z01), cimag(ctan_z01));
+    printf("数学的定義から求めた値: %.10f + %.10fi\n",
+        creal(ctan_z02), cimag(ctan_z02));
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+ctan 関数で求めた値:  -0.0098843750 + 0.9653858790i
+数学的定義から求めた値: -0.0098843750 + 0.9653858790i
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,101 @@
+TITLE : ＤＸライブラリ置き場　リファレンスページ
+
+                     ＤＸライブラリ　関数リファレンスページ
+-------------------------------------------------------------------------------
+
+　このページではＤＸライブラリの中でも使用頻度の低い、若しくはちょっと使い方が 難しい関数の解説と簡単なサンプルプログラムの掲示をする予定です。
+
+　今の所関数の一覧と概略のみになっています。
+　引数などは DxLib.h を見れば分かりますので、使おうと思えば一応使えます。
+　
+
+システム関連関数
+
+SetDoubleStartValidFlag 　２重起動を許すかどうかのフラグをセットする
+SetWindowInitPosition 　ウインドウの初期位置を設定する
+SetAlwaysRunFlag 　ウインドウがアクティブではない状態でも処理を続行するか、フラグをセットする
+SetOutApplicationLogValidFlag 　ログ出力を行うか否かのセット
+EnumFontName 　使用可能なフォントの名前を列挙する
+SetActiveStateChangeCallBackFunction 　ウインドウのアクティブ状態に変化があったときに呼ばれるコールバック関数をセットする
+SetUseASyncChangeWindowModeFunction 　最大化ボタンやALT+ENTERキーによる非同期なウインドウモードの変更の機能の設定を行う
+SetWindowUserCloseEnableFlag 　メインウインドウの×ボタンを押した時にライブラリが自動的にウインドウを閉じるかどうかのフラグをセットする
+GetWindowUserCloseFlag 　ウインドウの閉じるボタンが押されたかどうかを取得する
+
+
+ファイルのドラッグ＆ドロップ関係関数
+
+SetDragFileValidFlag 　ファイルのドラッグ＆ドロップ機能を有効にするかどうかのフラグをセットする
+DragFileInfoClear 　ドラッグ＆ドロップされたファイルの情報を初期化する
+GetDragFilePath 　ドラッグ＆ドロップされたファイル名を取得する
+GetDragFileNum 　ドラッグ＆ドロップされたファイルの数を取得する
+
+
+メニュー関係関数
+
+SetUseMenuFlag 　メニューを有効にするかどうかを設定する
+AddMenuItem 　メニューに項目を追加する
+DeleteMenuItem 　メニューから選択項目を削除する
+CheckMenuItemSelect 　メニューが選択されたかどうかを取得する( 0:選択されていない 1:選択された )
+SetMenuItemEnable 　メニューの項目を選択出来るかどうかを設定する
+SetMenuItemMark 　メニューの項目にチェックマークやラジオボタンを表示するかどうかを設定する
+DeleteMenuItemAll 　メニューの全ての選択項目を削除する
+ClearMenuItemSelect 　メニューが選択されたかどうかの情報を初期化
+GetMenuItemID 　メニューの項目名からＩＤを取得する
+GetMenuItemName 　メニューの項目名からＩＤを取得する
+LoadMenuResource 　メニューをリソースから読み込む
+SetMenuItemSelectCallBackFunction 　メニューの選択項目が選択されたときに呼ばれるコールバック関数を設定する
+SetUseKeyAccelFlag 　キーボードアクセラレーターを使用するかどうかを設定する
+AddKeyAccel 　ショートカットキーを追加する
+ClearKeyAccel 　ショートカットキーの情報を初期化する
+
+
+サウンド関係関数
+
+LoadMusicMem 　ＭＩＤＩファイルを読み込む
+LoadMusicMemByMemImage 　メモリ上に展開されたＭＩＤＩファイルを読み込む
+LoadSoundMemByMemImage 　メモリ上の音声ファイルイメージからサウンドハンドルを作成する
+SelectMidiMode 　ＭＩＤＩの演奏形態をセットする
+SetCreateSoundDataType 　作成する音声データの再生形式を設定する
+
+
+入力関係関数
+
+SetKeyExclusiveCooperativeLevelFlag 　キーボードの協調レベルを排他レベルにするかどうかのフラグをセットする
+
+
+グラフィック関係関数
+
+LoadPauseGraph 　フォーカスが他のソフトに移っているときにバックグラウンドに表示するグラフィックのロード、登録(NULL で解除)
+LoadPauseGraphFromMem 　アクティブウインドウが他のソフトに移っている際に表示する画像のロード(NULL で解除)
+DrawGraphF 　DrawGraph の座標引数 float 版
+DrawTurnGraphF 　DrawTurnGraph の座標引数 float 版
+DrawExtendGraphF 　DrawExtendGraph の座標引数 float 版
+DrawRotaGraphF 　DrawRotaGraph の座標引数 float 版
+DrawRotaGraph2F 　DrawRotaGraph2 の座標引数 float 版
+DrawModiGraphF 　DrawModiGraph の座標引数 float 版
+SetUseBlendGraphCreateFlag 　ブレンド処理用画像を作成するかどうかのフラグをセットする
+LoadBlendGraph 　画像ファイルからブレンド用画像を読み込む
+DrawBlendGraph 　ブレンド画像と合成して画像を描画する
+DrawVString 　文字列を縦に描画する
+DrawVStringToHandle 　フォントハンドルを使用して文字列を縦に描画する
+SetUseBasicGraphDraw3DDeviceMethodFlag 　単純図形の描画に３Ｄデバイスの機能を使用するかどうかのフラグをセットする
+SetDrawValidGraphCreateFlag 　描画可能なグラフィックを作成するかどうかのフラグをセットする
+SetMaskReverseEffectFlag 　マスクの数値に対する効果を逆転させるかどうかを設定する
+SaveDrawScreen 　現在描画対象になっている画面をＢＭＰ形式で保存する
+SetWaitVSyncFlag 　ScreenFlip関数実行時にＣＲＴの垂直同期信号待ちをするかのフラグセット
+SetUseSoftwareRenderModeFlag 　ソフトウエアレンダリングモードを使用するかどうかをセットする
+GetColorBitDepth 　画面の色ビット数を得る
+ScreenCopy 　画面コピー関数、画面の裏ページ（普段は表示されていない）を表ページ（普段表示されている）にコピーする
+CreateGraphFromMem 　メモリ上の画像ファイルイメージからグラフィックハンドルを作成する
+CreateDivGraphFromMem 　メモリ上のグラフィックイメージから分割グラフィックハンドルを作成する
+CreateColorData 　カラーデータを作成する
+CreateGraphFromGraphImage 　BASEIMAGE 構造体の情報を元にグラフィックハンドルを作成する
+CreateDivGraphFromGraphImage 　BASEIMAGE 構造体の情報を元に分割グラフィックハンドルを作成する
+
+
+その他の関数
+
+AppLogAdd 　書式付きログ文字列を書き出す
+MultiByteCharCheck 　２バイト文字か調べる( TRUE:２バイト文字 FALSE:１バイト文字 )
+
+

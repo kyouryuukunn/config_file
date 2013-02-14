@@ -1,0 +1,55 @@
+TITLE : SDL_BlitSurface
+
+SDL Library Documentation
+PrevNext
+
+SDL_BlitSurface
+
+Name
+
+SDL_BlitSurface --  転送元サーフェスから転送先サーフェスへ高速 blit 転送を行います
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect);
+
+Description
+
+
+転送元サーフェスから転送先サーフェスへ高速 blit 転送を行います
+
+
+srcrect の横幅(w)と縦幅(h)はコピーされる矩形領域のサイズを決定します。 dstrect は位置(x, y)のみが使われます。(w, h は無視されます)
+
+
+srcrect が NULL の場合は、 サーフェス全体がコピーされます。 dstrect が NULL の場合は、 転送先の座標(左上隅)は (0, 0) になります。
+
+
+最終的な blit 領域は全てのクリッピングが行なわれた後に dstrect に保存されます。 ((srcrect は変更されません)
+
+
+blit 関数はロックされたサーフェス上で呼ばれるべきではありません。
+
+
+blit 操作の結果は SDL_SRCAPLHA がセットされているか否かによって 大きく変化します。 これがどのように結果に影響するかについては、 SDL_SetAlpha を見て下さい。 以下の擬似コードのようにカラーキーとα属性もサーフェスの blit に作用します。 
+if (転送元サーフェスに SDL_SRCALPHA がセットされている) { if (転送元サーフェスにαチャンネルがある (つまり format->Amask != 0)) ピクセル単位のα値を使い、カラーキーを無視して blit else { if (転送元サーフェスに SDL_SRCCOLORKEY がセットされている) カラーキーとサーフェス単位のα値を使って blit else サーフェス単位のα値を使って blit } } else { if (転送元サーフェスに SDL_SRCCOLORKEY がセットされている) カラーキーを使って blit else 普通の矩形 blit }
+
+Return Value
+
+
+blit に成功すると 0 を返し、 そうでなければ -1 を返します。
+
+
+どちらかのサーフェスがビデオメモリにあり、blit が -2 を返す場合は、 ビデオメモリが失われたため、 画像込みでもう一度ロードして blit する必要があります。 
+ while ( SDL_BlitSurface(image, imgrect, screen, dstrect) == -2 ) { while ( SDL_LockSurface(image)) < 0 ) SDL_Delay(10); -- 画像のピクセルを image->pixels に書く -- SDL_UnlockSurface(image); }
+
+これは DirextX5.0 の下で、 システムがあなたのフルスクリーンアプリケーションを切り換える時に発生します。 あなたがビデオメモリに再度アクセスするまでは サーフェスのロックも失敗するでしょう。
+
+See Also
+
+SDL_LockSurface, SDL_FillRect, SDL_Surface, SDL_Rect
+
+PrevHomeNext
+SDL_ConvertSurfaceUpSDL_FillRect

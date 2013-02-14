@@ -1,0 +1,41 @@
+TITLE : SDL_ConvertAudio
+
+SDL Library Documentation
+PrevNext
+
+SDL_ConvertAudio
+
+Name
+
+SDL_ConvertAudio -- オーディオデータを望みのフォーマットに変換します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_ConvertAudio(SDL_AudioCVT *cvt);
+
+Description
+
+
+SDL_ConvertAudioは1つの引数cvtだけをとり、これは事前に初期化されている必要があります。 SDL_AudioCVT構造体を初期化するために2つの段階を経る必要があります。 まず最初に、変換元と変換先のフォーマットを指定した構造体をSDL_BuildAudioCVTに渡さなければいけません。 次にcvt->bufとcvt->lenフィールドをそれぞれ設定します。 cvt->bufはオーディオデータへのポインタを、cvt->lenは、そのオーディオデータの長さをバイト単位で指定します。 bufで指定されたバッファの大きさは、 len*len_mult バイトになることを忘れないでください。
+
+
+SDL_AudioCVT構造体が初期化されると、 cvt->bufで 示されたオーディオデータを変換するために SDL_ConvertAudioを呼び出すことができます。 変換が成功するとSDL_ConvertAudioは0を返します。失敗した場合は-1を返します。
+
+
+変換が成功すると、変換されたオーディオデータは cvt->bufから読み出すことができます。 変換後のバッファ内にあるオーディオデータの正しい大きさは cvt->len*cvt->len_ratioとなります。
+
+Examples
+
+
+/* WAVデータをハードウエアのフォーマットに変換します */ void my_audio_callback(void *userdata, Uint8 *stream, int len); SDL_AudioSpec *desired, *obtained; SDL_AudioSpec wav_spec; SDL_AudioCVT wav_cvt; Uint32 wav_len; Uint8 *wav_buf; int ret; /* オーディオ用のバッファを確保します */ desired=(SDL_AudioSpec *)malloc(sizeof(SDL_AudioSpec)); obtained=(SDL_AudioSpec *)malloc(sizeof(SDL_AudioSpec)); /* 変換したいフォーマットを設定します */ desired->freq=22050; desired->format=AUDIO_S16LSB; desired->samples=8192; desired->callback=my_audio_callback; desired->userdata=NULL; /* オーディオデバイスを開きます */ if ( SDL_OpenAudio(desired, obtained) < 0 ){ fprintf(stderr, "オーディオデバイスのオープンに失敗しました: %s\n", SDL_GetError()); exit(-1); } free(desired); /* test.wavを読み込みます */ if( SDL_LoadWAV("test.wav", &wav_spec, &wav_buf, &wav_len) == NULL ){ fprintf(stderr, "test.wavを開くことができませんでした: %s\n", SDL_GetError()); SDL_CloseAudio(); free(obtained); exit(-1); } /* AudioCVT構造体を設定します */ ret = SDL_BuildAudioCVT(&wav_cvt, wav_spec.format, wav_spec.channels, wav_spec.freq, obtained->format, obtained->channels, obtained->freq); /* 変換器の生成に成功したかどうかチェックします */ if(ret==-1){ fprintf(stderr, "変換器の生成に失敗しました!\n"); SDL_CloseAudio(); free(obtained); SDL_FreeWAV(wav_buf); } /* 変換の準備をします */ wav_cvt.buf=(Uint8 *)malloc(wav_len*wav_cvt.len_mult); wav_cvt.len=wav_len; memcpy(wav_cvt.buf, wav_buf, wav_len); /* 元のWAVデータはこの時点で解放することができます */ SDL_FreeWAV(wav_buf); /* 変換の準備ができましたので変換します */ SDL_ConvertAudio(&wav_cvt); /* 変換後の処理 */ . . . . 
+
+
+
+See Also
+
+SDL_BuildAudioCVT, SDL_AudioCVT
+
+PrevHomeNext
+SDL_BuildAudioCVTUpSDL_MixAudio

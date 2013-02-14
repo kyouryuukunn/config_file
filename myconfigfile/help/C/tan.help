@@ -1,0 +1,192 @@
+TITLE : C言語関数辞典 - tan, tanf, tanl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ tan, tanf, tanl
+
+The tan functions - tan, tanf, tanl
+
+正接 (tan) を計算します．
+
+tan
+
+
+#include <math.h>
+
+
+
+double tan(
+    double x
+);
+
+
+tan 関数は x の正接 (tan) を計算し，結果を double 型で返します．
+
+tanf (C99)
+
+
+#include <math.h>
+
+
+
+float tanf(
+    float x
+);
+
+
+tanf 関数は x の正接 (tan) を計算し，結果を float 型で返します．
+
+tanl (C99)
+
+
+#include <math.h>
+
+
+
+long double tanl(
+    long double x
+);
+
+
+tanl 関数は x の正接 (tan) を計算し，結果を long double 型で返します．
+
+戻り値
+
+  * 正接値
+
+数学上の表記
+
+C言語サンプルプログラム
+
+以下にtan，tanf，tanl 関数それぞれを使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* macros */
+#define PI 3.14159265
+
+/* main */
+int main(void) {
+    double d_angle = PI / 6.0, d_result;
+    float f_angle = PI / 4.0, f_result;
+    long double ld_angle = PI / 3.0L, ld_result;
+
+    d_result = tan(d_angle);
+    f_result = tanf(f_angle);
+    ld_result = tanl(ld_angle);
+
+    printf("tan(pi / 6): %.8f\n", d_result);
+    printf("tanf(pi / 4): %.8f\n", f_result);
+    printf("tanl(pi / 3): %.8Lf\n", ld_result);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+tan(pi / 6): 0.57735027
+tanf(pi / 4): 1.00000000
+tanl(pi / 3): 1.73205080
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

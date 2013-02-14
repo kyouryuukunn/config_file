@@ -1,0 +1,124 @@
+TITLE : C言語関数辞典 - fesetexceptflag
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ fenv.h ≫ fesetexceptflag
+
+fesetexceptflag (C99)
+
+浮動小数点状態フラグ (floating-point status flag) の状態を設定します．
+
+
+#include <fenv.h>
+
+
+
+int fesetexceptflag(
+    const fexcept_t *flagp,
+    int excepts
+);
+
+
+fesetexceptflag 関数は excepts が示す浮動小数点状態フラグの状態を，flagp が指すオブジェクトに保存されている状態に従って設定します． *flagpの値は，それ以前に fegetexceptflag 関数を呼び出して，設定しておく必要があります． (fegetexceptflag の 2 番目の引数で，少なくとも引数 excepts で指定する浮動小数点例外を指定しておく必要があります．) この関数は例外は発生せず，単にフラグの状態のセットだけを行います．
+
+戻り値
+
+  * excepts が 0 の場合: 0
+  * すべての指定されたフラグの適切な状態へのセットに成功した場合: 0
+  * 上記以外: 0 以外
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

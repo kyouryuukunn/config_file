@@ -1,0 +1,31 @@
+TITLE : Time
+
+SDL Library Documentation
+PrevNext
+
+Chapter 13. Time
+
+Table of Contents
+SDL_GetTicks --  SDLライブラリの初期化からの経過ミリ秒数を取得します。
+SDL_Delay --  指定されたミリ秒間停止して復帰します。
+SDL_AddTimer --  タイマを追加します。タイマは指定ミリ秒間経過した後にコールバックを呼び出します。
+SDL_RemoveTimer --  SDL_AddTimerで追加したタイマを削除します。
+SDL_SetTimer --  指定されたミリ秒が経過した後に実行するコールバックを設定します。
+
+
+SDLは時間を扱うクロスプラットフォームな関数をいくつか提供しています。 提供しているものは現在の時間を得る方法、短時間待つ方法、そして簡単なタイマ機能です。 この関数を使ってオブジェクトをXミリ秒ごとに動かす方法が2つあります。
+
+  * 
+
+  タイマのコールバック関数を使います。この方法は別のスレッドでの実行やアラームシグナルの使用に悪影響を与えます。しかし実装が簡単です。
+
+  * 
+
+  
+何ミリ秒経過したのか取得します。そして例えば30ミリ秒経過したらオブジェクトを移動します。
+
+
+
+
+PrevHomeNext
+SDL_CondWaitTimeoutUpSDL_GetTicks

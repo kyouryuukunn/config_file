@@ -1,0 +1,41 @@
+TITLE : SDL_JoystickGetBall
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickGetBall
+
+Name
+
+SDL_JoystickGetBall --  トラックボールの相対的な動きを取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_JoystickGetBall(SDL_Joystick *joystick, int ball, int *dx, int *dy);
+
+Description
+
+
+ball の軸の変化を取得します。
+
+
+トラックボールは 前回の SDL_JoystickGetBall の呼び出しからの 相対的な動きだけを返すことができ、これらの動きの変化は dx と dy に 格納されます。
+
+Return Value
+
+
+成功の場合は 0 を、 失敗の場合は -1 を返します。
+
+Examples
+
+
+int delta_x, delta_y; SDL_Joystick *joy; . . . SDL_JoystickUpdate(); if(SDL_JoystickGetBall(joy, 0, &delta_x, &delta_y)==-1) printf("トラックボール情報の読み込みに失敗しました!\n"); printf("トラックボールの相対移動値- X:%d, Y:%d\n", delta_x, delta_y);
+
+See Also
+
+SDL_JoystickNumBalls
+
+PrevHomeNext
+SDL_JoystickGetButtonUpSDL_JoystickClose

@@ -1,0 +1,33 @@
+TITLE : SDL_CreateCond
+
+SDL Library Documentation
+PrevNext
+
+SDL_CreateCond
+
+Name
+
+SDL_CreateCond -- ｾ・ﾑｿ鋿ｮ､ｷ､ﾞ､ｹ｡｣
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+SDL_cond *SDL_CreateCond(void);
+
+Description
+
+ｾ・ﾑｿ鋿ｮ､ｷ､ﾞ､ｹ｡｣
+
+Examples
+
+
+SDL_cond *cond; cond=SDL_CreateCond(); . . /* ｽ靉 */ . . SDL_DestroyCond(cond);
+
+
+See Also
+
+SDL_DestroyCond, SDL_CondWait, SDL_CondSignal
+
+PrevHomeNext
+SDL_SemValueUpSDL_DestroyCond

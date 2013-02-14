@@ -1,0 +1,39 @@
+TITLE : SDL_DisplayFormatAlpha
+
+SDL Library Documentation
+PrevNext
+
+SDL_DisplayFormatAlpha
+
+Name
+
+SDL_DisplayFormatAlpha --  サーフェスを表示フォーマットに変換します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_Surface *SDL_DisplayFormatAlpha(SDL_Surface *surface);
+
+Description
+
+
+この関数はサーフェスを引数に取り、 表示サーフェス上への高速 blit に適するように、 ビデオフレームバッファのピクセルフォーマット・色にαチャンネルを加えた 新しいサーフェスにコピーします。 その際 SDL_ConvertSurface を 呼び出します。
+
+
+ハードウェアによるカラーキーやαの blit 転送のアクセラレーション の利点を得たい場合は、 この関数を呼ぶ前にカラーキーとα値をセットしておくべきです。
+
+
+サーフェスに SDL_SRCCOLORKEY フラグがセットされている 場合は、この関数はカラーキーをαチャンネルに変換することに使うことが できます。 そうして生成されたサーフェスは、 カラーキーに一致するピクセルでは透明(α=0)に、 他の場所では不透明(α=255)になります。
+
+Return Value
+
+
+変換に失敗するか、メモリを使い切った時は NULL を返します。
+
+See Also
+
+SDL_ConvertSurface, SDL_SetAlpha, SDL_SetColorKey, SDL_DisplayFormat, SDL_Surface
+
+PrevHomeNext
+SDL_DisplayFormatUpSDL_WarpMouse

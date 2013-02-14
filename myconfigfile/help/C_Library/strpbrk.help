@@ -1,0 +1,28 @@
+TITLE :         BohYoh.com【Ｃ言語講座】標準ライブラリ strpbrk    
+
+　strpbrk
+Ｃ言語 標準ライブラリ   アルファベット順索引   ヘッダ別索引   ホームページへ　Ｃ言語講座のページ
+
+探索関数
+strpbrk
+ヘッダ  #include <string.h>
+形　式  char *strpbrk(const char *s1, const char *s2);
+機　能  s1が指す文字列の中で、s2が指す文字列中のいずれかの文字の最初の出現を返す。
+返却値  その文字へのポインタを返す。いずれの文字も現れない場合は、空ポインタを返す。
+
+■実装例■
+
+#include <string.h>
+
+char *strpbrk(const char *s1, const char *s2)
+{
+    for ( ; *s1; s1++) {
+        const char  *t = s2;
+        for ( ; *t; t++)
+            if (*t == *s1)                  /* 見つけた */
+                return ((char *)s1);
+    }
+    return (NULL);
+}
+
+-------------------------------------------------------------------------------

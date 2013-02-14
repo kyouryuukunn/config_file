@@ -1,0 +1,164 @@
+TITLE : C言語関数辞典 - system
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdlib.h ≫ system
+
+system
+
+コマンドプロセッサ (command processor) へコマンドを渡します．
+
+
+#include <stdlib.h>
+
+
+
+int system(
+    const char *string
+);
+
+
+system 関数はコマンドプロセッサへ string が指す文字列を渡します．string が空ポインタ (NULL) の場合はホスト環境にコマンドプロセッサが存在するかどうかを調べます．
+
+引数
+
+  * string: コマンドプロセッサに実行させるコマンド
+
+戻り値
+
+  * string が空ポインタの時:
+    * コマンドプロセッサが使用可能の時: 0 以外
+    * コマンドプロセッサが使用不可能の時: 0
+  * string が空ポインタの以外の時: 処理系定義の値
+
+C言語サンプルプログラム
+
+system コマンドを使用してコマンドプロセッサへコマンドを渡すサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+
+/* main */
+int main(void) {
+    char *echo = "echo snoopy";
+    char *ls = "ls -l hoge";
+
+    printf("> echo snoopy\n");
+    system(snoopy);
+
+    printf("> ls -l hoge\n");
+    system(ls);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+> echo snoopy
+snoopy
+> ls -l hoge
+total 3
+-rw-rw-rw-   1 user     group          13 Dec  31 12:59 afa
+-rw-rw-rw-   1 user     group           8 Dec  31 12:59 foo
+-rw-rw-rw-   1 user     group          10 Dec  31 12:59 piyo
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,33 @@
+TITLE : SDL_JoystickNumHats
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickNumHats
+
+Name
+
+SDL_JoystickNumHats --  ジョイスティックのハットスイッチの数を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_JoystickNumHats(SDL_Joystick *joystick);
+
+Description
+
+
+前もってオープンされた SDL_Joystick から 利用可能なハットスイッチの数を返します。
+
+Return Value
+
+
+ハットスイッチの数。
+
+See Also
+
+SDL_JoystickGetHat, SDL_JoystickOpen
+
+PrevHomeNext
+SDL_JoystickNumBallsUpSDL_JoystickNumButtons

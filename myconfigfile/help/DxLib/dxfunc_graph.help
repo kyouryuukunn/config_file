@@ -1,0 +1,6295 @@
+TITLE : ＤＸライブラリ置き場　リファレンスページ
+
+図形描画関数
+
+宣言  int DrawLine( int x1 , int y1 , int x2 , int y2 ,
+　　　　　　　 int Color ) ;
+
+概略 線を描画
+
+引数  x1 , y1　:　描画する線の起点座標
+x2 , y2　:　描画する線の終点座標
+Color　　:　描く線の色
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　画面上に点( x1 , y1 )と点( x2 , y2 )を結ぶ線をColorで 指定した色で描きます。(終端座標は描かれないので、実際には描き切り たい座標＋１の値を指定する必要があります。)
+　パソコン画面は一般に画面左上が座標( 0 , 0 )で、画面左から右に 向かう方向が x のプラス方向の 画面上から下に向かう方向が y の プラス方向となります。そして標準では画面の右端の x 座標値は 639 画面最下の y 座標は 479 となります。この最大値は関数『SetGraphMode』 によって変更する事が出来ます。
+　Colorの値は画面の色の表現できる色の数によってかわってきます。 この色の値はライブラリの関数『GetColor』を使って取得する事を お勧めします。
+(注) … 　なおこの関数は±１ドットの単位で描画位置に誤差が
+　　　　生じます、その誤差はグラフィックボードの機種、描く
+　　　　線の方向、長さによって様々なのでライブラリ側での
+　　　　補正は行っていませんのでご了承下さい。
+　　　（３Ｄ機能を使っていない場合は正しく描画されます
+　　　 (３Ｄ機能を使わない方法については
+　　　『SetUse3DFlag』関数を参照して下さい)）
+
+サンプル
+
+　画面左上から右下にかけて真っ白の線を描きます
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+						 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	Cr = GetColor( 255 , 255 , 255 ) ;	// 白色の値を取得
+
+	DrawLine( 0 , 0 , 640 , 480 , Cr ) ;	// 線を描画
+
+	WaitKey() ;			// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;			// ＤＸライブラリ使用の終了処理
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawBox( int x1 , int y1 , int x2 , int y2 ,
+　　　　　　　int Color , int FillFlag ) ;
+
+概略 四角形を描画
+
+引数  x1 , y1　:　描画する四角形の左上の頂点座標
+x2 , y2　:　描画する四角形の右下＋１の頂点座標
+Color　　:　描画する四角形の色
+FillFlag :　四角の中身を塗りつぶすか、のフラグ。TRUEで塗り
+　　　　　つぶし、FALSEで塗りつぶさない
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　( x1, y1 )を四角形左上の頂点、( x2 - 1, y2 - 1 )を右下の頂点と する四角形をColorで指定された色で描画します。
+（パソコン画面の座標の持ち方、色の指定のし方についての説明は すぐ上のDrawLine関数の解説を参照してください。）
+　FillFlagをTRUEにすると四角形の中身もColorで指定した色で塗り つぶし、FALSEを指定すると輪郭のみを描画します。（TRUEと言う のは#defineマクロで定義された定数で1と同義です。FALSEについて は0と同義です）
+
+＜＜注意＞＞
+　…何故四角形の右下の頂点が( x2 - 1, y2 - 1 )なのかと申しますと、 単純に ( x2, y2 ) が右下の頂点だと、ちょっと面倒なことになるからです。
+　例えば、( x2, y2 ) が右下の頂点だとしたときに、縦横３２ドットの大きさを持つ 四角形を描こうとしたら
+
+　　DrawBox( 0, 0, 32, 32, GetColor( 255,255,255 ), TRUE ) ;
+
+　ではなく
+
+　　DrawBox( 0, 0, 31, 31, GetColor( 255,255,255 ), TRUE ) ;
+
+　と書かなければいけません。つまり、ある地点から任意のサイズの 四角形を指定したい時に常に「－１」してやる必要があるのです。
+　どちらの方が直感的か、と言われると難しいところですが、慣れてきたときの 扱いやすさは( x2 - 1, y2 - 1 )の方が上ですし、他のライブラリも 右下の頂点を( x2 - 1, y2 - 1 )としていることが多いので、 ＤＸライブラリもそれに習って右下の頂点は( x2 - 1, y2 - 1 )と しているわけです。
+サンプル
+
+　画面中心に青い四角を描き、四角形の中も塗りつぶします
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+						 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )			// ＤＸライブラリ初期化処理
+	{
+		 return -1;			// エラーが起きたら直ちに終了
+	}
+
+	Cr = GetColor(   0 ,   0 , 255 ) ;		// 青色の値を取得
+
+	DrawBox( 0 , 0 , 640 , 480 , Cr , TRUE) ;	// 四角形を描画
+
+	WaitKey() ;				// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;				// ＤＸライブラリ使用の終了処理
+
+	return 0 ;				// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DrawCircle( int x , int y , int r , int Color, int FillFlag ) ;
+
+概略 円の描画
+
+引数  x , y　:　描く円の中心座標
+r　　　:　描く円の半径
+Color　:　円の色
+FillFlag : TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　( x , y )を円の中心座標とした半径 r の円を描きます。
+円はColorで指定した色で描かれ、FillFlag にTRUEを指定した場合は中身を塗り つぶし、FALSE を指定した場合は輪郭のみ描かれます。
+（パソコン画面上での座標の取り方、色の指定のし方は DrawLine の解説を参照してください。）
+
+サンプル
+
+　画面中心に半径150の青い円を描きます、中身は塗りつぶしません。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+						 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	Cr = GetColor(   0 ,   0 , 255 ) ;	// 青色の値を取得
+
+	// 円を描画
+	DrawCircle( 320 , 240 , 150 , Cr , FALSE ) ;
+
+	WaitKey() ;			// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;			// ＤＸライブラリ使用の終了処理
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DrawOval( int x , int y , int rx , int ry , int Color , int FillFlag ) ;
+
+概略 楕円を描く
+
+引数  x , y : 描く円の中心座標
+rx,ry : 描く円のＸ軸に対する半径とＹ軸に対する半径
+Color : 円の色
+FillFlag : TRUE(1の意)で円の中身も塗りつぶし、FALSE(0の意)で輪郭のみ
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　( x , y )を円の中心座標とした半径 rx , ry の楕円を描きます。
+円はColorで指定した色で描かれ、FillFlag にTRUEを指定した場合は中身を塗り つぶし、FALSE を指定した場合は輪郭のみ描かれます。
+（パソコン画面上での座標の取り方、色の指定のし方は DrawLine の解説を参照してください。）
+
+サンプル
+
+　画面中心に半径 (150,100) の青い楕円を描きます。中身も青色で塗りつぶします
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+				 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )				// ＤＸライブラリ初期化処理
+	{
+		 return -1;				// エラーが起きたら直ちに終了
+	}
+
+	Cr = GetColor(   0 ,   0 , 255 ) ;			// 青色の値を取得
+
+	// 楕円を描画
+	DrawOval( 320 , 240 , 150 , 100 ,  Cr , TRUE ) ;
+
+	WaitKey() ;					// キーの入力待ち((7-3)『WaitKey』を使用)
+
+	DxLib_End() ;					// ＤＸライブラリ使用の終了処理
+
+	return 0 ;					// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawTriangle( int x1, int y1, int x2, int y2,
+　　　　　　　　　　　　　 int x3, int y3, int Color , int FillFlag ) ;
+
+概略 三角形の描画
+
+引数  int x1, y1, x2, y2, x3, y3 : 三角形を描く３つの座標
+int Color : 描画に使う色
+int FillFlag : 三角形の中身を塗りつぶすかフラグ
+　　　　　　　　　　(TRUE:塗りつぶす FALSE:塗りつぶさない)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　( x1, y1 ), ( x2, y2 ), ( x3, y3 )の座標を３点とした三角形を Color で指定した色で描画します。
+　なお FillFlag が TRUE の場合は三角形の中身を塗りつぶし、FALSE の場合は三角形の輪郭のみを描画します。
+（パソコン画面上での座標の取り方、色の指定のし方はDrawLine の解説を参照してください。）
+
+サンプル
+
+　画面中心に黄色の三角形を描画し、中身を塗りつぶします
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	// ＤＸライブラリ初期化
+	if( DxLib_Init() == -1 ) return -1;
+
+	// 黄色の値を取得
+	Cr = GetColor( 255 , 255 , 0 ) ;
+
+	// 三角形を描画
+	DrawTriangle( 320, 100, 160, 420, 480, 420, Cr, TRUE ) ;
+
+	// キーの入力待ち((7-3)『WaitKey』を使用)
+	WaitKey() ;
+
+	// ＤＸライブラリ使用の終了処理
+	DxLib_End() ;
+
+	// ソフトの終了
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DrawPixel( int x , int y , int Color ) ;
+
+概略 点を描画する
+
+引数  x , y :　点を描画する座標
+Color :　描画する点の色
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　座標( x , y )にColorで指定した色で点を描画します。
+（パソコン画面上での座標のとり方、色の指定方法は『DrawLine』 の解説を参照してください）
+
+サンプル
+
+　画面中心に緑の点を描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	Cr = GetColor(   0 , 255 , 0 ) ;	// 緑色の値を取得
+
+	// 点を描画
+	DrawPixel( 320 , 240 , Cr ) ;
+
+	WaitKey() ;			// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;			// ＤＸライブラリ使用の終了処理
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int GetPixel( int x , int y ) ;
+
+概略 指定点の色を取得
+
+引数 x , y :　色を取得する点の座標
+戻り値 指定点の色コード
+
+解説  　描画先になっている画面の指定の座標( x , y )の点の色コードを得ます。 この関数はとても処理に時間がかかるので多用は禁物です。
+
+
+使用例
+　　座標( 120 , 80 )にある点の色コードを得てint型変数 Cr に保存する
+
+
+	int Cr ;
+	Cr = GetPixel( 120 , 80 ) ;
+
+
+サンプル
+
+　なし
+
+
+
+
+
+グラフィックデータ制御関数
+
+宣言 int LoadGraphScreen( int x , int y , char *GraphName , int TransFlag ) ;
+
+概略 画像ファイルを読みこんで画面に表示する
+
+引数  x , y　　　:　ロードした画像を描画する矩形の左上頂点の座標
+GraphName　:　ロードする画像パスの文字列があるポインタ
+TransFlag　:　透過色を入れるか、のフラグ。TRUEで透過色有効になる
+　　　　　　(逆はFALSE)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　画像ファイルをGraphNameの示すパスを元にディスクから読みこんで ( x , y )を画像の左上の頂点とした領域に描画します。
+　TransFlagをTRUEにすると画像ファイルの限りなく黒に近い部分を 透過色とし、その部分は画面上に元から画像が残ります。
+
+尚、読み込むことの出来る画像形式は BMP,JPEG,PNG,DDS,ARGB,TGA の６種類です。
+サンプル
+
+　画面左上を画像の左上頂点としtest1.bmpを透過色有効で表示します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// ＢＭＰ画像の表示
+	LoadGraphScreen( 0 , 0 , "test1.bmp" , TRUE ) ;
+
+	WaitKey() ;			// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;			// ＤＸライブラリ使用の終了処理
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int LoadGraph( char *FileName ) ;
+
+概略 画像ファイルのメモリへの読みこみ、及び動画ファイルのロード
+
+引数   FileName :　ロードする画像、及び動画ファイルの
+　　　　　　ファイルパス文字列へのポインタ
+戻り値  －１　　　:　エラー発生
+－１以外　:　グラフィックのハンドル
+
+解説  　画像ファイルをメモリにロードします。
+　これは表示する必要が出るたびにディスクにアクセスすると 画像処理の負荷が非常に高くなってしまうので、ディスクよりも 高速に処理を行うことが出来るメモリ上に画像を保存して しまおう、と言う考えから来ているものです。
+　この関数が成功するとグラフィックハンドルと言うものが 返って来ます。これはメモリに保存した画像の識別番号で int 型の数値です、読みこんだ画像を描画する際に この識別番号を指定するとメモリに読みこんだ画像を 描画することが出来ます。
+
+例　　test1.bmpをロードし、戻り値であるグラフィックハンドルを
+　　int 型変数 GrHandle に保存します
+
+
+
+	int GrHandle ;
+
+	GrHandle = LoadGraph( "test1.bmp" ) ;
+
+尚、読み込むことの出来る画像形式は BMP,JPEG,PNG,DDS,ARGB,TGA の６種類です。
+
+
+アルファチャンネル画像の自動読み込みについて
+
+　ＤＸライブラリでは、LoadGraph 等の画像ファイルを扱う関数全般で、 指定のファイル名の末端に『_a』が付く画像ファイルが在った場合、 その画像ファイルを透明情報として読み込みます。
+　透明情報として扱われる画像の色が白に近いほど不透明に、黒に近いほど 透明になります。
+　画像中に透明な部分を付けたいとき、又は、透過させる部分とさせない部分の 境界を暈したい時等に有効です。
+
+例　　test6.bmp と、透明情報用の test6_a.bmp を用意して透明情報付き画像として読み込みます
+
+
+	int GrHandle ;
+
+	GrHandle = LoadGraph( "test6.bmp" ) ;
+
+(前述通り test6_a.bmp 自動的に読み込まれるので特別な処理はありません)
+
+
+動画ファイルのロードについて
+
+　FileName に動画ファイルのファイルパスを渡すと、戻り値として只の グラフィックハンドルではなく、ムービーグラフィックハンドルが関数から 返ってきます。(と言っても同じ int型ですが・・・)
+　このハンドルは動画ファイルを普通の画像と同じように DrawGraph 関数や DrawExtendGraph 関数などで 動画像を描画することが出来ます。
+　詳しい説明は PlayMovieToGraph 関数の 解説をご参照下さい。
+
+サンプル
+
+　test1.bmpを読みこみ画面左上に描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// ＢＭＰ画像のメモリへの読みこみ
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 画面左上に描画します(『DrawGraph』を使用)
+	DrawGraph( 0 , 0 , GHandle , FALSE ) ;
+
+	// キーの入力待ち(『WaitKey』を使用)
+	WaitKey() ;
+
+	DxLib_End() ;			// ＤＸライブラリ使用の終了処理
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int LoadDivGraph( char *FileName , int AllNum ,
+　　　　　　　　　 int XNum , int YNum ,
+　　　　　　　　　 int XSize , int YSize , int *HandleBuf ) ;
+
+概略 画像ファイルのメモリへの分割読みこみ
+
+引数  FileName　　　:　分割読み込みする画像ファイル文字列のポインタ
+AllNum　　　　:　画像の分割総数
+XNum ,YNum　　:　画像の横向きに対する分割数と縦に対する分割数
+SizeX ,SizeY　:　分割された画像一つの大きさ
+HandleBuf　　 :　分割読み込みして得たグラフィックハンドルを
+　　　　　　　　保存するint型の配列へのポインタ
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　一つの画像ファイルを指定されたサイズ、指定された数で分割し メモリに保存します。これはアニメーションパターンなどを一つの 画像に纏めて保存した場合などを想定して作られた関数です。
+　SizeX , SizeYを一つのグラフィックのサイズとして 横XNum列YNum行分に分け、総数AllNum個で分割読み込みします。
+　分割した分だけ作成されたグラフィックハンドルはHandleBufで指定した int型変数配列のポインタに順に格納されていきます。格納される グラフィックハンドルの順は以下のようになります
+
+XNum = 4 ; YNum = 4 ; AllNum = 14 ;
+1 2 3 4
+5 6 7 8
+9 10 11 12
+13 14   
+
+
+例　　test.bmpを一つのグラフィックのサイズ32×32横１０、縦３、
+　　分割総数２４で分割読み込みし、int型の配列GrHandleに格納します。
+
+
+	int GrHandle[ 24 ] ;
+	
+	LoadDivGraph( "test.bmp" , 24 , 10 , 3 , 32 , 32 , GrHandle ) ;
+
+
+
+尚、読み込むことの出来る画像形式は BMP,JPEG,PNG,DDS,ARGB,TGA の６種類です。
+サンプル
+
+　test2.bmpを一つのグラフィックのサイズ48×56横４、縦３、分割総数 １０で分割読み込みし、int型の配列GHandleに格納します。
+　その後ロードしたグラフィックパターンを画面左上でアニメーション させます。（画面はちらつきます）
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle[ 10 ] ;
+	int i ;
+
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// ＢＭＰ画像のメモリへの分割読み込み
+	LoadDivGraph( "test2.bmp" , 10 , 4 , 3 , 48 , 56 , GHandle ) ;
+
+	// ロードしたグラフィックのアニメーション
+	i = 0 ;
+	// キーが押されるまでループ(キー判定には『CheckHitKeyAll』を使用)
+	while( CheckHitKeyAll() == 0 )
+	{
+		// グラフィックの描画(『DrawGraph』使用)
+		DrawGraph( 0 , 0 , GHandle[ i ] , FALSE ) ;
+
+		// アニメーションパターンナンバーを変更
+		i ++ ;
+		if( i == 10 ) i = 0 ;
+
+		// 一定時間待つ(『WaitTimer』使用)
+		WaitTimer( 100 ) ;
+
+		// メッセージ処理
+		if( ProcessMessage() == -1 )
+		{
+			break ;		// エラーが起きたらループから抜ける
+		}
+	}
+
+	DxLib_End() ;			// ＤＸライブラリ使用の終了処理
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int MakeGraph( int SizeX , int SizeY ) ;
+
+概略 空のグラフィックを作成する
+
+引数 SizeX , SizeY :　作成するからグラフィックのサイズ
+戻り値   －１　　　:　エラー
+－１以外　:　新しいグラフィックハンドル
+解説  　なにも描かれていないグラフィックを作成し、 そのグラフィックハンドルを得ます。こうして作られたグラフィックハンドルには GetDrawScreenGraph 関数等で利用します。
+
+>
+　この関数で作成れたグラフィックハンドルはフルスクリーン画面からタスク切り替え等で一時的にデスクトップ画面に戻った場合、 再度フルスクリーン画面になった時に画像は自動的に復元されません。
+　この場合 SetRestoreGraphCallback 関数で登録できる画像復元関数で画像を再度読み込む必要があります。
+サンプル
+
+　GetDrawScreenGraph のサンプルを参考にして下さい。
+
+
+
+宣言 int MakeScreen( int SizeX, int SizeY, int UseAlphaChannel ) ;
+
+概略 描画対象にできるグラフィックを作成する
+
+引数  SizeX , SizeY　:　作成するグラフィックのサイズ
+UseAlphaChannel　:　作成するグラフィックにアルファチャンネルを付けるかどうか
+　　　　　　　　　　　　(TRUE:つける　FALSE:つけない)
+戻り値   －１　　　:　エラー
+－１以外　:　新しいグラフィックハンドル
+　 －１：エラー発生
+
+解説  　関数 SetDrawScreen の引数として渡し、描画対象とすることができるグラフィックを作成し、そのグラフィックハンドルを得ます。
+MakeGraph で作成できるグラフィックハンドルとの違いは、SetDrawScreen の引数として渡せるか渡せないか、です。
+第三引数の UseAlphaChannel を TRUE にするとアルファチャンネル付きのグラフィックハンドルが作成できます。
+
+　この関数の価値は SetDrawScreen の引数として渡して描画対象にできるということに尽きます、 描画結果を変形させて描画したり、関数 GraphFilter や 関数 GraphBlend を使用して描画結果に画像補正処理や効果を施したりしたい場合に有効です。
+
+サンプル
+
+　縦横20ピクセルの描画可能グラフィックハンドルを作成して、そこに「あ」の文字を描画した後、
+作成した描画可能グラフィックハンドルを画面いっぱいに拡大して描画します。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int handle;
+
+	// ウインドウモードで起動
+	ChangeWindowMode( TRUE );
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+
+		
+
+			
+宣言 int SetDrawValidMultiSample( int Samples, int Quality ) ;
+
+
+			
+概略 描画対象にできるグラフィックのマルチサンプリング設定を行う
+
+
+			
+引数
+				 
+				int Samples ： マルチサンプルレベル
+
+				int Quality ： マルチサンプルクオリティ
+
+				
+			
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　関数 MakeScreen で作成する SetDrawScreen で描画対象にすることができるグラフィックのマルチサンプリング( アンチエイリアス )設定を行います。
+
+					　画面に対する描画の際のアンチエイリアス設定は関数 SetFullSceneAntiAliasingMode で行いますが、この関数は「描画対象にできるグラフィック」のアンチエイリアス設定を行います。
+
+					　尚、この関数は MakeScreen を実行する前に呼びます。この関数でアンチエイリアス設定をしたうえで MakeScreen を実行すると、作成される「描画対象にできるグラフィック」に SetDrawValidMultiSample の設定が反映されるというわけです。
+
+
+
+					　アンチエイリアスに関する注意や引数 Samples, Quality については SetFullSceneAntiAliasingMode の解説を参照してください。
+					( SetFullSceneAntiAliasingMode の解説にある注意点については２の「グラフィックスデバイスが対応していないとこの関数は機能しない」のみこの関数にも当てはります )
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+			　　640x480 のアンチエイリアス効果のある描画可能なグラフィックを作成して、
+
+			　そのグラフィックに DxChara.x を描画した後、裏画面に描画可能なグラフィックを描画します。
+
+			　　SetFullSceneAntiAliasingMode で画面自体の設定を変更してアンチエイリアス効果を得るという処理を、
+
+			　MakeScreen と SetDrawValidMultiSample を使った場合はこうなります、というサンプルです。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int ModelHandle ;
+	int Screen ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+
+		
+
+			
+宣言 int	DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
+
+
+			
+概略 メモリに読みこんだグラフィックの描画
+
+
+			
+引数
+			 
+				x , y　　　: グラフィックを描画する領域の左上頂点の座標
+
+				GrHandle　 : 描画するグラフィックのハンドル
+
+				TransFlag　: 透過色を有効にするか、のフラグ(TRUEで有効、FALSEで無効）
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した）
+					グラフィックを( x , y )を描画する画像の左上頂点として描画します。
+
+					　TransFlagをTRUEにすると描画するグラフィックの限りなく黒に近い
+					部分を透過色とし、その部分は画面上に元から画像が残ります。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+				　test1.bmpをメモリに読み込み、画面左上に透過色有効で描画する
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックを画面左上に描画
+	DrawGraph( 0 , 0 , GHandle , TRUE ) ;
+
+	WaitKey() ;		// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawTurnGraph( int x, int y,
+　　　　　　　　　 int GrHandle, int TransFlag ) ;
+
+概略 メモリに読みこんだグラフィックのＬＲ反転描画
+
+引数   x , y　　　: 描画する反転した画像の左上頂点の座標
+GrHandle　 : 描画するグラフィックのハンドル
+TransFlag　: 透過色が有効か、フラグ（TRUEで有効FALSEで無効）
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した） グラフィックを( x , y )を描画する画像の左上頂点として左右反転 描画します。
+　TransFlagをTRUEにすると描画するグラフィックの限りなく黒に近い 部分を透過色とし、その部分は画面上に元から画像が残ります。
+
+サンプル
+
+　test1.bmpをメモリに読み込み、座標( 100 , 0 )に透過色無効で反転描画する
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+	
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックを反転描画
+	DrawTurnGraph( 100 , 0 , GHandle , FALSE ) ;
+
+	WaitKey() ;			// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;			// ＤＸライブラリ使用の終了処理
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawExtendGraph( int x1, int y1, int x2, int y2,
+　　　　　　　　　　 int GrHandle , int TransFlag ) ;
+
+概略 メモリに読みこんだグラフィックの拡大縮小描画
+
+引数   x1 , y1　　: グラフィックを描画する矩形の左上頂点の座標
+x2 , y2　　: グラフィックを描画する矩形の右下頂点＋１の座標
+GrHandle　 : 描画するグラフィックのハンドル
+TransFlag　: 透過色が有効か、フラグ（TRUEで有効FALSEで無効）
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した） グラフィックを左上頂点を( x1 , y1 )右下頂点を( x2 - 1, y2 - 1 )とした 矩形領域に描画します。グラフィックの大きさが矩形領域よりも 小さい時は拡大描画され、矩形領域よりも大きかった時は縮小描画 されます。
+　TransFlagをTRUEにすると描画するグラフィックの限りなく黒に近い 部分を透過色とし、その部分は画面上に元から画像が残ります。
+
+注…『なんで右下の頂点は「-1」してるの？』と思われた方はDrawBoxの解説を読んでみて下さい。
+サンプル
+
+　test1.bmp(サイズ130×480)をメモリに読み込み、座標( 100 , 0 )に 横幅２倍のサイズで透過色有効で描画する
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックを拡大描画
+	DrawExtendGraph( 100 , 0 , 100 + 130 * 2 , 0 + 480 , GHandle , TRUE ) ;
+
+	WaitKey() ;		// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawRotaGraph( int x, int y,
+　　　　　　　　　　double ExtRate, double Angle,
+　　　　　　　　　　int GrHandle , int TransFlag , int TurnFlag ) ;
+
+概略 メモリに読みこんだグラフィックの回転描画
+
+引数   x , y　　　: グラフィックを描画する領域の中心座標
+ExtRate　　: 拡大率（１.０で等倍）
+Angle　　　: 描画角度（ラジアン指定）
+GrHandle　 : 描画するグラフィックの識別番号（グラフィックハンドル）
+TransFlag　: 透過色が有効か、フラグ（TRUEで有効FALSEで無効）
+TurnFlag : 画像の左右反転を行うか、のフラグ(FALSEで普通に描画 TRUEで反転)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した） グラフィックを回転、拡大処理を施して描画します。
+　まず ExtRate は拡大率です。１．０を等倍とし２．０なら２倍 に拡大されます。Angle は描画角度です、角度の指定単位はラジアンで π（3.14159～）で１８０度回転します。１度分だけ回転させたい 場合は π ÷ １８０ × １ とすれば１度分だけグラフィックが 右回り方向に回転して描画されます。
+　こうして拡大、回転を施されたグラフィックは( x , y )の示す 座標を描画先画面上の画像の中心座標として描画されます。
+　TransFlagをTRUEにすると描画するグラフィックの限りなく黒に近い 部分を透過色とし、その部分は画面上に元から画像が残ります。
+　TurnFlag をTRUE(1)にすると画像は左右反転した状態で描画され、 FALSE(0) を指定すると普通に描画されます。
+
+サンプル
+
+　画面中心に test1.bmp を１．５倍に拡大し９０度回転させて描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+#define PI	3.1415926535897932384626433832795f
+	
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックを回転描画
+	DrawRotaGraph( 320 , 240 , 1.5f , PI / 2 , GHandle , TRUE ) ;
+
+	WaitKey() ;		// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawRotaGraph2( int x, int y,
+　　　　　　　　　　int cx, int cy,
+　　　　　　　　　　double ExtRate, double Angle,
+　　　　　　　　　　int GrHandle, int TransFlag, int TurnFlag ) ;
+
+概略 メモリに読みこんだグラフィックの回転描画(回転中心指定あり)
+
+引数   x , y　　　: 画像を回転描画する画面上の中心座標
+cx , cy　　: 画像を回転描画する画像上の中心座標
+ExtRate　　: 拡大率（１.０で等倍）
+Angle　　　: 描画角度（ラジアン指定）
+GrHandle　 : 描画するグラフィックの識別番号（グラフィックハンドル）
+TransFlag　: 透過色が有効か、フラグ（TRUEで有効FALSEで無効）
+TurnFlag : 画像の左右反転を行うか、のフラグ(FALSEで普通に描画 TRUEで反転)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　DrawRotaGraphでは常に画像の中心が 回転の中心となっていますが、この関数では引数 cx, cy が示す画像 中の座標を回転中心として描画を行います。
+　それ以外の引数に関する解説はDrawRotaGraph の解説をご参照ください。
+
+サンプル
+
+　画面中心に test1.bmp を１．５倍に拡大し画像の左上端を基点に９０度回転させて描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+#define PI	3.1415926535897932384626433832795f
+	
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックを回転描画
+	DrawRotaGraph2( 320, 240, 0, 0, 1.5f, PI / 2, GHandle, TRUE ) ;
+
+	WaitKey() ;		// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawModiGraph( int x1, int y1, int x2, int y2,
+　　　　　　　　　　int x3, int y3, int x4, int y4,
+　　　　　　　　　 int GrHandle , int TransFlag );
+
+概略 メモリに読みこんだグラフィックの自由変形描画
+
+引数   x1 , y1 , x2 , y2
+x3 , y3 , x4 , y4 :　x1から順に描画する画像の左上、右上、
+　　　　　　　　　　右下、左下の頂点の座標
+GrHandle　　　　　:　描画するグラフィックのハンドル
+TransFlag　　　　 :　透過色が有効か、フラグ（TRUEで有効FALSEで無効）
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した） グラフィックを( x1 , y1 )を左上頂点、( x2 - 1, y2 ) を右上頂点、 ( x3 - 1, y3 - 1 ) を右下頂点、( x4, y4 - 1 ) を左下頂点とした四角形 に画像を変形し描画します。
+　ですが、画像変形後の画像内の各点が一次変換で求まらない場合は 画像結果がおかしくなります。要は、完全に自由な変形は出来ないと 言うことになります。
+　TransFlagをTRUEにすると描画するグラフィックの限りなく黒に近い 部分を透過色とし、その部分は画面上に元から画像が残ります。
+
+注…『なんで右側、下側の座標は「-1」してるの？』と思われた方はDrawBoxの解説を読んでみて下さい。
+サンプル
+
+　test1.bmp(サイズ130×480)をメモリに読み込み、( 0 , 0 )( 145 , 62 ) ( 12 , 56 )( 168 , 121 )をそれぞれ描画する画像の左上、右上、右下、 左下として透過色有効で描画する
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックを自由変形描画
+	DrawModiGraph( 0 , 0 , 145 , 62 , 168 , 121 , 12 , 56 , GHandle , TRUE ) ;
+				
+	WaitKey() ;		// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawRectGraph( int DestX, int DestY,
+　　　　　　　　　 int SrcX, int SrcY, int Width, int Height,
+　　　　　　　　　 int GraphHandle, int TransFlag, int TurnFlag ) ;
+
+概略 　グラフィックの指定矩形部分のみを描画
+
+引数   int DestX, int DestY　: グラフィックを描画する座標
+int SrcX, int SrcY　: 描画するグラフィック上の描画したい矩形の左上座標
+int Width, int Height　: 描画するグラフィックのサイズ
+int GraphHandle　: 描画するグラフィックのハンドル
+int TransFlag　: 透過色処理の有無(TRUEで有効FALSEで無効)
+int TurnFlag　: 画像反転処理の有無(TRUEで有効FALSEで無効)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した）
+グラフィックの指定座標に囲まれた部分
+
+　( SrcX, SrcY )-( SrcX + Width, SrcY + Height )
+
+だけを描画します。
+　沢山のグラフィックを一つの画像にまとめた時などに使います。
+
+サンプル
+
+　グラフィック testDiv.bmp を読み込み、グラフィック中の (32,32)-(64,64) の部分 だけを画面座標 (100,100) に描画する
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+// WinMain 関数
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+		 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Graph ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() == -1 ) return -1 ;
+
+	// グラフィックのロード
+	Graph = LoadGraph( "testDiv.bmp" ) ;
+
+	// グラフィック中の(32,32)-(64,64)の部分を画面座標(100,100)に
+	// 透過色処理あり、反転処理なしで描画
+	DrawRectGraph( 100, 100, 32, 32, 32, 32, Graph, TRUE, FALSE ) ;
+
+	// キーの入力待ち
+	WaitKey() ;
+
+	// ＤＸライブラリ使用の終了処理
+	DxLib_End() ;
+
+	// ソフトの終了
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DerivationGraph( int SrcX, int SrcY,
+　　　　　　 int Width, int Height, int SrcGraphHandle ) ;
+
+概略 　指定のグラフィックの指定部分だけを抜き出して新たなグラフィックを作成する
+
+引数   int SrcX, int SrcY : グラフィック中の抜き出したい矩形の左上座標
+int Width, int Height : 抜き出すグラフィックのサイズ
+int SrcGraphHandle : 抜き出したいグラフィックのハンドル
+戻り値 －１：エラー発生
+　 －１以外：新しいグラフィックのハンドル
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した） グラフィックの一部分を抜き出し、新しいグラフィックのハンドルを 作成します。
+　主に一つの画像ファイルに複数のグラフィックが詰まっている場合、 それらを個々のグラフィックとして扱いたい場合などに使用します。
+
+《注意！》
+　この関数によって作成されたグラフィックは抜き出し元となる SrcGraphHandle が示しているグラフィックと共有しますので、 DerivationGraph 関数によって作成したグラフィックハンドルを 使用して GetDrawScreenGraph 関数を 使用した場合は SrcGraphHandle 上のグラフィック情報にも影響が 出ますので注意してください。
+
+サンプル
+
+　testDiv.bmp をロードし、作成したグラフィックから、(0,32)-(32,64) の部分を抜き出し新たなグラフィックハンドルを作成します。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+// WinMain 関数
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+		 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Graph, Graph2 ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() == -1 ) return -1 ;
+
+	// グラフィックのロード
+	Graph = LoadGraph( "testDiv.bmp" ) ;
+
+	// Graph 中の (0,32)-(32,64) の部分を抜き出し、新たな
+	// グラフィックハンドルを作成
+	Graph2 = DerivationGraph( 0, 32, 32, 32, Graph ) ;
+
+	// 新たに作成したグラフィックハンドルで描画
+	DrawGraph( 100, 100, Graph2, TRUE ) ;
+
+	// キーの入力待ち
+	WaitKey() ;
+
+	// ＤＸライブラリ使用の終了処理
+	DxLib_End() ;
+
+	// ソフトの終了
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int GetDrawScreenGraph( int x1 , int y1 ,
+　　　　　　　　　　　　　int x2, int y2, int GrHandle ) ;
+
+概略 　描画先に設定されているグラフィック領域から指定領域のグラフィックを読みこむ
+
+引数   x1 , y1　 :　　取得するグラフィック領域（矩形）の左上頂点の座標
+x2 , y2　 :　　取得するグラフィック領域の右下頂点＋１の座標
+GrHandle　:　　取り込んだグラフィックを保存出来るサイズの
+　　　　　　グラフィックを持つハンドル
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した） グラフィックに、描画先となっているグラフィック領域（デフォルト では表示されている画面）から( x1 , y1 )( x2 - 1, y2 - 1 )をそれぞれ矩形の 左上頂点、右下頂点とした領域からGrHandleがもっているグラフィック に画像データを取りこみます。
+　この際取りこむ画像のサイズと、取り込んだ画像を保存する グラフィックのサイズは同じでなければなりません
+
+注１…この関数で取り込んだ画像は、透過色の機能が正常に動作しませんのでご注意ください。
+注２…『なんで右下の頂点は「-1」してるの？』と思われた方はDrawBoxの解説を読んでみて下さい。
+サンプル
+
+　画面にでたらめに１０００個の点を描き、その画面を取りこむ
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+	int i ;
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 白色の値を取得
+	Cr = GetColor( 255 , 255 , 255 ) ;
+
+	// １０００個の点を描く
+	for( i = 0 ; i 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 
+				int	GetGraphSize( int GrHandle ,
+
+				　　　　　　　　　 int *SizeXBuf , int *SizeYBuf ) ;
+
+
+			
+概略 グラフィックのサイズを得る
+
+
+			
+引数
+			 	GrHandle　:　サイズを調べるグラフィックのハンドル
+
+					SizeXBuf　:　グラフィックの幅を保存するint型変数のポインタ
+
+					SizeYBuf　:　グラフィックの高さを保存するint型変数のポインタ
+			
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　GrHandleで指定したハンドルが持つグラフィックのサイズを
+					取得する関数です。サイズはそれぞれSizeXBufとSizeYBufが示す
+					int型変数に保存されます。
+
+
+
+					例　　test1.bmpを読みこんでそのビットマップのサイズをint型変数
+
+					　　SizeX,SizeYに格納します
+
+
+
+
+	int SizeX , SizeY , GrHandle ;
+
+	GrHandle = LoadGraph( "test1.bmp" ) ;
+	GetGraphSize( GrHandle , &SizeX , &SizeY ) ;
+
+
+
+サンプル
+
+　test1.bmpをメモリに読み込み、そのサイズを取得する、上記の例を 無意味にもソフトプログラム化したものです。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+	int GSizeX , GSizeY ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックのサイズを得る
+	GetGraphSize( GHandle , &GSizeX , &GSizeY ) ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int InitGraph( void ) ;
+
+概略 読みこんだグラフィックデータをすべて削除する
+
+引数 なし
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadDivGraph、LoadGraph、MakeGraph等で読みこんだ（作成した） グラフィックをすべて削除し、初期化します。これによって占有 されていたメモリ領域を開放することができます。
+
+サンプル
+
+　ＢＭＰをロードして表示したり作成したりした後これらのグラフィックを 削除する。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle , GHandle2 ;
+	int i ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 適当な座標に１０回描画
+	for( i = 0 ; i 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 int DeleteGraph( int GrHandle ) ;
+
+
+			
+概略 指定のグラフィックをメモリ上から削除する
+
+
+			
+引数 GrHandle : メモリ上から削除したいグラフィックのハンドル
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　GrHandleで指定されたハンドルのグラフィックをメモリ上から
+					削除します。これによって使えるメモリの量を増やす事が出来ます。
+
+					　当然ですが削除したグラフィックは再度ロード等しない限り
+					使用できなくなります。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+				　test1.bmpをメモリに読み込み、画面左上に透過色有効で描画した後
+				メモリ上から削除する
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 読みこんだグラフィックを画面左上に描画
+	DrawGraph( 0 , 0 , GHandle , TRUE ) ;
+
+	// 描画が終ったのでグラフィックをメモリ上から削除する
+	DeleteGraph( GHandle ) ;
+
+	WaitKey() ;		// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int SetDrawMode( int DrawMode ) ;
+
+概略 描画モードをセットする
+
+引数  DrawMode : 描画モードを指定する引数です
+　　　　　　　DX_DRAWMODE_NEAREST　: ネアレストネイバー法で描画する
+　　　　　　　　　　　　　　　　　　　(標準)
+　　　　　　　DX_DRAWMODE_BILINEAR : バイリニア法で描画する
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　描画モードとは主に拡大描画をしたときに影響がでます。
+　それぞれ長所と短所があります。デフォルトとなっている ネアレストネイバー法は拡大描画をしたときにドットが粗くなって しまっているのが一目瞭然になります。
+　逆にバイリニア法は拡大した時のドットとドット間の境目を 滑らかに描画してくれるのでネアレストネイバー法で描画した 時よりも綺麗に描画する事が出来るのですが、普通（等倍）でに 描画した時は逆にぼやけた感じになってしまう事があります。 （グラフィックボードによります）
+　ので、無難な線を取って標準ではネアレストネイバー法で 描画するようになっています。用途によって変更してください。
+
+サンプル
+
+　test1.bmp(サイズ130×480)を読み込みネアレストネイバー法と バイリニア法で描画する
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 描画モードをネアレストネイバー法にする
+	SetDrawMode( DX_DRAWMODE_NEAREST ) ;
+
+	// 読みこんだグラフィックを画面左上に拡大描画
+	DrawExtendGraph( 0 , 0 , 130 * 2 , 480 * 2 , GHandle , FALSE ) ;
+
+	// 描画モードをバイリニア法にする
+	SetDrawMode( DX_DRAWMODE_BILINEAR ) ;
+
+	// 読みこんだグラフィックを先ほどの隣に描画
+	DrawExtendGraph( 260 , 0 , 260 + 130 * 2 , 480 * 2 , GHandle , FALSE ) ;
+
+	WaitKey() ;		// 結果を見るためにキー待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int SetDrawBlendMode( int BlendMode , int Pal ) ;
+
+概略 描画の際のブレンドモードをセットする
+
+引数  BlendMode : 描画ブレンドモードを指定する引数です
+　　　　　　　　DX_BLENDMODE_NOBLEND　:　ノーブレンド（デフォルト）
+　　　　　　　　DX_BLENDMODE_ALPHA　　:　αブレンド
+　　　　　　　　DX_BLENDMODE_ADD　　　:　加算ブレンド
+　　　　　　　　DX_BLENDMODE_SUB　　　:　減算ブレンド
+　　　　　　　　DX_BLENDMODE_MULA　　　:　乗算ブレンド
+　　　　　　　　DX_BLENDMODE_INVSRC　　:　反転ブレンド
+Pal : 描画ブレンドモードのパラメータ（０～２５５）
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　DrawGraph、DrawExtendGraph、 DrawRotaGraph、DrawModiGraph、DrawTurnGraph、 DrawLine、DrawBox、 DrawCircle,DrawPixel DrawString を使用したときの描画先に 元からある画像とのブレンドを行うか等の設定を行います。
+
+　DX_BLENDMODE_NOBLEND
+　を指定するとブレンド処理は行われず描画しようとしているグラフィックがそのまま描画される事となります（これがデフォルトです）。
+　このモードの場合Palの値は意味を持ちません
+
+　DX_BLENDMODE_ALPHA
+　を指定すると描画先に元から描かれていた画像と描画しようとしている画像とでアルファブレンディングします。
+　Palの値が２５５に近いほど描画しようとしているグラフィックの方が濃く表示されます。
+
+　DX_BLENDMODE_ADD
+　を指定すると描画先に元から描かれていた画像に描画しようとしている画像の各ドットの明るさを加算します。
+　加算される割合はPalの値が２５５に近いほど強くなります。
+
+　DX_BLENDMODE_SUB
+　を指定すると描画先に元から描かれている画像から描画しようとしている画像の各ドットの明るさを引きます。
+　元の画像が明るいものほど、描画先の輝度を奪います。
+　ダーク系の表現に有用です。
+(注意！DX_BLENDMODE_SUB は表画面に描画する際に使用すると表示が一瞬おかしくなります。 このブレンドモードを使用する際は必ず SetDrawScreen 関数で DX_SCREEN_BACK を指定し、 裏画面に描画するようにしてください。)
+
+　DX_BLENDMODE_MULA
+　を指定すると、描画先に元から描かれている画像の色と、描画しようとしている画像の色とで乗算します。
+　『色の乗算って何？』と思われるかもしれませんので、 『明るさ同士の掛け算』と言った方が分かりやすいかもしれません。
+　ただ、明るさ同志の掛け算と言うと描画先の画像に元からある色を元の何倍も明るい色にしてしまったり出来そうなイメージがありますが、 実際は描画先に元からある色を元の色以上に明るくすることは出来ず、 描画しようとしている画像の色が真っ白だったら元の画像はそのまま、 少しでも暗ければその分暗く、という具合になります。
+　用途としては、黒い煙を表現したい時や、自分の回り以外真っ暗で見えない、 等の表現をしたい時などがあります。
+
+　DX_BLENDMODE_INVSRC
+　描画元の色を反転して描画します。
+　反転ということはつまり、描画元の画像の明るいところほど暗く、 暗いところほど明るく描画されます。
+　シューティングゲームの敵がダメージを受けた場合や、 『ガーン』とショックを受けたときの表現に使えるかも？
+
+
+　それぞれエフェクト等を行う用途によって変更してください。
+
+サンプル
+
+　back.bmpとtest1.bmpを読み込みそれぞれノーブレンドと アルファブレンドと加算ブレンドと減算ブレンドと乗算ブレンドで描画する
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+		 LPSTR lpCmdLine, int nCmdShow )
+{
+	int TestHandle , BackHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	TestHandle = LoadGraph( "test1.bmp" ) ;
+
+	// back.bmpの読み込み
+	BackHandle = LoadGraph( "back.bmp" ) ;
+
+
+	// 描画ブレンドモードをノーブレンドにする
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+
+	// 背景を描画
+	DrawGraph( 0 , 0 , BackHandle , FALSE ) ;
+
+	// 上に載せるグラフィックを描画
+	DrawGraph( 255 , 0 , TestHandle , TRUE ) ;
+
+	// キー待ち(『WaitKey』を使用)
+	WaitKey() ;
+
+
+	// 背景を描画
+	DrawGraph( 0 , 0 , BackHandle , FALSE ) ;
+
+	// 描画ブレンドモードをアルファブレンド（５０％）にする
+	SetDrawBlendMode( DX_BLENDMODE_ALPHA , 128 ) ;
+
+	// 上に載せるグラフィックを描画
+	DrawGraph( 255 , 0 , TestHandle , TRUE ) ;
+
+	// キー待ち(『WaitKey』を使用)
+	WaitKey() ;
+
+
+	// 描画ブレンドモードをノーブレンドにする
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+
+	// 背景を描画
+	DrawGraph( 0 , 0 , BackHandle , FALSE ) ;
+
+	// 描画ブレンドモードを加算ブレンド（１００％）にする
+	SetDrawBlendMode( DX_BLENDMODE_ADD , 255 ) ;
+
+	// 上に載せるグラフィックを描画
+	DrawGraph( 255 , 0 , TestHandle , TRUE ) ;
+
+	// キー待ち(『WaitKey』を使用)
+	WaitKey() ;
+
+
+
+	// 描画ブレンドモードをノーブレンドにする
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+
+	// 背景を描画
+	DrawGraph( 0 , 0 , BackHandle , FALSE ) ;
+
+	// 描画ブレンドモードを減算ブレンド（８０％）にする
+	SetDrawBlendMode( DX_BLENDMODE_SUB , 204 ) ;
+
+	// 上に載せるグラフィックを描画
+	DrawGraph( 255 , 0 , TestHandle , TRUE ) ;
+
+	// キー待ち((7-3)『WaitKey』を使用)
+	WaitKey() ;
+
+
+
+	// 描画ブレンドモードをノーブレンドにする
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+
+	// 背景を描画
+	DrawGraph( 0 , 0 , BackHandle , FALSE ) ;
+
+	// 描画ブレンドモードを乗算ブレンドにする
+	SetDrawBlendMode( DX_BLENDMODE_MUL , 0 ) ;
+
+	// 上に載せるグラフィックを描画
+	DrawGraph( 255 , 0 , TestHandle , TRUE ) ;
+
+	// キー待ち((7-3)『WaitKey』を使用)
+	WaitKey() ;
+
+
+	DxLib_End() ;	// ＤＸライブラリ使用の終了処理
+
+	return 0 ;	// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int SetDrawBright( int RedBright ,
+　　　　　　　　　　int GreenBright ,
+　　　　　　　　　　int BlueBright ) ;
+
+概略 描画輝度をセット
+
+引数  RedBright
+GreenBirght
+BlueBright　:　それぞれ赤、緑、青の描画輝度です( 0=0% : 255=100% )
+　　　　　　　　(デフォルトでは１００％になっています)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　DrawGraph、DrawExtendGraph、DrawRotaGraph、DrawModiGraph、DrawTurnGraph関数を 使用してグラフィックを描画する際の描画輝度を指定します。
+　要はグラフィックを青色要素だけで描画したり暗く描画したり する事が出来るわけです。RedBirght、GreenBright、BlueBrigth はそれぞれ赤、緑、青の輝度に対応していて上限値は２５５で 明るさ１００％となります。(デフォルトは１００％です)
+　因みに１００％以上の明るさにはすることが出来ません。
+
+サンプル
+
+　test1.bmpを読み込み赤の色要素のみで描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// test1.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// 描画輝度を赤のみにセット
+	SetDrawBright( 255 , 0 , 0 ) ;
+
+	// グラフィックの描画
+	DrawGraph( 0 , 0 , GHandle , FALSE ) ;
+
+	// キー待ち(『WaitKey』を使用)
+	WaitKey() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int SetTransColor( int Red , int Green , int Blue ) ;
+
+概略 　グラフィックに設定する透過色をセットする
+
+引数  int Red , Green , Blue : 透過色に設定する色の各原色値
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　　DrawGraph, DrawExtendGraph等のグラフィック描画関数で使用する
+透過色をセットします、この関数の使用後 LoadGraph , MakeGraph
+等で新たに作成したグラフィックに設定した透過色がセットされます。
+
+サンプル
+
+　R:255 G:0 B:255 の色を透過色にしてtest4.bmpを画面に描画する
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )		// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// 透過色を変更
+	SetTransColor( 255 , 0 , 255 ) ;
+
+	// ＢＭＰ画像のメモリへの読みこみ
+	GHandle = LoadGraph( "test4.bmp" ) ;
+
+	// 画面左上に描画します((3-7)『DrawGraph』を使用)
+	DrawGraph( 0 , 0 , GHandle , TRUE ) ;
+
+	// キーの入力待ち((6-3)『WaitKey』を使用)
+	WaitKey() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int LoadBlendGraph( char *FileName ) ;
+
+概略 　画像ファイルからブレンド画像を読み込む
+
+引数  char *FileName : 読み込むブレンド用画像のパス
+
+戻り値 －１以外：ブレンド画像ハンドル
+　 －１：エラー発生
+
+解説  　DrawBlendGraph関数 で使用するブレンド画像ハンドルをファイルから読み込みます。
+　ブレンド画像を使った合成描画は主にシーンの切り替えに使える機能です。
+どんなものかはサンプルをご覧になって頂ければ一目瞭然、だと思います。
+
+サンプル
+
+　Scene1.jpg から Scene2.jpg への画面の切り替えを、ブレンド画像機能を使って行う(ブレンド画像に BlendGraph.bmp を使用)
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+		 LPSTR lpCmdLine, int nCmdShow )
+{
+	int BlendGraph, GrHandle1, GrHandle2 ;
+	int i ;
+
+	// ＤＸライブラリ初期化処理
+	if( DxLib_Init() == -1 ) return -1 ;
+
+	// 裏画面を使用
+	SetDrawScreen( DX_SCREEN_BACK ) ;
+
+	// ブレンド画像を読み込む
+	BlendGraph = LoadBlendGraph( "BlendGraph.bmp" ) ;
+
+	// 二つの画像の読み込み
+	GrHandle1 = LoadGraph( "Scene1.jpg" ) ;
+	GrHandle2 = LoadGraph( "Scene2.jpg" ) ;
+
+	// 256 フレーム掛けて切り替え
+	for( i = 0 ; i 
+		
+-------------------------------------------------------------------------------
+
+		
+
+
+		
+		
+		
+
+			
+宣言 int DrawBlendGraph( int x, int y, int GrHandle, int TransFlag, int BlendGraph, int BorderParam, int BorderRange ) ;
+
+
+			
+概略 　ブレンド画像と通常画像を合成して描画する
+
+
+			
+引数
+				 int x, y : 画像を描画する領域の左上端座標
+
+				int GrHandle : グラフィックハンドル
+
+				int TransFlag : 透過色処理の有無(TRUEで有効FALSEで無効)
+
+				int BlendGraph : ブレンド画像ハンドル
+
+				int BorderParam : 境界位置(０～２５５)
+
+				int BorderRange : 境界幅(指定できる値は１、６４、１２８、２５５の４つ)
+
+
+			 
+			
+戻り値 　０：正常終了
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadGraph関数 等で読み込んだグラフィックハンドルの画像と、LoadBlendGraph関数 で読み込んだブレンド画像を合成して描画します。
+
+
+				　ブレンド画像を使った合成描画は主にシーンの切り替えに使える機能です。
+
+				　どんなものかはサンプルをご覧になって頂ければ一目瞭然、だと思います。
+
+
+
+				　BorderParam ：ブレンド画像の効果の大きさを指定します。指定できる値は０から２５５です。
+
+
+				　BorderRange ：ブレンド画像の境界の幅を指定します。指定できる値は１，６４，１２８，２５５の４つで、
+				値が大きいほどぼやけた合成になります。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+			　LoadBlendGraph関数 のサンプルを参照してください。
+			
+
+
+
+
+		
+
+		
+
+			
+宣言 int GraphFilter( int GrHandle, int FilterType, ... ) ;
+
+
+			
+概略 画像にフィルター処理を施す
+
+
+			
+引数
+				 int GrHandle : フィルター処理を施すグラフィックハンドル
+
+					int FilterType : 施すフィルターのタイプ
+
+					　　　　　DX_GRAPH_FILTER_MONO　　　　 　　：モノトーンフィルタ
+
+					　　　　　DX_GRAPH_FILTER_GAUSS　　　　　　：ガウスフィルタ
+
+					　　　　　DX_GRAPH_FILTER_DOWN_SCALE　　：縮小フィルタ
+
+					　　　　　DX_GRAPH_FILTER_BRIGHT_CLIP　　：明るさクリップフィルタ
+
+					　　　　　DX_GRAPH_FILTER_HSB　　　　　　　　：色相・彩度・明度フィルタ
+
+					　　　　　DX_GRAPH_FILTER_INVERT　　　　　　：階調の反転フィルタ
+
+					　　　　　DX_GRAPH_FILTER_LEVEL　　　　　 　：レベル補正フィルタ
+
+					　　　　　DX_GRAPH_FILTER_TWO_COLOR　　　：２階調化フィルタ
+
+					　　　　　DX_GRAPH_FILTER_GRADIENT_MAP　：グラデーションマップフィルタ
+
+					... : 各フィルタに付随する引数
+			
+			
+戻り値 　０：正常終了
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadGraph、MakeScreen等で作成したグラフィックハンドル GrHandle に対して、
+					画像編集ソフトで見られるようなレベル補正や２階調化などのフィルター処理を施します。
+
+					　FilterType によって引数が違いますので、各フィルターについての解説は下の方に載せています。
+
+
+
+					>
+
+					　この関数は DrawGraph などの描画関数とは比べ物にならないほど低速ですが、
+					シェーダーモデル２．０が使用できるグラフィックスデバイスが備わった環境では、( フィルターによって負荷は違いますが ) DrawGraph を数回実行した程度の負荷で実行することができます。
+
+
+					　大まかに 2007年～2008年以降に発売されたノートパソコン、デスクトップパソコンではシェーダーモデル２．０が使用できるグラフィックスデバイスを備えています、
+					また、現在数千円くらいから購入できるグラフィックカードでは必ずシェーダーモデル２．０が使用できます。
+
+
+					
+					　尚、シェーダーモデル２．０が使用できる環境の場合、
+					GrHandle に渡すグラフィックハンドルはLoadGraphやMakeGraph
+					などで作成された「SetDrawScreen の引数として渡せない( 描画対象にできない )グラフィックハンドル」より、
+					MakeScreen で作成された「SetDrawScreen の引数として渡せる( 描画対象にできる )グラフィックハンドル」の方が GraphFilter の処理時間が短くなります。
+					
+
+
+
+				
+			
+		
+
+
+		
+
+			>
+
+
+
+			　DX_GRAPH_FILTER_MONO：モノトーンフィルタ
+
+
+
+			　　引数
+
+			　　　int Cb : 青色差( -255 ～ 255 )
+
+			　　　int Cr : 赤色差( -255 ～ 255 )
+
+
+
+			　　解説
+
+			　　　　画像をモノトーン調に変化させることができるフィルターです。
+
+			　　　　各ピクセルの色をＲＧＢ形式からYCbCr形式に変換して、その上ですべてのピクセルの輝度以外の成分を
+
+			　　　引数の Cb Cr の値を置き換えた後、再びＲＧＢ形式に戻します。
+
+			　　　　値の調整が難しいですが、似たような効果を得ることができる DX_GRAPH_FILTER_HSB より負荷は低いです。
+
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp をモノトーンフィルタを使用してセピア調の画像に変換してから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_GAUSS：ガウスフィルタ
+
+
+
+			　　引数
+
+			　　　int PixelWidth : 使用ピクセル幅( 8 , 16 , 32 の何れか )
+
+			　　　int Param : ぼかしパラメータ( 100 で約1ピクセル分の幅 )
+
+
+
+			　　解説
+
+			　　　　画像にガウス関数を使用したぼかし効果を与えることができるフィルターです。
+
+			　　　　Param の値の大きさでぼかしの強さが変化しますが、ぼかせる度合いには限界があります。
+
+			　　　ぼかしの限界は PixelWidth の値の大きさで決まり、PixelWidth の値が大きいほどぼかしの強さの限界が大きくなり、
+
+			　　　それとともに処理負荷も大きくなります。
+
+			　　　　このフィルタは非常に負荷が大きいので、強いぼかしをかけたい場合は PixelWidth の値を 32 にして強いぼかしを
+
+			　　　掛けるより、縮小フィルタ( DX_GRAPH_FILTER_DOWN_SCALE )で画像を縮小した後弱いぼかしを掛け、
+
+			　　　その後 DrawExtendGraph で元の大きさで描画する、という方法を採ったほうが処理負荷を小さく抑えることができます。
+
+
+
+				
+				＜＜注意＞＞
+
+				　サイズが 2 の n乗のドット数( 1,2,4,8,16,32,64,128,256,512,1024 )ぴったりではない画像に対してガウスフィルタを掛けると、
+				画像の端に、画像には無い色が滲み出たりすることがあります。
+
+				　こちらは今のところ仕様となりますので、この現象を回避する場合はガウスフィルタを掛ける画像は2のｎ乗サイズにするか、
+				若しくは画像のサイズを少し必要なサイズより大きめにして滲んだ部分を使わないという方法で対処してください。
+
+
+				
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp をガウスフィルタを使用してぼかした画像に変換してから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// 画面モードを32bitカラーにする
+	SetGraphMode( 640, 480, 32 ) ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_DOWN_SCALE：縮小フィルタ
+
+
+
+			　　引数
+
+			　　　int DivNum : 元のサイズの何分の１か、という値( 2 , 4 , 8 の何れか )
+
+
+
+			　　解説
+
+			　　　　画像を綺麗に縮小するためのフィルターです。
+
+			　　　　DrawExtendGraph でも縮小描画することができますが、それよりも綺麗に縮小した画像を得ることができます。
+
+			　　　　主にガウスフィルタ( DX_GRAPH_FILTER_GAUSS )の処理負荷を下げる目的で使用されることを想定しています。
+
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp を４分の１のサイズに縮小してから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像
+
+
+
+
+
+変換後( 左 )と DrawExtendGraph の縮小結果( 右 )
+
+ 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_BRIGHT_CLIP：明るさクリップフィルタ
+
+
+
+			　　引数
+
+			　　　int CmpType : クリップタイプ
+
+			　　　　　　　　　　　DX_CMP_LESS　　　　 CmpParamより小さい場合クリップ
+
+			　　　　　　　　　　　DX_CMP_GREATER　　CmpParamより大きい場合クリップ
+
+			　　　int CmpParam : クリップパラメータ( 0 ～ 255 )
+
+			　　　int ClipFillFlag : クリップしたピクセルを塗りつぶすかどうか
+
+			　　　　　　　　　　　　　　　( TRUE:塗りつぶす  FALSE:塗りつぶさない )
+
+			　　　int ClipFillColor : クリップしたピクセルに塗る色値( GetColor で取得できる値 )
+
+			　　　　　　　　　　　　　　　( ClipFillFlag が FALSE の場合は使用されません )
+
+			　　　int ClipFillAlpha : クリップしたピクセルに塗るアルファ値( 0 ～ 255 )
+
+			　　　　　　　　　　　　　　　( ClipFillFlag が FALSE の場合は使用されません )
+
+
+
+			　　解説
+
+			　　　　画像の各ピクセルを輝度に応じて引数で渡す色で塗りつぶすフィルターです。
+
+			　　　　まず各ピクセルの色から輝度を算出して、その値が CmpType が DX_CMP_LESS の場合は
+
+			　　　CmpParam より小さかったら、CmpType が DX_CMP_GRATER の場合は CmpParam より大きかったら
+
+			　　　クリップ処理が行われます。
+
+			　　　　クリップ処理は ClipFillFlag が TRUE かどうかで処理が別れます。
+
+			　　　　FALSE の場合は単純に出力先の画像にそのピクセルが書き込まれません。ただ、GraphFilter 関数は
+
+			　　　入力元と出力先が同じなので、何も変化しないことになります。なので、ClipFillFlag を FALSE にする
+
+			　　　意味があるのは入力元と出力先を別にできる関数 GraphFilterBlt や GraphFilterRectBlt を
+
+			　　　使用した場合のみとなります。
+
+			　　　　ClipFillFlag が TRUE の場合は、クリップ処理としてクリップ判定されたピクセルに元画像の
+
+			　　　ピクセルの色の代わりに ClipFillColor で指定した色が、出力先画像にアルファチャンネルが
+
+			　　　ある場合は元画像のピクセルのアルファ値の代わりに ClipFillAlpha が出力先に書き込まれます。
+
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp の輝度５０％以下の部分を緑色にしてから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_HSB：色相・彩度・明度フィルタ
+
+
+
+			　　引数
+
+			　　　int HueType 　: Hue の意味( 0:相対値  1:絶対値 )
+
+			　　　int Hue 　　　　: 色相
+
+			　　　　　　　　　　　　　( HueType が 0 の場合はピクセルの色相に対する相対値( -180 ～ 180 )
+
+			　　　　　　　　　　　　　　HueType が 1 の場合は色相の絶対値( 0 ～ 360 ) )
+
+			　　　int Saturation : 彩度( -255 ～ )
+
+			　　　int Bright 　　　: 輝度( -255 ～ 255 )
+
+
+
+			　　解説
+
+			　　　　画像の各ピクセルのＲＧＢの値から色相・彩度・輝度の値を算出して、それに対して引数の
+
+			　　　Hue、Saturation、Bright を加えることで画像の色相や彩度、輝度を補正するフィルターです。
+
+			　　　　まず HueType を 0 にするか 1 にするかで結果が大きく変化します。
+
+			　　　0 にした場合は元の色相の値に対して Hue の値を加算するのに対して、1 にした場合は元の色相の値を
+
+			　　　無視して Hue の値に置き換えるのですべてのピクセルが同じ色相となり、結果としてモノトーン調の
+
+			　　　出力結果になります。
+
+			　　　　Hue の値は色相です、色相は青、赤、緑の色合い 0 ～ 360 の数値で表したもので、0 は赤、
+
+			　　　120が緑、240が青、360が再び赤、というようになっています。この値に変化を加えることで
+
+			　　　色合いを変えることができます。HueType が 0 か 1 かによって指定できる値の範囲と意味が変化して、
+
+			　　　HueType が 0 の場合は元の色相に対する相対値となるので指定できる値は -180 から 180 になります。
+
+			　　　HueType が 1 の場合は、元の色相を無視した絶対値となるので指定できる値は 0 から 360 となります。
+
+			　　　　Saturation は彩度です、彩度は高ければ高いほど鮮やかな色に近づき、低ければ低いほどグレーに近くなります。
+
+			　　　Saturation は必ず元の彩度に対する相対値の指定になりますので、特に彩度を変更したくない場合は
+
+			　　　0 を指定します。
+
+			　　　　Bright は輝度です、この値を 0 以下にすると出力結果が黒に近くなり、0 以上にすると出力結果が
+
+			　　　白に近くなります。0 を指定すれば元画像と同じ輝度で出力されます。
+
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp の水面の色を紫色に変化させ、彩度を上げて輝度を下げてから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+
+
+色相を固定した場合としない場合の違い
+
+固定した場合
+　　　固定しない場合
+
+( 固定した場合はすべてのピクセルの色相が同じになり、固定しない場合は各ピクセル色相が独立します )
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_INVERT：階調の反転フィルタ
+
+
+
+			　　引数
+
+			　　　なし
+
+
+
+			　　解説
+
+			　　　　画像の各ピクセルのＲＧＢの値を反転するフィルタです。
+
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp の色を反転してから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_LEVEL：レベル補正フィルタ
+
+
+
+			　　引数
+
+			　　　int Min : 変換元の下限値( 0 ～ 255 )
+
+			　　　int Max : 変換元の上限値( 0 ～ 255 )
+
+			　　　int Gamma : ガンマ値( 100 で 1.0 を表し、ガンマ補正無し、1 より小さい値は不可 )
+
+			　　　int AfterMin : 変換後の最低値( 0 ～ 255 )
+
+			　　　int AfterMax : 変換後の最大値( 0 ～ 255 )
+
+
+
+			　　解説
+
+			　　　　画像にレベル補正を行うフィルタです、輝度分布が偏っていて締まりの無い画像のコントラストを上げたりできます。
+
+			　　　　Min の値を 0 以上にすると全体的に画像が暗い方向に傾き、白っぽくなってしまっている画像を引き締めます。
+
+			　　　　Max の値を 255 以下にすると全体的に画像が明るい方向に傾き、暗くなってしまっている画像を明るくします。
+
+			　　　　Gamma の値を 100 以上にすると画像が明るくなります。( Max の値を下げるのとは違う変化です )
+
+			　　　　Gamma の値を 100 以下にすると画像が暗くなります。( Min の値を上げるのとは違う変化です )
+
+			　　　　AfterMin の値を 0 以上にすると、画像が全体的に白っぽくなります。
+
+			　　　　AfterMax の値を 255 以下にすると、画像が全体的に黒に近くなります。
+
+
+			
+			
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp をレベル補正フィルタを使用してコントラストと鮮やかさを上げてから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_TWO_COLOR：２階調化フィルタ
+
+
+
+			　　引数
+
+			　　　int Threshold : 閾値( 0 ～ 255 )
+
+			　　　int LowColor : 閾値より値が低かったピクセルの変換後の色値( GetColor で取得できる値 )
+
+			　　　int LowAlpha : 閾値より値が低かったピクセルの変換後のアルファ値( 0 ～ 255 )
+
+			　　　int HighColor : 閾値より値が高かったピクセルの変換後の色値( GetColor で取得する )
+
+			　　　int HighAlpha : 閾値より値が高かったピクセルの変換後のアルファ値( 0 ～ 255 )
+
+
+
+			　　解説
+
+			　　　　画像を２階調化するフィルターです。
+
+			　　　　画像の各ピクセルの色から 0 ～ 255 の輝度値を算出し、その値が Threshold で指定した値以上かどうかで
+
+			　　　変換後の色が LowColor, LowAlpha になるか、 HighColor, HighAlpha になるかが決まります。
+
+			　　　　引数の説明以上に引数について解説できることはアルファチャンネルを持たない画像に対しては LowAlpha と
+
+			　　　HighAlpha の引数は特に使われないということくらいです。
+
+
+			
+			
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp を２階調化フィルタで輝度が50%以下の部分を暗い青に、
+
+			　　　50%以上の部分を黄色にしてから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+			　DX_GRAPH_FILTER_GRADIENT_MAP：グラデーションマップフィルタ
+
+
+
+			　　引数
+
+			　　　int MapGrHandle : グラデーションマップとして使用するグラフィックハンドル、普通に LoadGraph などで作成したハンドル
+
+			　　　　　　　　　　　　( 横幅は 256pixelである必要があります、縦幅は何でも( 1pixel でも 100pixel でも )大丈夫です )
+
+			　　　int Reverse : グラデーションマップを左右反転して使用するかどうか
+
+			　　　　　　　　　　　　( TRUE : 左右反転して使用する  FALSE : 左右反転しない )
+
+
+
+			　　解説
+
+			　　　　画像の各ピクセルの輝度からグラデーションマップのＸ座標を算出して、その座標の色に変換するフィルターです。
+
+			　　　　輝度が０の場合はグラデーションマップの一番左上のピクセルの色が( x:0 y:0 座標のピクセル )、
+
+			　　　輝度が２５５( 最大 )だったらグラデーションマップの一番右上のピクセルの色が( x:255 y:0 座標のピクセル )
+
+			　　　出力結果の色となります。
+
+			　　　　変換元画像のピクセルの輝度によってグラデーションマップ中のＸ座標を決定しますが、Ｙ座標は常に０ですので、
+
+			　　　グラデーションマップ画像は縦幅１ピクセルでも問題ありません。
+
+
+
+			　　　　Reverse を TRUE にすると輝度からグラデーションマップのＸ座標を算出する結果を反転します。
+
+			　　　つまり輝度が最大のときにグラデーションマップ中の一番左上のピクセルが使用され、輝度が最低のときに一番右上の
+
+			　　　ピクセルが使用されるようになります。
+
+
+			
+			
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp を GMap.bmp をグラデーションマップとして使用してグラデーションマップフィルタを適用した後、
+
+			　　　画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+	int GradHandle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+
+
+
+グラデーションマップとして使用した画像
+
+
+
+元画像の暗いところほど白く、元画像の明るいところほど青色になります。
+
+
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 int GraphFilterBlt( int SrcGrHandle, int DestGrHandle, int FilterType, ... ) ;
+
+
+			
+概略 　画像にフィルター処理を施す( 出力先画像指定版 )
+
+
+			
+引数
+				 int SrcGrHandle : フィルター処理を施すグラフィックハンドル
+
+					int DestGrHandle : フィルター処理を施した結果を出力するグラフィックハンドル
+
+					int FilterType : 施すフィルターのタイプ
+
+					　　　　　DX_GRAPH_FILTER_MONO　　　　 　　：モノトーンフィルタ
+
+					　　　　　DX_GRAPH_FILTER_GAUSS　　　　　　：ガウスフィルタ
+
+					　　　　　DX_GRAPH_FILTER_DOWN_SCALE　　：縮小フィルタ
+
+					　　　　　DX_GRAPH_FILTER_BRIGHT_CLIP　　：明るさクリップフィルタ
+
+					　　　　　DX_GRAPH_FILTER_HSB　　　　　　　　：色相・彩度・明度フィルタ
+
+					　　　　　DX_GRAPH_FILTER_INVERT　　　　　　：階調の反転フィルタ
+
+					　　　　　DX_GRAPH_FILTER_LEVEL　　　　　 　：レベル補正フィルタ
+
+					　　　　　DX_GRAPH_FILTER_TWO_COLOR　　　：２階調化フィルタ
+
+					　　　　　DX_GRAPH_FILTER_GRADIENT_MAP　：グラデーションマップフィルタ
+
+					... : 各フィルタに付随する引数
+			 
+			
+戻り値 　０：正常終了
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadGraph、MakeScreen等で作成したグラフィックハンドル SrcGrHandle に対して、
+					画像編集ソフトで見られるようなレベル補正や２階調化などのフィルター処理を施した結果をグラフィックハンドル DestGrHandle に出力します。
+
+
+
+					　この関数は出力先のグラフィックハンドルを指定できるという以外は関数 GraphFilter と同じなので、
+					各フィルターについては GraphFilter の解説をご覧ください。
+
+
+
+					　尚、出力先のグラフィックハンドルは関数 MakeScreen で作成できる
+					「SetDrawScreen で描画対象にできるグラフィックハンドル」を使った方が高速に動作します。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+			　　　　画像 Src1.bmp をモノトーンフィルタを使用してセピア調の画像に変換してから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int SrcHandle ;
+	int DestHandle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像 　　変換後 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 int GraphFilterRectBlt( int SrcGrHandle, int DestGrHandle, int SrcX1, int SrcY1, int SrcX2, int SrcY2, int DestX, int DestY, int FilterType, ... ) ;
+
+
+			
+概略 　画像にフィルター処理を施す( 出力先画像、使用矩形指定版 )
+
+
+			
+引数
+				 int SrcGrHandle : フィルター処理を施すグラフィックハンドル
+
+					int DestGrHandle : フィルター処理を施した結果を出力するグラフィックハンドル
+
+					int SrcX1, SrcY1 : フィルター処理を施す SrcGrHandle 内の矩形の左上座標
+
+					int SrcX2, SrcY2 : フィルター処理を施す SrcGrHandle 内の矩形の右下座標
+
+					int DestX, DestY : フィルター処理を施した結果を出力する
+
+					　　　　　　　　　　　　　DestGrHandle 内の矩形の左上座標
+
+					int FilterType : 施すフィルターのタイプ
+
+					　　　　　DX_GRAPH_FILTER_MONO　　　　 　　：モノトーンフィルタ
+
+					　　　　　DX_GRAPH_FILTER_GAUSS　　　　　　：ガウスフィルタ
+
+					　　　　　DX_GRAPH_FILTER_DOWN_SCALE　　：縮小フィルタ
+
+					　　　　　DX_GRAPH_FILTER_BRIGHT_CLIP　　：明るさクリップフィルタ
+
+					　　　　　DX_GRAPH_FILTER_HSB　　　　　　　　：色相・彩度・明度フィルタ
+
+					　　　　　DX_GRAPH_FILTER_INVERT　　　　　　：階調の反転フィルタ
+
+					　　　　　DX_GRAPH_FILTER_LEVEL　　　　　 　：レベル補正フィルタ
+
+					　　　　　DX_GRAPH_FILTER_TWO_COLOR　　　：２階調化フィルタ
+
+					　　　　　DX_GRAPH_FILTER_GRADIENT_MAP　：グラデーションマップフィルタ
+
+					... : 各フィルタに付随する引数
+			 
+			
+戻り値 　０：正常終了
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadGraph、MakeScreen等で作成したグラフィックハンドル SrcGrHandle に対して、
+					画像編集ソフトで見られるようなレベル補正や２階調化などのフィルター処理を施した結果をグラフィックハンドル DestGrHandle に出力します。
+
+
+
+					　この関数は画像中のどの部分にフィルターを施し、その結果を出力先のどの座標に出力するかを指定できるという以外は関数 GraphFilter と同じなので、
+					各フィルターについては GraphFilter の解説をご覧ください。
+
+
+
+					　尚、出力先のグラフィックハンドルは関数 MakeScreen で作成できる
+					「SetDrawScreen で描画対象にできるグラフィックハンドル」を使った方が高速に動作します。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+			　　　　画像 Src1.bmp の右下部分だけをモノトーンフィルタを使用してセピア調の画像に変換してから画面に描画します。
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int SrcHandle ;
+	int DestHandle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 int GraphBlend( int GrHandle, int BlendGrHandle, int BlendRatio, int BlendType, ... ) ;
+
+
+			
+概略 　二つの画像を特殊効果付きでブレンドする
+
+
+			
+引数
+				 int GrHandle : BlendGrHandle と合成するグラフィックハンドル
+
+					int BlendGrHandle : GrHandle に合成するグラフィックハンドル
+
+					int BlendRatio : ブレンド効果の影響度( 0:０％  255:１００％ )
+
+					int BlendType : ブレンド効果タイプ
+
+					　　　　　DX_GRAPH_BLEND_NORMAL 　　　　　　　: ごく普通の合成
+
+					　　　　　DX_GRAPH_BLEND_RGBA_SELECT_MIX　: RGBAの要素を選択して合成
+
+					　　　　　DX_GRAPH_BLEND_MULTIPLE 　　　　　　: 乗算
+
+					　　　　　DX_GRAPH_BLEND_DIFFERENCE　　　　　: 減算
+
+					　　　　　DX_GRAPH_BLEND_ADD 　　　　　　　　　　: 加算
+
+					　　　　　DX_GRAPH_BLEND_SCREEN　　　　　　　　: スクリーン
+
+					　　　　　DX_GRAPH_BLEND_OVERLAY　　 　　　　　: オーバーレイ
+
+					　　　　　DX_GRAPH_BLEND_DODGE　　　　　　　　　: 覆い焼き
+
+					　　　　　DX_GRAPH_BLEND_BURN　　　　　　　　　　: 焼き込み
+
+					　　　　　DX_GRAPH_BLEND_DARKEN 　　　　　　　　: 比較(暗)
+
+					　　　　　DX_GRAPH_BLEND_LIGHTEN 　　　　　　　　: 比較(明)
+
+					　　　　　DX_GRAPH_BLEND_SOFTLIGHT 　　　　　　: ソフトライト
+
+					　　　　　DX_GRAPH_BLEND_HARDLIGHT 　　　　　　: ハードライト
+
+					　　　　　DX_GRAPH_BLEND_EXCLUSION 　　　　　　: 除外
+
+					... : 各効果タイプに付随する引数
+			 
+			
+戻り値 　０：正常終了
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadGraph、MakeScreen等で作成した二つのグラフィックハンドルを、
+					画像編集ソフトのレイヤー合成のような効果付きで合成します。( DX_GRAPH_BLEND_RGBA_SELECT_MIX だけは画像編集ソフトには無いかもしれません・・・ )
+
+
+					　GrHandle と BlendGrHandle を特殊効果付きで合成して、その結果を GrHandle に出力します。
+
+					　BlendRatio はブレンド結果と GrHandle の元の画像との合成比率で、
+					255 を指定すると合成後の結果がそのまま GrHandle の画像となりますが、
+					例えば 128 を指定すると合成後の結果と GrHandle の元の画像とが半々で合成され、それが GrHandle の以後の画像となります。
+					( そして 0 を指定すると GrHandle には元の画像のまま何も変化しません )
+
+					　BlendType によって引数が違いますので、各ブレンド効果についての解説は下の方に載せています。
+
+
+
+					>
+
+					　この関数は DrawGraph などの描画関数とは比べ物にならないほど低速ですが、
+					シェーダーモデル２．０が使用できるグラフィックスデバイスが備わった環境では、( ブレンド効果によって負荷は違いますが ) DrawGraph を数回実行した程度の負荷で実行することができます。
+
+
+					　大まかに 2007年～2008年以降に発売されたノートパソコン、デスクトップパソコンではシェーダーモデル２．０が使用できるグラフィックスデバイスを備えています、
+					また、現在数千円くらいから購入できるグラフィックカードでは必ずシェーダーモデル２．０が使用できます。
+
+
+					
+					　尚、シェーダーモデル２．０が使用できる環境の場合、
+					GrHandle に渡すグラフィックハンドルはLoadGraphやMakeGraph
+					などで作成された「SetDrawScreen の引数として渡せない( 描画対象にできない )グラフィックハンドル」より、
+					MakeScreen で作成された「SetDrawScreen の引数として渡せる( 描画対象にできる )グラフィックハンドル」の方が GraphFilter の処理時間が短くなります。
+					
+
+
+				
+			
+		
+
+
+		
+
+			>
+
+
+
+			　DX_GRAPH_BLEND_RGBA_SELECT_MIX：RGBAの要素を選択して合成
+
+
+
+			　　引数
+
+			　　　int SelectR : 出力の赤値となる要素
+
+			　　　　　　　　DX_RGBA_SELECT_SRC_R 　: GrHandle 画像の赤値
+
+			　　　　　　　　DX_RGBA_SELECT_SRC_G 　: GrHandle 画像の緑値
+
+			　　　　　　　　DX_RGBA_SELECT_SRC_B 　: GrHandle 画像の青値
+
+			　　　　　　　　DX_RGBA_SELECT_SRC_A 　: GrHandle 画像のアルファ値
+
+			　　　　　　　　DX_RGBA_SELECT_BLEND_R : BlendGrHandle 画像の赤値
+
+			　　　　　　　　DX_RGBA_SELECT_BLEND_G : BlendGrHandle 画像の緑値
+
+			　　　　　　　　DX_RGBA_SELECT_BLEND_B : BlendGrHandle 画像の青値
+
+			　　　　　　　　DX_RGBA_SELECT_BLEND_A : BlendGrHandle 画像のアルファ値
+
+			　　　int SelectG : 出力の緑値となる要素( 渡せる値の種類は SelectR と同じです )
+
+			　　　int SelectB : 出力の青値となる要素( 渡せる値の種類は SelectR と同じです )
+
+			　　　int SelectA : 出力のアルファ値となる要素( 渡せる値の種類は SelectR と同じです )
+
+
+
+			　　解説
+
+			　　　　合成後の画像として赤・緑・青・アルファの各成分を GrHandle の画像、BlendGrHandle の画像のどちらのどの要素から
+
+			　　　取ってくるかを指定します。
+
+			　　　　例えば、SelectR に DX_RGBA_SELECT_BLEND_G を指定した場合は、合成後の画像の赤成分は、BlendGrHandle
+
+			　　　の緑成分になります。
+
+
+
+			　　　>
+
+			　　　　尚、このブレンド効果だけは BlendRatio の値が無視され、必ず BlendRatio 255 が指定されたのと同じ
+
+			　　　結果になります。
+
+			　　　　また、GrHandle にアルファチャンネルが含まれていない場合は SelectA の値は無視されます。
+
+			　　　( GrHandle にアルファチャンネルが無いということはアルファ値を格納する領域が無いということなので )
+
+
+
+			　　　　このブレンド効果の主な利用法としてはマスク機能を想定しています。
+
+			　　　　赤・緑・青のどの成分も合成後の画像のアルファ値とすることができるので、普通の画像や描画結果をマスク画像として
+
+			　　　使用することができ、マスク部分の半透明描画も可能なので、既存の DrawMask や DrawFillMask などのマスク関数より
+
+			　　　柔軟なマスク機能を実現することができます。
+
+			　　　( ただ、シェーダーモデル２．０が使用できない環境では処理負荷が高くリアルタイム処理には利用できませんが・・・ )
+
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp と Src2.tga を合成してから画面に描画します。
+
+			　　　　Src1.bmp にはアルファチャンネルが無いのでアルファチャンネル付きの描画可能画像のグラフィックハンドルを作成して、
+
+			　　　そこに Src1.bmp を描画してから合成しています、合成後の画像は、赤を Src1.bmp の緑成分から、緑を Src1.bmp の
+
+			　　　赤成分から、青を Src1.bmp の青成分から( つまり変化なし )、アルファ成分を Src2.tga の赤成分から取ってきています。
+
+			　　　( Src2.tga の緑成分・青成分・アルファ成分はこのサンプルでは使用していません )
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+	int BlendHandle ;
+	int AlphaHandle ;
+
+	// 画面モードを32bitカラーにする
+	SetGraphMode( 640, 480, 32 ) ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像
+
+
+
+
+
+ブレンド画像( 格子の部分は透明を表しています )
+
+
+
+
+
+合成結果
+
+
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+			
+
+			　DX_GRAPH_BLEND_NORMAL : 通常
+
+			　DX_GRAPH_BLEND_MULTIPLE : 乗算
+
+			　DX_GRAPH_BLEND_DIFFERENCE : 減算
+
+			　DX_GRAPH_BLEND_ADD : 加算
+
+			　DX_GRAPH_BLEND_SCREEN : スクリーン
+
+			　DX_GRAPH_BLEND_OVERLAY : オーバーレイ
+
+			　DX_GRAPH_BLEND_DODGE : 覆い焼き
+
+			　DX_GRAPH_BLEND_BURN : 焼き込み
+
+			　DX_GRAPH_BLEND_DARKEN : 比較(暗)
+
+			　DX_GRAPH_BLEND_LIGHTEN : 比較(明)
+
+			　DX_GRAPH_BLEND_SOFTLIGHT : ソフトライト
+
+			　DX_GRAPH_BLEND_HARDLIGHT : ハードライト
+
+			　DX_GRAPH_BLEND_EXCLUSION : 除外
+
+
+
+			　　引数
+
+			　　　なし
+
+
+
+			　　解説
+
+			　　　　上記の合成タイプは引数が無いので解説を一括します。
+
+			　　　　( サンプルプログラムはこの解説の一番下にあります )
+
+			　　　　解説で使用する画像は GrHandle がこの画像
+
+
+
+			　　　　
+
+
+
+			　　　　BlendGrHandle がこの画像となります。( 格子の部分は透明な部分です )
+
+
+
+			　　　　
+
+
+
+			　　　　各タイプの説明の合成結果画像は BlendRatio に 255 を指定した場合の結果です。
+
+
+
+			　　　　＜各タイプの説明にある擬似プログラムについて＞
+
+			　　　　　・色の値を 0.0 ～ 1.0 としたプログラムです。
+
+			　　　　　・計算結果は 0.0 ～ 1.0 にクランプされます。
+
+			　　　　　・赤・緑・青成分個々に対して同じ処理が実行されます。
+
+			　　　　　・擬似プログラムの後に共通して以下の処理が行われています
+
+			　　　　　　　最終結果の色 = GrHandleの色 * ( 1.0 - BlendGrHandleのアルファ値 * BlendRatio ) +
+
+			　　　　　　　　　　　　　　　　　 結果の色 　　 * ( 　　　 BlendGrHandleのアルファ値 * BlendRatio );
+
+			　　　　　　　( BlendRatio は 0.0 ～ 1.0 となります )
+
+
+
+
+
+			　　　　DX_GRAPH_BLEND_NORMAL : 通常
+
+
+
+			　　　　　合成に特に特殊効果はありません、BlendRatio が 255 に近いほど BlendGrHandle の画像の不透明度が高くなります。
+
+
+
+			　　　　　>
+
+			　　　　　　結果の色 = BlendGrHandleの色;
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_MULTIPLE : 乗算
+
+
+
+			　　　　　二つの画像の色を乗算します、乗算といっても各成分を ０．０ ～ １．０ の値に見立てて乗算を行うので、
+
+			　　　　元の色より暗くなることはあっても明るくなることはありません。
+
+
+
+			　　　　　>
+
+			　　　　　　結果の色 = GrHandleの色 * BlendGrHandleの色;
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_DIFFERENCE : 減算
+
+
+
+			　　　　　GrHandle の色から BlendGrHandle の色を引きます。
+
+
+
+			　　　　　>
+
+			　　　　　　結果の色 = GrHandleの色 - BlendGrHandleの色;
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_ADD : 加算
+
+
+
+			　　　　　GrHandle の色に BlendGrHandle の色を足します。
+
+
+
+			　　　　　>
+
+			　　　　　　結果の色 = GrHandleの色 + BlendGrHandleの色;
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_SCREEN : スクリーン
+
+
+
+			　　　　　加算と同じで明るくなりますが、加算ほど明るくなりません。
+
+
+
+			　　　　　>
+
+			　　　　　　結果の色 = 1.0f - ( ( 1.0f - GrHandleの色 ) * ( 1.0f - BlendGrHandleの色 ) );
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_OVERLAY : オーバーレイ
+
+
+
+			　　　　　GrHandle の色の値が 0.5 以下の部分は暗く、0.5 以上の部分は明るくなる合成です。
+
+
+
+			　　　　　>
+
+			　　　　　　if( GrHandleの色 
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = GrHandleの色 * BlendGrHandleの色 * 2.0;
+
+			　　　　　　}
+
+			　　　　　　else
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = 2.0 * ( GrHandleの色 + BlendGrHandleの色 - GrHandleの色 * BlendGrHandleの色 ) - 1.0;
+
+			　　　　　　}
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_DODGE : 覆い焼き
+
+
+
+			　　　　　計算は複雑ですが加算と同様に合成後の画像は明るくなります。
+
+
+
+			　　　　　>
+
+			　　　　　　if( BlendGrHandleの色 
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = GrHandleの色 / ( 1.0 - BlendGrHandleの色 );
+
+			　　　　　　}
+
+			　　　　　　else
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = 1.0;
+
+			　　　　　　}
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_BURN : 焼き込み
+
+
+
+			　　　　　計算は複雑ですが乗算と同様に合成後の画像は暗くなります。
+
+
+
+			　　　　　>
+
+			　　　　　　if( BlendGrHandleの色 > 0 )
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = 1.0 - ( 1.0 - GrHandleの色 ) / BlendGrHandleの色 ;
+
+			　　　　　　}
+
+			　　　　　　else
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = 0.0;
+
+			　　　　　　}
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_DARKEN : 比較(暗)
+
+
+
+			　　　　　GrHandle と BlendGrHandle で色の暗い方を合成後の色とします。
+
+
+
+			　　　　　>
+
+			　　　　　　if( BlendGrHandleの色 > GrHandleの色 )
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = GrHandleの色 ;
+
+			　　　　　　}
+
+			　　　　　　else
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = BlendGrHandleの色 ;
+
+			　　　　　　}
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_LIGHTEN : 比較(明)
+
+
+
+			　　　　　GrHandle と BlendGrHandle で色の明るい方を合成後の色とします。
+
+
+
+			　　　　　>
+
+			　　　　　　if( BlendGrHandleの色 > GrHandleの色 )
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = BlendGrHandleの色 ;
+
+			　　　　　　}
+
+			　　　　　　else
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = GrHandleの色 ;
+
+			　　　　　　}
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_SOFTLIGHT : ソフトライト
+
+
+
+			　　　　　オーバーレイより少し暗い感じです。
+
+
+
+			　　　　　>
+
+			　　　　　　if( BlendGrHandleの色 
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = pow( GrHandleの色, ( 1.0f - BlendGrHandleの色 ) * 2.0 ) ;
+
+			　　　　　　}
+
+			　　　　　　else
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = pow( GrHandleの色, 0.5 / BlendGrHandleの色 );
+
+			　　　　　　}
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_HARDLIGHT : ハードライト
+
+
+
+			　　　　　オーバーレイは GrHandle の値が 0.5 以上かどうかを判断していましたが、
+
+			　　　　　ハードライトでは BlendGrHandle の値を 0.5 以上かどうかを判断に使用しています。
+
+
+
+			　　　　　>
+
+			　　　　　　if( BlendGrHandleの色 
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = GrHandleの色 * BlendGrHandleの色 * 2.0;
+
+			　　　　　　}
+
+			　　　　　　else
+
+			　　　　　　{
+
+			　　　　　　　　　結果の色 = 2.0 * ( GrHandleの色 + BlendGrHandleの色 - GrHandleの色 * BlendGrHandleの色 ) - 1.0;
+
+			　　　　　　}
+
+
+
+			　　　　　
+
+
+
+
+			　　　　DX_GRAPH_BLEND_EXCLUSION : 除外
+
+
+
+			　　　　　減算に若干似ています。
+
+
+
+			　　　　　>
+
+			　　　　　　結果の色 = GrHandleの色 + BlendGrHandleの色 - 2.0 * GrHandleの色 * BlendGrHandleの色;
+
+
+
+			　　　　　
+
+
+
+
+
+			　　サンプル
+
+
+
+			　　　　画像 Src1.bmp と Src2.tga をオーバーレイ合成してから画面に描画します。
+
+			　　　　この一括解説で扱われた合成タイプはすべて引数がありませんので、このサンプルの
+
+			　　　DX_GRAPH_BLEND_OVERLAY の部分を他の合成タイプに置き換えればそのままその合成タイプの
+
+			　　　サンプルとして見立てることができます。
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int Handle ;
+	int BlendHandle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+
+		
+
+			
+宣言 int GraphBlendBlt( int SrcGrHandle, int BlendGrHandle, int DestGrHandle, int BlendRatio, int BlendType, ... ) ;
+
+
+			
+概略 　二つの画像を特殊効果付きでブレンドする( 出力先画像指定版 )
+
+
+			
+引数
+				 int SrcGrHandle : BlendGrHandle と合成するグラフィックハンドル
+
+					int BlendGrHandle : SrcGrHandle に合成するグラフィックハンドル
+
+					int DestGrHandle : 合成した結果を出力するグラフィックハンドル
+
+					int BlendRatio : ブレンド効果の影響度( 0:０％  255:１００％ )
+
+					int BlendType : ブレンド効果タイプ
+
+					　　　　　DX_GRAPH_BLEND_NORMAL 　　　　　　　: ごく普通の合成
+
+					　　　　　DX_GRAPH_BLEND_RGBA_SELECT_MIX　: RGBAの要素を選択して合成
+
+					　　　　　DX_GRAPH_BLEND_MULTIPLE 　　　　　　: 乗算
+
+					　　　　　DX_GRAPH_BLEND_DIFFERENCE　　　　　: 減算
+
+					　　　　　DX_GRAPH_BLEND_ADD 　　　　　　　　　　: 加算
+
+					　　　　　DX_GRAPH_BLEND_SCREEN　　　　　　　　: スクリーン
+
+					　　　　　DX_GRAPH_BLEND_OVERLAY　　 　　　　　: オーバーレイ
+
+					　　　　　DX_GRAPH_BLEND_DODGE　　　　　　　　　: 覆い焼き
+
+					　　　　　DX_GRAPH_BLEND_BURN　　　　　　　　　　: 焼き込み
+
+					　　　　　DX_GRAPH_BLEND_DARKEN 　　　　　　　　: 比較(暗)
+
+					　　　　　DX_GRAPH_BLEND_LIGHTEN 　　　　　　　　: 比較(明)
+
+					　　　　　DX_GRAPH_BLEND_SOFTLIGHT 　　　　　　: ソフトライト
+
+					　　　　　DX_GRAPH_BLEND_HARDLIGHT 　　　　　　: ハードライト
+
+					　　　　　DX_GRAPH_BLEND_EXCLUSION 　　　　　　: 除外
+
+					... : 各効果タイプに付随する引数
+			 
+			
+戻り値 　０：正常終了
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadGraph、MakeScreen等で作成した二つのグラフィックハンドル( SrcGrHandle と BlendGrHandle )を、
+					画像編集ソフトのレイヤー合成のような効果付きで合成して、その結果を DestGrHandle に出力します。
+
+
+
+					　この関数は出力先のグラフィックハンドルを指定できるという以外は関数 GraphBlend と同じなので、
+					各ブレンドタイプについては GraphBlend の解説をご覧ください。
+
+
+
+					　尚、出力先のグラフィックハンドルは関数 MakeScreen で作成できる
+					「SetDrawScreen で描画対象にできるグラフィックハンドル」を使った方が高速に動作します。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+			　　　　画像 Src1.bmp と Src2.tga を覆い焼き合成してから画面に描画します。
+
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int SrcHandle ;
+	int DestHandle ;
+	int BlendHandle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+元画像
+
+
+
+
+
+ブレンド画像
+
+
+
+
+
+合成後
+
+
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 int GraphBlendRectBlt( int SrcGrHandle, int BlendGrHandle, int DestGrHandle, int SrcX1, int SrcY1, int SrcX2, int SrcY2, int BlendX, int BlendY, int DestX, int DestY, int BlendRatio, int BlendType, ... ) ;
+
+
+			
+概略 　二つの画像を特殊効果付きでブレンドする( 出力先画像、使用矩形指定版 )
+
+
+			
+引数
+				 int SrcGrHandle : BlendGrHandle と合成するグラフィックハンドル
+
+					int BlendGrHandle : SrcGrHandle に合成するグラフィックハンドル
+
+					int DestGrHandle : 合成した結果を出力するグラフィックハンドル
+
+					int SrcX1, SrcY1 : 合成処理を行う SrcGrHandle 内の矩形の左上座標
+
+					int SrcX2, SrcY2 : 合成処理を行う SrcGrHandle 内の矩形の右下座標
+
+					int BlendX, BlendY : 合成処理を行う BlendGrHandle 内の矩形の左上座標
+
+					int DestX, DestY : 合成処理を行った結果を出力する
+
+					　　　　　　　　　　　　　DestGrHandle 内の矩形の左上座標
+
+					int BlendRatio : ブレンド効果の影響度( 0:０％  255:１００％ )
+
+					int BlendType : ブレンド効果タイプ
+
+					　　　　　DX_GRAPH_BLEND_NORMAL 　　　　　　　: ごく普通の合成
+
+					　　　　　DX_GRAPH_BLEND_RGBA_SELECT_MIX　: RGBAの要素を選択して合成
+
+					　　　　　DX_GRAPH_BLEND_MULTIPLE 　　　　　　: 乗算
+
+					　　　　　DX_GRAPH_BLEND_DIFFERENCE　　　　　: 減算
+
+					　　　　　DX_GRAPH_BLEND_ADD 　　　　　　　　　　: 加算
+
+					　　　　　DX_GRAPH_BLEND_SCREEN　　　　　　　　: スクリーン
+
+					　　　　　DX_GRAPH_BLEND_OVERLAY　　 　　　　　: オーバーレイ
+
+					　　　　　DX_GRAPH_BLEND_DODGE　　　　　　　　　: 覆い焼き
+
+					　　　　　DX_GRAPH_BLEND_BURN　　　　　　　　　　: 焼き込み
+
+					　　　　　DX_GRAPH_BLEND_DARKEN 　　　　　　　　: 比較(暗)
+
+					　　　　　DX_GRAPH_BLEND_LIGHTEN 　　　　　　　　: 比較(明)
+
+					　　　　　DX_GRAPH_BLEND_SOFTLIGHT 　　　　　　: ソフトライト
+
+					　　　　　DX_GRAPH_BLEND_HARDLIGHT 　　　　　　: ハードライト
+
+					　　　　　DX_GRAPH_BLEND_EXCLUSION 　　　　　　: 除外
+
+					... : 各効果タイプに付随する引数
+			 
+			
+戻り値 　０：正常終了
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　LoadGraph、MakeScreen等で作成した二つのグラフィックハンドル( SrcGrHandle と BlendGrHandle )を、
+					画像編集ソフトのレイヤー合成のような効果付きで合成して、その結果を DestGrHandle に出力します。
+
+
+
+					　この関数は画像中のどの部分を合成処理に使用し、その結果を出力先のどの座標に出力するかを指定できるという以外は関数 GraphBlend と同じなので、
+					各ブレンドタイプについては GraphBlend の解説をご覧ください。
+
+
+
+					　尚、出力先のグラフィックハンドルは関数 MakeScreen で作成できる
+					「SetDrawScreen で描画対象にできるグラフィックハンドル」を使った方が高速に動作します。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+			　　　　画像 Src1.bmp の右下部分と Src2.tga の中心部分を覆い焼き合成してから画面に描画します。
+
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int SrcHandle ;
+	int DestHandle ;
+	int BlendHandle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+			文字描画関係関数
+
+
+		
+
+		
+
+			
+宣言 int	DrawString( int x , int y , char *String , int Color ) ;
+
+
+			
+概略 文字列を描画する
+
+
+			
+引数
+			 	x , y　 : 文字列を描画する領域の左上の座標
+
+					String　: 描画する文字列のポインタ
+
+					Color　 : 描画する文字列の色
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　( x , y )が示す座標にStringポインタが示している文字列を
+					Color色で描画します。
+
+					（パソコン画面上での座標のとり方、色の指定方法は『DrawLine』
+					の解説を参照してください）
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+				　画面の中心に文字列を描画します
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 白色の値を取得
+	Cr = GetColor( 255 , 255 , 255 ) ;
+
+	// 文字列の描画
+	DrawString( 250 , 240 - 32 , "Hello C World!" , Cr );
+
+	WaitKey() ;		// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawFormatString( int x , int y , int Color ,
+　　　　　　　　　　　　　 char *FormatString , ... ) ;
+
+概略 書式付き文字列を描画する
+
+引数   int x , y : 文字列を描画する起点座標
+int Color : 描画する文字列の色
+char *FormatString : 描画したい書式付き文字列のアドレス
+... : 書式付き文字列に付随する引数
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　printf という関数はご存知でしょうか？書式を指定することに より容易に数値変数や文字列配列の内容を画面に出力することの 出来る便利なＣ言語の標準関数です。
+　そんな便利な printf 関数ですが、ＤＸライブラリを含む DirectX を使う環境では printf 関数は使うことが出来ません。
+　そこで登場するのがこの DrawFormatString 関数です。
+　この関数は printf と違い描画する座標や色を指定するという 違いはあるものの、ほぼ printf と同じ機能を提供します。
+
+
+例
+
+　printf で 変数 i の内容を説明付きで出力する場合
+
+
+
+	printf( "変数 i の値は %d です\n" , i ) ;
+
+
+　DrawFormatString で 画面左上端に 変数 i の内容を 説明付きで出力する場合( 文字の色は白 )
+
+
+
+	int Color ;
+
+	Color = GetColor( 255 , 255 , 255 ) ;
+	DrawFormatString( 0, 0, Color, "変数 i の値は %d です\n", i ) ;
+
+
+　となります。
+　流石に \t や \n のエスケープシーケンスを表現することは 出来ませんが、普通に使う分には問題無いはずです。
+　なお、肝心の書式の指定方法ですが、かなり複雑で説明が大変なので 詳しくはＣ言語のヘルプを参照して下さい。
+　主な例を次に記載しておきますので、参考にしてください。
+
+
+文字列を描画する例
+
+
+
+	char String[ 100 ] ;
+	strcpy( String , "曇り" ) ;
+	DrawFormatString( 0, 0, Color, "今日の天気は %s です", String ) ;
+
+
+
+int 型整数値を描画する例
+
+
+
+	DrawFormatString( 0, 0, Color, "タイム %d  速度 %d ", t, s ) ;
+
+
+
+double 型浮動小数点数値を描画する例
+
+
+
+	DrawFormatString( 0, 0, Color, "倍率 %f ",r ) ;
+
+
+
+double 型浮動小数点数値を少数第三位まで描画する例
+
+
+
+	DrawFormatString( 0, 0, Color, "倍率 %.3f ",r ) ;
+
+
+
+int 型整数値と double 型浮動小数点数値と文字列を描画する例
+
+
+
+	char String[ 100 ] ;
+	strcpy( String , "城北" ) ;
+	DrawFormatString( 0, 0, Color,
+		 "%s 高等学校　出願者数 %d人  倍率 %.3f ",s ,n ,r ) ;
+
+
+
+　なお、文章の量を抑えるために Color は常に Color = GetColor( 255 , 255 , 255 ) ; が 代入されているものとします。
+
+サンプル
+
+　メッセージを表示してからボタンが押されるまでの時間を描画します。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+// WinMain関数
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+					 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Start , Time ;
+	int Cr ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() == -1 ) return 0;
+
+	// 白の色コードを保存
+	Cr = GetColor( 255 , 255, 255 ) ;
+
+	// スタートタイムを取得
+	Start = GetNowCount() ;
+
+	// メッセージを表示
+	DrawString( 0 , 0 , "なにかキーを押してください" , Cr ) ;
+
+	// ボタンが押されるまで待つ
+	WaitKey() ;
+
+	// 終了、経過時間を算出
+	Time = GetNowCount() - Start ;
+
+	// 画面に表示
+	ClearDrawScreen() ;
+	DrawFormatString( 0, 0, Cr, "ボタンが押されるまでに %dミリ秒経過しました", Time ) ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+	// ＤＸライブラリ使用の終了
+	DxLib_End() ;
+
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int GetDrawStringWidth( char *String , int StrLen ) ;
+
+概略 描画した時の文字列の幅(ドット単位)を得る
+
+引数  char *StrData : 描画時の幅を調べたい文字列のアドレス
+int StrLen : 調べたい文字列の長さ(半角文字単位)
+戻り値 －１以外：描画時の幅
+　 －１：エラー発生
+
+解説  　DrawString で描画される文字列のドット単位の長さは文字数が 同じでも一つ一つの文字の幅が違うために一定では有りません。
+　そこでこの関数を用いて文字列を描画した際の長さを調べる ことが出来ます。StrLen として文字列の長さをわざわざ指定する ようにしたのは色々な側面から見て文字列の長さを指定できるよう にしたほうが良いと思ったからです。
+
+サンプル
+
+　一つの文章を同じ列に２回にわけて描画します
+-------------------------------------------------------------------------------
+
+
+#include <string.h> 
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			LPSTR lpCmdLine, int nCmdShow )
+{
+	int StrWidth , StrLen ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() == -1 ) return -1 ;
+
+	// 最初の文字列を描画
+	DrawString( 0 , 0 , "今日もいい天気だ" , GetColor( 255 , 255 , 255 ) ) ;
+
+	// 文字列の長さを取得
+	StrLen = strlen( "今日もいい天気だ" ) ;
+
+	// 描画時の文字列の幅を取得
+	StrWidth = GetDrawStringWidth( "今日もいい天気だ" , StrLen ) ;
+
+	// 「今日もいい天気だ」の直後に新たな文字列を描画
+	DrawString( StrWidth , 0 , "明日も晴れると良いなあ" , GetColor( 255 , 255 , 255 ) ) ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+	// ＤＸライブラリの使用終了
+	DxLib_End() ;
+
+	// 終了
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int GetDrawFormatStringWidth( char *FormatString , ... ) ;
+
+概略 DrawFormatString 関数書式付き文字列の描画幅(ドット単位)を得る
+
+引数  char *FormatString : 描画幅を得たい書式付き文字列のアドレス
+... : 書式付き文字列に付随する引数
+戻り値 －１以外：描画時の幅
+　 －１：エラー発生
+
+解説  　GetDrawStringWidth の書式付き文字列版です。書式付き 文字列の説明は DrawFormatString 関数を参照してください。
+　なお、書式付き文字列の場合は結果的に文字列の文字数が幾つに なるかはわからないので GetDrawStringWidth のように参照する 文字数は取りません。
+
+サンプル
+
+　ありません
+
+
+
+宣言 int SetFontSize( int FontSize ) ;
+
+概略 描画する文字列のフォントのサイズをセットする
+
+引数 FontSize : 描画するフォントのサイズ（およそドット単位）
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　『DrawString』関数で描画する文字列の文字の大きさを 設定します。フォントのサイズは FontSize で指定したドット数に大体比例します。
+
+サンプル
+
+　フォントのサイズを６４にし、画面中心に文字列を描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画する文字列のサイズを設定
+	SetFontSize( 64 ) ;
+
+	// 白色の値を取得
+	Cr = GetColor( 255 , 255 , 255 ) ;
+
+	// 文字列の描画
+	DrawString( 100 , 240 - 42 , "Hello C World!" , Cr );
+
+	WaitKey() ;		// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int SetFontThickness( int TinckPal ) ;
+
+概略 描画する文字列の文字の太さをセットする
+
+引数 TinckPal : 文字の太さ( 0 ～　9 )
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　『DrawString』関数で描画する文字列の太さを引数 TinckPal が示す太さに変更します。デフォルトでは 6 になっています。
+　因みにフォントの関係上、１や２の太さの違いでは見た目に影響が 出ない場合があります。
+
+サンプル
+
+　フォントの太さを3にし、文字列を描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画する文字列の太さを設定
+	SetFontThickness( 3 ) ;
+
+	// 白色の値を取得
+	Cr = GetColor( 255 , 255 , 255 ) ;
+
+	// 文字列の描画
+	DrawString( 100 , 240 - 42 , "Hello C World!" , Cr );
+
+	WaitKey() ;		// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int ChangeFont( char *FontName ) ;
+
+概略 文字列描画に使用するフォントを変更する
+
+引数 char *FontName : フォントの名前
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　『DrawString』関数で描画する文字セットの名前を 引数 FontName の示す文字セットに変更します。もし指定の文字セットが なかった場合はデフォルトの文字セットになります。
+　注意としましてはあまりマイナーな文字セットはソフトをプレーする 方のパソコンに入っていない場合がありますので、その場合は文字セットも ソフトと一緒に配布するか、または Windows に標準で入っている 文字セットを使うことをお勧めします。
+
+サンプル
+
+フォントをＭＳ明朝にして文字列を描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画する文字列の文字セットを変更します
+	ChangeFont( "ＭＳ 明朝" ) ;
+
+	// 白色の値を取得
+	Cr = GetColor( 255 , 255 , 255 ) ;
+
+	// 文字列の描画
+	DrawString( 100 , 240 - 42 , "Hello C World!" , Cr );
+
+	WaitKey() ;		// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int ChangeFontType( int FontType ) ;
+
+概略 文字列描画に使用するフォントのタイプを変更する
+
+引数  int FontType : フォントのタイプ
+(　-1　　　　　　　　　: デフォルトフォント(DX_FONTTYPE_NORMAL と同じ)
+　DX_FONTTYPE_NORMAL　　　　　　: ノーマルフォント
+　DX_FONTTYPE_EDGE　　　　　　　: エッジつきフォント
+　DX_FONTTYPE_ANTIALIASING　　　: アンチエイリアスフォント
+　DX_FONTTYPE_ANTIALIASING_EDGE　: アンチエイリアス＆エッジ付きフォント )
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　『DrawString』関数等で描画する文字のタイプを変更します。
+　タイプの変更とは、文字に縁取りを付けるか、綺麗な文字にするか、 などです。上記のいずれかの引数を関数に渡すことによりフォントの タイプを変更することが出来ます。
+
+　DX_FONTTYPE_NORMAL は普通のフォントです。アンチエイリアスなし、 エッジなしのもっとも高速に描画処理を行えるフォントです。ただし 見た目はあまりよくありません。
+
+　DX_FONTTYPE_EDGE はエッジつきフォントです。
+　エッジとは文字の縁のことです、エッジフォントとは文字の輪郭を 文字のメインの色とは違う色でなぞることでノーマルフォントよりも 見やすくしたフォントです。
+
+　DX_FONTTYPE_ANTIALIASING はアンチエイリアスフォントです。
+　エイリアスとは解像度が低いがために目立ってしまう、例えばこの場合 で言うところの文字の輪郭のギザギザのことなどを示します。(640x480 などの画面モードではドットがくっきり見えてしまうのでこの現象が 起こります、デスクトップ画面などで使われている画面モードは大抵 1024x768 以上の事が多いので、ギザギザしていても大して気にならないのです)
+　このエイリアスを抑えたフォントがアンチエイリアスフォントです。
+　具体的には文字をベタッと画面に描画するのではなく、書き込まれる 画面に溶け込むように描画します。
+
+　DX_FONTTYPE_ANTIALIASING_EDGE はエッジつきアンチエイリアスフォントです。
+　上記のアンチエイリアスフォントにエッジをつけたタイプです。エッジも 画面に溶け込むように描かれます。
+
+
+　＜裏話　エッジ(縁)の色は指定できないのか！？＞
+　通常エッジは黒で描画されますが、実際はこのエッジ色も指定することが 出来ます。DrawFormatString と DrawFormatStringToHandle を除くすべての 文字列描画関数の一番後ろにカラーコードを入力することで、エッジのカラーを 指定することが出来ます。
+
+例
+
+
+
+// エッジカラー指定なし文字色白
+
+DrawString( 0 , 0 , "ＤＸライブラリ" , GetColor( 255,255,255 ) ) ;
+
+
+
+// エッジカラー指定、青、文字色は白
+
+DrawString( 0 , 0 , "ＤＸライブラリ" ,
+		 GetColor( 255,255,255 ), GetColor( 0,0,255 ) ) ;
+
+
+
+
+
+// エッジカラー指定なし文字色白
+
+DrawStringToHandle( 0 , 0 , "ＤＸライブラリ" ,
+		 GetColor( 255,255,255 ), FontHandle ) ;
+
+
+
+// エッジカラー指定、青、文字色は白
+
+DrawStringToHandle( 0 , 0 , "ＤＸライブラリ" ,
+		 GetColor( 255,255,255 ),
+		 FontHandle, GetColor( 0,0,255 ) ) ;
+
+
+
+
+
+　仕様の関係上 DrawFormatString と DrawFormatStringToHandle 関数は 残念ながらエッジ色を指定することは出来ません。エッジカラー指定を 書式付文字列描画 で使用したい場合などはＣの標準関数である sprintf 関数 との組み合わせで実現してください。
+
+サンプル
+
+　最初にサイズ４０で『ＤＸライブラリ』と描画した後、フォントの タイプをエッジつきアンチエイリアスフォントに変更してもう一度 『ＤＸライブラリ』と描画します。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+// WinMain関数
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+					 LPSTR lpCmdLine, int nCmdShow )
+{
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() == -1 ) return 0 ;
+
+	// 画面を黄色で塗りつぶします
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 128,128, 0) , TRUE ) ;
+
+	// サイズを４０に変更
+	SetFontSize( 40 ) ;
+
+	// 『ＤＸライブラリ』と描画
+	DrawString( 100 , 100 , "ＤＸライブラリ" , GetColor( 255,255,255 ) ) ;
+
+	// フォントのタイプをエッジつきアンチエイリアスフォントに変更
+	ChangeFontType( DX_FONTTYPE_ANTIALIASING_EDGE ) ;
+
+	// 『ＤＸライブラリ』と描画
+	DrawString( 100 , 160 , "ＤＸライブラリ" , GetColor( 255,255,255 ), GetColor( 0,0,0 ) ) ;
+
+
+	// キー入力を待つ
+	WaitKey() ;
+
+
+	// ＤＸライブラリの終了
+	DxLib_End() ;
+
+	// ソフトの終了
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int CreateFontToHandle( char *FontName , int Size , int Thick , int FontType ) ;
+
+概略 新しいフォントデータを作成
+
+引数  char *FontName : 作成するフォント名( NULL にするとデフォルトのフォント )
+int Size : フォントのサイズ( およそドット数 -1:デフォルトのサイズ )
+int Thick : フォントの太さ( 0 ～　9 -1:デフォルトの太さ )
+int FontType : フォントのタイプ
+(　-1　　　　　　　　　: デフォルトフォント(DX_FONTTYPE_NORMAL と同じ)
+　DX_FONTTYPE_NORMAL　　　　　　: ノーマルフォント
+　DX_FONTTYPE_EDGE　　　　　　　: エッジつきフォント
+　DX_FONTTYPE_ANTIALIASING　　　: アンチエイリアスフォント
+　DX_FONTTYPE_ANTIALIASING_EDGE　: アンチエイリアス＆エッジ付きフォント )
+戻り値  戻り値 -1 : 失敗
+0以上 : フォントハンドル
+
+解説  　　普段 DrawString 関数や DrawFormatString 関数で 文字列を描画していて、ふと一回の画面の更新で複数のタイプの フォントを使いたくなったりしたとします。
+　当然描きたいフォントのサイズや太さに応じてその都度 SetFontSize 関数や SetFontThickness 関数を使用する しかないのですが、実はフォントのサイズや太さを変えるのは非常に 時間がかかり、高速処理を行わなければならないゲームソフトでは 致命的な負荷となります。
+　そこで解決方法として、元々ある標準のフォントデータを場合に 応じてサイズや太さを変えるのではなく、標準のフォントデータとは 全く別に、必要な分だけフォントデータを作成しておき、文字列 描画時にあらかじめ用意されたフォントデータを使って描画処理を 行うというものがあります。
+　この関数は上記の方法を実現するための一つ目である『標準で 使用するフォントデータ以外のフォントデータを作る』ための機能を 持っています。
+
+　具体的に説明しますと、まずこの CreateFontToHandle 関数で作成 されたフォントのデータはひとつの識別番号を付けられます。 この CreateFontToHandle 関数は戻り値としてこの int 型の識別 番号値を返してきますので、この値を何らかの変数に保存します。
+　そしてあとは今まで紹介された DrawString 関数 , GetDrawStringWidth 関数 などと使い方はほとんど同じで、 違いは各関数名の語尾には 『ToHandle』が付き、関数の引数の 最後にどのフォントのデータを使うのか、を示す保存しておいた 識別番号を渡す必要があるということだけです。
+
+　ただしこのフォントデータ機能には、SetFontSize 関数や SetFontThickness 関数 のような、途中でサイズや太さの変更をすることは出来ません。ので、違う タイプのフォントを使用したい場合は再度この CreateFontToHandle 関数 でフォントデータを作成する必要があります。
+
+　CreateFontToHandle 関数は FontName に作成するフォントの 名前の文字列を、Size に作成するフォントのサイズを、Thick に 作成するフォントの線の太さを渡すことで任意のフォントデータを 作成してくれます。
+　なお、FontName に NULL を指定するとデフォルトのフォントが 使用され、Size 及び Thick も -1 を指定することによりそれぞれ 標準のサイズ、太さのフォントが作成されます。
+
+　FontType は作成するフォントのタイプを指定します。
+　種類が沢山あり、説明が少々長くなるので詳細はChangeFontType 関数 の解説を参照してください。
+
+サンプル
+
+　まずサイズ４０、太さ３のフォントを作成し、そのフォントで画面に 『ＨＥＬＬＯＷ！！』と描画します。そのあと標準のフォントデータで 『ＯＫ？』と言う文字列を描画します。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+// WinMain関数
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+					 LPSTR lpCmdLine, int nCmdShow )
+{
+	int FontHandle ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() == -1 ) return 0 ;
+
+
+	// 　デフォルトのフォントで、サイズ４０、太さ３のフォントを作成し
+	// 作成したデータの識別番号を変数 FontHandle に保存する
+	FontHandle = CreateFontToHandle( NULL , 40 , 3 ) ;
+
+	// 作成したフォントで画面左上に『Ｈｅｌｌｏｗ！！』と白色の文字列を描画する
+	DrawStringToHandle( 0 , 0 , "ＨＥＬＬＯＷ！！" , GetColor( 255 , 255 , 255 ) , FontHandle ) ;
+
+	// 次に標準フォントデータで画面に『ＯＫ？』という文字列を描画する
+	DrawString( 0 , 50 , "ＯＫ？" , GetColor( 255 , 128 , 100 ) ) ; 
+
+
+	// キー入力を待つ
+	WaitKey() ;
+
+	// 作成したフォントデータを削除する
+	DeleteFontToHandle( FontHandle ) ;
+
+
+	// ＤＸライブラリの終了
+	DxLib_End() ;
+
+	// ソフトの終了
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DeleteFontToHandle( int FontHandle ) ;
+
+概略 フォントデータを削除する
+
+引数 FontHandle : 削除したいフォントデータに付けられた識別番号(フォントハンドル)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　CreateFontToHandle 関数で作成したフォントのデータを メモリーから削除するための関数です。引数に CreateFontToHandle 関数 で戻り値として受け取ったデータの識別番号を渡すことによって 指定のフォントデータを削除することが出来ます。
+　なお、作成したフォントデータは削除せずに DxLib_End 関数により ソフトを終了しようとした場合は自動的にＤＸライブラリがデータを 消去してくれます。この関数は、明らかに使われなくなったフォント データがメモリ領域を圧迫して迷惑を掛けているときに使うと有効です。 (フォントデータはひとつあたり１．２ＭＢ程のメモリ領域を必要とします。)
+
+サンプル
+
+　CreateFontToHandle 関数のサンプルを参照してください。
+
+
+
+宣言  int DrawStringToHandle( int x , int y , char *String ,
+　　　　　　　　　　　　　　　　　　int Color , int FontHandle ) ;
+
+概略 指定のフォントデータで文字列を描画する
+
+引数  int x , y : 文字列を描画する起点座標
+char *String : 描画したい文字列のポインタ
+int Color : 描画する文字列の色を示すカラーコード
+int FontHandle : 描画に使用するフォントのデータ識別番号(フォントハンドル)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　CreateFontToHandle 関数を使って作成したフォントを 使用して ( x , y ) を描画する文字列の起点座標、とし、String の示す文字列を Color で指定された色で画面に描画します。
+　引数の最後に CreateFontToHandle 関数で取得したフォント データの識別番号を渡す以外は全て DrawString と動作は 同じです。
+
+サンプル
+
+　CreateFontToHandle 関数のサンプルを参照してください。
+
+
+
+宣言  int DrawFormatStringToHandle( int x , int y , int Color ,
+　　　　　　　　　　　　　　　int FontHandle , char *FormatString , ... ) ;
+
+概略 指定のフォントデータで書式付き文字列を描画する
+
+引数  int x , y : 文字列を描画する起点座標
+int Color : 描画する文字列の色のコード
+int FontHandle : 描画に使用するフォントデータの識別番号(ハンドル)
+char *FormatString : 描画したい書式付き文字列のアドレス
+... : 書式付き文字列に付随する引数
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　CreateFontToHandle 関数を使って作成したフォントを 使用して書式付き文字列の描画を行います。
+　フォントハンドルを使用して処理を行う、ということ以外は すべて DrawFormatString 関数と同じです。
+
+サンプル
+
+　動作については DrawFormatString 関数を参照して下さい。
+
+
+
+宣言  int GetDrawStringWidthToHandle( char *String ,
+　　　　　　　　　　　　　　　　　　 int StrLen , int FontHandle ) ;
+
+概略 指定のフォントデータで描画する文字列の幅(ドット単位)を得る
+
+引数  char *StrData : 描画時の幅を調べたい文字列のアドレス
+int StrLen : 調べたい文字列の長さ(半角文字単位)
+int FontHandle : 描画幅を取得する際に使用するフォントデータの識別番号
+戻り値 －１以外：描画時の幅
+　 －１：エラー発生
+
+解説  　CreateFontToHandle 関数を使って作成したフォントを 使用して、String の示す文字列を描画した際の実際の描画幅を 取得します。
+　引数の最後に CreateFontToHandle 関数で取得したフォント データの識別番号を渡す以外は全て GetDrawStringWidth と動作は 同じです。
+
+サンプル
+
+　動作の挙動については GetDrawStringWidth 関数のサンプルを参照して ください
+
+
+
+宣言  int GetDrawFormatStringWidthToHandle( int FontHandle ,
+　　　　　　　　　　　　　　　　　　　　 char *FormatString , ... ) ;
+
+概略 指定のフォントデータで書式付き文字列の描画幅を得る
+
+引数  int FontHandle : 描画幅を調べる再に使用するフォントデータのハンドル
+char *FormatString : 描画幅を得たい書式付き文字列のアドレス
+... : 書式付き文字列に付随する引数
+戻り値 －１以外：描画時の幅
+　 －１：エラー発生
+
+解説  　CreateFontToHandle 関数を使って作成したフォントを 使用して、書式付き文字列の描画幅を取得します。
+　取得する際にフォントデータのハンドルを使う、ということ以外は GetDrawFormatStringWidth 関数と同じです。
+
+サンプル
+
+　動作の挙動については GetDrawFormatStringWidth 関数を参照して ください
+
+
+
+宣言  int GetFontStateToHandle( char *FontName , int *Size ,
+　　　　　　　　　　　　　　　 int *Thick , int FontHandle ) ;
+
+概略 指定のフォントデータの情報を得る
+
+引数  char *FontName : フォント名を保存する char 型配列へのポインタ
+int *Size : サイズを保存する int 型変数へのポインタ
+int *Thick : 太さを保存する int 型変数へのポインタ
+int FontHandle : 情報を得たいフォントデータの識別番号(フォントハンドル)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　CreateFontToHandle 関数で作成したフォントデータの情報を それぞれポインタ FontName , Size , Thick の示すアドレスに格納 します。作成したフォントのサイズ等の情報を得たい場合に使用します。
+　なお、サイズの情報だけ取得したくて、ほかのフォント名と太さの 情報は要らない、などの場合はそれぞれ引数に NULL を渡すことによって キャンセルすることが出来ます。
+
+例　サイズだけ取得したい場合
+
+FontHandle : フォントのデータ識別番号と仮定
+
+　　int FontSize ;
+
+　　GetFontStateToHandle( NULL , &FontSize , NULL , FontHandle ) ;
+
+サンプル
+
+　ありません。
+
+
+
+
+宣言 int InitFontToHandle( void ) ;
+
+概略 フォントデータを全て初期化する
+
+引数 なし
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　CreateFontToHandle 関数で作成した全てのフォントデータを 削除します。具体的に言えば、全てのフォントデータを、 DeleteFontToHandle 関数に渡した場合と同じ事を行います。
+　複数のフォントが一度にいらなくなり、個別に DeleteFontToHandle 関数 を実行するのが面倒なときに有効です。
+
+サンプル
+
+　ありません。
+
+
+
+
+
+
+簡易画面出力関数
+
+宣言  int printfDx( char *FormatString , ... ) ;
+
+概略 簡易文字列出力を行う
+
+引数  char *FormatString : 書式付き文字列のアドレス
+... : 書式付き文字列に付随する引数
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　ＤＸライブラリで作成できるソフトをはじめとする Windows ソフトは Ｃ言語の入門書などに必ず出てくる printf という便利な画面出力関数が 使えません。
+　ＤＸライブラリにも DrawString や DrawFormatString という文字列を出力する関数がありますが、色や座標を指定しなくては なりませんし、なにより他のグラフィック描画関数と使う順番を誤ると 他のグラフィックの影になり、見えなくなってしまったりします。
+　『座標や色はどうでもいいから、とにかく画面に情報を表示したい』 という時は必ずあるものです。
+　さて、そんなときに登場するのが printfDx 関数です。
+　この関数は名前こそ後ろに 『Dx』 と書かれていますが、Ｃ言語の標準 出力関数である printf 関数と全く同じ使い方をすることが出来ます。
+　ですので詳細はＣ言語の入門書、もしくは統合環境のヘルプを参照 してください。(書式付き文字列の簡単な説明は DrawFormatString 関数にありますのでよろしかったら参照してください。)
+
+≪注意！≫
+　printfDx 関数で出力された文字列はすぐには画面には表示されません。
+　絶対に他のグラフィック描画関数によって文字列が隠れないように するために、ScreenFlip 関数が使われた瞬間に一度に画面に表示され るようになっています。
+　なお、画面には淵付き文字で表示されますが、この文字の描画は非常に 処理負荷が重いので、あくまでちょっとした情報の表示程度に使用して ください。
+
+サンプル
+
+　画面に適当に文字列を出力する
+
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+// WinMain関数
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+					 LPSTR lpCmdLine, int nCmdShow )
+{
+	// ＤＸライブラリ初期化
+	if( DxLib_Init() == -1 ) return 0;
+
+	// Ｈｅｌｌｏ Ｃ Ｗｏｒｌｄ！と表示、最後に改行
+	printfDx( "Hello Ｃ World!\n" ) ;
+
+	// 画面に適当に数値を描画
+	printfDx( " 600 x 800 = %d \n" , 600 * 800 ) ;
+
+	// 画面が降り切れるほど文字列を描画
+	printfDx( "実験実験実験実験実験実験実験実験実験" ) ;
+	printfDx( "実験実験実験実験実験実験実験実験実験" ) ;
+	printfDx( "実験実験実験実験実験実験実験実験実験実験" ) ;
+
+	// 画面を青くする
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 0 , 255 ) , TRUE ) ;
+
+	// 出力した文字列を表示
+	ScreenFlip() ;
+
+	// キーが押されるまで待つ
+	WaitKey() ;
+
+	// ＤＸライブラリの使用終了
+	DxLib_End() ;
+
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int clsDx( void ) ;
+
+概略 簡易画面出力履歴をクリアする
+
+引数  char *FormatString : 書式付き文字列のアドレス
+... : 書式付き文字列に付随する引数
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　printfDx 関数で文字列を画面に表示しつづけるとやがて画面が 文字でいっぱいになってしまい、とてもうっとうしくなります。
+　そんなうっとうしい文字列達を一掃するのがこの関数す。
+
+　なお、文字達を消す、とはいっても DrawString 等の関数で 描画された文字は消えませんのでご注意下さい。
+
+サンプル
+
+　画面に延々と文字列を表示しつづけ、キーが押されたら文字列を一掃します
+
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+// WinMain関数
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+					 LPSTR lpCmdLine, int nCmdShow )
+{
+	// ＤＸライブラリ初期化
+	if( DxLib_Init() == -1 ) return 0;
+
+	// 描画先画面を裏画面にする
+	SetDrawScreen( DX_SCREEN_BACK ) ;
+
+	// なにかキーが押されるまでループ
+	while( CheckHitKeyAll() == 0 )
+	{
+		// Ｈｅｌｌｏ Ｃ Ｗｏｒｌｄ！と表示
+		printfDx( "Hello C World" ) ;
+
+		// 画面を青くする
+		DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 0 , 255 ) , TRUE ) ;
+
+		// 出力した文字列を表示
+		ScreenFlip() ;
+
+		// Windows依存処理
+		if( ProcessMessage() == -1 ) break ;
+	}
+
+	// 画面の文字達を消す
+	clsDx() ;
+
+	// 画面にメッセージを表示
+	printfDx( "消えましたか？" ) ;
+
+	// 画面を赤くする
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 255 , 0 , 0 ) , TRUE ) ;
+
+	// 画面の状態を更新
+	ScreenFlip() ;
+
+	// キーが押されるまで待つ
+	WaitKey() ;
+
+	// ＤＸライブラリの使用終了
+	DxLib_End() ;
+
+	return 0 ;
+}
+
+-------------------------------------------------------------------------------
+
+
+
+
+その他画面操作系関数
+
+宣言 int SetGraphMode( int SizeX , int SizeY , int ColorBitNum ) ;
+
+概略 画面モードの変更
+
+引数  SizeX , SizeY　:　画面の解像度
+ColorBitNum　　:　カラービット数
+戻り値   DX_CHANGESCREEN_OK　　　: 画面変更は成功した
+DX_CHANGESCREEN_RETURN　: 画面の変更は失敗し元の画面モードに戻された
+DX_CHANGESCREEN_DEFAULT : 画面の変更は失敗し標準の画面モードに変更された
+解説  　画面の解像度や最大表示色数を変更します。
+
+＜注意＞
+　この関数を実行するとロードしたすべてのグラフィックデータハンドル、 作成したフォントハンドルは自動的に削除され、SetDrawArea, SetDrawScreen, SetDrawMode, SetDrawBlendMode, SetDrawBright 等の描画に関係する設定を行う関数による設定も全て初期状態に戻りますので、 画面モード変更後 LoadGraph関数や CreateFontToHandle関数等で再度ハンドルを作成し直し、 描画可能領域、描画対象画面等の各種描画系の設定も再度行う必要があります。
+
+　画面の解像度は画面を表現するのに使用されるドット（点）の数 です。解像度としては主に
+
+　　320×240　640×480　800×600　1024×768　1280×1024
+
+　があり、２Ｄのアクションゲームで１番メジャーな解像度は640×480となっています
+（デフォルトは640×480です）。画面の解像度を上げると点の数が 増え表現力も高まりますが、その分画面の状態を記憶しておく データの量も増えますので注意してください。あと上記に記されて いない解像度を指定することも出来ますが（例 300×200 512×225) モニターやグラフィックボードが対応していない場合はウインドウ モードで起動します。
+
+　カラービット数とは使用する画面の色の数です。
+　ビットとは要は２進数の１桁の事で、１６ビットで６５５３６色 （Trueカラー）２４ビットで１６７７万色（フルカラー）表現でき ます。ビット数が上がれば上がるほど表現できる色の数は増えますが その分必要なデータの量も増えますので注意してください。
+
+　このライブラリで指定できるカラービット数は１６ビットと３２ビットの 二つになります。
+
+　指定したカラービット数に対応する３Ｄ機能を持たないグラフィ ックカードでは３Ｄ機能が使用不可になります。
+　１６ビットはＤＸライブラリの標準色ビット数で、 ６５５３６色を使って画像を表現します。
+　３２ビットは内部的には２４ビットを使って１６６７万色で画像を表現します。 このモードを選択するとグラフィックデータのサイズが１６bitモードに比べて２倍になるので、 ある程度ハイスペックなグラフィックカードが必要となります。
+
+　戻り値は、変更が成功した場合は DX_CAHNGESCREEN_OK　が 失敗して元の画面モードに戻された場合は DX_CHANGESCREEN_RETURN が 失敗して元の画面にも戻せず、デフォルトの画面モード( 640x480 16bit) に変更された場合は DX_CHANGESCREEN_DEFAULT が、それすらも失敗 した場合はソフトが自動終了します。
+
+　なおこの関数を DxLib_Init 関数を使用する前に呼び出すことにより 初期状態の画面モードを設定することが出来ます。
+
+サンプル
+
+　解像度８００×６００、カラービット数３２ビットで起動し、グラフィックを グラフィックを読み込み描画します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int GHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 画面モードの変更
+	SetGraphMode( 800 , 600 , 32 ) ;
+
+	// test.bmpの読み込み
+	GHandle = LoadGraph( "test1.bmp" ) ;
+
+	// グラフィックの描画
+	DrawGraph( 0 , 0 , GHandle , FALSE ) ;
+
+	// キー待ち(『WaitKey』を使用)
+	WaitKey() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int GetScreenState( int *SizeX , int *SizeY , int *ColorBitDepth ) ;
+
+概略 現在の画面の大きさとカラービット数を得る
+
+引数  int *SizeX , *SizeY : それぞれ画面の幅と高さを保存する int 型変数のポインタ
+int *ColorBitDepth : 画面のカラービット深度を保存する int 型変数のポインタ
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　現在の画面の幅と高さ、そして１ピクセルあたりに使用されているビット数 を得ます。
+
+例 Sx,Sy,Cb にそれぞれ画面の幅、高さ、カラービット数を取得する
+
+
+
+	int Sx , Sy , Cb ;
+
+	GetScreenState( &Sx , &Sy , &Cb ) ;
+
+
+　なおここでいう画面の幅、高さとはＤＸライブラリが実際に描きこめる 広さのことを示しており、ウインドウモード時などのデスクトップ自体の 画面の広さのことではないので注意してください。
+( 例　デスクトップの広さ 1024x768 ＤＸライブラリの画面の広さ 640x480 だった 　場合、この関数で得られる数値は後者の 640x480 です)
+
+サンプル
+
+　ありません
+
+
+
+
+宣言 int SetDrawArea( int x1 , int y1 , int x2 , int y2 ) ;
+
+概略 描画可能領域のセット
+
+引数  x1 , y1 : 描画可能領域を示す矩形の左上の頂点
+x2 , y2 : 描画可能領域を示す矩形の右下＋１の頂点
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　( x1, y1 )を左上頂点、( x2 - 1, y2 - 1 ) を右下頂点とした矩形 を各描画関数で描画可能な領域として設定します。この領域をはみ出て 描画しようとした場合はその部分は描画されません。
+
+注…『なんで右下の頂点は「-1」してるの？』と思われた方はDrawBoxの解説を読んでみて下さい。
+サンプル
+
+　画面の半分を描画不可能にして画面全体に青い四角を描画しようとする
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画可能領域セット
+	SetDrawArea( 0 , 0 , 320 , 480 ) ;
+
+	// 青色の値を取得
+	Cr = GetColor( 0 , 0 , 255 ) ;
+
+	// 青い四角形の描画
+	DrawBox( 0 , 0 , 640 , 480 , Cr , TRUE ) ;
+
+	// キー待ち(『WaitKey』を使用)
+	WaitKey() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int ClearDrawScreen( void ) ;
+
+概略 画面に描かれたものを消去する
+
+引数 なし
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　各種描画関数で描画したグラフィックをすべて消し画面を初期化します。
+
+サンプル
+
+　ランダムな座標で１０００個の点を描画した後画面を消去します
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+		 LPSTR lpCmdLine, int nCmdShow )
+{
+	int i ;
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 白色の値を取得
+	Cr = GetColor( 255 , 255 , 255 ) ;
+
+	// １０００個の点を描く
+	for( i = 0 ; i 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 int GetColor( int Red , int Green , int Blue ) ;
+
+
+			
+概略 色コードを取得する
+
+
+			
+引数 Red , Green , Blue : 取得したい色の各輝度値（０～２５５）
+			
+戻り値 カラーコード
+
+
+			
+
+				 解説
+				 　DrawLine、DrawPixel、DrawString、DrawBox、DrawCircleで
+					使用する色の値を取得します。Red、Green、Blueはそれぞれ
+					色の３原色に対応していてこの値を指定することで希望の
+					色コードが取得できます。（各色要素の上限値は２５５です）
+
+
+					>
+
+					　色コードは画面のカラービット数によって変化しますので、画面のカラービット数が変化するとそれ以前にこの関数で得られた色コードは無効( 別の色を表す数値 )になります。
+
+
+				
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+				　灰色の線を描く
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int Cr ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 灰色の値を取得
+	Cr = GetColor( 128 , 128 , 128 ) ;
+
+	// 線の描画
+	DrawLine( 120 , 150 , 300 , 240 , Cr );
+
+	WaitKey() ;		// キーの入力待ち(『WaitKey』を使用)
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int SetDrawScreen( int DrawScreen ) ;
+
+概略 描画先グラフィック領域の指定
+
+引数  DrawScreen　:　描画する対象となるグラフィック領域を指定します。
+　　　　　　　　DX_SCREEN_FRONT　:　表の画面（表示されている画面）
+　　　　　　　　DX_SCREEN_BACK 　:　裏の画面（表示されていない画面）
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　アニメーショングラフィックを表示するとして、 常に表示されている画面に対して描画処理を行うと、画面への描画、 消去が見えてしまい結果として画面がちらついているように見えます。 （ 注 … グラフィックカードによってはちらつかない場合も ありますが、一般にはちらつきます ）
+　そこで画面への描画中は見えないようにして、 描画処理が終った後で見えるようにすれば画面のちらつきは消えるはずです。 それを実現するためにこの関数があります。
+　デフォルトでは描画先は DX_SCREEN_FRONT （表の画面）となっていて描画処理中も見えてしまい画面はちらつきますが、 描画先を DX_SCREEN_BACK （裏の画面）を指定すると描画先が普段は見えない裏の画面に対して行われます。
+　描画が終った後で次に示す関数『ScreenFlip』を呼び出せば、 裏画面の内容が表画面に反映され、裏画面に描画していた内容が実際に表示されます。
+　この関数はその描画先をどちらの画面にするか、を指定するための関数です。
+
+＜注意＞
+　この関数を使用して描画対象を変更すると、SetDrawArea で設定した描画可能範囲と、 ３Ｄ描画で使用するカメラの設定（ SetCameraPositionAndTarget_UpVecY などの関数でパラメータを設定する )がリセットされます。
+
+サンプル
+
+　最初に表画面を描画先にしてランダムに四角形を描き続き、次に 描画先を裏画面にして同じことをしてみます。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int i ;
+	int Cr ;
+	int x , y ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画先画面を表にする
+	SetDrawScreen( DX_SCREEN_FRONT ) ;
+
+	// １００００個四角形を描きます
+	for( i = 0 ; i 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+		
+
+		
+
+			
+宣言 int	ScreenFlip( void ) ;
+
+
+			
+概略
+				 　フリップ関数、画面の裏ページ（普段は表示されていない）を
+					表ページ（普段表示されている）に反映する
+
+
+			
+			
+引数 なし
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　裏ページの内容を表ページに反映します。
+
+				(裏ページ、表ページについては 『SetDrawScreen』関数の解説を参照してください)
+
+
+				
+				注…この関数を使用した後の裏ページの内容は環境によって変わりますので、ScreenFlip 関数を使用した後は ClearDrawScreen 等を使用して裏ページを初期化して下さい
+				
+				 
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+				　『SetDrawScreen』関数の解説を参照してください
+
+			
+
+
+
+
+		
+
+		
+
+			
+宣言 int SetFullSceneAntiAliasingMode( int Samples, int Quality ) ;
+
+
+			
+概略
+				 　画面のフルスクリーンアンチエイリアスモードの設定をする
+
+
+			
+			
+引数
+				 
+				int Samples ： マルチサンプルレベル
+
+				int Quality ： マルチサンプルクオリティ
+
+				
+			
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 
+				　画面のフルスクリーンアンチエイリアスモードの設定をします。
+
+
+				
+				＜注意！＞
+
+				１．この関数は DxLib_Init の前で実行した場合のみ効果が得られます
+
+
+				２．この関数は実行したＰＣに搭載されているグラフィックスデバイスがフルシーンアンチエイリアスに対応している場合のみ効果を得ることができます
+
+
+				３．フルスクリーンアンチエイリアスを有効にした場合は必ず SetDrawScreen で「裏画面」を使用して ScreenFlip で画面を更新する必要があります
+
+
+
+				　フルシーンアンチエイリアスが有効なのは主に３Ｄ描画に関してで、２Ｄ描画には殆ど効果はありません。
+				( 寧ろぼやけて汚くなってしまうことも・・・ )
+
+				　３Ｄ描画の結果は、フルシーンアンチエイリアスを有効にすることによってジャギが消え、フルシーンアンチエイリアスがＯＦＦの時には潰れてしまっていた細かい部分も見えるようになります。
+
+				　要は元の画面解像度の高い解像度の画面に描画した結果を綺麗に縮小したような効果を得ることができます。
+
+				　その「画面の解像度に対して、どれくらい高い解像度の画面に描画したのと同じような結果を得るか」の「どれくらい」の部分に当たるのが引数 Samples です。
+
+				　Samples の値を 1 にした場合は１倍なので、フルシーンアンチエイリアスの効果は得られません。
+				２にすると２倍面積の解像度の画面に描画してそれを綺麗に縮小したような効果をえることが、４にすると４倍面積の解像度の、１６にすると１６倍面積の解像度の画面に描画してから縮小したような効果を得ることができます。
+				( つまり画面の解像度が 640x480 だった場合は 2560x1920 の解像度の画面に描画してから縮小したような結果が得られる！( 解像度が倍になると面積は４倍になるので面積１６倍＝解像度４倍 ) )
+
+				　ただ、高い解像度の画面に描画する、となると想像が付くと思いますが、引数 Samples の値が大きければ大きいだけ処理負荷は高くなります。
+				フルシーンアンチエイリアス無しと比べると Samples の値が 4 でもかなり見た目が違いますので、効果が得られる可能な限り小さい値を渡すのが賢明です。
+
+
+
+				　引数 Quality について、Samples の値に従って「高い解像度の画面に描画して、それを綺麗に縮小した場合と同じような効果が得られる」フルシーンアンチエイリアスの機能ですが、
+				その「綺麗に縮小」する工程の、「どのくらい綺麗にするか」を Quality で指定します。
+
+				　値の上限はグラフィックスデバイス毎に設定されていて、大体指定できる範囲は 0 ～ 3 です。この引数も Samples と同様に値が大きければ大きいほど処理負荷が高くなりますので、
+				満足できる効果が得られる、可能な限り小さい値を渡すのが賢明です。
+
+
+
+				　尚、この関数でフルスクリーンアンチエイリアスモードの設定を行えるのは裏画面、表画面のみで、MakeScreen 関数で作成できる描画可能画像のフルスクリーンアンチエイリアスについての設定は SetDrawValidMultiSample で行います。
+				 
+			
+		
+
+
+		
+
+			サンプル
+
+
+
+				　フルスクリーンアンチエイリアスを有効にした状態で DxChara.x を読み込み、画面に表示します
+
+
+				
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+{
+	int ModelHandle ;
+
+	// フルシーンアンチエイリアスを設定する
+	SetFullSceneAntiAliasingMode( 4, 2 ) ;
+
+	// ＤＸライブラリの初期化
+	if( DxLib_Init() 
+			
+-------------------------------------------------------------------------------
+
+			
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+マスク関係関数
+
+
+
+		
+
+			
+宣言 int CreateMaskScreen( void ) ;
+
+
+			
+概略 マスク画面を作成する
+
+
+			
+引数
+				 なし
+			
+			
+戻り値 　０：成功
+			
+　 －１：エラー発生
+
+
+			
+
+				 解説
+				 　マスク情報を保持するためのマスク画面を作成します。
+
+
+
+
+
+					マスク画面とは
+
+
+
+					　マスク画面とは普通のグラフィックを表示する画面のように存在し、
+					LoadMask 等で画像ファイルをマスクデータとして読みこんだマスクを
+					DrawMask , DrawFillMask 等でマスク画面に描画できます。
+
+					　マスク画面はグラフィック画面とは違い黒と白の２つ(２色)の状態しかない
+					ピクセル(点)で構成されていて、マスク画面の状態はグラフィック画面に
+					描画作業を行う際に影響を及ぼします。
+
+					　例えば画面座標(10,10)の位置のマスク画面での点の状態が白の時、グラフィ
+					ック画面に DrawPixel やその他の関数で描画しようとしても座標(10,10)の状態は
+					変化しません、逆に状態が黒ですと通常通り描画できることとなります。
+
+
+
+					　このマスク機能は画面のフェードインや、グラフィックの描画にアクセントを
+					付ける場合などに有効な機能といえます。
+
+
+
+
+
+
+					　この関数を使用しなければマスク画面を使用できない主な理由には
+					マスク画面を使用するにはビデオメモリ(VRAM)をグラフィック画面
+					１つ分、メインメモリもグラフィック画面一つ分必要とするので、マスク
+					画面を必要としない場合にもこれだけの資源を占有されてしまうのは単純に
+					もったいないから、及び、マスク処理というのはかなりのＣＰＵパワーを
+					必要とし、描画処理に多大な負担を与える事となるので使用しない時にも
+					常にマスク画面が存在するのは不都合極まりないからです。
+
+
+					
+			
+		
+
+
+		
+
+			サンプル
+
+
+				　マスク画面を作成し、マスクデータを testMask.bmp から読みこみ、
+				マスク画面の左上に描画した後、画面を赤色で埋め尽くします。
+
+				　するとマスクを描画した画面左上の部分だけ赤くなりません。
+
+
+			
+-------------------------------------------------------------------------------
+
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			LPSTR lpCmdLine, int nCmdShow )
+{
+	int MaskHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータをロードします
+	MaskHandle = LoadMask( "testMask.bmp" ) ;
+
+	// ロードしたマスクデータを画面の左上に描画します
+	DrawMask( 0 , 0 , MaskHandle , DX_MASKTRANS_NONE ) ;
+
+	// 画面いっぱいに赤い四角を描きます
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 255 , 0 , 0 ) , TRUE ) ;
+
+	// キーの入力待ちをします
+	WaitKey() ;
+
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DeleteMaskScreen( void ) ;
+
+概略 マスク画面を削除する
+
+引数  なし
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　CreateMaskScreen で作成したマスク画面を削除します。
+　以降マスク関係の機能は使用不可になりますので、再びマスクの機能を 使用したい場合は CreateMaskScreen 関数を使用します。
+
+サンプル
+
+CreateMaskScreen のサンプルを参照して下さい
+
+
+
+宣言 int LoadMask( char *FileName ) ;
+
+概略 マスクデータを画像ファイル(ＢＭＰ．ＪＰＥＧ．ＰＮＧ)から構築する
+
+引数  char *FileName : マスクとしてロードする画像ファイル(ＢＭＰ or
+　　　　　　　　　　ＰＮＧ or ＪＰＧ ファイル)のパス
+戻り値 －１以外：マスクデータハンドル
+　 －１：エラー発生
+
+解説  　マスク画面に描画するためのマスクデータを FileName で指定した画像 ファイルから構築します。
+　画像ファイル中の真っ黒の部分と真っ白の部分をそれぞれマスクなし、 ありとして判別しマスクデータを構築します。この関数を使用すると 返り値としてマスクデータハンドル(識別番号)が返ってきます。この ハンドルを使用して DrawMask や DrawFillMask 等の関数で構築した マスクデータをマスク画面に書きこむことが出来ます。
+
+サンプル
+
+　testMask.bmp を読みこみ画面上のランダムな場所に１０回描画し、その後 画面全体を青い四角で描画する。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+				LPSTR lpCmdLine, int nCmdShow )
+{
+	int MaskHandle ;
+	int i ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータをロードします
+	MaskHandle = LoadMask( "testMask.bmp" ) ;
+
+	// ロードしたマスクデータを画面のランダムな位置に１０個描画します
+	for( i = 0 ; i DrawMask( GetRand( 639 ) , GetRand( 479 ) , MaskHandle , DX_MASKTRANS_NONE ) ;
+
+	// 画面いっぱいに青い四角を描きます
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 0 , 255 ) , TRUE ) ;
+
+	// キーの入力待ちをします
+	WaitKey() ;
+
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int LoadDivMask( char *FileName , int AllNum , int XNum , int YNum ,
+　　　　　　　　　　　　　　　int XSize , int YSize , int *HandleBuf ) ;
+
+概略 マスクデータを画像ファイル(ＢＭＰ．ＪＰＥＧ．ＰＮＧ)から分割構築する
+
+引数  char FileName : マスクとしてロードする画像ファイルのパス
+int AllNum : 画像を分割して読みこむ総数
+int XNum : 画像をＸ軸に対して分割する数
+int YNum : 画像をＹ軸に対して分割する数
+int XSize : 分割された画像一つの幅
+int YSize : 分割された画像一つの高さ
+int *HandleBuf : 分割した画像一つ一つに割り当てられるマスクハンドル
+　　　　　　　　(識別番号)を格納する int 型配列のアドレス
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　FileName で指定された画像ファイルを各パラメータに応じて分割し、 分割された画像一つ一つに LoadMask で得られるマスクハンドルと同様の マスクハンドル(識別番号)を割り当てます。
+　LoadMask 関数と違い一度に得られるハンドルが複数あるので最後の 引数 HandleBuf の示す int 型配列に順次格納していきます。この int 型 配列は分割総数分だけ確保しておく必要があります。分割総数以下の数しか ない配列をこの関数に渡した場合の動作保証はいたしかねますので気を付け てください。
+　読みこみ、作られたマスクハンドルはHandleBufで指定したint型変数配列 には以下のような順にマスクハンドルが格納されていきます。
+
+XNum = 4 ; YNum = 4 ; AllNum = 14 ;
+1 2 3 4
+5 6 7 8
+9 10 11 12
+13 14   
+AllNum = 14
+
+サンプル
+
+　testMask2.bmp を 横 8 縦 2 、分割される一つの画像サイズを 8 × 16 、分割 画像の総数 16 として読みこみ、得られたマスクハンドルを配列に保存しその後 ０から順番に画面全体にマスクグラフィックを描画しアニメーションさせます。
+
+　いちいち画面を消去するので裏画面を使用しています。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+					LPSTR lpCmdLine, int nCmdShow )
+{
+	int MaskHandle[ 16 ] ;
+	int i ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画先画面を裏画面にします
+	SetDrawScreen( DX_SCREEN_BACK ) ;
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータをロードします
+	LoadDivMask( "testMask2.bmp", 16, 8, 2, 8, 16, MaskHandle ) ;
+
+	// マスクを画面全体にタイル上に描画しアニメーションさせます
+	for( i = 0 ; i ClearDrawScreen() ;
+
+		// 画面全体にタイル上描画
+		DrawFillMask( 0 , 0 , 640 , 480 , MaskHandle[ i ] ) ;
+
+		// 画面いっぱいに青い四角を描きます
+		DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 0 , 255 ) , TRUE ) ;
+
+		// 時間待ち
+		WaitTimer( 100 ) ;
+
+		// 裏画面の内容を表画面に反映させる
+		ScreenFlip() ;
+	}
+
+	// 最後の時間待ち
+	WaitTimer( 1000 ) ;
+
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DrawMask( int x , int y , int MaskHandle , int TransMode ) ;
+
+概略 マスクデータをマスク画面に描画する
+
+引数  int x , y : マスクを描画する座標(マスクの左上頂点と対応)
+int MaskHandle : 描画するマスクのハンドル(識別番号)
+int TransMode : マスクを描画する際の透過色のタイプ
+　　　　　DX_MASKTRANS_NONE. 透過色なし
+　　　　　DX_MASKTRANS_BLACK. マスク中の黒色部分を書き込まない
+　　　　　DX_MASKTRANS_WHITE. マスク中の白色部分を書き込まない
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説   　LoadMask . LoadDivMask 等の関数で構築したマスクをマスク画面に 描画します。描画する際 TransMode で指定したパラメータに応じて 透過色処理が行われます。
+　透過色処理とは DX_MASKTRANS_BLACK を指定すると描画するマスクの 白い部分のみがマスク画面に書きこまれ、黒い部分は書きこまれません。 そして DX_MASKTRANS_WHITE はその逆です。
+　DX_MASKTRANS_NONE はそれらのマスク処理を行わないパラメータとなり ます。
+
+　DrawGraph . DrawExtendGraph のように TRUE . FALSE の２種類では 透過色の種類数に対応できないためにこのような形を取ることになりました。
+
+サンプル
+
+　CreateMaskScreen 関数のサンプルを参照して下さい。
+
+
+
+宣言 int DrawFillMask( int x1 , int y1 , int x2 , int y2 , int MaskHandle ) ;
+
+概略 指定のマスク画面領域を指定のマスクデータをタイル上に並べて埋める
+
+引数  int x1 , y1 : 埋める領域を矩形とした場合の左上の頂点となる座標
+int x2 , y2 : 埋める領域を矩形とした場合の右下＋１の頂点となる座標
+int MaskHandle : 埋めるのに使用するマスクのハンドル(識別番号)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　概略の通り、( x1, y1 )-( x2 - 1, y2 - 1 ) の占める範囲を MaskHandle が示すマスク をタイル上に並べて埋めます。
+
+　この関数の機能は DrawMask 関数を複数回使用することで実現可能 なのですが、如何せん小さいマスクパターンを使用して広範囲を埋める という機会が多いマスク処理において、 DrawMask 関数でそれを実現 するのは非常に不効率、過負荷がかかるので専用の高速に処理できる 関数をという次第で用意されました。
+　高速な代わりに DrawMask 関数のような透過処理は出来ませんので ご了承下さい。
+
+注…『なんで右下の頂点は「-1」してるの？』と思われた方はDrawBoxの解説を読んでみて下さい。
+サンプル
+
+　(100,200)-(640,480)の領域を testMask.bmp から構築したマスクで 埋めます。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			LPSTR lpCmdLine, int nCmdShow )
+{
+	int MaskHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータをロードします
+	MaskHandle = LoadMask( "testMask.bmp" ) ;
+
+	// (100,200)-(400,400)の領域にマスクをタイル上に並べて描画します
+	DrawFillMask( 100 , 200 , 400 , 400 , MaskHandle ) ;
+
+	// 画面いっぱいに緑の四角を描画
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 255 , 0 ) , TRUE ) ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+	// マスクを削除します
+	DeleteMask( MaskHandle ) ;
+
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DeleteMask( int MaskHandle ) ;
+
+概略 マスクデータを削除
+
+引数  int MaskHandle : 削除するマスクのハンドル(識別番号)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadMask . LoadDivMask 関数等で構築したマスクを削除します。
+　削除した後は使えなくなります。それだけです。使わなくなった マスクデータが占有しているメモリ資源を解放するために使用する 関数です。
+
+　因みに削除せずにソフトを終了した場合は終了時に自動的にマスクは 削除されます。
+
+サンプル
+
+DrawFillMask 関数のサンプルを参照して下さい
+
+
+
+宣言 int InitMask( void ) ;
+
+概略 マスクデータを初期化する
+
+引数  なし
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadMask . LoadDivMask 関数等で構築したマスクをすべて削除します。
+　構築したマスクすべてに DeleteMask 関数を使用した場合と同じです。
+
+　一度にすべてのマスクを削除したい場合に使用します。
+
+サンプル
+
+　ありません
+
+
+
+宣言 int FillMaskScreen( int Flag ) ;
+
+概略 マスク画面を指定の色で塗りつぶす
+
+引数  int Flag : マスク画面を白黒どちらの色で塗りつぶすかを決める引数。
+　　　　　　( 0:黒　1:白 )
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　マスク画面を白、又は黒で塗りつぶします。グラフィック画面で言う ところの ClearDrawScreen 関数に相当する関数です。
+　各色の効果の程は CreateMaskScreen 関数の解説を参照して下さい。
+
+サンプル
+
+　DrawFillMask 関数で一部マスクを適用し、緑の四角を描画した後、 マスク画面を白で覆い尽くしてから再び緑の四角を描画します
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			LPSTR lpCmdLine, int nCmdShow )
+{
+	int MaskHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータをロードします
+	MaskHandle = LoadMask( "testMask.bmp" ) ;
+
+	// (100,200)-(400,400)の領域にマスクをタイル上に並べて描画します
+	DrawFillMask( 100 , 200 , 400 , 400 , MaskHandle ) ;
+
+	// 画面いっぱいに緑の四角を描画
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 255 , 0 ) , TRUE ) ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+	// マスク画面を白で覆い尽くします
+	FillMaskScreen( 1 ) ;
+
+	// もう一度画面いっぱいに緑の四角を描きます
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 255 , 0 ) , TRUE ) ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+	// マスクを削除します
+	DeleteMask( MaskHandle ) ;
+
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int SetUseMaskScreenFlag( int ValidFlag ) ;
+
+概略 マスク画面の有効の有無を変更
+
+引数  int ValidFlag : マスク画面の有効状態( TRUE:有効 FALSE:無効 )
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　マスク画面の有効、無効を変更します。マスク処理は常に必要ではなく 且使用する時と使用しない時が短時間の内に切り替わる場合、いくらマスク 処理がマシンに過負荷を与えるとしてもその度に CreateMaskScreen 関数 DeleteMaskScreen 関数を使用するのは効率的ではありません。
+　ですので一時的にマスク画面の効果を取り下げたい場合にこの関数は 有効です。当然マスク画面を作成した直後の状態ではこの関数で言うところ の TRUE(有効) 状態になっています。
+
+サンプル
+
+　まず testMask.bmp を DrawFillMask 関数をもって画面全体に描画します。 その後緑の四角を画面全体に、以後マスク画面を無効にして同じことを、更に再び マスク画面を有効にして再度緑の四角を画面に描画します。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+				LPSTR lpCmdLine, int nCmdShow )
+{
+	int MaskHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータをロードします
+	MaskHandle = LoadMask( "testMask.bmp" ) ;
+
+	// 画面全体にマスクをタイル上に並べて描画します
+	DrawFillMask( 0 , 0 , 640 , 480 , MaskHandle ) ;
+
+	// 画面いっぱいに緑の四角を描画
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 255 , 0 ) , TRUE ) ;
+	ScreenFlip() ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+
+	// マスク画面を無効にします
+	SetUseMaskScreenFlag( FALSE );
+
+	// もう一度画面いっぱいに緑の四角を描きます
+	ClearDrawScreen() ;	// 画面初期化
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 255 , 0 ) , TRUE ) ;
+	ScreenFlip() ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+
+	// マスク画面を有効にします
+	SetUseMaskScreenFlag( TRUE ) ;
+
+	// 再び一度画面いっぱいに緑の四角を描きます
+	ClearDrawScreen() ;	// 画面初期化
+	DrawBox( 0 , 0 , 640 , 480 , GetColor( 0 , 255 , 0 ) , TRUE ) ;
+	ScreenFlip() ;
+
+	// キー入力待ち
+	WaitKey() ;
+
+
+	// マスクを削除します
+	DeleteMask( MaskHandle ) ;
+
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int MakeMask( int Width , int Height ) ;
+
+概略 空のマスクデータの作成
+
+引数  int Width , Height : それぞれ作成する空マスクの幅と高さ
+戻り値 －１以外：マスクデータハンドル
+　 －１：エラー発生
+
+解説  　LoadMask , LoadDivMask 等で構築する事の出来るマスクデータの 空っぽの何もデータのないバージョンのマスクを作成し、そのハンドル (識別番号)を得ます。
+　用途としては SetDataToMask 関数で動的にプログラム中に作成した マスクデータをセットして使用する場合などがあります。
+
+サンプル
+
+　MakeMask 関数で 16 × 16 の大きさの空マスクを作成し、プログラム中で 動的に作成、変更を加えたマスクデータを SetDataToMask 関数 で順次転送、 そしてそのマスクデータを持ってマスク画面を埋め尽くし、マスクの結果を 確認するために画面いっぱいに白い四角を描画しています。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+				LPSTR lpCmdLine, int nCmdShow )
+{
+	int MaskHandle ;
+	unsigned char MaskData[ 16 ][ 16 ] ;
+	int i , j ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画先を裏画面にします
+	SetDrawScreen( DX_SCREEN_BACK ) ;
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// 空のマスクを作成します
+	MaskHandle = MakeMask( 16 , 16 ) ;
+
+	// マスクデータを白で埋めます
+	for( i = 0 ; i ClearDrawScreen() ;
+
+		// マスクのデータを一部変更
+		for( j = 0 ; j SetDataToMask( 16 , 16 , MaskData , MaskHandle ) ;
+
+		// マスク画面をセットしたマスクデータで埋めます
+		DrawFillMask( 0 , 0 , 640 , 480 , MaskHandle ) ;
+
+		// 白の四角を画面全体に描画します
+		DrawBox( 0 , 0 , 640 , 480 , GetColor( 255 , 255 , 255 ) , TRUE ) ;
+
+		// 裏画面の内容を表画面に反映させます
+		ScreenFlip() ;
+
+		// 時間待ち
+		WaitTimer( 100 ) ;
+	}
+
+	// マスクを削除します
+	DeleteMask( MaskHandle ) ;
+
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int GetMaskSize( int *WidthBuf , int *HeightBuf , int MaskHandle ) ;
+
+概略 マスクデータの大きさを得る
+
+引数  int *WidthBuf , *HeightBuf : それぞれマスクデータの幅と高さを
+　　　　　　　　　　　　　　　保存するint 型変数のアドレス
+int MaskHandle : サイズを取得するマスクハンドル(識別番号)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadMask , LoadDivMask 等の関数で構築したマスクデータの サイズを得ます。主な用途はありません。
+
+サンプル
+
+特になし
+
+
+
+宣言  int SetDataToMask( int Width , int Height ,
+　　　　　　　　　　void *MaskData , int MaskHandle ) ;
+
+概略 マスクのデータをマスクデータ領域に転送する
+
+引数  int Width ,Heiht : それぞれマスクデータの幅と高さ
+void *MaskData : マスクのデータがあるアドレス
+int MaskHandle : 　マスクのデータを転送する先となるマスクの
+　　　　　　　　　ハンドル(識別番号)
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadMask , LoadDivMask , MakeMask 関数で構築したマスクの データを指定のデータに置き換えます。
+　主な用途としてはマスクデータを画像ファイルから読みこむの ではなく動的に生成して使用したい場合などが上げられます。
+
+　因みにWidth , Height が示すサイズは転送先となるマスクと 同サイズでなければエラーとなります。わざわざ引数として取る のはプログラマー側の確認を取るという意味があります。
+　後このようなマスクのデータを直接マスク画面に転送する DrawMaskToDirectData 関数がありますが、これは同じデータで 複数回描画する場合には SetDataToMask 関数で通常のマスクデー タに転送してから DrawMask 等で描画したほうが速度面で有利と なりますので注意してください。速度面での違いが起こるのは DrawMaskToDirectData 関数ですと描画毎にデータの変換をする 必要があるからです。
+
+
+データ形式
+
+　マスクのデータ形式としては １ドット = 1 バイト、unsigned char 型の変数一つで１ドットを表します。そしてその値が０の 場合は黒に、255(0xff)の場合は白と解釈されます。つまり幅３２ 高さ１６のマスクデータ領域を用意し、マスクデータ上のＸ軸上１５ Ｙ軸上１０のドットを白にしたいときは次のようになります。
+
+　　　unsigned char MaskData[16][32] ;
+
+　　　MaskData[10][15] = 255 ;
+
+　普段Ｘ，Ｙを指定するときとはＸとＹの位置関係が逆になるので 注意してください。
+
+サンプル
+
+MakeMask 関数のサンプルを参照して下さい
+
+
+
+宣言  int DrawMaskToDirectData( int x , int y ,
+　　　　　　　　　　　　　　int Width , int Height ,
+　　　　　　　　　　　　　　void *MaskData , int TransMode ) ;
+
+概略 マスクのデータをマスク画面に直接描画する
+
+引数  int x ,y : マスクデータの描画先のマスク画面上の座標
+int Width , Height : 描画するマスクデータの幅と高さ
+void *MaskData : マスクのデータが格納されているアドレス
+int TransMode : 描画時の透過色モード
+　　　　　　　　DX_MASKTRANS_NONE . 透過色なし
+　　　　　　　　DX_MASKTRANS_BLACK . マスク中の黒色部分を透過色
+　　　　　　　　DX_MASKTRANS_WHITE . マスク中の白色部分を透過色
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　マスク画面上の( x , y )の座標を描画領域の左上頂点 として MaskData の示す先に格納されているマスクデータを直接マスク 画面に転送します。
+　要は DrawMask 関数のマスクハンドルの代わりに直接データを 渡すタイプです。
+　透過色処理とは DX_MASKTRANS_BLACK を指定すると描画するマスクの 白い部分のみがマスク画面に書きこまれ、黒い部分は書きこまれません。 そして DX_MASKTRANS_WHITE はその逆です。
+　DX_MASKTRANS_NONE はそれらのマスク処理を行わないパラメータとなり ます。
+
+　主に動的にマスクデータを用意し、複数回そのデータで描画 しない場合に有効です。複数回描画を行う場合は MakeMask 関数 で空のマスクを作成し、そこにマスクのデータを転送した後 作成したマスクのハンドルをもって描画したほうが高速です。
+
+　データ形式に付いては SetDataToMask 関数の解説を参照して 下さい。
+
+サンプル
+
+　マスクのデータを直接マスク画面の左上に転送し、そのつど 画面全体に白い四角を描画し、マスクの状態を確認します。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			LPSTR lpCmdLine, int nCmdShow )
+{
+	unsigned char MaskData[ 16 ][ 16 ] ;
+	int i , j ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// 描画先を裏画面にします
+	SetDrawScreen( DX_SCREEN_BACK ) ;
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータを白で埋めます
+	for( i = 0 ; i ClearDrawScreen() ;
+
+		// マスクのデータを一部変更
+		for( j = 0 ; j DrawMaskToDirectData( 0 , 0 , 16 , 16 , MaskData , DX_MASKTRANS_NONE ) ;
+
+		// 白の四角を画面全体に描画します
+		DrawBox( 0 , 0 , 640 , 480 , GetColor( 255 , 255 , 255 ) , TRUE ) ;
+
+		// 裏画面の内容を表画面に反映させます
+		ScreenFlip() ;
+
+		// 時間待ち
+		WaitTimer( 100 ) ;
+	}
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言  int DrawFillMaskToDirectData( int x1, int y1, int x2, int y2,
+　　　　　　　　　　　　　　　 int Width, int Height, void *MaskData ) ;
+
+概略 マスクのデータをタイル上に並べた形で直接マスク画面全体に描画する
+
+引数  int x1, y1: データを埋め尽くす領域を矩形とした場合の左上の頂点座標
+int x2, y2: データを埋め尽くす領域を矩形とした場合の右下＋１の頂点座標
+int Width , Height : 描画するマスクデータの幅と高さ
+void *MaskData : マスクのデータが格納されているアドレス
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　DrawFillMask 関数の直接データを渡すバージョンです。
+　( x1, y1 )-( x2 - 1, y2 - 1 ) の占める範囲を Width , Height, MaskData が示す マスクデータをタイル上に並べて埋めます。
+
+　マスクのデータ形式に付いては SetDataToMask 関数の解説を参照 してください。
+
+注…『なんで右下の頂点は「-1」してるの？』と思われた方はDrawBoxの解説を読んでみて下さい。
+サンプル
+
+　ダイレクトにマスク画面に動的に生成した 16 × 16 の大きさのマスク データを画面全体に描画し、その結果を確認するために描画毎に画面全体に 白い四角を描画します。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+				LPSTR lpCmdLine, int nCmdShow )
+{
+	unsigned char MaskData[ 16 ][ 16 ] ;
+	int i , j ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// 描画先を裏画面にします
+	SetDrawScreen( DX_SCREEN_BACK ) ;
+
+	// マスク画面を作成します
+	CreateMaskScreen() ;
+
+	// マスクデータを白で埋めます
+	for( i = 0 ; i ClearDrawScreen() ;
+
+		// マスクのデータを一部変更
+		for( j = 0 ; j DrawFillMaskToDirectData( 0 , 0 , 640 , 480 , 16 , 16 , MaskData ) ;
+
+		// 白の四角を画面全体に描画します
+		DrawBox( 0 , 0 , 640 , 480 , GetColor( 255 , 255 , 255 ) , TRUE ) ;
+
+		// 裏画面の内容を表画面に反映させます
+		ScreenFlip() ;
+
+		// 時間待ち
+		WaitTimer( 100 ) ;
+	}
+	// マスク画面を削除します
+	DeleteMaskScreen() ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+
+
+
+動画関係
+
+宣言 int PlayMovie( char *FileName , int ExRate , int PlayType ) ;
+
+概略 　動画ファイルを再生する
+
+引数  char *FileName : 再生する動画ファイルのパス
+int　ExRate　　: 再生時の拡大率
+　　　　　　　　　　(1=等倍 2=2倍 など,1.5倍などは出来ません)
+int　PlayType　: 再生のタイプ
+　　　　　　　　　　DX_MOVIEPLAYTYPE_BCANCEL : ボタンキャンセルあり
+　　　　　　　　　　DX_MOVIEPLAYTYPE_NORMAL　: ボタンキャンセルなし
+
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　FileNameで指定された動画ファイルを ExRate で指定された倍率 に拡大し、画面中心に再生します。なお PlayType に DX_MOVIEPLAYTYPE_BCANCEL を指定した場合は再生中にボタンが押されるとそこで再生を中断します。
+DX_MOVIEPLAYTYPE_NORMAL を指定するとボタンを押しても中断しません。
+
+　ＡＶＩ(Codecがない形式は再生できません),ＭＰＧ　等
+
+サンプル
+
+　test.aviを等倍で再生する（ボタン押しキャンセルなし）
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+		 LPSTR lpCmdLine, int nCmdShow )
+{
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	PlayMovie( "test.avi" , 1 , DX_MOVIEPLAYTYPE_NORMAL ) ;
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int PlayMovieToGraph( int GraphHandle ) ;
+
+概略 ムービーグラフィックの動画の再生を開始する
+
+引数  int GraphHandle : ムービーグラフィックハンドル
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　LoadGraph 関数で取得したムービーグラフィックハンドルが 持っているムービーファイルの再生を開始します。
+　ムービーグラフィックについては LoadGraph 関数の説明書きを 参照して下さい。
+
+
+ムービーグラフィックハンドルによるムービーの再生
+
+　百聞は一見にしかず、まず次のプログラムを見てください。
+
+
+
+int MovieGraphHandle ;
+
+MovieGraphHandle = LoadGraph( "??.mpg" ) ;
+
+PlayMovieToGraph( MovieGraphHandle ) ;
+
+while( ProcessMessage() == 0 )
+{
+	DrawGraph( 0 , 0 , MovieGraphHandle , FALSE ) ;
+	WaitTimer( 10 ) ;
+}
+
+　このプログラムを実行すると ??.mpg という動画ファイルを 再生し、画面に表示します。
+　まず LoadGraph 関数で動画ファイルをロードし、その ムービーを示すムービーグラフィックハンドルを変数 MovieGraphHandle に 保存します、そして次の行の PlayMovieToGraph 関数でロードした ムービーを再生状態にします。
+　次が肝です、１ループごとに DrawGraph 関数で MovieGraphHandle 変数の示すムービーを描画し、その後１０ミリ秒停止しています。
+　この DrawGraph 関数では何が描画されるかといいますとずばり ムービー映像が描画されます。
+　つまり、画像ファイルをロードして得ることが出来るグラフィック ハンドルでは決まったグラフィックが常に描画されるわけですが、 ムービーグラフィックハンドルの場合は描画されるグラフィックが ムービーファイルのデータに応じて次々に変更されるということです。
+
+　説明がわかりにくいので次のサンプルプログラムを見てイメージを つかんでください。
+　ちなみに動画の再生のみを行う場合は PlayMovie 関数を使用すること をお勧めします。こちらのほうがムービー再生のみであれば低負荷、 高画質で処理することが出来るからです。
+
+
+>
+　動画の再生処理は非同期で行われますので、 この関数から出てきた時点で動画の再生が確実に開始されていることや、 動画の再生が GetNowCount で取得できる時刻通りに正確に行われ続ける保証はありません。
+　なのでもし動画の映像に合わせて何かを行う処理をする場合は TellMovieToGraph を使用して動画の再生時間に合わせて処理を行う必要があります。
+
+>
+　ムービーの『ロード』といっていますが、動画ファイルは容量が 大きいので、実際にはメモリにすべてロードしているわけではありません。
+　正しくはムービーの『オープン』です。
+
+サンプル
+
+??.mpg を画面いっぱいに拡大して再生します。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int MovieGraphHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// ムービーファイルをロードします。
+	MovieGraphHandle = LoadGraph( "??.mpg" ) ;
+
+	// ムービーを再生状態にします
+	PlayMovieToGraph( MovieGraphHandle ) ;
+
+	// ループ、GetMovieStateToGraph 関数はムービーの再生状態を得る関数です
+	// 戻り値が１の間は再生状態ですのでループを続けます
+	while( ProcessMessage() == 0 && GetMovieStateToGraph( MovieGraphHandle ) == 1 )
+	{
+		// ムービー映像を画面いっぱいに描画します
+		DrawExtendGraph( 0 , 0 , 640 , 480 , MovieGraphHandle , FALSE ) ;
+
+		// ウエイトをかけます、あまり速く描画すると画面がちらつくからです
+		WaitTimer( 17 ) ;
+	}
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+
+宣言 int PauseMovieToGraph( int GraphHandle ) ;
+
+概略 ムービーグラフィックの動画再生を一時停止する
+
+引数  int GraphHandle : ムービーグラフィックハンドル
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　PlayMovieToGraph 関数で開始したムービー再生にポーズを掛けます。 ポーズを解除するには再び PlayMovieToGraph 関数を使用します。
+　ムービーグラフィックについては LoadGraph 関数の説明書きを 参照して下さい。
+
+サンプル
+
+ありません
+
+
+
+宣言 int SeekMovieToGraph( int GraphHandle , int Time ) ;
+
+概略 ムービーグラフィックの動画の再生位置を変更する
+
+引数  int GraphHandle : ムービーグラフィックハンドル
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　再生する動画の再生位置を変更します。
+　時間は Time で指定します、単位は細かいですが 1ミリ秒単位となります。
+　ムービーグラフィックについては LoadGraph 関数の説明書きを 参照して下さい。
+
+サンプル
+
+　??.avi ファイルを５秒目から再生します。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int MovieGraphHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// ムービーファイルをロードします。
+	MovieGraphHandle = LoadGraph( "??.avi" ) ;
+
+	// ムービーの再生位置を５秒目に変更します
+	SeekMovieToGraph( MovieGraphHandle , 5000 ) ; 
+
+	// ムービーを再生状態にします
+	PlayMovieToGraph( MovieGraphHandle ) ;
+
+	// ループ、GetMovieStateToGraph 関数はムービーの再生状態を得る関数です
+	// 戻り値が１の間は再生状態ですのでループを続けます
+	while( ProcessMessage() == 0 && GetMovieStateToGraph( MovieGraphHandle ) == 1 )
+	{
+		// ムービー映像を画面いっぱいに描画します
+		DrawExtendGraph( 0 , 0 , 640 , 480 , MovieGraphHandle , FALSE ) ;
+
+		// ウエイトをかけます、あまり速く描画すると画面がちらつくからです
+		WaitTimer( 17 ) ;
+	}
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+
+宣言 int TellMovieToGraph( int GraphHandle ) ;
+
+概略 ムービーグラフィックの動画の再生位置を得る
+
+引数  int GraphHandle : ムービーグラフィックハンドル
+戻り値 ０以上：再生時間（単位はミリ秒）
+　 －１：エラー発生
+
+解説  　再生している動画の再生位置を取得します。
+　戻り値は GetNowCount と同じくミリ秒単位です。
+
+サンプル
+
+　??.mpg ファイルを再生しながら、画面左上に再生時間を表示します。
+
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+			 LPSTR lpCmdLine, int nCmdShow )
+{
+	int MovieGraphHandle ;
+
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	// ムービーファイルをロードします。
+	MovieGraphHandle = LoadGraph( "??.mpg" ) ;
+
+	// ムービーを再生状態にします
+	PlayMovieToGraph( MovieGraphHandle ) ;
+
+	// 描画先の画面を裏画面に
+	SetDrawScreen( DX_SCREEN_BACK ) ;
+
+	// ループ、GetMovieStateToGraph 関数はムービーの再生状態を得る関数です
+	// 戻り値が１の間は再生状態ですのでループを続けます
+	while( ProcessMessage() == 0 && GetMovieStateToGraph( MovieGraphHandle ) == 1 )
+	{
+		// ムービー映像を画面いっぱいに描画します
+		DrawExtendGraph( 0 , 0 , 640 , 480 , MovieGraphHandle , FALSE ) ;
+
+		// 画面左上に再生時間を描画します
+		DrawFormatString( 0, 0, GetColor( 255,255,255 ), "Time:%d", TellMovieToGraph( MovieGraphHandle ) ) ;
+
+		// 裏画面の内容を表画面に反映します
+		ScreenFlip() ;
+	}
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+
+宣言 int GetMovieStateToGraph( int GraphHandle ) ;
+
+概略 ムービーグラフィックの動画の再生状態を得る
+
+引数  int GraphHandle : ムービーグラフィックハンドル
+戻り値  ０　：再生は停止している
+　 １　：再生中
+－１：エラー発生
+
+解説  　ムービーグラフィックの再生状態を得ます。
+　もし０が返ってきたら停止中、１なら再生中となります。
+　因みに動画の再生が終了するか PauseMovieGraph 関数で再生に ポーズを掛けると停止中となります。
+　ムービーグラフィックについては LoadGraph 関数の説明書きを 参照して下さい。
+
+サンプル
+
+　PlayMovieToGraph 関数のサンプルを参照して下さい
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------
+戻る

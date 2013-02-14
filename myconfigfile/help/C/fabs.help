@@ -1,0 +1,189 @@
+TITLE : C言語関数辞典 - fabs, fabsf, fabsl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ fabs, fabsf, fabsl
+
+The fabs functions - fabs, fabsf, fabsl
+
+絶対値を取得します．
+
+fabs
+
+
+#include <math.h>
+
+
+
+double fabs (
+    double x
+);
+
+
+fabs 関数は引数 x の絶対値を計算し，結果を double 型で返します．
+
+fabsf (C99)
+
+
+#include <math.h>
+
+
+
+float fabsf (
+    float x
+);
+
+
+fabsf 関数は引数 x の絶対値を計算し，結果を float 型で返します．
+
+fabsl (C99)
+
+
+#include <math.h>
+
+
+
+long double fabsl (
+    long double x
+);
+
+
+fabsl 関数は引数 x の絶対値を計算し，結果を long double 型で返します．
+
+戻り値
+
+  * 絶対値
+
+数学上の表記
+
+C言語サンプルプログラム
+
+以下にfabs，fabsf，fabsl 関数それぞれを使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* main */
+int main(void) {
+    double dblVal = -100.0, dblAbs;
+    float fltVal = -100.0, fltAbs;
+    long double lngdblVal = -100.0L, lngdblAbs;
+
+    dblAbs = fabs(dblVal);
+    fltAbs = fabsf(fltVal);
+    lngdblAbs = fabsl(lngdblVal);
+
+    printf("fabs(%.1f) = %.1f\n", dblVal, dblAbs);
+    printf("fabsf(%.1f) = %.1f\n", fltVal, fltAbs);
+    printf("fabsl(%.1Lf) = %.1Lf\n", lngdblVal, lngdblAbs);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+fabs(-100.0) = 100.0
+fabsf(-100.0) = 100.0
+fabsl(-100.0) = 100.0
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

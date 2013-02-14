@@ -1,0 +1,129 @@
+TITLE : C言語関数辞典 - srand
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdlib.h ≫ srand
+
+srand
+
+擬似乱数の乱数種 (シード) を設定します．
+
+
+#include <stdlib.h>
+
+
+
+void srand(
+    unsigned int seed
+);
+
+
+srand 関数は rand 関数で返される擬似乱数の乱数種 (以下シード) を seed に変更します．シードとは擬似乱数を生成するための計算に用いられる係数です．
+
+srand を同一の seed の値で呼び出した場合，同じ擬似乱数列が生成されます．そのため，完全にランダムに擬似乱数を発生させたい場合は通常 time 関数で返された値を seed にします．
+
+rand を srand の呼び出しより前に呼んだ場合，srand が最初に seed の値を 1 として呼ばれたときと同じ動作になります．
+
+引数
+
+  * seed: 乱数種 (シード)
+
+C言語サンプルプログラム
+
+擬似乱数を発生させる のサンプルプログラムをご覧下さい．
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

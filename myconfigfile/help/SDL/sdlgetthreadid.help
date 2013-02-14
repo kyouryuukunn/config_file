@@ -1,0 +1,28 @@
+TITLE : SDL_GetThreadID
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetThreadID
+
+Name
+
+SDL_GetThreadID -- SDL_ThreadのSDL内のスレッドIDを得ます。
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+Uint32 SDL_GetThreadID(SDL_Thread *thread);
+
+Description
+
+
+SDL_CreateThreadで作成された SDL_ThreadのIDを返します。
+
+See Also
+
+SDL_CreateThread
+
+PrevHomeNext
+SDL_ThreadIDUpSDL_WaitThread

@@ -1,0 +1,458 @@
+TITLE : ＤＸライブラリ置き場　リファレンスページ
+
+                     ＤＸライブラリ　関数リファレンスページ
+-------------------------------------------------------------------------------
+
+　このページではＤＸライブラリの主な関数の説明と簡単な
+サンプルプログラムを載せています。
+
+
+使用必須関数
+
+DxLib_Init 　ライブラリの初期化
+DxLib_End 　ライブラリ使用の終了関数
+ProcessMessage 　ウインドウズのメッセージを処理する
+
+
+３Ｄ関係関数
+
+一覧はこちら 　数が多いので分けました
+
+
+図形描画関数
+
+DrawLine 　線を描画
+DrawBox 　四角を描画
+DrawCircle 　円の描画
+DrawOval 　楕円の描画
+DrawTriangle 　三角形の描画
+DrawPixel 　点を描画する
+GetPixel 　指定点の色を取得
+
+
+グラフィックデータ制御関数
+
+LoadGraphScreen 　画像ファイルを読みこんで画面に表示する
+LoadGraph 　画像ファイルのメモリへの読みこみ、及び動画ファイルのロード
+LoadDivGraph 　画像ファイルのメモリへの分割読みこみ
+MakeGraph 　空のグラフィックを作成する
+MakeScreen 　描画対象にできるグラフィックを作成する
+SetDrawValidMultiSample 　描画対象にできるグラフィックのマルチサンプリング設定を行う
+DrawGraph 　メモリに読みこんだグラフィックの描画
+DrawTurnGraph 　メモリに読みこんだグラフィックのＬＲ反転描画
+DrawExtendGraph 　メモリに読みこんだグラフィックの拡大縮小描画
+DrawRotaGraph 　メモリに読みこんだグラフィックの回転描画
+DrawRotaGraph2 　メモリに読みこんだグラフィックの回転描画(回転中心指定あり)
+DrawModiGraph 　メモリに読みこんだグラフィックの自由変形描画
+DrawRectGraph 　グラフィックの指定矩形部分のみを描画
+DerivationGraph 　指定のグラフィックの指定部分だけを抜き出して新たなグラフィックを作成する
+GetDrawScreenGraph 　描画先に設定されているグラフィック領域から指定領域のグラフィックを読みこむ
+GetGraphSize 　グラフィックのサイズを得る
+InitGraph 　読みこんだグラフィックデータをすべて削除する
+DeleteGraph 　指定のグラフィックをメモリ上から削除する
+SetDrawMode 　描画モードをセットする
+SetDrawBlendMode 　描画の際のブレンドモードをセットする
+SetDrawBright 　描画輝度をセット
+SetTransColor 　グラフィックに設定する透過色をセットする
+
+LoadBlendGraph 　画像ファイルからブレンド画像を読み込む
+DrawBlendGraph 　ブレンド画像と通常画像を合成して描画する
+
+GraphFilter 　画像にフィルター処理を施す
+GraphFilterBlt 　画像にフィルター処理を施す( 出力先画像指定版 )
+GraphFilterRectBlt 　画像にフィルター処理を施す( 出力先画像、使用矩形指定版 )
+GraphBlend 　二つの画像を特殊効果付きでブレンドする
+GraphBlendBlt 　二つの画像を特殊効果付きでブレンドする( 出力先画像指定版 )
+GraphBlendRectBlt 　二つの画像を特殊効果付きでブレンドする( 出力先画像、使用矩形指定版 )
+
+
+文字描画関係関数
+
+DrawString 　文字列を描画する
+DrawFormatString 　書式付き文字列を描画する
+GetDrawStringWidth 　DrawString で描画される文字列の幅(ドット単位)を得る
+GetDrawFormatStringWidth 　DrawFormatString 関数書式付き文字列の描画幅(ドット単位)を得る
+SetFontSize 　描画する文字列のサイズをセットする
+SetFontThickness 　描画する文字列の文字の太さをセットする
+ChangeFont 　描画するフォントを変更する
+ChangeFontType 　文字列描画に使用するフォントのタイプを変更する
+
+CreateFontToHandle 　新しいフォントデータを作成
+DeleteFontToHandle 　フォントデータを削除する
+DrawStringToHandle 　指定のフォントデータで文字列を描画する
+DrawFormatStringToHandle 　指定のフォントデータで書式付き文字列を描画する
+GetDrawStringWidthToHandle 　指定のフォントデータで描画する文字列の幅を得る
+GetDrawFormatStringWidthToHandle 　指定のフォントデータで書式付き文字列の描画幅を得る
+GetFontStateToHandle 　指定のフォントデータの情報を得る
+InitFontToHandle 　フォントデータを全て初期化する
+
+
+簡易画面出力関数
+
+printfDx 　簡易文字列描画
+clsDx 　簡易画面出力履歴をクリアする
+
+
+その他画面操作系関数
+
+SetGraphMode 　画面モードの変更
+GetScreenState 　現在の画面の大きさとカラービット数を得る
+SetDrawArea 　描画可能領域のセット
+ClearDrawScreen 　画面に描かれたものを消去する
+GetColor 　色コードを取得する
+SetDrawScreen 　描画先グラフィック領域の指定
+ScreenFlip 　フリップ関数、画面の裏ページ(普段は表示されていない)の内容を表ページ(普段表示されている)に反映する
+SetFullSceneAntiAliasingMode 　画面のフルスクリーンアンチエイリアスモードの設定をする
+
+
+動画関係関数
+
+PlayMovie 　動画ファイルの再生
+PlayMovieToGraph 　ムービーグラフィックの動画の再生を開始する
+PauseMovieToGraph 　ムービーグラフィックの動画再生を一時停止する
+SeekMovieToGraph 　ムービーグラフィックの動画の再生位置を変更する
+TellMovieToGraph 　ムービーグラフィックの動画の再生位置を得る
+GetMovieStateToGraph 　ムービーグラフィックの動画の再生状態を得る
+
+
+マスク関係関数
+
+CreateMaskScreen 　マスク画面を作成する
+DeleteMaskScreen 　マスク画面を削除する
+LoadMask 　マスクデータを画像ファイル(BMP.JPEG.PNG)から構築する
+LoadDivMask 　マスクデータを画像ファイル(BMP.JPEG.PNG)から分割構築する
+DrawMask 　マスクデータをマスク画面に描画する
+DrawFillMask 　指定のマスク画面領域を指定のマスクデータをタイル上に並べて埋める
+DeleteMask 　マスクデータを削除
+InitMask 　マスクデータを初期化する
+FillMaskScreen 　マスク画面を指定の色で塗りつぶす
+SetUseMaskScreenFlag 　マスク画面の有効の有無を変更
+MakeMask 　空のマスクデータの作成
+GetMaskSize 　マスクデータの大きさを得る
+SetDataToMask 　マスクのデータをマスクデータ領域に転送する
+DrawMaskToDirectData 　マスクのデータをマスク画面に直接描画する
+DrawFillMaskToDirectData 　マスクのデータをタイル上に並べた形で直接マスク画面全体に描画する
+
+
+入力関係の関数
+
+　　ジョイパッド入力関連関数
+GetJoypadNum 　ジョイパッドが接続されている数を取得する
+GetJoypadInputState 　ジョイパッドの入力状態を得る
+GetJoypadAnalogInput 　ジョイパッドのアナログ的なレバー入力情報を得る
+SetJoypadInputToKeyInput 　ジョイパッドの入力に対応したキーボードの入力を設定する
+StartJoypadVibration 　ジョイパッドの振動を開始する
+StopJoypadVibration 　ジョイパッドの振動を停止する
+
+　　マウス入力関連関数
+SetMouseDispFlag 　マウスカーソルの表示設定フラグのセット
+GetMousePoint 　マウスカーソルの位置を取得する
+SetMousePoint 　マウスカーソルの位置をセットする
+GetMouseInput 　マウスカーソルのボタンの状態を得る
+GetMouseWheelRotVol 　マウスホイールの回転量を得る
+
+　　キーボード入力関連関数
+CheckHitKeyAll 　すべてのキーの押下状態を取得
+CheckHitKey 　特定キーの入力状態を得る
+GetHitKeyStateAll 　キーボードのすべてのキーの押下状態を取得する
+
+　　半角文字入力関連関数
+GetInputChar 　文字入力バッファに溜まった文字データから１文字取得する
+GetInputCharWait 　文字入力バッファに溜まった文字データから１文字取得する、バッファになにも文字コードがない場合はキーが押されるまで待つ
+ClearInputCharBuf 　文字入力バッファをクリアする
+
+　　日本語入力関連関数
+KeyInputString 　キーボードによる文字列の入力
+KeyInputSingleCharString 　キーボードによる半角文字列のみの入力
+KeyInputNumber 　キーボードによる数値の入力
+SetKeyInputStringColor 　KeyInputString系 関数使用時の文字の各色を変更する
+
+MakeKeyInput 　新しいキー入力データの作成
+DeleteKeyInput 　キー入力データの削除
+InitKeyInput 　すべてのキー入力データの削除
+SetActiveKeyInput 　指定のキー入力をアクティブにする
+CheckKeyInput 　入力が終了しているか取得する
+DrawKeyInputString 　キー入力中データの描画
+DrawKeyInputModeString 　入力モード文字列を描画する
+SetKeyInputString 　キー入力データに指定の文字列をセットする
+SetKeyInputNumber 　キー入力データに指定の数値を文字に置き換えてセットする
+GetKeyInputString 　入力データの文字列を取得する
+GetKeyInputNumber 　入力データの文字列を数値として取得する
+
+
+音利用関数
+
+PlaySoundFile 　音声ファイル(WAV.MP3.Ogg)を再生する
+CheckSoundFile 　音声ファイルが再生中か調べる
+StopSoundFile 　音声ファイルの再生を止める
+LoadSoundMem 　音声ファイル(WAV.MP3.Ogg)をメモリに読みこむ
+PlaySoundMem 　メモリに読みこんだ音声データを再生する
+CheckSoundMem 　メモリに読みこんだ音声データが再生中か調べる
+StopSoundMem 　メモリに読み込んだ音声データの再生を止める
+DeleteSoundMem 　メモリに読みこんだサウンドデータを削除する
+InitSoundMem 　メモリに読みこんだ音声データをすべて消去する
+SetPanSoundMem 　メモリに読みこんだ音声データの再生にパンを設定する
+ChangeVolumeSoundMem 　メモリに読みこんだ音声データの再生にボリュームを設定する
+SetFrequencySoundMem 　メモリに読み込んだ音声データの再生周波数を設定する
+SetLoopPosSoundMem 　メモリに読み込んだ音声データのループ位置を設定する
+SetLoopSamplePosSoundMem 　メモリに読み込んだ音声データのループ位置を設定する(サンプル位置指定)
+SetCurrentPositionSoundMem 　メモリに読み込んだ音声データの再生位置をサンプル単位で変更する
+DuplicateSoundMem 　既にメモリに読み込んである音声データを使用するサウンドハンドルを新たに作成する( 非ストリームサウンドのみ )
+
+
+音楽再生関数
+
+PlayMusic 　ＭＩＤＩ又はＭＰ３ファイルを演奏(再生)する
+CheckMusic 　ＭＩＤＩ又はＭＰ３ファイルが演奏(再生)中かの情報を取得する
+StopMusic 　ＭＩＤＩ又はＭＰ３ファイルの演奏(再生)停止
+SetVolumeMusic 　ＭＩＤＩ又はＭＰ３ファイルの演奏(再生)の音量を設定する
+
+
+ウエイト関係の関数
+
+WaitTimer 　指定の時間だけ処理をとめる
+WaitVSync 　ＣＲＴの垂直同期信号を指定回数待つ
+WaitKey 　キーの入力待ち
+
+
+時間関係の関数
+
+GetNowCount 　ミリ秒単位の精度を持つカウンタの現在値を得る
+GetNowHiPerformanceCount 　GetNowCountの高精度バージョン
+GetDateTime 　現在時刻を取得する
+
+
+乱数取得関数
+
+GetRand 　乱数を取得する
+SRand 　乱数の初期値を設定する
+
+
+ウインドウモード関係
+
+ChangeWindowMode 　ウインドウモード・フルスクリーンモードの変更を行う
+SetMainWindowText 　ウインドウのタイトルを変更する
+SetWindowIconID 　ウインドウのアイコンを変更する
+SetWindowSizeChangeEnableFlag 　ウインドウモードの時にウインドウのサイズを自由に変更出来るようにするかどうかを設定する
+SetWindowSizeExtendRate 　ウインドウモードの時のウインドウの大きさと描画画面の大きさの比率を設定する
+
+
+通信関係
+
+ConnectNetWork 　他のマシンに接続する
+CloseNetWork 　接続を終了する
+PreparationListenNetWork 　接続を受け付けられる状態にする
+StopListenNetWork 　接続を受け付けている状態を解除する
+NetWorkSend 　データを送信する
+GetNetWorkDataLength 　受信データ一時記憶バッファに溜まっているデータの量を得る
+GetNetWorkSendDataLength 　未送信のデータの量を得る
+NetWorkRecv 　受信データ一時記憶バッファに溜まっているデータを取得する
+NetWorkRecvToPeek 　受信したデータを読み込む、読み込んだデータはバッファから削除されない
+GetNewAcceptNetWork 　新たに確立した接続を示すネットワークハンドルを得る
+GetLostNetWork 　新たに破棄された接続を示すネットワークハンドルを得る
+GetNetWorkAcceptState 　接続状態を取得する
+GetNetWorkIP 　接続先のＩＰアドレスを得る
+
+MakeUDPSocket 　ＵＤＰを使用して通信するためのソケットを作成する
+
+DeleteUDPSocket 　ＵＤＰを使用して通信するためのソケットを削除する
+
+NetWorkSendUDP 　ＵＤＰを使用して他のマシンにデータを送信する
+
+NetWorkRecvUDP 　ＵＤＰを使用して他のマシンからのデータを受信する
+
+CheckNetWorkRecvUDP 　ＵＤＰを使用した他のマシンから受信データがあるかどうかを取得する
+
+
+
+ファイル読み込み関係
+
+FileRead_open 　ファイルを開く
+FileRead_size 　ファイルのサイズを得る
+FileRead_close 　ファイルを閉じる
+FileRead_tell 　ファイルポインタの位置を得る
+FileRead_seek 　ファイルポインタの位置を変更する
+FileRead_read 　ファイルからデータを読み込む
+FileRead_eof 　ファイルの終端かどうかを調べる
+FileRead_gets 　ファイルから一行読み出す
+FileRead_getc 　ファイルから一文字読み出す
+FileRead_scanf 　ファイルから書式付きデータを読み出す
+
+
+ドット単位で画像にアクセスしたい関係
+
+LoadSoftImage 　ＣＰＵで扱うイメージの読み込み
+LoadSoftImageToMem 　ＣＰＵで扱うイメージのメモリからの読み込み
+MakeARGB8ColorSoftImage 　ＣＰＵで扱うイメージの作成( RGBA8 カラー )
+MakeXRGB8ColorSoftImage 　ＣＰＵで扱うイメージの作成( XRGB8 カラー )
+MakePAL8ColorSoftImage 　ＣＰＵで扱うイメージの作成( パレット２５６色 カラー )
+DeleteSoftImage 　ＣＰＵで扱うイメージの解放
+InitSoftImage 　ＣＰＵで扱うイメージを全て解放
+GetSoftImageSize 　ＣＰＵで扱うイメージのサイズを取得する
+FillSoftImage 　ＣＰＵで扱うイメージを指定色で塗りつぶす(各色要素は０～２５５)
+SetPaletteSoftImage 　ＣＰＵで扱うイメージのパレットをセットする(各色要素は０～２５５)
+GetPaletteSoftImage 　ＣＰＵで扱うイメージのパレットを取得する(各色要素は０～２５５)
+DrawPixelPalCodeSoftImage 　ＣＰＵで扱うイメージの指定座標にドットを描画する(パレット画像用、有効値は０～２５５)
+GetPixelPalCodeSoftImage 　ＣＰＵで扱うイメージの指定座標の色コードを取得する(パレット画像用、戻り値は０～２５５)
+DrawPixelSoftImage 　ＣＰＵで扱うイメージの指定座標にドットを描画する(各色要素は０～２５５)
+GetPixelSoftImage 　ＣＰＵで扱うイメージの指定座標の色を取得する(各色要素は０～２５５)
+BltSoftImage 　ＣＰＵで扱うイメージを別のイメージ上に転送する
+DrawSoftImage 　ＣＰＵで扱うイメージを画面に描画する
+CreateGraphFromSoftImage 　ＣＰＵで扱うイメージからグラフィックハンドルを作成する
+CreateDivGraphFromSoftImage 　ＣＰＵで扱うイメージから分割グラフィックハンドルを作成する
+
+
+非同期読み込み関係
+
+SetUseASyncLoadFlag 　非同期読み込みを行うかどうかを設定する
+GetASyncLoadNum 　行っている非同期読み込みの数を取得する
+CheckHandleASyncLoad 　ハンドルが非同期読み込み中かどうかを取得する
+
+
+マイナー関数
+
+SetUse3DFlag 　３Ｄ機能を使うか、のフラグをセット
+GetUse3DFlag 　画面の描画に３Ｄアクセラレータを使っているか、の情報を得る
+SetWaitVSyncFlag 　ScreenFlip関数実行時にＣＲＴの垂直同期信号待ちをするかのフラグセット
+GetColorBitDepth 　画面の色ビット数を得る
+DrawVString 　文字列を縦に描画する
+DrawVStringToHandle 　フォントハンドルを使用して文字列を縦に描画する
+SetGraphDataShavedMode 　グラフィック減色時の画像劣化緩和処理モードの変更
+SaveDrawScreen 　現在描画対象になっている画面をＢＭＰ形式で保存する
+LoadPauseGraph 　フォーカスが他のソフトに移っているときにバックグラウンドに表示するグラフィックのロード、登録(NULL で解除)
+SetOutApplicationLogValidFlag 　ログ出力を行うか否かのセット
+SetBasicBlendFlag 　３Ｄアクセラレータを使わない半透明描画処理を高速な簡略化された処理を使用するか否かを変更する
+SetScreenMemToVramFlag 　画面の画像データをＶＲＡＭに配置するかどうかを変更する
+ScreenCopy 　画面コピー関数、画面の裏ページ（普段は表示されていない）を表ページ（普段表示されている）にコピーする
+EnumFontName 　使用可能なフォントの名前を列挙する
+SelectMidiMode 　ＭＩＤＩの演奏形態をセットする
+SetAlwaysRunFlag 　ウインドウがアクティブではない状態でも処理を続行するか、フラグをセットする
+SetUseDivGraphFlag 　必要ならグラフィックの分割を行うか否かを設定する
+SetCreateSoundDataType 　作成する音声データの再生形式を設定する
+CreateGraphFromMem 　メモリ上の画像ファイルイメージからグラフィックハンドルを作成する
+ReCreateGraphFromMem 　メモリ上の画像ファイルイメージから既存のグラフィックハンドルにデータを転送する
+ReloadFileGraphAll 　画像ファイルから作成したグラフィックハンドルに再度画像ファイルから画像を読み込む
+SetRestoreGraphCallback 　グラフィックハンドル復元関数を登録する
+LoadSoundMemByMemImage 　メモリ上の音声ファイルイメージからサウンドハンドルを作成する
+SetMaskReverseEffectFlag 　マスクの数値に対する効果を逆転させるかどうかを設定する
+SetUseDXArchiveFlag 　ＤＸアーカイブファイルの読み込み機能を使うかどうかを設定する
+SetDXArchiveExtension 　検索するＤＸアーカイブファイルの拡張子を変更する
+SetDXArchiveKeyString 　ＤＸアーカイブファイルの鍵文字列を設定する
+SetEmulation320x240 　６４０ｘ４８０の画面で３２０ｘ２４０の画面解像度にするかどうかのフラグをセットする、６４０ｘ４８０以外の解像度では無効
+
+
+
+-------------------------------------------------------------------------------
+使用必須関数
+
+宣言 int DxLib_Init( void ) ;
+
+概略 ライブラリの初期化
+
+引数 なし
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　ＤＸライブラリを使用可能な状態に初期化します。
+ＤＸライブラリを使用するソフトウェアはまずこの 関数を呼び出す必要があります。
+　この関数を使ってもし-1（エラー）が返ってきた場合は直ちに ソフトを終了しなければなりません。
+
+サンプル
+
+　　初期化して終了するだけのプログラムです。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+						 LPSTR lpCmdLine, int nCmdShow )
+{
+	if( DxLib_Init() == -1 )	// ＤＸライブラリ初期化処理
+	{
+		 return -1;	// エラーが起きたら直ちに終了
+	}
+
+	DxLib_End() ;		// ＤＸライブラリ使用の終了処理
+
+	return 0 ;		// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+宣言 int DxLib_End( void ) ;
+
+概略 ライブラリ使用の終了関数
+
+引数 なし
+戻り値 　０：成功
+　 －１：エラー発生
+
+解説  　ＤＸライブラリの使用を終了する関数です。
+ＤＸライブラリを使用しているソフトはすべてソフトを 終了させる前にこの関数を呼ぶ必要があります。
+　同時に、ＤＸライブラリはソフトのウインドウの制御も しているので、この関数を呼び出した後はなるべくすぐにプログラムを 終了させなければなりません。
+
+サンプル
+
+　すぐ上のDxLib_Init関数のサンプルを参照してください
+
+
+
+宣言 int ProcessMessage( void ) ;
+
+概略 ウインドウのメッセージを処理する
+
+引数 なし
+戻り値 　０：成功
+　 －１：エラー発生・若しくはウインドウが閉じられた
+
+解説  　この関数はWindows環境でのソフトプログラムに付きまとう メッセージループ処理を肩代わりしてくれる関数です。
+　この関数がなにをしているのか、というのは特に気にする 必要はありませんが、とにかく定期的にこの関数を呼び出して やる必要があります。
+　目安としては６０分の１秒に一回程度、用はゲームのループに 一回程度です。この関数を呼び出さないと結果としてシステムが 異常に重くなったり不安定になったりします。
+　あと、戻り値が-1( エラー発生・若しくはＤＸライブラリのウインドウが閉じられた )になったらなるべく早めにDxLib_Endでライブラリ使用を終了し、同時にプログラムも終了する必要があります。( そうしないとウインドウを閉じてもプロセスが残るという事態になります )
+
+サンプル
+
+　キーが押されるまで待つループの中にProcessMessageを入れています。
+-------------------------------------------------------------------------------
+
+
+#include "DxLib.h"
+
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+						 LPSTR lpCmdLine, int nCmdShow )
+{
+	// ＤＸライブラリ初期化処理
+	if( DxLib_Init() == -1 )
+	{
+		 return -1;		// エラーが起きたら直ちに終了
+	}
+
+	// キーが押されるまでループします
+	// (因みにキーが押されるまで待つ事は『WaitKey』という
+	//  専用の関数があります)
+	while( CheckHitKeyAll() == 0 )
+	{
+		// メッセージループに代わる処理をする
+		if( ProcessMessage() == -1 )
+		{
+			break ;		// エラーが起きたらループを抜ける
+
+		}
+	}
+
+	// ＤＸライブラリ使用の終了処理
+	DxLib_End() ;
+
+	return 0 ;			// ソフトの終了
+}
+
+-------------------------------------------------------------------------------
+
+
+
+
+
+-------------------------------------------------------------------------------
+戻る

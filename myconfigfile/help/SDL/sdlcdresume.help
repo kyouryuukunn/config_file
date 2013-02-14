@@ -1,0 +1,33 @@
+TITLE : SDL_CDResume
+
+SDL Library Documentation
+PrevNext
+
+SDL_CDResume
+
+Name
+
+SDL_CDResume --  CD-ROM の再生を再開します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_CDResume(SDL_CD *cdrom);
+
+Description
+
+
+指定された cdrom の再生を再開します。
+
+Return Value
+
+
+成功した時は 0 を返し、 エラーの時は -1 を返します。
+
+See Also
+
+SDL_CDPlay, SDL_CDPause
+
+PrevHomeNext
+SDL_CDPauseUpSDL_CDStop

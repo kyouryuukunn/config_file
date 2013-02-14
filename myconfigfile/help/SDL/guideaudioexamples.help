@@ -1,0 +1,18 @@
+TITLE : Audio Examples
+
+SDL Library Documentation
+PrevChapter 4. ExamplesNext
+Audio Examples
+
+オーディオデバイスを開く
+
+
+ SDL_AudioSpec wanted; extern void fill_audio(void *udata, Uint8 *stream, int len); /* オーディオフォーマットを設定する */ wanted.freq = 22050; wanted.format = AUDIO_S16; wanted.channels = 2; /* 1 = モノラル, 2 = ステレオ */ wanted.samples = 1024; /* 遅延も少なく推奨の値です */ wanted.callback = fill_audio; wanted.userdata = NULL; /* 指定したフォーマットを強制してデバイスを開きます */ if ( SDL_OpenAudio(&wanted, NULL) < 0 ) { fprintf(stderr, "オーディオデバイスを開くことができませんでした: %s\n", SDL_GetError()); return(-1); } return(0);
+
+オーディオを演奏する
+
+
+ static Uint8 *audio_chunk; static Uint32 audio_len; static Uint8 *audio_pos; /* コールバック関数は以下の2つの引数をとります: stream: オーディオデータを格納するバッファへのポインタ len: オーディオバッファの大きさ(バイト単位) */ void fill_audio(void *udata, Uint8 *stream, int len) { /* 演奏したいデータが残っているときだけ演奏する */ if ( audio_len == 0 ) return; /* 詰められるデータをミックスする */ len = ( len > audio_len ? audio_len : len ); SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME); audio_pos += len; audio_len -= len; } /* オーディオデータを読み込む処理 ... */ ;;;;; audio_pos = audio_chunk; /* コールバック関数に演奏開始を指示する */ SDL_PauseAudio(0); /* 何らかの処理 */ ;;;;; /* 演奏終了を待つ */ while ( audio_len > 0 ) { SDL_Delay(100); /* 1/10 秒だけ待つ */ } SDL_CloseAudio();
+
+PrevHomeNext
+Event ExamplesUpCDROM Examples

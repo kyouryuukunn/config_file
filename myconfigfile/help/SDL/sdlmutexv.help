@@ -1,0 +1,31 @@
+TITLE : SDL_mutexV
+
+SDL Library Documentation
+PrevNext
+
+SDL_mutexV
+
+Name
+
+SDL_mutexV -- mutexのロックを解除します。
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+int SDL_mutexV(SDL_mutex *mutex);
+
+Description
+
+
+SDL_CreateMutexで作成されたmutexのロックを解除します。 成功すると0、エラーが起きると-1を返します。
+
+
+SDLは#define SDL_UnlockMutex(m) SDL_mutexV(m)というマクロを定義しています。
+
+See Also
+
+SDL_CreateMutex, SDL_mutexP
+
+PrevHomeNext
+SDL_mutexPUpSDL_CreateSemaphore

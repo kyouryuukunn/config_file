@@ -1,0 +1,9 @@
+= index
+base 0
+layer0 1000
+layer1 2000
+message0 1000000
+message1 1001000
+history  2000000
+[2012-11-08 20:57]
+

@@ -1,0 +1,39 @@
+TITLE : SDL_DisplayFormat
+
+SDL Library Documentation
+PrevNext
+
+SDL_DisplayFormat
+
+Name
+
+SDL_DisplayFormat --  サーフェスを表示フォーマットに変換します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_Surface *SDL_DisplayFormat(SDL_Surface *surface);
+
+Description
+
+
+この関数はサーフェスを引数に取り、 表示サーフェス上への高速 blit に適するように、 ビデオフレームバッファのピクセルフォーマットと色の 新しいサーフェスにコピーします。 その際 SDL_ConvertSurface を 呼び出します。
+
+
+ハードウェアによるカラーキーやαの blit 転送のアクセラレーション の利点を得たい場合は、 この関数を呼ぶ前にカラーキーとα値をセットしておくべきです。
+
+
+αチャンネルが欲しいならば SDL_DisplayFormatAlpha を 見て下さい。
+
+Return Value
+
+
+変換に失敗するか、メモリを使い切った時は NULL を返します。
+
+See Also
+
+SDL_ConvertSurface, SDL_DisplayFormatAlpha SDL_SetAlpha, SDL_SetColorKey, SDL_Surface
+
+PrevHomeNext
+SDL_FillRectUpSDL_DisplayFormatAlpha

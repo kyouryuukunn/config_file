@@ -1,0 +1,28 @@
+TITLE : SDL_SetCursor
+
+SDL Library Documentation
+PrevNext
+
+SDL_SetCursor
+
+Name
+
+SDL_SetCursor --  現在アクティブなマウスカーソルを設定します。
+
+Synopsis
+
+#include "SDL.h"
+
+void *SDL_SetCursor(SDL_Cursor *cursor);
+
+Description
+
+
+現在アクティブなカーソルを指定されたものに設定します。 カーソルが現在見える状態にあるときは、この変更はすぐに表示に反映されます。
+
+See Also
+
+SDL_GetCursor, SDL_CreateCursor, SDL_ShowCursor
+
+PrevHomeNext
+SDL_FreeCursorUpSDL_GetCursor

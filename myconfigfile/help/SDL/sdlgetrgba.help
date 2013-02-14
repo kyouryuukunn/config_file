@@ -1,0 +1,34 @@
+TITLE : SDL_GetRGBA
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetRGBA
+
+Name
+
+SDL_GetRGBA --  指定されたピクセルフォーマット内のピクセルから RGBA 値を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_GetRGBA(Uint32 pixel, SDL_PixelFormat *fmt, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a);
+
+Description
+
+
+指定されたピクセルフォーマットに格納されたピクセルから RGBA 各チャンネルの値を取得します。
+
+
+この関数は RGB 各チャンネルが 8 ビット未満のピクセルフォーマットから 色チャンネルを変換する際にも 8 ビット全体 [0～255] の範囲を使います。 (例えば、16 ビット RGB565 フォーマットにおける完全な白色は [0xf8, 0xfc, 0xf8] ではなく [0xff, 0xff, 0xff] を返します)
+
+
+サーフェスにαチャンネルがない場合は、αには 0xff (100% 不透明) が返されます。
+
+See Also
+
+SDL_GetRGB, SDL_MapRGB, SDL_MapRGBA, SDL_PixelFormat
+
+PrevHomeNext
+SDL_GetRGBUpSDL_CreateRGBSurface

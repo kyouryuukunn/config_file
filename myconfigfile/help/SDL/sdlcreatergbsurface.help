@@ -1,0 +1,53 @@
+TITLE : SDL_CreateRGBSurface
+
+SDL Library Documentation
+PrevNext
+
+SDL_CreateRGBSurface
+
+Name
+
+SDL_CreateRGBSurface --  空の SDL_Surface を生成します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_Surface *SDL_CreateRGBSurface(Uint32 flags, int width, int height, int depth, Uint32 Rmask, Uint32 Gmask, Uint32 Bmask, Uint32 Amask);
+
+Description
+
+
+空のサーフェスを確保します。 (SDL_SetVideoMode の後で呼ばれなければいけません)
+
+
+depth が 8 ビットの場合は、 サーフェスに空のパレットが確保されます。 そうでない場合は、 与えられた[RGBA]mask を使って 「パッキングされたピクセル」 SDL_PixelFormat が作られます。 (SDL_PixelFormat を見て下さい) flags は作られるサーフェスのタイプを指定し、 以下の取りうる値の OR による組み合わせとなります。
+
+SDL_SWSURFACE
+SDL はシステムメモリからサーフェスを作ります。 ピクセルレベルのアクセスのパフォーマンスを向上されますが、 いくつかのハードウェアによる blit 転送の 利点を得ることができなくなるかも知れません。
+SDL_HWSURFACE
+SDL はビデオメモリからサーフェスを作ろうとします。 これにより SDL はビデオメモリ同士の bilt 転送 (しばしばアクセラレーションが利きます) の利点を得ることができます。
+SDL_SRCCOLORKEY
+このフラグはサーフェスを blit する際にカラーキーを有効にします。 SDL_HWSURFACE も指定されており、 カラーキー付きの blit 転送もハードウェアによるアクセラレーションが利く場合は、 SDL はサーフェスをビデオメモリに作ろうとします。 サーフェスを作った後にこのフラグをセット・リセットしたい場合は SDL_SetColorKey を使って下さい。
+SDL_SRCALPHA
+このフラグはサーフェスからの blit 転送におけるαブレンディングを有効にします。 SDL_HWSURFACE も指定され、 αブレンディング blit 転送がハードウェアによるアクセラレーションが利く場合は サーフェスはなるだけビデオメモリに置かれます。 サーフェスを作った後にこのフラグをセット・リセットしたい場合は SDL_SetAlpha を使って下さい。
+
+Note: αチャンネルが指定されている (つまり Amask が 0 でない) 場合は、 SDL_SRCALPHA フラグは自動的にセットされます。 サーフェスを作った後は、 SDL_SetAlpha を 呼ぶことでこのフラグを取り除くことができます。
+
+Return Value
+
+
+作られたサーフェスか、エラーの場合は NULL を返します。
+
+Example
+
+
+ /* テクスチャ用として OpenGL に要求される、 個々のピクセルのバイトが RGBA の順番で並んだ 32 ビットのサーフェスを生成 */ SDL_Surface *surface; Uint32 rmask, gmask, bmask, amask; /* SDL は 個々のピクセルを 32 ビットの数値として解釈するので、 マスクは各マシンのエンディアン(バイトの並び)に依存しなければいけません */ #if SDL_BYTEORDER == SDL_BIG_ENDIAN rmask = 0xff000000; gmask = 0x00ff0000; bmask = 0x0000ff00; amask = 0x000000ff; #else rmask = 0x000000ff; gmask = 0x0000ff00; bmask = 0x00ff0000; amask = 0xff000000; #endif surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, rmask, gmask, bmask, amask); if(surface == NULL) { fprintf(stderr, "CreateRGBSurface に失敗しました: %s\n", SDL_GetError()); exit(1); }
+
+
+See Also
+
+SDL_CreateRGBSurfaceFrom, SDL_FreeSurface, SDL_SetVideoMode, SDL_LockSurface, SDL_PixelFormat, SDL_Surface SDL_SetAlpha SDL_SetColorKey
+
+PrevHomeNext
+SDL_GetRGBAUpSDL_CreateRGBSurfaceFrom

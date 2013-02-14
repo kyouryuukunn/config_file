@@ -1,0 +1,37 @@
+TITLE : SDL_SemValue
+
+SDL Library Documentation
+PrevNext
+
+SDL_SemValue
+
+Name
+
+SDL_SemValue -- セマフォの現在の値を返します。
+
+Synopsis
+
+#include "SDL.h" #include "SDL/SDL_thread.h"
+
+Uint32 SDL_SemValue(SDL_sem *sem);
+
+Description
+
+
+SDL_SemValue()は、semで示された セマフォの現在の値を返します。
+
+Return Value
+
+
+セマフォの現在の値を返します。
+
+Examples
+
+sem_value = SDL_SemValue(my_sem);
+
+See Also
+
+SDL_CreateSemaphore, SDL_DestroySemaphore, SDL_SemWait, SDL_SemTryWait, SDL_SemWaitTimeout, SDL_SemPost
+
+PrevHomeNext
+SDL_SemPostUpSDL_CreateCond

@@ -1,0 +1,28 @@
+TITLE :         BohYoh.com【Ｃ言語講座】標準ライブラリ memcpy    
+
+　memcpy
+Ｃ言語 標準ライブラリ   アルファベット順索引   ヘッダ別索引   ホームページへ　Ｃ言語講座のページ
+
+文字列複写関数
+memcpy
+ヘッダ  #include <string.h>
+形　式  void *memcpy(void *s1, const void *s2, size_t n);
+機　能  s2が指すオブジェクトからn文字を、s1が指すオブジェクトにコピーする。コピー元とコピー先が重なる場合の動作は未定義とする。
+返却値  s1の値を返す。
+
+■実装例■
+
+void *memcpy(void *s1, const void *s2, size_t n)
+{
+    char        *p1 = (char *)s1;
+    const char  *p2 = (const char *)s2;
+
+    while (n-- > 0) {
+        *p1 = *p2;
+        p1++;
+        p2++;
+    }
+    return (s1);
+}
+
+-------------------------------------------------------------------------------

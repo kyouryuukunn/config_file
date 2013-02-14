@@ -1,0 +1,170 @@
+TITLE : C言語関数辞典 - islower
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ ctype.h ≫ islower
+
+islower
+
+文字がアルファベットの小文字かどうかをチェックします．
+
+
+#include <ctype.h>
+
+
+
+int islower(
+    int c /* int 型の文字 */
+);
+
+
+islower 関数は，指定した文字 c がアルファベットの小文字 ('a' - 'z') なら真を返します．
+
+islower 関数はその時点のロケール (locale) の影響を受けます．ロケールがデフォルトの設定 ("C"ロケール) でない場合は，上記以外の文字も真となる可能性があります．
+
+戻り値
+
+  * c がアルファベットの小文字であるとき: 真 (0 以外)
+  * c がアルファベットの小文字以外であるとき: 偽 (0)
+
+C言語サンプルプログラム
+
+islower 関数を使用して文字がアルファベットの小文字かどうかをチェックするサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+/* main */
+int main(void) {
+
+    /* zを判定 */
+    if ( islower('z') ) {
+        puts("アルファベットの小文字です．");
+    } else {
+        puts("アルファベットの小文字ではありません．");
+    }
+
+    /* Aを判定 */
+    if ( islower('A') ) {
+        puts("アルファベットの小文字です．");
+    } else {
+        puts("アルファベットの小文字ではありません．");
+    }
+
+    /* 9を判定 */
+    if ( islower('?') ) {
+        puts("アルファベットの小文字です．");
+    } else {
+        puts("アルファベットの小文字ではありません．");
+    }
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+アルファベットの小文字です．
+アルファベットの小文字ではありません．
+アルファベットの小文字ではありません．
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

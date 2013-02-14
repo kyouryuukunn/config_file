@@ -1,0 +1,168 @@
+TITLE : C言語関数辞典 - getchar
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ getchar
+
+getchar
+
+標準入力 (standard input) から 1 文字単位で文字を読み取ります．
+
+
+#include <stdio.h>
+
+
+
+int getchar(void);
+
+
+getchar 関数は標準入力から 1 文字分文字を読み取ります．(文字は unsigned char 型として取り込まれ，int 型に変換されて戻り値になります．)
+
+getchar は実引数として stdin を指定した getc と同じです．なお，getchar はマクロとして実装してもよいことになっています．
+
+戻り値
+
+  * 文字を読み取った時: 読み取った文字
+  * ファイルの終端を読み取った時: EOF (ファイル終了表示子 (end-of-file indicator) をセットします)
+  * 読み取り失敗時: EOF (エラー表示子 (error indicator) をセットします)
+
+C言語サンプルプログラム
+
+getchar 関数を使用して標準入力から文字を取得するサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+
+/* macros */
+#define N 256
+
+/* main */
+int main(void) {
+    int i;
+    int ch;
+    char read_str[N] = {'\0'};
+
+    i = 0;
+    /* 中断されるまで文字を読み取る */
+    while (( ch = getchar()) != EOF ) {
+        read_str[i++] = ch;
+        if ( i >= N - 1 ){
+            break;
+        }
+    }
+
+    printf("%s\n", read_str);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+キーボードから以下のように入力したとします．
+
+
+I don't want to march as much as possible.
+(ctrl + d)   ※ Windows の場合は(ctrl + z)
+
+ディスプレイには以下のように表示されます．
+
+
+I don't want to march as much as possible.
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

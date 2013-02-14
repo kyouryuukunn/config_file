@@ -1,0 +1,45 @@
+TITLE : SDL_CDStatus
+
+SDL Library Documentation
+PrevNext
+
+SDL_CDStatus
+
+Name
+
+SDL_CDStatus --  指定されたドライブの現在の状態を返します。
+
+Synopsis
+
+#include "SDL.h"
+
+CDstatus SDL_CDStatus(SDL_CD *cdrom);
+
+
+/* status を引数に取り ドライブにディスクがあるなら true を返す */ #define CD_INDRIVE(status) ((int)status > 0)
+
+Description
+
+
+この関数は指定されたドライブの現在の状態を返します。 状態は次のように表わされます: typedef enum { CD_TRAYEMPTY, CD_STOPPED, CD_PLAYING, CD_PAUSED, CD_ERROR = -1 } CDstatus;
+
+
+ドライブに CD が入っていると、 CD の内容一覧 と CD の現在の再生位置が SDL_CD 構造体に格納されます。
+
+
+CD_INDRIVE マクロは便宜のため提供されています。 status を引数に取り、ドライブにディスクがあるなら true を返します。
+
+Note: また、SDL_CDStatus は 渡された SDL_CD 構造体を 更新します。
+
+Example
+
+
+int playTrack(int track) { int playing = 0; if ( CD_INDRIVE(SDL_CDStatus(cdrom)) ) { /* 実際の CD のトラック数で切り捨て */ if (track >= cdrom->numtracks) { track = cdrom->numtracks-1; } if ( SDL_CDPlayTracks(cdrom, track, 0, 1, 0) == 0 ) { playing = 1; } } return playing; }
+
+
+See Also
+
+SDL_CD
+
+PrevHomeNext
+SDL_CDOpenUpSDL_CDPlay

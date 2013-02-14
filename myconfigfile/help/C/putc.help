@@ -1,0 +1,170 @@
+TITLE : C言語関数辞典 - putc
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ putc
+
+putc
+
+ストリーム (stream) に指定した文字を書き込みます．
+
+
+#include <stdio.h>
+
+
+
+int putc(
+    int c,
+    FILE *stream
+);
+
+
+putc 関数は基本的には fputc と同じで，stream が指すストリームに c で指定された文字を書き込みます．(文字は unsigned char 型に変換されて書き込まれます．)
+
+ただし，putc は fputc とは違い，マクロとして実装してもよいことになっています．getc がマクロとして実装されている場合は streamを 2 回以上評価することがあります．したがって，stream に副作用 (side effect) を伴う式は使えません．
+
+引数
+
+  * c: 書き込みたい文字
+  * stream: ストリーム
+
+戻り値
+
+  * 書き込み成功時: 書き込んだ文字
+  * 書き込み失敗時: EOF (エラー表示子 (error indicator) をセットします)
+
+C言語サンプルプログラム
+
+以下に putc 関数を使用してファイルに文字を書き込むサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+
+/* main */
+int main(void) {
+    int i;
+    FILE *fp;
+    char *filename = "sample.txt";
+    char writeline[] = "ABCDEFG12345あいうえお";
+
+    /* ファイルのオープン */
+    if ((fp = fopen(filename, "w")) == NULL) {
+        fprintf(stderr, "%sのオープンに失敗しました。\n", filename);
+        return EXIT_FAILURE;
+    }
+
+    /* ファイルの終端まで文字を書き込む */
+    for ( i = 0; i < sizeof(writeline) - 1; i++ ) {
+        putc(writeline[i], fp);
+    }
+
+    /* ファイルのクローズ */
+    fclose(fp);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムを実行すると sample.txt に以下が書き込まれます．
+
+
+ABCDEFG12345あいうえお
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

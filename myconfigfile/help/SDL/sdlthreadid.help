@@ -1,0 +1,24 @@
+TITLE : SDL_ThreadID
+
+SDL Library Documentation
+PrevNext
+
+SDL_ThreadID
+
+Name
+
+SDL_ThreadID -- 32ビットで表現された現在のスレッド識別子を得ます。
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+Uint32 SDL_ThreadID(void);
+
+Description
+
+
+現在のスレッドの32ビットの識別子を得ます。
+
+PrevHomeNext
+SDL_CreateThreadUpSDL_GetThreadID

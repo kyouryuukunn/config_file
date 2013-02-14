@@ -1,0 +1,170 @@
+TITLE : C言語関数辞典 - wcstombs
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdlib.h ≫ wcstombs
+
+wcstombs
+
+ワイド文字列 (wide string) を多バイト文字列 (multibyte string) に変換します．
+
+
+#include <stdlib.h>
+
+
+
+size_t wcstombs(
+    char * restrict s,
+    const wchar_t * restrict pwcs,
+    size_t n
+);
+
+
+wcstombs 関数は pwcs が指すワイド文字列を対応する多バイト文字列に変換し，n バイト以下の多バイト文字列を s が指す配列に格納します．ナル文字 ('\0') が格納されたとき，配列への格納を終了します．領域の重なり合うオブジェクト間でコピーが行われるときの動作は未定義です．
+
+wcstombs 関数の動作はその時点のロケール (locale) の LC_CTYPE カテゴリの影響を受けます．
+
+引数
+
+  * s: 多バイト文字列を格納する場所
+  * pwcs: 変換するワイド文字列
+  * n: 変換する文字列の文字数
+
+戻り値
+
+  * 変換に成功したとき: 変換したバイト数 (終端のナルワイド文字は除く)
+  * 多バイト文字に対応しないワイド文字が含まれていたとき: (size_t)(-1)
+
+C言語サンプルプログラム
+
+wcstombs 関数を使用してワイド文字列を多バイト文字列に変換するサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+
+/* main */
+int main(void) {
+    wchar_t pwcs[] = L"ABCDEFG";
+    char s[256] = {'\0'};
+    int result;
+
+    /* ロケールを変更 */
+    setlocale(LC_CTYPE, "JPN");
+
+    result = wcstombs(s, pwcs, 256);
+    if ( result > 0 ) {
+        printf("s: %s\n", s);
+
+    } else {
+        printf("多バイト文字に対応しないワイド文字が含まれています.\n");
+
+    }
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+s: ABCDEFG
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

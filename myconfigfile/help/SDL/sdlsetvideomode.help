@@ -1,0 +1,67 @@
+TITLE : SDL_SetVideoMode
+
+SDL Library Documentation
+PrevNext
+
+SDL_SetVideoMode
+
+Name
+
+SDL_SetVideoMode --  指定された横幅・高さ・ピクセル深度を用いてビデオモードを設定します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags);
+
+Description
+
+
+指定された幅・高さ・ピクセル深度(1ピクセルのビット数)を用いてビデオモードを設定します。
+
+
+bpp が 0 ならば、 現在表示されているピクセル深度として扱われます。
+
+
+flags パラメータは SDL_Surface 構造体の flags フィールドを同じです。 以下の値の OR による組み合わせが有効です。
+
+
+SDL_SWSURFACE
+システムメモリからビデオサーフェスを作成します。
+SDL_HWSURFACE
+ビデオメモリからビデオサーフェスを作成します。
+SDL_ASYNCBLIT
+表示サーフェスの非同期更新の使用を有効にします。 これは通常、単一 CPU における blit 転送は遅くなりますが、 SMP システムにおいてスピードの向上をもたらすかも知れません。
+SDL_ANYFORMAT
+普通は、もし要求されたピクセル深度のビデオサーフェス (bpp) が使えない場合は、 SDL はシャドウサーフェスでこれをエミュレートします。 SDL_ANYFORMAT はこれを禁止し、 SDL はピクセル深度とは無関係にビデオサーフェスを使うことになります。
+SDL_HWPALETTE
+SDL がパレットに対する排他的なアクセスをできるようにします。 このフラグがないと、 SDL_SetColors や or SDL_SetPalette を用いて要求した色が、常に取得できるとは限りません。
+SDL_DOUBLEBUF
+ハードウェアによるダブルバッファを有効にします。 (SDL_HWSURFACE と一緒の時のみ) SDL_Flip の呼び出し によってバッファを切り替え、画面を更新します。 全ての描画は、その瞬間に表示されていない方のサーフェスに行われます。 ダブルバッファを有効にできなかった場合は、 SDL_Flip は 画面全体に対し単に SDL_UpdateRect を行います。
+SDL_FULLSCREEN
+SDL はフルスクリーンモードの使用を試みます。 どういう理由であれ、ハードウェアによる解像度変更ができない場合は 一段階解像度の高いモードが使われ、黒い背景の中央に表示ウインドウが置かれます。
+SDL_OPENGL
+OpenGL の描画コンテキストを作成します。 前もって SDL_GL_SetAttribute によって OpenGL のビデオ属性を設定しておく必要があります。
+SDL_OPENGLBLIT
+上と同様に OpenGL の描画コンテキストを作成しますが、 通常の blit 転送を可能にします。 画面(2D)のサーフェスはαチャンネルを持つことが可能で、 画面のサーフェスへの変更を更新するために、 SDL_UpdateRects を使わなければいけません。注意: このオプションは互換性のためにのみ 残されており、新しいコードでこの機能を使うことは推奨されていません。
+SDL_RESIZABLE
+リサイズ可能なウィンドウを作成します。 ユーザーの手でウィンドウがリサイズされた場合は、 SDL_VIDEORESIZE イベントが発生し、新しいサイズで SDL_SetVideoModeが 再度呼ばれることがあります。
+SDL_NOFRAME
+もし可能であれば、SDL_NOFRAME は SDL がタイトルバーなし、あるいはフレームによる装飾なしの ウィンドウが生成することになります。 フルスクリーンモードは自動的にこのフラグを設定します。
+
+Note: SDL_SetVideoMode が どの flags を満たすことができたかは、 返り値のサーフェスの flags メンバに セットされています。
+
+Note: bpp パラメータはピクセルごとのビット数です。 そのため、bpp が 24 の場合は 3 バイト/ピクセルの パッキングされた表現方法が使われます。 より一般的な 4 バイト/ピクセルのモードについては、 bpp が 32 の場合に使われます。 幾分奇妙ですが、15 と 16 の場合はいずれも 2 バイト/ピクセルのモードを 要求しますが、異なるピクセルフォーマットです。
+
+Return Value
+
+
+フレームバッファのサーフェスか、失敗した場合は NULL を返します。 ここで返されたサーフェスは SDL_Quit() で解放されるので、 呼び出し側が解放してはいけません。
+
+See Also
+
+SDL_LockSurface, SDL_SetColors, SDL_Flip, SDL_Surface
+
+PrevHomeNext
+SDL_VideoModeOKUpSDL_UpdateRect

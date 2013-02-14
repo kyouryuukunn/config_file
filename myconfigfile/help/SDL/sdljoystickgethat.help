@@ -1,0 +1,43 @@
+TITLE : SDL_JoystickGetHat
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickGetHat
+
+Name
+
+SDL_JoystickGetHat --  ジョイスティックのハットスイッチの現在の状態を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+Uint8 SDL_JoystickGetHat(SDL_Joystick *joystick, int hat);
+
+Description
+
+
+SDL_JoystickGetHat は 指定された joystick における、 指定された hat の 現在の状態を返します。
+
+Return Value
+
+
+現在の状態は、 以下に挙げる値の 1 つまたは複数の OR による組み合わせとして 定義される Uint8 の値として返されます。
+
+SDL_HAT_CENTERED
+SDL_HAT_UP
+SDL_HAT_RIGHT
+SDL_HAT_DOWN
+SDL_HAT_LEFT
+SDL_HAT_RIGHTUP
+SDL_HAT_RIGHTDOWN
+SDL_HAT_LEFTUP
+SDL_HAT_LEFTDOWN
+
+See Also
+
+SDL_JoystickNumHats
+
+PrevHomeNext
+SDL_JoystickGetAxisUpSDL_JoystickGetButton

@@ -1,0 +1,132 @@
+TITLE : C言語関数辞典 - ftell
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ ftell
+
+ftell
+
+ファイル位置表示子 (file position indicator) の値を取得します．
+
+
+#include <stdio.h>
+
+
+
+long ftell(
+    FILE *stream
+);
+
+
+ftell 関数は stream が指すストリーム (stream) の現在のファイル位置表示子の値を取得します．
+バイナリストリームの場合は，その値はファイルの始めからの文字数になります．
+テキストストリームの場合は，ftell 関数の呼出し時の位置にファイル位置表示子を戻すために，fseek 関数で使用できる情報を含みます．
+
+引数
+
+  * stream: ストリーム
+
+戻り値
+
+  * 成功時: 現在のファイル位置表示子の値
+  * 失敗時: -1L (処理系定義の正の値を errno に格納)
+
+C言語サンプルプログラム
+
+fseek 関数のサンプルプログラムをご覧下さい．
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,190 @@
+TITLE : C言語関数辞典 - ccos, ccosf, ccosl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ complex.h ≫ ccos, ccosf, ccosl
+
+The ccos functions (C99) - ccos, ccosf, ccosl
+
+複素数の余弦 (cos) を計算します．
+
+ccos (C99)
+
+
+#include <complex.h>
+
+
+
+double complex ccos(
+    double complex z
+);
+
+
+ccos 関数は，z の複素数余弦を計算し，結果を double complex 型で返します．
+
+ccosf (C99)
+
+
+#include <complex.h>
+
+
+
+float complex ccosf(
+    float complex z
+);
+
+
+ccosf 関数は，z の複素数余弦を計算し，結果を float complex 型で返します．
+
+ccosl (C99)
+
+
+#include <complex.h>
+
+
+
+long double complex ccosl(
+    long double complex z
+);
+
+
+ccosl 関数は，z の複素数余弦を計算し，結果を long double complex 型で返します．
+
+戻り値
+
+  * 複素数余弦値
+
+C言語サンプルプログラム
+
+以下に ccos 関数を使用して複素数余弦を求めるサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <complex.h>
+
+/* main */
+int main(void) {
+    double complex z = 3.0 + 2.0 * I;
+    double complex ccos_z01, ccos_z02;
+    double re = creal(z);
+    double im = cimag(z);
+
+    /* 複素数余弦を求める */
+    ccos_z01 = ccos(z);
+    ccos_z02 = cos(re) * cosh(im) - I * sin(re) * sinh(im);
+
+    /* 表示 */
+    printf("ccos 関数で求めた値:    %.10f + %.10fi\n",
+        creal(ccos_z01), cimag(ccos_z01));
+    printf("数学的定義から求めた値: %.10f + %.10fi\n",
+        creal(ccos_z02), cimag(ccos_z02));
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+ccos 関数で求めた値:  -3.7245455049 + -0.5118225700i
+数学的定義から求めた値: -3.7245455049 + -0.5118225700i
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

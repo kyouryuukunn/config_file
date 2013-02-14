@@ -1,0 +1,199 @@
+TITLE : C言語関数辞典 - nexttoward, nexttowardf, nexttowardl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ nexttoward, nexttowardf, nexttowardl
+
+The nexttoward functions (C99) - nexttoward, nexttowardf, nexttowardl
+
+実軸上で x から見て y の方向にある x の次に表現可能な値を求めます．x と y が等しい場合は y をその関数の型に変換して返します．
+
+nexttoward (C99)
+
+
+#include <math.h>
+
+
+
+double nexttoward(
+    double x,
+    long double y
+);
+
+
+nexttoward 関数は，実軸上で x から見て y の方向にある x の次に表現可能な値を求め，double 型で返します．
+
+nexttowardf (C99)
+
+
+#include <math.h>
+
+
+
+float nexttowardf(
+    float x,
+    long double y
+);
+
+
+nexttowardf 関数は，実軸上で x から見て y の方向にある x の次に表現可能な値を求め，float 型で返します．
+
+nexttowardl (C99)
+
+
+#include <math.h>
+
+
+
+long double nexttowardl(
+    long double x,
+    long double y
+);
+
+
+nexttowardl 関数は，実軸上で x から見て y の方向にある x の次に表現可能な値を求め，long double 型で返します．
+
+nexttoward，nexttowardf，nexttowardl 関数は，x がその型で表現できる最大の有限な値であり，かつその結果が無限大かその型で表現できない場合，値域エラー (range error) が発生する事があります．
+
+よく似た関数に nextafter，nextafterf，nextafterl 関数があります．
+
+戻り値
+
+  * y の方向にある x の次の値
+
+C言語サンプルプログラム
+
+以下に nexttoward 関数を使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* main */
+int main(void) {
+    double x_posi = 5.0, x_nega = -5.0;
+    long double y_posi = 6.0L, y_nega = -6.0L;
+    double result;
+
+    result = nexttoward(x_posi, y_posi);
+    printf("nexttoward(%.1f, %.1Lf) = %.16f\n", x_posi, y_posi, result);
+
+    result = nexttoward(x_nega, y_posi);
+    printf("nexttoward(%.1f, %.1Lf) = %.16f\n", x_nega, y_posi, result);
+
+    result = nexttoward(x_posi, y_nega);
+    printf("nexttoward(%.1f, %.1Lf) = %.16f\n", x_posi, y_nega, result);
+
+    result = nexttoward(x_nega, y_nega);
+    printf("nexttoward(%.1f, %.1Lf) = %.16f\n", x_nega, y_nega, result);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+nexttoward(5.0, 6.0) = 5.0000000000000009
+nexttoward(-5.0, 6.0) = -4.9999999999999991
+nexttoward(5.0, -6.0) = 4.9999999999999991
+nexttoward(-5.0, -6.0) = -5.0000000000000009
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

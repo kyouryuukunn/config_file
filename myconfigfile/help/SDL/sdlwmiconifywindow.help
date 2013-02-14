@@ -1,0 +1,29 @@
+TITLE : SDL_WM_IconifyWindow
+
+SDL Library Documentation
+PrevNext
+
+SDL_WM_IconifyWindow
+
+Name
+
+SDL_WM_IconifyWindow --  ウィンドウをアイコン化/最小化します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_WM_IconifyWindow(void);
+
+Description
+
+
+ウィンドウを管理する環境でアプリケーションが実行されている場合、 SDL はアプリケーションをアイコン化/最小化することを試みます。 SDL_WM_IconifyWindow が成功すれば、 アプリケーションは SDL_APPACTIVEを 失なったイベントを受け取るでしょう。
+
+Return Value
+
+
+成功した場合は 0 でない数を、アイコン化がウィンドウマネージャで サポートされていないか、拒否された場合は 0 を 返します。
+
+PrevHomeNext
+SDL_WM_SetIconUpSDL_WM_ToggleFullScreen

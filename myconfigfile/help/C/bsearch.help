@@ -1,0 +1,150 @@
+TITLE : C言語関数辞典 - bsearch
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdlib.h ≫ bsearch
+
+bsearch
+
+整列 (sort) 済みの配列から値を探索します．
+
+
+#include <stdlib.h>
+
+
+
+void *bsearch(
+    const void *key,
+    const void *base,
+    size_t nmemb,
+    size_t size,
+    int (*compar)(const void *, const void *)
+);
+
+
+bsearch 関数は先頭要素を base が指すオブジェクトの配列 (要素数が nmemb 個，各要素の大きさが size である配列) から，key が指すオブジェクトに一致する要素を探索します．なお，base が指すオブジェクト配列は昇順に整列されている必要があります．
+
+compar が指す比較関数は key オブジェクトへのポインタを第 1 引数とし，配列要素へのポインタを第 2 引数として呼び出されます．
+
+compar が指す比較関数は以下のルールに基づいて実装する必要があります．
+
+比較関数のルール
+
+  * key オブジェクトが配列要素よりも小さい場合: 0 より小さい値を返す
+  * key オブジェクトが配列要素と一致する場合: 0 を返す
+  * key オブジェクトが配列要素よりも大きい場合: 0 より大きい値を返す
+
+※ bsearch 関数の名前は 2 分探索 (binary Search) に由来しますが，内部で 2 分探索アルゴリズムを使用してる保障はありません．(処理系定義)
+
+引数
+
+  * key: 探索キー
+  * base: 探索する配列
+  * nmemb: 配列の要素数
+  * size: 配列の個々の要素のサイズ
+  * compar: 比較関数
+
+戻り値
+
+  * 一致する要素が見つかったとき: 配列中の一致する要素へのポインタ
+  * 一致する要素が見つからなかったとき: 空ポインタ (NULL)
+
+C言語サンプルプログラム
+
+メモリ領域の内容から任意の値を探索する のサンプルプログラムをご覧下さい．
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

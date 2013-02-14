@@ -1,0 +1,31 @@
+TITLE : SDL_mutexP
+
+SDL Library Documentation
+PrevNext
+
+SDL_mutexP
+
+Name
+
+SDL_mutexP -- mutexをロックします。
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+int SDL_mutexP(SDL_mutex *mutex);
+
+Description
+
+
+SDL_CreateMutex関数によって作成されたmutexをロックします。 すでにmutexがロックされていた場合、SDL_mutexPは、ロックが解除されるまで戻りません。 ロックに成功すると0、エラーが起きると-1が返ります。
+
+
+SDLは#define SDL_LockMutex(m) SDL_mutexP(m)というマクロを 定義しています。
+
+See Also
+
+SDL_CreateMutex, SDL_mutexV
+
+PrevHomeNext
+SDL_DestroyMutexUpSDL_mutexV

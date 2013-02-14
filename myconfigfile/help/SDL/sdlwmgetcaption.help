@@ -1,0 +1,28 @@
+TITLE : SDL_WM_GetCaption
+
+SDL Library Documentation
+PrevNext
+
+SDL_WM_GetCaption
+
+Name
+
+SDL_WM_GetCaption --  ウィンドウのタイトルとアイコン名を取得します
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_WM_GetCaption(char **title, char **icon);
+
+Description
+
+
+ウィンドウのタイトルへのポインタ title と、 アイコン名へのポインタ icon をセットします。
+
+See Also
+
+SDL_WM_SetCaption, SDL_WM_SetIcon
+
+PrevHomeNext
+SDL_WM_SetCaptionUpSDL_WM_SetIcon

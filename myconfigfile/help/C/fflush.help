@@ -1,0 +1,177 @@
+TITLE : C言語関数辞典 - fflush
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ fflush
+
+fflush
+
+バッファをフラッシュ (データの吐き出し) します．
+
+
+#include <stdio.h>
+
+
+
+int fflush(
+    FILE *stream /* 出力ストリーム or 更新ストリーム */
+);
+
+
+fflush 関数は stream が指すストリームにおいて，まだ書き込まれていないデータを書き込みます．(正確には書き込まれていないデータをホスト環境に引渡し，ホスト環境がデータをファイルに書き込みます．)
+
+fflush の呼び出しは，出力用に stream を用いているとき※1 に限定されます．それ以外のときの動作は未定義です．※2
+
+※1 正確には stream が出力ストリーム，もしくは直前の操作が入力でない更新ストリームであるときです．
+
+※2 処理系によっては入力ストリームに対しての動作が定義されている場合がありますのでマニュアル等でご確認ください．
+
+引数
+
+  * stream: 出力用のストリーム or 空ポインタ (NULL)
+  (空ポインタを指定した場合には，すべてのストリームに対して動作を行います)
+
+戻り値
+
+  * 操作が成功したとき: 0
+  * 操作が失敗したとき: EOF (エラー表示子 をセットします)
+
+C言語サンプルプログラム
+
+fflush 関数を使用してバッファをフラッシュするサンプルプログラムを以下に示します．以下のサンプルプログラムは setbuf 関数を用いて標準出力をバッファリングしています．そのため，printf 関数を使用してもすぐには表示されません．fflush を用いてバッファをフラッシュすることで書き込まれます．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+
+/* functions */
+void MySleep(int n);
+
+/* main */
+int main(void) {
+    char buf[BUFSIZ];
+
+    /* 標準出力を完全バッファリングする */
+    setbuf(stdout, buf);
+
+    /* Snoopyの出力 */
+    printf("Snoopy\n"); /* <-- "Snoopy\n"がバッファリングされる */
+
+    /* 時間稼ぎ */
+    MySleep(100000);
+
+    /* バッファのフラッシュ */
+    fflush(stdout); /* <-- この時点で"Snoopy\n"が出力される" */
+
+    return EXIT_SUCCESS;
+}
+
+/* 時間かせぎ */
+void MySleep(int n) {
+    int i;
+    for ( i = 0; i < n * 5000; i++ ); 
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+Snoopy
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

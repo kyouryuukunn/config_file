@@ -1,0 +1,37 @@
+TITLE : SDL_CDOpen
+
+SDL Library Documentation
+PrevNext
+
+SDL_CDOpen
+
+Name
+
+SDL_CDOpen --  CD-ROM ドライブにアクセスするためにオープンします。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_CD *SDL_CDOpen(int drive);
+
+Description
+
+
+CD-ROM ドライブにアクセスするためにオープンします。 成功した場合は SDL_CD 構造体を返し、 ドライブが正しくないか、ビジー状態のときは NULL を 返します。 新たにオープンされた CD-ROM は、 他の CD 関数に NULL の CD-ROM ハンドルが渡された時に 使われるデフォルト CD となります。
+
+
+ドライブは 0 から番号付けされています。 ドライブ 0 はシステムのデフォルト CD-ROM です。
+
+Examples
+
+
+SDL_CD *cdrom; int cur_track; int min, sec, frame; SDL_Init(SDL_INIT_CDROM); atexit(SDL_Quit); /* CD ドライブをチェック */ if(!SDL_CDNumDrives()){ /* 見つからなかった */ fprintf(stderr, "利用可能な CDROM デバイスがありません\n"); exit(-1); } /* デフォルトドライブをオープン */ cdrom=SDL_CDOpen(0); /* オープンできた？ cdrom が NULL かどうかをチェック */ if(!cdrom){ fprintf(stderr, "ドライブがオープンできませんでした: %s\n", SDL_GetError()); exit(-1); } /* ボリュームの情報を表示 */ printf("名前: %s\n", SDL_CDName(0)); printf("トラック数: %d\n", cdrom->numtracks); for(cur_track=0;cur_track < cdrom->numtracks; cur_track++){ FRAMES_TO_MSF(cdrom->track[cur_track].length, &min, &sec, &frame); printf("\tトラック %d: 長さ %d:%d\n", cur_track, min, sec); } SDL_CDClose(cdrom);
+
+
+See Also
+
+SDL_CD, SDL_CDtrack, SDL_CDClose
+
+PrevHomeNext
+SDL_CDNameUpSDL_CDStatus

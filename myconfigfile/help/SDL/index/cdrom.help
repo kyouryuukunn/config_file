@@ -1,0 +1,39 @@
+TITLE : CD-ROM
+
+SDL Library Documentation
+PrevNext
+
+Chapter 11. CD-ROM
+
+Table of Contents
+SDL_CDNumDrives --  システム上の CD-ROM の数を返します。
+SDL_CDName --  CD-ROM について、人間に読めるシステム非依存の ID を返します。
+SDL_CDOpen --  CD-ROM ドライブにアクセスするためにオープンします。
+SDL_CDStatus --  指定されたドライブの現在の状態を返します。
+SDL_CDPlay --  CD を再生します。
+SDL_CDPlayTracks --  指定された CD トラックを再生します。
+SDL_CDPause --  CD-ROM の再生を一時停止します。
+SDL_CDResume --  CD-ROM の再生を再開します。
+SDL_CDStop --  CD-ROM の再生を停止します。
+SDL_CDEject --  CD-ROM を取り出します。
+SDL_CDClose --  SDL_CD ハンドルをクローズします。
+SDL_CD --  CD-ROM ドライブの情報
+SDL_CDtrack --  CD トラック情報の構造体
+
+
+SDL は一度に 32 までのローカル CD-ROM ドライブの オーディオ制御をサポートします。
+
+
+トラック一覧の取得・再生・停止そして CD-ROM の取り出しを含む、 CD プレーヤの全ての基本的な機能を実行するためにこの API を使います。 (現在はマルチチェンジャーの CD ドライブはサポートしていません)
+
+
+SDL のどんな CD-ROM 関数を呼ぶ前に、 まず "SDL_Init(SDL_INIT_CDROM)" を呼ばなければいけません。 これは CD-ROM ドライブを探してシステムをスキャンし、 プログラムがオーディオ制御できるようセットアップします。 通常は 0 であるはずの 返値をチェックし、スタートアップでエラーがないかを確認して下さい。
+
+
+ライブラリを初期化した後は、 SDL_CDNumDrives() 関数を使って 利用可能なドライブがいくつあるかを知ることができます。 リストの最初のドライブはデフォルト CD-ROM ドライブです。 ドライブを選択し、SDL_CDOpen() でオープンした後は、 ステータスをチェックし CD がドライブにあるなら再生を開始することができます。
+
+
+CD-ROM は 1 つまたはそれ以上のトラックで構成され、 個々のトラックはある数の「フレーム」で構成されています。 それぞれのフレームはサイズにして 2K であり、 CD は通常の再生スピードにおいて 1 秒間に 75 フレーム再生されます。 SDL は CD 上のフレーム数を使って動作しますが、 FRAMES_TO_MSF() マクロを使うことで、 より見慣れた分/秒のフォーマットに簡単に変換することができます。
+
+PrevHomeNext
+SDL_CloseAudioUpSDL_CDNumDrives

@@ -1,0 +1,51 @@
+TITLE : SDL_SetTimer
+
+SDL Library Documentation
+Prev 
+
+SDL_SetTimer
+
+Name
+
+SDL_SetTimer --  指定されたミリ秒が経過した後に実行するコールバックを設定します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_SetTimer(Uint32 interval, SDL_TimerCallback callback);
+
+Callback
+
+
+/* タイマコールバック関数のための関数プロトタイプ */ typedef Uint32 (*SDL_TimerCallback)(Uint32 interval);
+
+Description
+
+
+指定されたミリ秒数が経過した後に実行するコールバックを設定します。 コールバック関数は現在のタイマ間隔を引数として取り、次のタイマ間隔を返します。 戻り値が引数の値と同じならば、周期的なアラームは継続します。 そうでないなら新しいアラームが追加されます。
+
+
+現在実行されているタイマを取り消すにはSDL_SetTimer(0, NULL);を実行して下さい。
+
+
+このタイマコールバック関数はメインコンスタントとは異なるスレッドで実行されます。 そのためタイマコールバック関数内では関数を呼び出すべきではありません。
+
+
+このタイマの最大解像度は10msです。このため16msのタイマを要求した場合にはコールバックは最後に呼び出されてから約20ms後に実行されます。 毎秒30フレーム(つまり33msごと)のフレーム更新を行うフラグを設定したい時は30msでタイマを設定すればいいでしょう。(以下の例を見て下さい)
+
+
+この関数を使う場合にはSDL_INIT_TIMERをSDL_Init()の引数として渡す必要があります。
+
+Note: この関数は互換性のために残っています。 しかし複数のタイマに対応している、SDL_AddTimerと SDL_RemoveTimerという新しいタイマ関数を使うべきです。
+
+Examples
+
+SDL_SetTimer((33/10)*10, my_callback);
+
+See Also
+
+SDL_AddTimer
+
+PrevHome 
+SDL_RemoveTimerUp 

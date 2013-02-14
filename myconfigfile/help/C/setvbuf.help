@@ -1,0 +1,208 @@
+TITLE : C言語関数辞典 - setvbuf
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ setvbuf
+
+setvbuf
+
+入出力用のバッファ (buffer) を設定します．
+
+
+#include <stdio.h>
+
+
+
+int setvbuf(
+    FILE * restrict stream,
+    char * restrict buf,
+    int mode,
+    size_t size
+);
+
+
+setvbuf 関数は stream が指すストリームに対して入出力用のバッファを設定します．buf が空ポインタ (NULL) でないときは，buf がバッファとして使用されます．buf が空ポインタのときはバッファ用のメモリ空間が自動的に生成されます．
+
+setvbuf の呼び出しが許されるのは stream の指すストリームがオープン (open) されたファイルに結び付けられてから，そのストリームに対して他の操作が行われるまでの間だけです．
+
+引数
+
+  * stream: ストリーム
+  * buf: バッファ用領域
+    * 指定した場合: 指定した buf をバッファ領域とする
+    * 空ポインタ: setvbuf が自動的にバッファ領域を割り当てる
+  * mode: モード (下記を参照してください)
+  * size: バッファのサイズ (buf を指定した場合は，その配列の大きさを指定する)
+
+モード
+
+引数 mode に指定できるモードは以下の通りです．
+
+モード 意味
+_IOFBF 入出力を完全バッファリング (fully buffered) する
+_IOLBF 入出力を行バッファリング (line buffered) する
+_IONBF 入出力をバッファリングなし (unbuffered) しない
+
+
+戻り値
+
+  * 成功した場合: 0
+  * 失敗した場合: 0以外
+
+C言語サンプルプログラム
+
+setvbuf 関数を使用して標準出力 (standard output) をバッファリングするサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+
+/* functions */
+void MySleep(int n);
+
+/* main */
+int main(void) {
+    /* 標準出力を行バッファリングする */
+    if ( setvbuf(stdout, NULL, _IOLBF, 256) !=0 ) {
+        fprintf(stderr, "Snoopyバッファの設定に失敗しました.\n");
+        return EXIT_SUCCESS;
+    }
+
+    /* Snoopyの出力 (改行無し) */
+    fprintf(stdout, "Snoopy"); /* <-- "Snoopy"がバッファリングされる */
+
+    /* 時間稼ぎ */
+    MySleep(100000);
+
+    /* 改行の出力 */
+    fprintf(stdout, "\n"); /* <-- この時点で"Snoopy\n"が出力 */
+
+
+    /* 標準出力をバッファリングしない */
+    if ( setvbuf(stdout, NULL, _IONBF, 0) !=0 ) {
+        fprintf(stderr, "バッファの設定に失敗しました.\n");
+        return EXIT_FAILURE;
+    }
+
+    /* Snoopyの出力 (改行無し) */
+    fprintf(stdout, "Snoopy"); /* <-- "Snoopy"が直接出力される */
+
+    /* 時間稼ぎ */
+    MySleep(100000);
+
+    /* 改行の出力 */
+    fprintf(stdout, "\n"); /* <-- "\n"が直接出力される */
+
+    return EXIT_SUCCESS;
+}
+
+/* 時間かせぎ */
+void MySleep(int n) {
+    int i;
+    for ( i = 0; i < n * 5000; i++ ); 
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+Snoopy
+Snoopy
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

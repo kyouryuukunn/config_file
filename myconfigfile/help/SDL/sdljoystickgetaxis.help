@@ -1,0 +1,40 @@
+TITLE : SDL_JoystickGetAxis
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickGetAxis
+
+Name
+
+SDL_JoystickGetAxis --  軸の現在の状態を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+Sint16 SDL_JoystickGetAxis(SDL_Joystick *joystick, int axis);
+
+Description
+
+
+SDL_JoystickGetAxis は 指定された joystick の 指定された axis の現在の状態を返します。
+
+
+最近のほとんどのジョイスティックでは、 X 軸は通常 axis 0、 Y 軸は axis 1 で表現されています。 SDL_JoystickGetAxis によって返される値は、 axis, の現在の位置を表わす 符号付き整数 (-32768 から 32768 まで) であり、 ぶれを考慮するためこれらの値にいくらかの許容値を課す必要があるでしょう。 いくつかのジョイスティックが 拡張ボタンのために軸 2 や 3 を使うことには 何の価値もありません。
+
+Return Value
+
+
+axis の現在の位置を表現する 16ビットの符号付き整数を返します。
+
+Examples
+
+Sint16 x_move, y_move; SDL_Joystick *joy1; . . x_move=SDL_JoystickGetAxis(joy1, 0); y_move=SDL_JoystickGetAxis(joy1, 1);
+
+See Also
+
+SDL_JoystickNumAxes
+
+PrevHomeNext
+SDL_JoystickUpdateUpSDL_JoystickGetHat

@@ -1,0 +1,33 @@
+TITLE : SDL_JoystickNumAxes
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickNumAxes
+
+Name
+
+SDL_JoystickNumAxes --  ジョイスティックの軸の数を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_JoystickNumAxes(SDL_Joystick *joystick);
+
+Description
+
+
+前もってオープンされた SDL_Joystick から 利用可能な軸の数を返します。
+
+Return Value
+
+
+軸の数。
+
+See Also
+
+SDL_JoystickGetAxis, SDL_JoystickOpen
+
+PrevHomeNext
+SDL_JoystickIndexUpSDL_JoystickNumBalls

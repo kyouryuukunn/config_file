@@ -1,0 +1,30 @@
+TITLE : SDL_GetAudioStatus
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetAudioStatus
+
+Name
+
+SDL_GetAudioStatus -- 現在のオーディオの状態を返します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_audiostatusSDL_GetAudioStatus(void);
+
+Description
+
+typedef enum{ SDL_AUDIO_STOPPED, SDL_AUDIO_PAUSED, SDL_AUDIO_PLAYING } SDL_audiostatus;
+
+
+現在のオーディオの状態に従って、SDL_AUDIO_STOPPED、 SDL_AUDIO_PAUSED、SDL_AUDIO_PLAYINGの いずれかを返します。
+
+See Also
+
+SDL_PauseAudio
+
+PrevHomeNext
+SDL_PauseAudioUpSDL_LoadWAV

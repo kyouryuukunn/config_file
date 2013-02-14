@@ -1,0 +1,27 @@
+TITLE :         BohYoh.com【Ｃ言語講座】標準ライブラリ strlen    
+
+　strlen
+Ｃ言語 標準ライブラリ   アルファベット順索引   ヘッダ別索引   ホームページへ　Ｃ言語講座のページ
+
+文字列処理関数
+strlen
+ヘッダ  #include <string.h>
+形　式  size_t strlen(const char *s);
+機　能  sが指す文字列の長さを計算する。
+返却値  終端を示すナル文字に先行する文字の個数を返す。
+
+■実装例■
+
+#include <stdlib.h>
+
+/*--- 文字列sの長さを調べる ---*/
+size_t strlen(const char *s)
+{
+    size_t len = 0;
+
+    while (*s++)
+        len++;
+    return (len);
+}
+
+-------------------------------------------------------------------------------

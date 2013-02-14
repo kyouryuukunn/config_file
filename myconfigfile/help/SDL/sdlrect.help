@@ -1,0 +1,34 @@
+TITLE : SDL_Rect
+
+SDL Library Documentation
+PrevNext
+
+SDL_Rect
+
+Name
+
+SDL_Rect --  矩形領域を定義します。
+
+Structure Definition
+
+typedef struct{ Sint16 x, y; Uint16 w, h; } SDL_Rect;
+
+
+Structure Data
+
+x, y
+矩形の左上端の位置
+w, h
+矩形の横幅と高さ
+
+Description
+
+
+SDL_Rect はピクセルの矩形領域を定義します。 blit 領域を定義するために SDL_BlitSurfaceや、 またいくつかのビデオ関数でも使われます。
+
+See Also
+
+SDL_BlitSurface, SDL_UpdateRect
+
+PrevHomeNext
+SDL_GLattrUpSDL_Color

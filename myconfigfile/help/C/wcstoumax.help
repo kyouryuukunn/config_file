@@ -1,0 +1,199 @@
+TITLE : C言語関数辞典 - wcstoumax
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ inttypes.h ≫ wcstoumax
+
+wcstoumax (C99)
+
+ワイド文字列 (wide string) を uintmax_t 型に変換します．
+
+
+#include <inttypes.h>
+#include <stddef.h> /* wchar_t のため */
+
+
+
+intmax_t wcstoumax(
+    const wchar_t * restrict nptr,
+    wchar_t ** restrict  endptr,
+    int base
+);
+
+
+wcstoumax 関数は nptr が指すワイド文字列のはじめの数字の部分を，base で指定された基数で uintmax_t 型の表現に変換します．nptr が指す文字列中に変換不可能なワイド文字 (wide character) があった場合には，そのワイド文字列へのポインタを endptr に格納します．
+
+機能がよく似た関数に，wcstoumax 関数があります．
+
+引数
+
+  * nptr: 変換するワイド文字列 ※1
+  * endptr: 変換出来ないワイド文字列を格納 ※2
+  * base: 基数 ※3
+
+※1 指定可能なフォーマットは以下の通りです．([ ]で囲まれたところは省略可能です)
+
+  * 16 進数以外: [符号 (+ or -)] 空でない数字の列
+  * 16 進数: [符号 (+ or -)] [0x or 0X] 空でない 16 進数の列
+
+※2 空ポインタ (NULL) を指定した場合は格納されません．
+
+※3 指定可能なフォーマットは以下の通りです．
+
+  * 0 を指定した場合: 数字の列の先頭を見て基数を自動的に決める．
+    * 数字の列の先頭が 0: 8 進数
+    * 数字の列の先頭が 0x (0X でも OK): 16 進数
+    * 上記以外: 10 進数
+  * 2 ～ 36 を指定した場合: 指定した基数になる．
+
+戻り値
+
+  * 変換が可能な場合: 変換した値
+  * 変換が不可能な場合: 0
+  * 正しい値が表現可能な値の範囲外: INTMAX_MIN or INTMAX_MAX or UINTMAX_MAX
+  (errno に ERANGE の値を格納)
+
+C言語サンプルプログラム
+
+以下に wcstoumax 関数を使用してワイド文字列を uintmax_t 型に変換するサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <inttypes.h>
+
+/* main */
+int main(void) {
+    wchar_t *number10 = L"+255";  /* 10進数255 */
+    wchar_t *number16 = L"+0xff"; /* 16進数255 */
+    wchar_t *number8 = L"+377";   /*  8進数255 */
+    wchar_t *error = L"snoopy+10";
+    wchar_t *endptr;
+    intmax_t x;
+
+    /* 10進数 数値のみ */
+    x = wcstoumax(number10, &endptr, 0);
+    wprintf(L"x = %"PRIuMAX", endptr = %s\n", x, endptr);
+
+    /* 16進数 数値のみ */
+    x = wcstoumax(number16, &endptr, 0);
+    wprintf(L"x = %"PRIuMAX", endptr = %s\n", x, endptr);
+
+    /* 8進数 数値のみ */
+    x = wcstoumax(number8, &endptr, 8);
+    wprintf(L"x = %"PRIuMAX", endptr = %s\n", x, endptr);
+
+    /* 10進数 数値 + 文字列 */
+    x = wcstoumax(error, &endptr, 0);
+    wprintf(L"x = %"PRIuMAX", endptr = %s\n", x, endptr);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+x = 255, endptr = 
+x = 255, endptr = 
+x = 255, endptr = 
+x = 0, endptr = snoopy+10
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

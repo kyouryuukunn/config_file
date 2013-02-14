@@ -1,0 +1,24 @@
+TITLE : Events
+
+SDL Library Documentation
+PrevNext
+
+Chapter 8. Events
+
+Table of Contents
+Introduction
+SDL Event Structures.
+Event Functions.
+
+Introduction
+
+
+イベント処理によってあなたのアプリケーションはユーザーからの 入力を受け取ることができます。 イベント処理は次の関数を呼ぶことで、(ビデオと一緒に)初期化されます。 SDL_Init(SDL_INIT_VIDEO);
+
+内部的には、SDL は処理されるまで待機している全てのイベントをイベントキューに 格納します。 SDL_PollEvent や SDL_PeepEvents の ような関数を使うことで、待機している入力イベントを見たり、処理することができます。
+
+
+SDL におけるイベント処理の鍵は、 SDL_Event 共用体です。 イベントキュー自身は 一連の SDL_Event 共用体で構成されており、 個々の待機イベントごとにひとつ存在します。 SDL_Event 共用体は SDL_PollEvent 関数を使ってキューから読み出され、 そしてそこに格納された情報の処理はアプリケーションに任されています。
+
+PrevHomeNext
+SDL_WM_GrabInputUpSDL Event Structures.

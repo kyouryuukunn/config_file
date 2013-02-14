@@ -1,0 +1,34 @@
+TITLE : SDL_Palette
+
+SDL Library Documentation
+PrevNext
+
+SDL_Palette
+
+Name
+
+SDL_Palette --  8 ビットピクセルフォーマット用のカラーパレット
+
+Structure Definition
+
+typedef struct{ int ncolors; SDL_Color *colors; } SDL_Palette;
+
+
+Structure Data
+
+ncolors
+このパレットで使われている色数
+colors
+パレットを仕立てる SDL_Color 構造体 へのポインタ。
+
+Description
+
+
+8ビットサーフェス内の個々のピクセルは SDL_PixelFormat における SDL_Palette 構造体の colors フィールドへのインデックスです。 SDL_Palette は手動で作る必要は絶対にないはずです。 SDL がサーフェス用に SDL_PixelFormat を 確保するときに自動的に作られます。 SDL_Surface の パレットの色は SDL_SetColors を用いてセットすることができます。
+
+See Also
+
+SDL_Color, SDL_Surface, SDL_SetColors SDL_SetPalette
+
+PrevHomeNext
+SDL_ColorUpSDL_PixelFormat

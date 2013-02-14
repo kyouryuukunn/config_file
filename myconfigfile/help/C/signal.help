@@ -1,0 +1,196 @@
+TITLE : C言語関数辞典 - signal
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ signal.h ≫ signal
+
+signal
+
+シグナル (signal) をキャッチします.
+
+
+#include <signal.h>
+
+
+
+void (*signal(
+    int sig, /* シグナル番号 */
+    void (*func) (int) /* シグナルハンドラ */
+)) (int);
+
+
+signal 関数は, 引数 sig で指定されたシグナル番号に応じて, 引数 func で指定されたシグナルハンドラ (signal handler) を実行します.
+
+abort 関数または, raise 関数で呼び出されるシグナルハンドラ内でraise 関数を呼び出してはいけません.
+
+注意!
+POSIX 準拠のシステムでは, signal 関数の代わりに sigaction 関数を使用したほうがよいとされています.
+
+引数
+
+  * sig: キャッチしたいシグナル番号 ※1
+  * func: シグナルハンドラ ※2
+
+※1 シグナル番号
+
+sig に指定するシグナル番号は以下の通りです．
+
+引数 意味
+SIGABRT 異常終了
+SIGFPE 誤った算術演算
+SIGILL 不正な関数イメージの検出
+SIGINT 対話的なアテンションシグナルの受け取り
+SIGSEGV 記憶域への不正なアクセス
+SIGTERM プログラムへ送信された終了要求
+上記以外 各処理系で定義されているシグナル番号
+
+
+※2 シグナルハンドラ
+
+func に指定可能なマクロを以下に示します．
+
+引数 意味
+SIG_DEL そのシグナルに対するデフォルトの操作を行う.
+SIG_IGN シグナルを無視する.
+上記以外 ユーザーが独自に定義したシグナルハンドラ.
+
+
+戻り値
+
+  * 指定された操作が出来る場合: funcの値
+  * 上記以外: SIG_ERR
+
+C言語サンプルプログラム
+
+signal 関数と raise 関数を使用したサンプルプログラムを以下に示します.
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+
+/* functions */
+void sig_catch(int sig);
+
+/* main */
+int main(void) {
+    /* シグナルハンドラの設定 */
+    if (SIG_ERR == signal(SIGABRT, sig_catch)) {
+        fprintf(stderr, "error.\n");
+        return EXIT_FAILURE;
+    }
+
+    /* シグナルを送信する */
+    raise(SIGABRT);
+
+    return EXIT_SUCCESS;
+}
+
+/** シグナルハンドラ */
+void sig_catch(int sig) {
+    printf("signal: %d\n", sig);
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります.
+
+
+signal: 22
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

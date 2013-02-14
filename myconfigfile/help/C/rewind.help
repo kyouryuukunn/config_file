@@ -1,0 +1,185 @@
+TITLE : C言語関数辞典 - rewind
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ rewind
+
+rewind
+
+ファイル位置表示子 (file position indicator) をそのファイルの始めに位置付けます．
+
+
+#include <stdio.h>
+
+
+
+void rewind(
+    FILE *stream
+);
+
+
+rewind 関数は stream が指すストリームのファイル位置表示子をそのファイルの始めに位置づけ，そのストリームに対応するエラー表示子 (error indicator) をクリアします．
+
+rewind はエラー表示子もクリアすることを除けば以下の式と同じになります．
+
+(void)fseek(stream, 0L, SEEK_SET)
+
+引数
+
+  * stream: ストリーム
+
+C言語サンプルプログラム
+
+rewind 関数を使用してファイル位置表示子をそのファイルの始めに位置付けるサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* main */
+int main(void) {
+    FILE *fp;
+    char *filename = "sample.txt";
+    char ch;
+
+    /* ファイルのオープン */
+    if ((fp = fopen(filename, "r")) == NULL) {
+        fprintf( stderr, "%sのオープンに失敗: %s\n",
+                filename, strerror(errno) );
+        return EXIT_FAILURE;
+    }
+
+    /* ファイルの終端まで文字を読み取り表示する */
+    while (( ch = fgetc(fp)) != EOF ) {
+        putchar(ch);
+    }
+
+    /* ファイルの最初に戻す */
+    rewind(fp);
+    putchar('\n');
+
+    /* ファイルの終端まで文字を読み取り表示する */
+    while (( ch = fgetc(fp)) != EOF ) {
+        putchar(ch);
+    }
+
+    /* ファイルクローズ */
+    fclose(fp);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラム内で使用する sample.txt の内容は以下のように用意したとします．
+
+
+I don't want to march as much as possible.
+I love SNOOPY.
+
+サンプルプログラムの実行結果は以下のようになります.
+
+
+I don't want to march as much as possible.
+I love SNOOPY.
+
+I don't want to march as much as possible.
+I love SNOOPY.
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

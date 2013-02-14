@@ -1,0 +1,33 @@
+TITLE : SDL_NumJoysticks
+
+SDL Library Documentation
+PrevNext
+
+SDL_NumJoysticks
+
+Name
+
+SDL_NumJoysticks --  利用可能なジョイスティックの数を数えます。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_NumJoysticks(void);
+
+Description
+
+
+システムに接続されたジョイスティックの数を数えます。
+
+Return Value
+
+
+接続されたジョイスティックの数を返します。
+
+See Also
+
+SDL_JoystickName, SDL_JoystickOpen
+
+PrevHomeNext
+JoystickUpSDL_JoystickName

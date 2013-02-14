@@ -1,0 +1,28 @@
+TITLE : SDL_CondSignal
+
+SDL Library Documentation
+PrevNext
+
+SDL_CondSignal
+
+Name
+
+SDL_CondSignal -- 条件変数を待っているスレッドを再開します。
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+int SDL_CondSignal(SDL_cond *cond);
+
+Description
+
+
+条件変数condを待っているスレッドを再開します。 成功すると0、エラーが起こると-1を返します。
+
+See Also
+
+SDL_CondWait, SDL_CondBroadcast
+
+PrevHomeNext
+SDL_DestroyCondUpSDL_CondBroadcast

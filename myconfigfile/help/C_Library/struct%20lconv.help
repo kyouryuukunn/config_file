@@ -1,0 +1,56 @@
+TITLE :         BohYoh.com【Ｃ言語講座】標準ライブラリ　型 struct lconv    
+
+　struct lconv
+Ｃ言語 標準ライブラリ   アルファベット順索引   ヘッダ別索引   ホームページへ　Ｃ言語講座のページ
+
+C89  C99  C11  文化圏固有の数値の書式を表す型
+struct lconv
+ヘッダ  #include <locale.h>
+概　要  文化圏固有の数値の書式を表す型。本構造体は、以下のメンバを含むが、その順序は任意である。
+
+規格 メンバ "C"ロケールにおける値 解説
+C89  C99  C11   char *decimal_point  "."  金額以外の数量の書式化に使用する小数点文字。
+char *thousands_sep  ""  書式化された金額以外の数量において、小数点文字の前の数字のグループを区切るための文字。
+char *grouping  ""  文字列であって、その要素は書式化された金額以外の数量において数字の各グループのけた数を示す。
+char *mon_decimal_point  ""  金額数量を書式化するために使用する小数点文字。
+char *mon_thousands_sep  ""  書式化された金額数量において、小数点文字の前の数字のグループを区切るための文字。
+char *mon_grouping  ""  文字列であって、その要素は書式化された金額数量において数字の各グループのけた数を示す。
+char *positive_sign  ""  書式化された金額数量が負でない値をもつことを示すために使う文字列。
+char *negative_sign  ""  書式化された金額数量が負の値をもつことを示すために使う文字列。
+char *currency_symbol  ""  その時点のロケールで適用されるその地域の通貨記号。
+char frac_digits  CHAR_MAX  その地域向けに書式化された金額数量において表示される小数部の（小数点の後ろの）けた数。
+char p_cs_precedes  CHAR_MAX  その地域向けに書式化された負でない金額数量において、currency_symbolが値に先行する場合は1、後続する場合は0。
+char n_cs_precedes  CHAR_MAX  その地域向けに書式化された負の金額数量において、currency_symbolが値に先行する場合は1、後続する場合は0。
+char p_sep_by_space  CHAR_MAX  その地域向けに書式化された負でない金額数量において、currency_symbol、符号文字列、および値の区切り方を示す値。
+char n_sep_by_space  CHAR_MAX  その地域向けに書式化された負の金額数量において、currency_symbol、符号文字列、および値の区切り方を示す値。
+char p_sign_posn  CHAR_MAX  その地域向けに書式化された負でない金額数量において、positive_signの位置を示す値。
+char n_sign_posn  CHAR_MAX  その地域向けに書式化された負の金額数量において、negative_signの位置を示す値。
+char *int_curr_symbol  ""  その時点のロケールで適用される国際通貨記号。最初の3文字は、ISO 4217の規定にしたがって英字で表した国際通貨記号で、4番目の（ナル文字の直前の）文字は、国際通貨記号と金額数量を区切るために使用する文字。
+char int_frac_digits  CHAR_MAX  国際様式で書式化された金額数量において表示される小数部の（小数点の後ろの）けた数。
+C99  C11   char int_p_cs_precedes  CHAR_MAX  国際様式で書式化された負でない金額数量において、int_curr_symbolが値に先行する場合は1、後続する場合は0。
+char int_n_cs_precedes  CHAR_MAX  国際様式で書式化された負の金額数量において、int_curr_symbolが値に先行する場合は1、後続する場合は0。
+char int_p_sep_by_space  CHAR_MAX  国際様式で書式化された負でない金額数量において、int_curr_symbol、符号文字列、および値の区切り方を示す値。
+char int_n_sep_by_space  CHAR_MAX  国際様式で書式化された負の金額数量において、int_curr_symbol、符号文字列、および値の区切り方を示す値。
+char int_p_sign_posn  CHAR_MAX  国際様式で書式化された負でない金額数量において、positive_signの位置を示す値。
+char int_n_sign_posn  CHAR_MAX  国際様式で書式化された負の金額数量において、negative_sign の位置を示す値。
+
+◆groupingとmon_groupingの要素の解釈は、次のとおりとする。
+CHAR_MAX それ以上のグループ分けを行わない。
+0 前の要素を残りの数字に対して繰り返し使用する。
+その他 整数値が、その対応するグループを構成する数字の個数を表す。次の要素を調べて、そのグループの前に来る次のグループの大きさを決定する。
+
+◆p_sep_by_space、n_sep_by_space、int_p_sep_by_space、int_n_sep_by_spaceの値の解釈は、次のとおりとする。
+0 通貨記号と値は空白によって区切らない。
+1 通貨記号と符号文字列が隣接していれば、一つの空白がそれらと値とを区切る。そうでなければ一つの空白が通貨記号と値とを区切る。
+2 通貨記号と符号文字列が隣接していれば、一つの空白がそれらを区切る。そうでなければ一つの空白が符号文字列と値とを区切る。
+
+◆int_p_sep_by_spaceとint_n_sep_by_spaceでは、int_curr_symbolの4番目の文字を空白の代わりに使う。
+
+◆p_sign_posn、n_sign_posn、int_p_sign_posn、int_n_sign_posnの値の解釈は、次のとおりとする。
+0 数量および通貨記号を括弧で囲む。
+1 符号文字列が数量および通貨記号に先行する。
+2 符号文字列が数量および通貨記号に続く。
+3 符号文字列が通貨記号の直前に先行する。
+4 符号文字列が通貨記号の直後に続く。
+
+-------------------------------------------------------------------------------

@@ -1,0 +1,190 @@
+TITLE : C言語関数辞典 - casinh, casinhf, casinhl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ complex.h ≫ casinh, casinhf, casinhl
+
+The casinh functions (C99) - casinh, casinhf, casinhl
+
+複素数の複素数逆双曲線正弦 (arcsinh) を計算します．
+
+casinh (C99)
+
+
+#include <complex.h>
+
+
+
+double complex casinh(
+    double complex z
+);
+
+
+casinh 関数は，z の複素数逆双曲線正弦を計算し，結果を double complex 型で返します．
+
+casinhf (C99)
+
+
+#include <complex.h>
+
+
+
+float complex casinhf(
+    float complex z
+);
+
+
+casinhf 関数は，z の複素数逆双曲線正弦を計算し，結果を float complex 型で返します．
+
+casinhl (C99)
+
+
+#include <complex.h>
+
+
+
+long double complex casinhl(
+    long double complex z
+);
+
+
+casinhl 関数は，z の複素数逆双曲線正弦を計算し，結果を long double complex 型で返します．
+
+casinh，casinhf，casinhl 関数は，区間 [-i,+i] の外側に虚軸に沿って分岐切断線をもちます．
+
+戻り値
+
+  * 実軸方向には数学的に無限の区間，虚軸方向には区間 [-i pi/2, +i pi/2] を値域とする複素数逆双曲線正弦値
+
+C言語サンプルプログラム
+
+以下に casinh 関数を使用して複素数逆双曲線正弦を求めるサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <complex.h>
+
+/* main */
+int main(void) {
+    double complex z = 3.0 + 2.0 * I;
+    double complex casinh_z01, casinh_z02;
+
+    /* 複素数逆双曲線正弦を求める */
+    casinh_z01 = casinh(z);
+    casinh_z02 = clog(z + csqrt(1.0 + z * z));
+
+    /* 表示 */
+    printf("casinh 関数で求めた値:  %.10f + %.10fi\n",
+        creal(casinh_z01), cimag(casinh_z01));
+    printf("数学的定義から求めた値: %.10f + %.10fi\n",
+        creal(casinh_z02), cimag(casinh_z02));
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+casinh 関数で求めた値: 1.9833870299 + 0.5706527843i
+数学的定義から求めた値:  1.9833870299 + 0.5706527843i
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

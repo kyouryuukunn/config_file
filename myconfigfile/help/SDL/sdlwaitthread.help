@@ -1,0 +1,33 @@
+TITLE : SDL_WaitThread
+
+SDL Library Documentation
+PrevNext
+
+SDL_WaitThread
+
+Name
+
+SDL_WaitThread -- スレッドが終了するのを待ちます。
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+void SDL_WaitThread(SDL_Thread *thread, int *status);
+
+Description
+
+
+スレッドが終了するのを待ちます(タイムアウトはサポートしていません)。
+
+Return Value
+
+
+もしstatusがNULLで ないなら、statusの指す領域に スレッドの関数のリターンコードが格納されます。
+
+See Also
+
+SDL_CreateThread
+
+PrevHomeNext
+SDL_GetThreadIDUpSDL_KillThread

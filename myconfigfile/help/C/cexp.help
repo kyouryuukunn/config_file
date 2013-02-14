@@ -1,0 +1,192 @@
+TITLE : C言語関数辞典 - cexp, cexpf, cexpl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ complex.h ≫ cexp, cexpf, cexpl
+
+The cexp functions (C99) - cexp, cexpf, cexpl
+
+底がネイピア数 e である指数関数 (指数は複素数) を計算します．
+
+cexp (C99)
+
+
+#include <complex.h>
+
+
+
+double complex cexp(
+    double complex z
+);
+
+
+cexp 関数は，自然対数の底 e の z 乗を計算し，結果を double complex 型で返します．
+
+cexpf (C99)
+
+
+#include <complex.h>
+
+
+
+float complex cexpf(
+    float complex z
+);
+
+
+cexpf 関数は，自然対数の底 e の z 乗を計算し，結果を float complex 型で返します．
+
+cexpl (C99)
+
+
+#include <complex.h>
+
+
+
+long double complex cexpl(
+    long double complex z
+);
+
+
+cexpl 関数は，自然対数の底 e の z 乗を計算し，結果を long double complex 型で返します．
+
+戻り値
+
+  * e を底とする指数関数値 (複素数)
+
+C言語サンプルプログラム
+
+以下に cexp 関数を使用して e を底とする複素数の指数関数値を求めるサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <complex.h>
+
+/* macros */
+#define PI 3.14159265
+
+/* main */
+int main(void) {
+    double theta = PI;
+    double complex z = theta * I;
+    double complex cexp_z01, cexp_z02;
+
+    /* 指数関数を求める */
+    cexp_z01 = cexp(z);
+    cexp_z02 = (cos(theta) + sin(theta) * I);
+
+    /* 表示 */
+    printf("cexp 関数で求めた値:      %.10f + %.10fi\n",
+        creal(cexp_z01), cimag(cexp_z01));
+    printf("オイラーの公式で求めた値: %.10f + %.10fi\n",
+        creal(cexp_z02), cimag(cexp_z02));
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+cexp 関数で求めた値:   -1.0000000000 + 0.0000000036i
+オイラーの公式で求めた値: -1.0000000000 + 0.0000000036i
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,31 @@
+TITLE : SDL_CreateYUVOverlay
+
+SDL Library Documentation
+PrevNext
+
+SDL_CreateYUVOverlay
+
+Name
+
+SDL_CreateYUVOverlay --  YUV ビデオオーバレイを生成します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_Overlay *SDL_CreateYUVOverlay(int width, int height, Uint32 format, SDL_Surface *display);
+
+Description
+
+
+SDL_CreateYUVOverlay は 与えられた display 用に 指定されたwidth・height そしてformatの YUV オーバレイを生成します。 (利用可能なフォーマットのリストについては SDL_Overlay を 見て下さい) SDL_Overlay 構造体が返されます。
+
+
+オーバーレイがハードウェア内で生成されるのでなければ、 オーバーレイが表示される領域下の表示サーフェスに対する内容は オーバーレイが表示される時に上書きされるため、 「オーバーレイ」という言葉は誤った名称です。
+
+See Also
+
+SDL_Overlay, SDL_DisplayYUVOverlay, SDL_FreeYUVOverlay
+
+PrevHomeNext
+SDL_GL_SwapBuffersUpSDL_LockYUVOverlay

@@ -1,0 +1,202 @@
+TITLE : C言語関数辞典 - fread
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ fread
+
+fread
+
+ブロック単位でファイルを読み込みます．主にバイナリファイル (binary file) を読み込む場合に使用します．
+
+
+#include <stdio.h>
+
+
+
+size_t fread(
+    void * restrict ptr,
+    size_t size,
+    size_t nmemb,
+    FILE * restrict stream
+);
+
+
+fread 関数は stream が指すストリーム (stream) から，size バイト単位で nmemb 個のデータを読み込み，ptr が指す配列に格納します．
+
+引数
+
+  * ptr: 読み込む領域へのポインタ
+  * size: 要素 1 個あたりの大きさ
+  * nmemb: 要素の個数
+  * stream: ストリーム
+
+戻り値
+
+  * 読み取り成功時: 読み取った要素の個数 (バイト数ではない)
+  * size または nmembが 0 : 0
+
+C言語サンプルプログラム
+
+以下に fread 関数を使用してファイルから文字列を読み込むサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* macros */
+#define N 256
+
+/* structures */
+typedef struct player_tag {
+    char no[N];
+    char name[N];
+    char team[N];
+} player;
+
+/* main */
+int main(void) {
+    int i;
+    FILE *fp;
+    char *filename = "sample.dat";
+    player p[2];
+
+    /* ファイルのオープン */
+    if ((fp = fopen(filename, "rb")) == NULL) {
+        fprintf(stderr, "%sのオープンに失敗: %s\n",
+                filename, strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    for ( i = 0; i < 2; i++ ) {
+        fread(&p[i].no, 1 ,4 ,fp);
+        p[i].no[4] = '\0';
+
+        fread(&p[i].name, 1 ,14 ,fp);
+        p[i].name[14] = '\0';
+
+        fread(&p[i].team, 1 ,10 ,fp);
+        p[i].team[10] = '\0';
+    }
+
+    for ( i = 0; i < 2; i++ ) {
+        printf("%s, %s, %s\n", p[i].no, p[i].name, p[i].team);
+    }
+
+    /* ファイルのクローズ */
+    fclose(fp);
+
+    return EXIT_SUCCESS;
+}
+
+sample.datの内容
+
+sample.dat を以下のように用意したとします．
+
+
+0051ススキヒチローマリナーズ0055マツイヒテキ  ヤンキース
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+0051, ススキヒチロー, マリナーズ
+0055, マツイヒテキ  , ヤンキース
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

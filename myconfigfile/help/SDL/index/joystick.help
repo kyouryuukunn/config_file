@@ -1,0 +1,39 @@
+TITLE : Joystick
+
+SDL Library Documentation
+PrevNext
+
+Chapter 9. Joystick
+
+Table of Contents
+SDL_NumJoysticks --  利用可能なジョイスティックの数を数えます。
+SDL_JoystickName --  ジョイスティック名を取得します。
+SDL_JoystickOpen --  ジョイスティックを使うためオープンします。
+SDL_JoystickOpened --  ジョイスティックがオープンされているかどうかを調べます。
+SDL_JoystickIndex --  SDL_Joystick のインデックス番号を返します。
+SDL_JoystickNumAxes --  ジョイスティックの軸の数を取得します。
+SDL_JoystickNumBalls --  ジョイスティックのトラックボールの数を取得します。
+SDL_JoystickNumHats --  ジョイスティックのハットスイッチの数を取得します。
+SDL_JoystickNumButtons --  ジョイスティックのボタンの数を取得します。
+SDL_JoystickUpdate --  すべてのジョイスティックの状態を更新します。
+SDL_JoystickGetAxis --  軸の現在の状態を取得します。
+SDL_JoystickGetHat --  ジョイスティックのハットスイッチの現在の状態を取得します。
+SDL_JoystickGetButton --  指定されたジョイスティックの指定されたボタンの現在の情報を返します。
+SDL_JoystickGetBall --  トラックボールの相対的な動きを取得します。
+SDL_JoystickClose --  前もってオープンされたジョイスティックをクローズします。
+
+
+ジョイスティック、またそれに近い他のデバイスは、 ゲームプレイにおける非常に強い役割を持っており、 SDL はそれらを広範囲にサポートしています。 軸、ボタン、POV ハットスイッチ、そしてトラックボールは 全てサポートされてます。
+
+
+ジョイスティックのサポートは SDL_Init に SDL_INIT_JOYSTICK フラグを渡すことで初期化されます。 いったん初期化されたジョイスティックは SDL_JoystickOpen で オープンされなければいけません。
+
+
+この節に書かれている関数を使う時、 ジョイスティックにこちらからアクセスして読み込むのが 最良の方法のように思えますが、たいていの場合そうではありません。 理想的には、ジョイスティックは イベント システムを使って読み込むべきです。 これを可能にするために、 SDL_JoystickEventState を使ってジョイスティックのイベント処理状態を設定しなければなりません。 もちろん、ジョイスティックを使う前に オープン しなければなりません。
+
+Note: イベントキューを通してジョイスティックを扱っているので なければ、 SDL_JoystickUpdate を呼んでジョイスティックの更新を明示的に要求する必要があります。
+
+Note: フォースフィードバックはまだサポートされていません。 Sam (slouken@libsdl.org) は API をデザインする最良の方法に関して、 フォースフィードバックの経験のある人々からの提案を求めています。
+
+PrevHomeNext
+SDL_JoystickEventStateUpSDL_NumJoysticks

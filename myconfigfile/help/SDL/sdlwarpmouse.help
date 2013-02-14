@@ -1,0 +1,28 @@
+TITLE : SDL_WarpMouse
+
+SDL Library Documentation
+PrevNext
+
+SDL_WarpMouse
+
+Name
+
+SDL_WarpMouse --  マウスカーソルの位置をセットします。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_WarpMouse(Uint16 x, Uint16 y);
+
+Description
+
+
+マウスカーソルの位置をセットします。(マウスモーションイベントを発生させます)
+
+See Also
+
+SDL_MouseMotionEvent
+
+PrevHomeNext
+SDL_DisplayFormatAlphaUpSDL_CreateCursor

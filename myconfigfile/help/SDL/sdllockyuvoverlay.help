@@ -1,0 +1,33 @@
+TITLE : SDL_LockYUVOverlay
+
+SDL Library Documentation
+PrevNext
+
+SDL_LockYUVOverlay
+
+Name
+
+SDL_LockYUVOverlay --  オーバーレイをロックします。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_LockYUVOverlay(SDL_Overlay *overlay);
+
+Description
+
+
+SDL_LockSurface とまったく同じように、 SDL_LockYUVOverlay は ピクセルデータに対する直接アクセスのために overlay を ロックします。
+
+Return Value
+
+
+成功の時は 0 を、 エラーの時は -1 を返します。
+
+See Also
+
+SDL_UnlockYUVOverlay, SDL_CreateYUVOverlay, SDL_Overlay
+
+PrevHomeNext
+SDL_CreateYUVOverlayUpSDL_UnlockYUVOverlay

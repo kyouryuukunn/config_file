@@ -1,0 +1,131 @@
+TITLE : C言語関数辞典 - va_start
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdarg.h ≫ va_start
+
+va_start
+
+可変長引数 (variable arguments) を初期化します．
+
+
+#include <stdarg.h>
+
+
+
+void va_start(
+    va_list ap,
+    最終仮引数
+);
+
+
+va_start マクロは，va_arg マクロの引数などに使用される va_list 型の変数 ap を初期化します． va_start マクロは，ap に対して va_end マクロを呼び出すことなく，その ap を最初期化する目的で呼び出してはいけません．
+
+引数最終仮引数が以下もので宣言される場合，その動作は未定義です．
+
+  * register 記憶域クラス
+  * 関数型
+  * 配列型
+  * 規定の実引数拡張を適用した結果の型と適合しない型
+
+C言語サンプルプログラム
+
+va_arg マクロのサンプルプログラムをご覧下さい．
+
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

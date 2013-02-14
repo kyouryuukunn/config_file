@@ -1,0 +1,51 @@
+TITLE : SDL_CD
+
+SDL Library Documentation
+PrevNext
+
+SDL_CD
+
+Name
+
+SDL_CD --  CD-ROM ドライブの情報
+
+Structure Definition
+
+typedef struct{ int id; CDstatus status; int numtracks; int cur_track; int cur_frame; SDL_CDtrack track[SDL_MAX_TRACKS+1]; } SDL_CD;
+
+
+Structure Data
+
+id
+プライベートドライブ ID
+status
+ドライブの ステータス
+numtracks
+CD のトラック数
+cur_track
+現在のトラック
+cur_frame
+トラック内の現在のフレームオフセット値
+track[SDL_MAX_TRACKS+1]
+トラック内容の配列 (SDL_CDtrack を参照)
+
+Description
+
+
+SDL_CD 構造体は SDL_CDOpen によって返されます。 オープンされた CDROM デバイスを表し、 ディスクにおけるトラックのレイアウトの情報を格納します。
+
+
+フレームは CD の基礎データの単位です。 CD_FPS フレームは音楽の 1 秒と同等です。 SDL は時間とフレームとの間を変換する 2 種類のマクロを提供しています。 それは FRAMES_TO_MSF(f,M,S,F) と MSF_TO_FRAMES です。
+
+Examples
+
+
+int min, sec, frame; int frame_offset; FRAMES_TO_MSF(cdrom->cur_frame, &min, &sec, &frame); printf("現在位置: %d 分, %d 秒, %d フレーム\n", min, sec, frame); frame_offset=MSF_TO_FRAMES(min, sec, frame);
+
+
+See Also
+
+SDL_CDOpen, SDL_CDtrack
+
+PrevHomeNext
+SDL_CDCloseUpSDL_CDtrack

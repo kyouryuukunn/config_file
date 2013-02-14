@@ -1,0 +1,10 @@
+= git
+git init
+	git add .
+	git commit -m '' 
+or
+	git commit -am ''
+git remote origin url
+git push origin master
+[2012-10-28 11:15]
+

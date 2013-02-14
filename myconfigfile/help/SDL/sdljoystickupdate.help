@@ -1,0 +1,28 @@
+TITLE : SDL_JoystickUpdate
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickUpdate
+
+Name
+
+SDL_JoystickUpdate --  すべてのジョイスティックの状態を更新します。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_JoystickUpdate(void);
+
+Description
+
+
+オープンされたすべてのジョイスティックの状態(位置・ボタンなど)を更新します。 SDL_JoystickEventState によってジョイスティックイベントが有効になっている場合は、 イベントループの中で自動的に呼ばれます。
+
+See Also
+
+SDL_JoystickEventState
+
+PrevHomeNext
+SDL_JoystickNumButtonsUpSDL_JoystickGetAxis

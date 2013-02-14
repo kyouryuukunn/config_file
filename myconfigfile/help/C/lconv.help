@@ -1,0 +1,159 @@
+TITLE : C言語関数辞典 - lconv
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ locale.h ≫ lconv
+
+lconv
+
+conv 構造体はロケール情報を格納する構造体です．
+
+
+#include <locale.h>
+
+
+conv 構造体のメンバは以下の通りです．
+
+メンバ
+
+型 メンバ 意味
+char * decimal_point  数値書式 (通貨以外) で使用する小数点文字
+char * thousands_sep  数値書式 (通貨以外) の整数部の数字のグループを区切る文字
+char * grouping  数値書式 (通貨以外) の数字の各グループの桁数
+char * int_curr_symbol  国際通貨記号
+
+  *  最初の3文字:
+  ISO4217規格に定義されている英字国際通貨記号
+  *  4番目の文字:
+  国際通貨記号と通貨値を区切るために使用する文字
+
+char * currency_symbol  現地通貨記号
+char * mon_decimal_point  通貨書式で使用する小数点文字
+char * mon_thousands_sep  通貨書式の整数部の数字のグループを区切る文字
+char * mon_grouping  通貨書式の数字の各グループの桁数
+char * positive_sign  負でない通貨値の符号を示す文字列
+char * negative_sign  負の通貨値の符号を表す文字列
+char int_frac_digits  国際的な通貨書式の小数部の桁数
+char frac_digits  通貨書式の小数部の桁数
+char p_cs_precedes  
+
+  * 0: 通貨記号が値の後ろにある場合
+  * 1: 通貨記号が負でない通貨値の前にある場合
+
+char p_sep_by_space  
+
+  *  0:
+  通貨記号と負でない通貨値が空白で区切られていない場合
+  *  1:
+  通貨記号と負でない通貨値が空白で区切られている場合
+
+char n_cs_precedes  
+
+  *  0: 通貨記号が負の通貨値の後ろにある場合
+  *  1: 通貨記号が負の通貨値の前にある場合
+
+char n_sep_by_space  
+
+  *  0:
+  通貨記号と負の通貨値が空白で区切られていない場合
+  *  1:
+  通貨記号と負の通貨値が空白で区切られている場合
+
+char p_sign_posn  負でない通貨書式の符号の位置
+char n_sign_posn  負の通貨書式の符号の位置
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

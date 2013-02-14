@@ -1,0 +1,30 @@
+TITLE : SDL_WM_ToggleFullScreen
+
+SDL Library Documentation
+PrevNext
+
+SDL_WM_ToggleFullScreen
+
+Name
+
+SDL_WM_ToggleFullScreen --  フルスクリーンモードを切り換えます。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_WM_ToggleFullScreen(SDL_Surface *surface);
+
+Description
+
+
+フルスクリーンモードがサポートされていれば、 アプリケーションをウィンドウモードとフルスクリーンモードとの間で 切り換えます。 (現在は X11 のみサポートされており、BeOS のサポートは実験的なものです)
+
+Return Value
+
+
+失敗した時は 0 を、 成功した時は 1 を返します。
+
+
+PrevHomeNext
+SDL_WM_IconifyWindowUpSDL_WM_GrabInput

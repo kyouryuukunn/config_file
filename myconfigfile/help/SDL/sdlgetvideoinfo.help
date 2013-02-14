@@ -1,0 +1,28 @@
+TITLE : SDL_GetVideoInfo
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetVideoInfo
+
+Name
+
+SDL_GetVideoInfo --  ビデオハードウェアについての情報の構造体へのポインタを返します。
+
+Synopsis
+
+#include "SDL.h"
+
+SDL_VideoInfo *SDL_GetVideoInfo(void);
+
+Description
+
+
+この関数はビデオハードウェアに関する 情報の構造体への読み込み専用ポインタを 返します。 SDL_SetVideoMode の前に これが呼ばれると、 返された構造体の vfmt メンバには 「最も適した」ビデオモードのピクセルフォーマットが入ります。
+
+See Also
+
+SDL_SetVideoMode, SDL_VideoInfo
+
+PrevHomeNext
+SDL_GetVideoSurfaceUpSDL_VideoDriverName

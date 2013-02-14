@@ -1,0 +1,157 @@
+TITLE : C言語関数辞典 - ceil, ceilf, ceill
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ ceil, ceilf, ceill
+
+The ceil functions - ceil, ceilf, ceill
+
+天井関数 (ceiling function) (引数以上の最小の整数値) を計算します．
+
+ceil
+
+
+#include <math.h>
+
+
+
+double ceil(
+    double x
+);
+
+
+ceil 関数は，x 以上の最小の整数値を計算し，結果を double 型で返します．
+
+ceilf (C99)
+
+
+#include <math.h>
+
+
+
+float ceilf(
+    float x
+);
+
+
+ceilf 関数は，x 以上の最小の整数値を計算し，結果を float 型で返します．
+
+ceill (C99)
+
+
+#include <math.h>
+
+
+
+long double ceill(
+    long double x
+);
+
+
+ceill 関数は，x 以上の最小の整数値を計算し，結果を long double 型で返します．
+
+戻り値
+
+  * x 以上の最小の整数値
+
+数学上の表記
+
+C言語サンプルプログラム
+
+小数点以下を切り上げる のサンプルプログラムをご覧下さい．
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

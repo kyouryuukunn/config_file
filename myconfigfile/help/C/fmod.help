@@ -1,0 +1,202 @@
+TITLE : C言語関数辞典 - fmod, fmodf, fmodl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ fmod, fmodf, fmodl
+
+The fmod functions - fmod, fmodf, fmodl
+
+余剰を計算します．
+
+fmod
+
+
+#include <math.h>
+
+
+
+double fmod(
+    double x,
+    double y
+);
+
+
+fmod 関数は x / y の浮動小数点余剰を計算し，結果を double 型で返します．
+
+fmodf (C99)
+
+
+#include <math.h>
+
+
+
+float fmodf(
+    float x,
+    float y
+);
+
+
+fmodf 関数は x / y の浮動小数点余剰を計算し，結果を float 型で返します．
+
+fmodl (C99)
+
+
+#include <math.h>
+
+
+
+long double fmodl(
+    long double x,
+    long double y
+);
+
+
+fmodl 関数は x / y の浮動小数点余剰を計算し，結果を long double 型で返します．
+
+fmod，fmodf，fmodl 関数の結果は x と同じ符号をもち，y の絶対値より小さい絶対値を持ちます．また，処理系によっては y が 0 の場合，定義域エラー (domain error) が発生する可能性があります．
+
+戻り値
+
+  * x / y の浮動小数点余剰
+
+C言語サンプルプログラム
+
+以下に fmod 関数を使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* main */
+int main(void) {
+    double x, y;
+    double rem;
+
+    printf("x の値を入力して下さい> ");
+    scanf("%lf", &x);
+
+    printf("y の値を入力して下さい> ");
+    scanf("%lf", &y);
+
+    /* 余剰を求める */
+    rem = fmod(x, y);
+
+    printf("%.2f %% %.2f = %.2f\n", x, y, rem);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+x の値を入力して下さい> 13.5
+y の値を入力して下さい> 2
+13.50 % 2.00 = 1.50
+
+x の値を入力して下さい> -13.5
+y の値を入力して下さい> 2
+-13.50 % 2.00 = -1.50
+
+x の値を入力して下さい> 13.5
+y の値を入力して下さい> -2
+13.50 % -2.00 = 1.50
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

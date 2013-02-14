@@ -1,0 +1,46 @@
+
+snippet     scene
+abbr        scene
+prev_word   '^'
+        *${1}|
+        @cn
+        ${2}
+snippet     rm
+abbr        @rm
+prev_word   '^'
+        @rmm
+        @rm
+        
+        *${1}|
+        @cn
+        ${2}
+snippet     lk
+abbr        @lk
+prev_word   '^'
+        @lk target=*${1} text=${2} x=${3} y=${4}
+snippet     flow
+abbr        @flow
+prev_word   '^'
+        *${1}|${1}
+        @flow outline="${2}" storage="${3}" target="*${1}" backtarget="${4}" skiptarget="*${5}"
+snippet     iscript
+abbr        @iscript
+prev_word   '^'
+        @iscript
+                ${1}
+        @endscript
+snippet     macro
+abbr        @macro
+prev_word   '^'
+        @macro name=${1}        
+        @endmacro
+
+snippet     eval
+abbr        @eval
+prev_word   '^'
+        @eval exp="${1}"
+snippet     if
+abbr        @if
+prev_word   '^'
+        @if exp="${1}"
+        @endif

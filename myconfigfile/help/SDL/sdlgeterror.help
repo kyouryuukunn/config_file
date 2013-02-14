@@ -1,0 +1,29 @@
+TITLE : SDL_GetError
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetError
+
+Name
+
+SDL_GetError -- SDLのエラーを文字列で得ます。
+
+Synopsis
+
+#include "SDL/SDL.h"
+
+char *SDL_GetError(void);
+
+Description
+
+
+SDL_GetError は 最新のSDL内のエラーの情報を、NULLで終端された文字列で返します。
+
+Return Value
+
+
+SDL_GetError は最新のエラーの内容を文字列で返します。
+
+PrevHomeNext
+SDL_WasInitUpVideo

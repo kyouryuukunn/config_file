@@ -1,0 +1,66 @@
+TITLE :         BohYoh.com【Ｃ言語講座】標準ライブラリ qsort    
+
+　qsort
+Ｃ言語 標準ライブラリ   アルファベット順索引   ヘッダ別索引   ホームページへ　Ｃ言語講座のページ
+
+探索・整列ユーティリティ
+qsort
+ヘッダ  #include <stdlib.h>
+形　式  void qsort(void *base, size_t nmemb, size_t size, int(*compar)(const void *, const void *));
+機　能  先頭要素をbaseが指している、要素数がnmemb個で要素の大きさがsizeであるオブジェクトの配列を、comparが指す比較関数にしたがって整列する。
+比較されるオブジェクトを指す二つの実引数をもって呼ばれる比較関数は、第１引致が第２引数より小さい／等しい／大きいとみなされるとき、それぞれ0より小さい／等しい／大きい整数を返すこと。
+二つの要素が等しいとき、整列された配列内でのそれらの順序は規定されない。
+返却値  なし。
+
+■実装例■
+
+#include <stdlib.h>
+
+/*--- x, yの指すnバイトの領域を交換 ---*/
+static void memswap(void *x, void *y, size_t n)
+{
+    unsigned char  *a = (unsigned char *)x;
+    unsigned char  *b = (unsigned char *)y;
+
+    for ( ; n--; a++, b++) {
+        unsigned char  c = *a;
+        *a = *b;
+        *b = c;
+    }
+}
+
+/*--- 要素の大きさがsizeで要素数がnmembの配列baseを比較関数comparを用いて
+      クイックソートからkeyと一致する要素を ---*/
+void qsort(void *base, size_t nmemb, size_t size,
+           int (*compar)(const void *, const void *))
+{
+    if (nmemb > 0) {
+        size_t pl = 0;                  /* 左カーソル */
+        size_t pr = nmemb - 1;          /* 右カーソル */
+        size_t pv = nmemb;              /* ピボット */
+        size_t pt = (pl + pr) / 2;      /* ピボットの更新値 */
+        char  *v = (char *)base;        /* 先頭要素へのポインタ */
+        char  *x;                       /* ピボットへのポインタ */
+
+        do {
+            if (pv != pt) x = &v[(pv = pt) * size];
+
+            while (compar((const void *)&v[pl * size], x) < 0) pl++;
+            while (compar((const void *)&v[pr * size], x) > 0) pr--;
+            if (pl <= pr) {
+                pt = (pl == pv) ? pr : (pr == pv) ? pl : pv;
+                memswap(&v[pl * size], &v[pr * size], size);
+                pl++;
+                if (pr == 0)    /* 符号無し整数0からのデクリメントを避ける */
+                    goto QuickRight;
+                pr--;
+            }
+        } while (pl <= pr);
+
+        if (0  < pr)      qsort(&v[0],         pr + 1,     size, compar);
+    QuickRight:
+        if (pl < nmemb-1) qsort(&v[pl * size], nmemb - pl, size, compar);
+    }
+}
+
+-------------------------------------------------------------------------------

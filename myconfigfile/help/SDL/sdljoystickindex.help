@@ -1,0 +1,33 @@
+TITLE : SDL_JoystickIndex
+
+SDL Library Documentation
+PrevNext
+
+SDL_JoystickIndex
+
+Name
+
+SDL_JoystickIndex --  SDL_Joystick のインデックス番号を返します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_JoystickIndex(SDL_Joystick *joystick);
+
+Description
+
+
+指定された SDL_Joystick 構造体のインデックス番号を返します。
+
+Return Value
+
+
+ジョイスティックのインデックス番号。
+
+See Also
+
+SDL_JoystickOpen
+
+PrevHomeNext
+SDL_JoystickOpenedUpSDL_JoystickNumAxes

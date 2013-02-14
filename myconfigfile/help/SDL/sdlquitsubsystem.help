@@ -1,0 +1,28 @@
+TITLE : SDL_QuitSubSystem
+
+SDL Library Documentation
+PrevNext
+
+SDL_QuitSubSystem
+
+Name
+
+SDL_QuitSubSystem -- サブシステムをシャットダウンします。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_QuitSubSystem(Uint32 flags);
+
+Description
+
+
+SDL_QuitSubSystemは、SDL_Init や SDL_InitSubSystemで初期化したサブシステムをシャットダウンすることが できます。flagsパラーメータには SDL_QuitSubSystemでシャットダウンしたいサブシステムを指定します。 指定方法はSDL_Initと同じです。
+
+See Also
+
+SDL_Quit, SDL_Init, SDL_InitSubSystem
+
+PrevHomeNext
+SDL_InitSubSystemUpSDL_Quit

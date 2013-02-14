@@ -1,0 +1,188 @@
+TITLE : C言語関数辞典 - freopen
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ freopen
+
+freopen
+
+ストリーム (stream) をクローズしてから新しいストリームをオープンします．
+
+
+#include <stdio.h>
+
+
+
+FILE *freopen(
+    const char * restrict filename,
+    const char * restrict mode,
+    FILE * restrict stream
+);
+
+
+freopen 関数は stream が指す既存のストリームをクローズしてから filename が指す文字列を名前とするファイルを mode が指すモードでオープンし，そのファイルにストリームを結び付けます．このとき，そのストリームのエラー表示子 (error indicator) とファイル終了表示子 (end-of-file indicator) はクリアされます．
+
+なお，freopen はストリームのクローズの失敗は無視します．
+
+引数
+
+  * filename: ファイル名 or 空ポインタ (NULL)
+  (空ポインタを指定した場合は，そのストリームに現在結び付けられているファイル名を指定したものとして，そのストリームのモードを mode で指定されたものへ変更します．※)
+  * mode: モード (詳しくは fopen 関数のモードを参照してください)
+  * stream: クローズするストリーム
+
+戻り値
+
+  * 成功した場合: オープンしたストリームを制御するオブジェクトへのポインタ
+  * 失敗した場合: 空ポインタ
+
+※ どのような状況でどのようなモード変更が可能かは処理系定義なので注意が必要です．
+
+C言語サンプルプログラム
+
+freopen 関数を使用したサンプルプログラムを以下に示します．以下のサンプルプログラムでは fopen を用いてファイルをオープンした後，fputs で文字列をファイルに書き込んでいます．そして freopen を用いてファイルを開き直した後，fgets を用いて書き込んだ文字列を再取得しています．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* macros */
+#define N 256
+
+/* main */
+int main(void) {
+    FILE *fp;
+    char *filename = "sample.txt";
+    char *writeline = "I love Snoopy!";
+    char readline[N] = {'\0'};
+
+    /* ファイルを書き込みモードでオープン */
+    if ((fp = fopen(filename, "w")) == NULL) {
+        fprintf(stderr, "%sのオープンに失敗しました.\n", filename);
+        exit(EXIT_FAILURE);
+    }
+
+    /* 文字列をsample.txtに書き込む */
+    fputs(writeline, fp);
+
+    /* ファイルをクローズし, 読み込みモードで再オープン */
+    if ((fp = freopen(filename, "r", fp)) == NULL) {
+        fprintf(stderr, "%sの再オープンに失敗しました.\n 詳細:%s",
+                filename, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    /* ファイルの終端まで文字を読み取り表示する */
+    fgets(readline, N, fp);
+    puts(readline);
+
+    /* ファイルのクローズ */
+    fclose(fp);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+I love Snoopy!
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

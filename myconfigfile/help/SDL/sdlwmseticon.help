@@ -1,0 +1,42 @@
+TITLE : SDL_WM_SetIcon
+
+SDL Library Documentation
+PrevNext
+
+SDL_WM_SetIcon
+
+Name
+
+SDL_WM_SetIcon --  表示ウィンドウにアイコンをセットします。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_WM_SetIcon(SDL_Surface *icon, Uint8 *mask);
+
+Description
+
+
+表示ウィンドウにアイコンをセットします。 Win32 のアイコンは 32×32 でなければいけません。
+
+
+この関数は、 SDL_SetVideoMode を 初めて呼ぶ前に呼ばれなければいけません。
+
+
+mask はアイコンの形状を表すビットマスクです。 mask が NULL ならば、 形状はicon のカラーキーがあれば それによって決定し、そうでなければ矩形(透明部分なし)のアイコンにします。
+
+
+mask が NULL でない場合、 対応するピクセルが見えるべき部分についてビットがセットされた ビットマップを指します。 ビットマップのフォーマットは以下の通りです: スキャンラインは通常上から下の順番で来ます。 それぞれのスキャンラインは (width / 8) バイト (端数は切り上げ) からなります。 個々のバイトのMSB(最上位ビット)は左端のピクセルを表します。
+
+Example
+
+SDL_WM_SetIcon(SDL_LoadBMP("icon.bmp"), NULL);
+
+
+See Also
+
+SDL_SetVideoMode, SDL_WM_SetCaption
+
+PrevHomeNext
+SDL_WM_GetCaptionUpSDL_WM_IconifyWindow

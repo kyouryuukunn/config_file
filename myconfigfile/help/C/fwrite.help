@@ -1,0 +1,198 @@
+TITLE : C言語関数辞典 - fwrite
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ fwrite
+
+fwrite
+
+ブロック単位でファイルを書き込みます．主にバイナリファイル (binary file) に書き込む場合に使用します．
+
+
+#include <stdio.h>
+
+
+
+size_t fwrite(
+    const void * restrict ptr,
+    size_t size,
+    size_t nmemb,
+    FILE * restrict stream
+);
+
+
+fwrite 関数は，ptr が指す配列から size バイト単位で nmemb 個のデータを，stream が指すストリーム (stream) に書き込みます．
+
+引数
+
+  * ptr: 書き込むデータへのポインタ
+  * size: 要素 1 個あたりの大きさ
+  * nmemb: 要素の個数
+  * stream: ストリーム
+
+戻り値
+
+  * 読み取り成功時: 書込みに成功した要素の個数 (バイト数ではない)
+  * size または nmembが 0 : 0
+
+C言語サンプルプログラム
+
+以下に fwrite 関数を使用してファイルに文字列を書き込むサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* macros */
+#define N 256
+
+/* structures */
+typedef struct player_tag {
+    char no[N];
+    char name[N];
+    char team[N];
+} player;
+
+/* main */
+int main(void) {
+    int i;
+    FILE *fp;
+    char *filename = "sample.dat";
+    player p[] = {
+        {"0051", "ススキヒチロー", "マリナーズ"},
+        {"0055", "マツイヒテキ  ", "ヤンキース"}
+    };
+
+    /* ファイルのオープン */
+    if ((fp = fopen(filename, "w")) == NULL) {
+        fprintf(stderr, "%sのオープンに失敗: %s\n",
+                filename, strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    /* 書き込み */
+    for ( i = 0; i < 2; i++ ) {
+        fwrite(&p[i].no, 1 ,4 ,fp);
+        fwrite(&p[i].name, 1 ,14 ,fp);
+        fwrite(&p[i].team, 1 ,10 ,fp);
+    }
+
+    printf("書き込みが完了しました．\n");
+
+    /* ファイルのクローズ */
+    fclose(fp);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+書き込みが完了しました．
+
+sample.datの内容
+
+sample.dat の内容は以下のようになります．
+
+
+0051ススキヒチローマリナーズ0055マツイヒテキ  ヤンキース
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

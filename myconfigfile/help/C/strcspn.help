@@ -1,0 +1,156 @@
+TITLE : C言語関数辞典 - strcspn
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ string.h ≫ strcspn
+
+strcspn
+
+文字列中の指定文字列を含まない先頭部分の長さを求めます．
+
+
+#include <string.h>
+
+
+
+size_t strcspn(
+    const char *s1,
+    const char *s2
+);
+
+
+strcspn 関数は s1 が指す文字列の中で，s2 が指す文字列の中の文字以外から構成される先頭部分の最大の長さを計算します．
+
+戻り値
+
+  * 先頭部分の長さ
+
+C言語サンプルプログラム
+
+strcspn 関数を使用して文字列中から指定文字列を含まない先頭部分の長さを求めるサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* main */
+int main(void) {
+    char s1[] = "Joe Cool";
+    char s2[] = "o";
+    char s3[] = "cC";
+    size_t n;
+
+    n = strcspn(s1, s2);
+    printf("%s 中から %s が見つかるまでの長さ: %d\n", s1, s2, n);
+
+    n = strcspn(s1, s3);
+    printf("%s 中から %s が見つかるまでの長さ: %d\n", s1, s3, n);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+Joe Cool 中から o が見つかるまでの長さ: 1
+Joe Cool 中から cC が見つかるまでの長さ: 4
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

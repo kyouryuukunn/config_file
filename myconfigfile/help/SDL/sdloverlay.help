@@ -1,0 +1,44 @@
+TITLE : SDL_Overlay
+
+SDL Library Documentation
+PrevNext
+
+SDL_Overlay
+
+Name
+
+SDL_Overlay --  YUV のビデオオーバレイ
+
+Structure Definition
+
+typedef struct{ Uint32 format; int w, h; int planes; Uint16 *pitches; Uint8 **pixels; Uint32 hw_overlay:1; } SDL_Overlay;
+
+
+Structure Data
+
+format
+オーバーレイのフォーマット(下記参照)
+w, h
+オーバーレイの横幅と高さ
+planes
+オーバーレイのプレーン数。通常は 1 か 3
+pitches
+各プレーンごとのピッチの配列。 ピッチは 1 ライン分のバイト数。
+pixels
+各プレーンのデータを指すポインタの配列。 これらのポインタが使われる前にオーバーレイはロックされなければいけません。 オーバーレイは
+hw_overlay
+オーバーレイがハードウェアアクセエラレーションに対応している場合は、 これは 1 にセットされます。
+
+Description
+
+
+SDL_Overlay は SDL_Surface に 似ていますが、YUVV オーバレイを格納する点だけが異なります。 pixels (使う前に ロック する必要があります) を除き、全てのフィールドは読込専用です。 format フィールドは 以下のいずれかのオーバーレイフォーマットを格納します。 #define SDL_YV12_OVERLAY 0x32315659 /* Planar mode: Y + V + U */ #define SDL_IYUV_OVERLAY 0x56555949 /* Planar mode: Y + U + V */ #define SDL_YUY2_OVERLAY 0x32595559 /* Packed mode: Y0+U0+Y1+V0 */ #define SDL_UYVY_OVERLAY 0x59565955 /* Packed mode: U0+Y0+V0+Y1 */ #define SDL_YVYU_OVERLAY 0x55595659 /* Packed mode: Y0+V0+Y1+U0 */
+
+YUV フォーマットについての詳しい情報は http://www.webartz.com/fourcc/indexyuv.htm で見つけることができます。
+
+See Also
+
+SDL_CreateYUVOverlay, SDL_LockYUVOverlay, SDL_UnlockYUVOverlay, SDL_FreeYUVOverlay
+
+PrevHomeNext
+SDL_VideoInfoUpWindow Management

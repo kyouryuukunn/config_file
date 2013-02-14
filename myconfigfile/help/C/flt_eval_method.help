@@ -1,0 +1,122 @@
+TITLE : C言語関数辞典 - FLT_EVAL_METHOD
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ float.h ≫ FLT_EVAL_METHOD
+
+FLT_EVAL_METHOD (C99)
+
+浮動小数点演算の結果の値などの精度を表します．
+
+
+#include <float.h>
+
+
+FLT_EVAL_METHOD は浮動小数点演算の結果の値，算術型変換の結果の値，浮動小数点定数の値の精度を表します．とりうる値は以下の通りです．
+
+とりうる値
+
+値 意味
+-1 不確定
+0 すべての演算及び定数をその型の範囲及び精度のとおりに評価する
+1 float 型，double 型の演算及び定数を double 型の範囲及び精度で評価する
+long double 型の演算及び定数を long double 型の範囲及び精度で評価する
+2 すべての演算及び定数を long double 型の範囲及び精度で評価する
+その他 処理系定義
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

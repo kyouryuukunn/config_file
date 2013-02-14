@@ -1,0 +1,185 @@
+TITLE : C言語関数辞典 - fgetpos
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ fgetpos
+
+fgetpos
+
+ストリーム (stream) の解析状態および，現在のファイル位置表示子 (file position indicator) の値を取得します．
+
+
+#include <stdio.h>
+
+
+
+int fgetpos(
+    FILE * restrict stream,
+    fpos_t * restrict pos
+);
+
+
+fgetpos 関数は stream が指すストリームの解析状態および，現在のファイル位置表示子の値を pos が指すオブジェクトに格納します．
+
+pos に格納される値は fsetpos 関数で使用する情報を含みます．
+
+引数
+
+  * stream: ストリーム
+  * pos: 解析状態および，現在のファイル位置表示子を格納するためのオブジェクト
+
+戻り値
+
+  * 成功時: 0
+  * 失敗時: 0 以外の値 (処理系定義の正の値を errno に格納)
+
+C言語サンプルプログラム
+
+以下に fgetpos 関数を使用して現在のファイル位置表示子の値を取得するサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* main */
+int main(void) {
+    FILE *fp;
+    fpos_t pos_first, pos_writed;
+    char *filename = "sample.txt";
+
+    /* ファイルのオープン */
+    if ((fp = fopen(filename, "w+")) == NULL) {
+        fprintf(stderr, "%sのオープンに失敗: %s\n",
+                filename, strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    /* file position indicator の値を取得 */
+    fgetpos(fp, &pos_first);
+    printf("file position indicator: %ld\n", (long)pos_first);
+
+    /* ファイルに Snoopy を書き込む */
+    fputs("Snoopy",fp);
+
+    /* Snoopy 書込み後の file position indicator の値を取得 */
+    fgetpos(fp, &pos_writed);
+    printf("file position indicator: %ld\n", (long)pos_writed);
+
+    /* file position indicator の値を元に戻す */
+    if (fsetpos(fp, &pos_first) == 0) {
+        printf("元に戻した file position indicator: %ld\n", (long)pos_first);
+    } else {
+        fprintf(stderr, "file position indicator の設定に失敗.\n");
+        return EXIT_FAILURE;
+    }
+
+    fclose(fp);
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+file position indicator: 0
+file position indicator: 6
+元に戻した file position indicator: 0
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

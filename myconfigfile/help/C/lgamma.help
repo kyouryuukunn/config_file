@@ -1,0 +1,195 @@
+TITLE : C言語関数辞典 - lgamma, lgammaf, lgammal
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ lgamma, lgammaf, lgammal
+
+The lgamma functions (C99) - lgamma, lgammaf, lgammal
+
+ガンマ関数の絶対値の自然対数 (loge) を計算します．
+
+lgamma (C99)
+
+
+#include <math.h>
+
+
+
+double lgamma(
+    double x
+);
+
+
+lgamma 関数は，x のガンマ関数の絶対値の自然対数 (loge) を計算し，double 型で返します．
+
+lgammaf (C99)
+
+
+#include <math.h>
+
+
+
+float lgammaf(
+    float x
+);
+
+
+lgammaf 関数は，x のガンマ関数の絶対値の自然対数 (loge) を計算し，float 型で返します．
+
+lgammal (C99)
+
+
+#include <math.h>
+
+
+
+long double lgammal(
+    long double x
+);
+
+
+lgammal 関数は，x のガンマ関数の絶対値の自然対数 (loge) を計算し，long double 型で返します．
+
+lgamma，lgammaf，lgammal 関数は，値域エラー (range error) が発生します．また，x が負の整数か 0 の場合，値域エラー (range error) が発生することがあります．
+
+戻り値
+
+  * x のガンマ関数の絶対値の自然対数 (loge)
+
+数学上の表記
+
+C言語サンプルプログラム
+
+以下に lgamma 関数を使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* main */
+int main(void) {
+    double x = 2.0;
+    double y;
+
+    while ( x < 10.0 ) {
+        /* ガンマ関数の絶対値の自然対数 */
+        y = lgamma(x);
+
+        printf("lgamma(%.1f) = %.16f\n", x, y);
+        x += 1.0;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+lgamma(2.0) = 0.0000000000000000
+lgamma(3.0) = 0.6931471805599453
+lgamma(4.0) = 1.7917594692280550
+lgamma(5.0) = 3.1780538303479458
+lgamma(6.0) = 4.7874917427820458
+lgamma(7.0) = 6.5792512120101012
+lgamma(8.0) = 8.5251613610654147
+lgamma(9.0) = 10.6046029027452510
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

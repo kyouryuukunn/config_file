@@ -1,0 +1,65 @@
+TITLE : Multi-threaded Programming
+
+SDL Library Documentation
+PrevNext
+
+Chapter 12. Multi-threaded Programming
+
+Table of Contents
+SDL_CreateThread -- 親の属性を共有した新しいスレッドを作成します。
+SDL_ThreadID -- 32ビットで表現された現在のスレッド識別子を得ます。
+SDL_GetThreadID -- SDL_ThreadのSDL内のスレッドIDを得ます。
+SDL_WaitThread -- スレッドが終了するのを待ちます。
+SDL_KillThread -- スレッドを無理矢理に終了させます。
+SDL_CreateMutex -- mutexを作成します。
+SDL_DestroyMutex -- mutexを破棄します。
+SDL_mutexP -- mutexをロックします。
+SDL_mutexV -- mutexのロックを解除します。
+SDL_CreateSemaphore -- 新しいセマフォを作成し、初期値を設定します。
+SDL_DestroySemaphore -- SDL_CreateSemaphoreによって作成されたセマフォを破棄します。
+SDL_SemWait -- セマフォをロックし、セマフォの値が0のときはスレッドを停止します。
+SDL_SemTryWait -- スレッドを停止せずにセマフォのロックを試みます。
+SDL_SemWaitTimeout -- 制限時間つきでセマフォをロックします。
+SDL_SemPost -- セマフォのロックを解除します。
+SDL_SemValue -- セマフォの現在の値を返します。
+SDL_CreateCond -- 条件変数を作成します。
+SDL_DestroyCond -- 条件変数を破棄します。
+SDL_CondSignal -- 条件変数を待っているスレッドを再開します。
+SDL_CondBroadcast -- 条件変数を待っている全てのスレッドを再開します。
+SDL_CondWait -- 条件変数を待ちます。
+SDL_CondWaitTimeout -- 条件変数を制限時間つきで待ちます。
+
+
+SDLはスレッド、mutex、セマフォ、そして条件変数(condition variable)を生成する 関数群を提供します。
+
+
+一般的に、マルチスレッドのプログラムを書く場合、並列アクセスや データの整合性について注意する必要があります。 ガイドラインには以下のものも含まれます:
+
+  * 
+
+  独立したスレッドではSDLのビデオ、イベントの関数を呼ばない
+
+  * 
+
+  独立したスレッドからはいかなるライブラリ関数も使用しない
+
+  * 
+
+  独立したスレッドからメモリ管理を行わない
+
+  * 
+
+  複数のスレッドからアクセスされる可能性があるグローバル変数はロックする
+
+  * 
+
+  決してスレッドを終了させない。フラグをセットしてスレッドが終了するのを待つこと
+
+  * 
+
+  コードの相互作用について考えられる全ての可能性を吟味すること
+
+Note: MacOSでは、プリエンプティブスレッドのサポートがないため、SDLではスレッド機能を実装していません(MacOS Xにはこの問題はありません)。
+
+PrevHomeNext
+SDL_CDtrackUpSDL_CreateThread

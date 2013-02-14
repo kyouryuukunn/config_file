@@ -1,0 +1,28 @@
+TITLE : SDL_GetTicks
+
+SDL Library Documentation
+PrevNext
+
+SDL_GetTicks
+
+Name
+
+SDL_GetTicks --  SDLライブラリの初期化からの経過ミリ秒数を取得します。
+
+Synopsis
+
+#include "SDL.h"
+
+Uint32 SDL_GetTicks(void);
+
+Description
+
+
+SDLライブラリが初期化されてからのミリ秒数を得ることができます。 プログラムが49日間以上実行される場合にはこの値は戻ってしまう(wrap)ことに注意して下さい。
+
+See Also
+
+SDL_Delay
+
+PrevHomeNext
+TimeUpSDL_Delay

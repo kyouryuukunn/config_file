@@ -1,0 +1,14 @@
+TITLE : Time Examples
+
+SDL Library Documentation
+PrevChapter 4. ExamplesNext
+Time Examples
+
+時刻ベースのループ
+
+
+#define TICK_INTERVAL 30 static Uint32 next_time; Uint32 time_left(void) { Uint32 now; now = SDL_GetTicks(); if(next_time <= now) return 0; else return next_time - now; } /* メインループ */ next_time = SDL_GetTicks() + TICK_INTERVAL; while ( game_running ) { update_game_state(); SDL_Delay(time_left()); next_time += TICK_INTERVAL; }
+
+
+PrevHomeNext
+CDROM ExamplesUpSDL Reference

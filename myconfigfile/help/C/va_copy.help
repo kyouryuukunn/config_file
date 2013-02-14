@@ -1,0 +1,186 @@
+TITLE : C言語関数辞典 - va_copy
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdarg.h ≫ va_copy
+
+va_copy (C99)
+
+可変長引数 (variable arguments) を初期化します．
+
+
+#include <stdarg.h>
+
+
+
+void va_copy(
+    va_list dest,
+    va_list src
+);
+
+
+va_copy マクロは，dest に va_start マクロを適用し，それに続いて (src のその時点の状態に達するために使った順序と同じ順序で) va_arg マクロを使った場合と同じ規則に従って，dest を src のコピーとして初期化します．
+
+va_copy マクロは，dest に対して va_end マクロを呼び出すことなく，その dest を最初期化する目的で呼び出してはいけません．
+
+C言語サンプルプログラム
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdarg.h>
+
+/* functions */
+void sum_product(double *, double *, int n, ...);
+
+/* main */
+int main(void) {
+    double sum, product;
+
+    /* 総和と総乗を求める */
+    sum_product(&sum, &product, 4, 1.0, 2.0, 3.0, 4.0);
+
+    printf("総和: %.1f\n", sum);
+    printf("総乗: %.1f\n", product);
+
+    return EXIT_SUCCESS;
+}
+
+/**
+ * @brief 総和と総乗を求める
+ * @param[OUT] sum 総和
+ * @param[OUT] product 総乗
+ * @param[IN] n 引数の数
+ * @param[IN] ... 可変長引数
+ */
+void sum_product(double *sum, double *product, int n, ...) {
+    va_list ap;
+    va_list dest;
+    int i;
+
+    va_start(ap, n);
+    va_copy(dest,ap);
+
+    *sum = 0.0;
+    *product = 0.0;
+
+    /* 総和 */
+    for ( i = 0; i < n; i++ ) {
+        *sum += va_arg(ap, double);
+    }
+
+    /* 総乗 */
+    *product = va_arg(dest, double);
+    for ( i = 1; i < n; i++ ) {
+        *product *= va_arg(dest, double);
+    }
+
+    va_end(ap);
+    va_end(dest);
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+総和: 10.0
+総乗: 24.0
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,168 @@
+TITLE : C言語関数辞典 - isxdigit
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ ctype.h ≫ isxdigit
+
+isxdigit
+
+文字が 16 進数の数字かどうかをチェックします．
+
+
+#include <ctype.h>
+
+
+
+int isxdigit(
+    int c /* int 型の文字 */
+);
+
+
+isxdigit 関数は文字 c が 16 進数字 ('0'～'9', 'A'～'F', 'a'～'f') なら真を返します．
+
+戻り値
+
+  * c が 16 進数字であるとき: 真 (0 以外)
+  * c が 16 進数字以外であるとき: 偽 (0)
+
+C言語サンプルプログラム
+
+isxdigit 関数を使用して文字が16 進数字かどうかをチェックするサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+/* main */
+int main(void) {
+
+    /* 9を判定 */
+    if ( isxdigit('9') ) {
+        puts("16進数の数字です．");
+    } else {
+        puts("16進数の数字ではありません．");
+    }
+
+    /* Fを判定 */
+    if ( isxdigit('F') ) {
+        puts("16進数の数字です．");
+    } else {
+        puts("16進数の数字ではありません．");
+    }
+
+    /* Gを判定 */
+    if ( isxdigit('G') ) {
+        puts("16進数の数字です．");
+    } else {
+        puts("16進数の数字ではありません．");
+    }
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+16進数の数字です．
+16進数の数字です．
+16進数の数字ではありません．
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

@@ -1,0 +1,47 @@
+TITLE : SDL_Init
+
+SDL Library Documentation
+PrevNext
+
+SDL_Init
+
+Name
+
+SDL_Init -- SDLを初期化します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_Init(Uint32 flags);
+
+Description
+
+
+SDLを初期化します。 すべてのSDLの関数を呼び出す前にこの関数が呼ばれなければいけません。 flagsには SDLのどの部分を初期化するかを指定します。
+
+SDL_INIT_TIMER
+タイマー サブシステムを初期化します。
+SDL_INIT_AUDIO
+オーディオ サブシステムを初期化します。
+SDL_INIT_VIDEO
+ビデオ サブシステムを初期化します。
+SDL_INIT_CDROM
+CD-ROM サブシステムを初期化します。
+SDL_INIT_JOYSTICK
+ジョイスティック サブシステムを初期化します。
+SDL_INIT_EVERYTHING以上すべてのサブシステムを初期化します。
+SDL_INIT_NOPARACHUTE致命的エラーのシグナルをSDLが捕捉しないようにします。
+SDL_INIT_EVENTTHREAD 
+
+Return Value
+
+
+失敗すると-1、成功すると 0を返します。
+
+See Also
+
+SDL_Quit, SDL_InitSubSystem
+
+PrevHomeNext
+GeneralUpSDL_InitSubSystem

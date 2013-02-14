@@ -1,0 +1,345 @@
+
+
+TITLE : ＤＸライブラリ置き場　３Ｄ関係関数リファレンスページ
+
+        ＤＸライブラリ　関数リファレンスページ　３Ｄ関係関数リファレンス
+-------------------------------------------------------------------------------
+
+　このページではＤＸライブラリの３Ｄ表現を扱うための主な関数の説明と簡単な
+サンプルプログラムを載せています。
+
+
+３Ｄ図形描画関係関数
+
+DrawLine3D 　３Ｄ空間に線分を描画する
+DrawTriangle3D 　３Ｄ空間に三角形を描画する
+DrawSphere3D 　３Ｄ空間に球を描画する
+DrawCapsule3D 　３Ｄ空間にカプセルを描画する
+DrawCone3D 　３Ｄ空間に円錐を描画する
+DrawBillboard3D 　３Ｄ空間に画像を描画する
+DrawModiBillboard3D 　３Ｄ空間に２次元的な変形を加えた画像を描画する
+DrawPolygon3D 　３Ｄ空間に三角形ポリゴンの集合を描画する
+DrawPolygonIndexed3D 　３Ｄ空間に三角形ポリゴンの集合を描画する(インデックス)
+
+SetMaterialUseVertDifColor 　３Ｄ図形描画のライティング計算に頂点データのディフューズカラーを使用するかどうかを設定する
+SetMaterialUseVertSpcColor 　３Ｄ図形描画のライティング計算に頂点データのスペキュラカラーを使用するかどうかを設定する
+SetMaterialParam 　３Ｄ図形描画のライティング計算に使用するマテリアルパラメータを設定する
+
+SetUseZBuffer3D 　Ｚバッファを使用するかどうかを設定する
+SetWriteZBuffer3D 　Ｚバッファに書き込みを行うかどうかを設定する
+SetUseBackCulling 　ポリゴンのバックカリングを使用するかどうかを設定する
+SetTextureAddressModeUV 　テクスチャアドレスモードを設定する
+SetFogEnable 　フォグを有効にするかどうかを設定する
+SetFogColor 　フォグの色を変更する
+SetFogStartEnd 　フォグが始まる距離と終了する距離を設定する
+GetColorF 　不動小数点型のカラー値を取得する
+GetColorU8 　符号なし整数８ビットのカラー値を取得する
+
+
+カメラ関数
+
+SetCameraNearFar 　カメラの 手前クリップ距離と 奥クリップ距離を設定する
+SetCameraPositionAndTarget_UpVecY 　カメラの視点、注視点を設定する( 上方向はＹ軸から算出 )
+SetCameraPositionAndTargetAndUpVec 　カメラの視点、注視点、上方向を設定する
+SetCameraPositionAndAngle 　カメラの視点、垂直回転角度、水平回転角度、捻り回転角度を設定する
+SetCameraViewMatrix 　ビュー行列を直接設定する
+SetupCamera_Perspective 　遠近法カメラをセットアップする
+SetupCamera_Ortho 　正射影カメラをセットアップする
+SetupCamera_ProjectionMatrix 　射影行列を設定する
+SetCameraDotAspect 　カメラのドットアスペクト比を設定する
+ConvWorldPosToScreenPos 　ワールド座標をスクリーン座標に変換する
+ConvScreenPosToWorldPos 　スクリーン座標をワールド座標に変換する
+SetCameraScreenCenter 　画面上でのカメラが見ている映像の中心座標を設定する
+CheckCameraViewClip 　指定の座標がカメラの視界に入っていないかどうかを判定する
+CheckCameraViewClip_Box 　二つの座標で表されるボックスがカメラの視界に入っていないかどうかを判定する
+
+
+ライト関数
+
+SetUseLighting 　ライティング計算処理を使用するかどうかを設定する
+SetGlobalAmbientLight 　グローバルアンビエントライトカラーを設定する
+
+　　標準ライト関数
+
+ChangeLightTypeDir 　標準ライトのタイプをディレクショナルライトにする
+ChangeLightTypePoint 　標準ライトのタイプをポイントライトにする
+ChangeLightTypeSpot 　標準ライトのタイプをスポットライトにする
+SetLightEnable 　標準ライトの有効、無効をセットする
+SetLightDifColor 　標準ライトのディフューズカラーを設定する
+SetLightSpcColor 　標準ライトのスペキュラカラーを設定する
+SetLightAmbColor 　標準ライトのアンビエントカラーを設定する
+SetLightDirection 　標準ライトの方向を設定する
+SetLightPosition 　標準ライトの位置を設定する
+SetLightRangeAtten 　標準ライトの有効距離と距離減衰パラメータを設定する
+SetLightAngle 　標準ライトの照射角度パラメータを設定する
+GetLightType 　標準ライトのタイプを取得する
+GetLightEnable 　標準ライトの有効、無効を取得する
+GetLightDifColor 　標準ライトのディフューズカラーを取得する
+GetLightSpcColor 　標準ライトのスペキュラカラーを取得する
+GetLightAmbColor 　標準ライトのアンビエントカラーを取得する
+GetLightDirection 　標準ライトの向きを取得する
+GetLightPosition 　標準ライトの位置を取得する
+GetLightRangeAtten 　標準ライトの有効距離と距離減衰パラメータを取得する
+GetLightAngle 　標準ライトの照射角度パラメータを取得する
+
+　　ライトハンドル関数
+
+CreateDirLightHandle 　ディレクショナルタイプのライトハンドルを作成する
+CreatePointLightHandle 　ポイントタイプのライトハンドルを作成する
+CreateSpotLightHandle 　スポットタイプのライトハンドルを作成する
+DeleteLightHandle 　ライトハンドルを削除する
+DeleteLightHandleAll 　ライトハンドルを全て削除する
+SetLightTypeHandle 　ライトハンドルのタイプを変更する
+SetLightEnableHandle 　ライトハンドルのライトの有効、無効を設定する
+SetLightDifColorHandle 　ライトハンドルのライトのディフューズカラーを設定する
+SetLightSpcColorHandle 　ライトハンドルのライトのスペキュラカラーを設定する
+SetLightAmbColorHandle 　ライトハンドルのライトのアンビエントカラーを設定する
+SetLightDirectionHandle 　ライトハンドルのライトの方向を設定する
+SetLightPositionHandle 　ライトハンドルのライトの位置を設定する
+SetLightRangeAttenHandle 　ライトハンドルのライトの有効距離と距離減衰パラメータを設定する
+SetLightAngleHandle 　ライトハンドルのライトの照射角度パラメータを設定する
+GetLightTypeHandle 　ライトハンドルのライトのタイプを取得する
+GetLightEnableHandle 　ライトハンドルのライトの有効、無効を取得する
+GetLightDifColorHandle 　ライトハンドルのライトのディフューズカラーを取得する
+GetLightSpcColorHandle 　ライトハンドルのライトのスペキュラカラーを取得する
+GetLightAmbColorHandle 　ライトハンドルのライトのアンビエントカラーを取得する
+GetLightDirectionHandle 　ライトハンドルのライトの方向を取得する
+GetLightPositionHandle 　ライトハンドルのライトの位置を取得する
+GetLightRangeAttenHandle 　ライトハンドルのライトの有効距離と距離減衰パラメータを取得する
+GetLightAngleHandle 　ライトハンドルのライトの照射角度パラメータを取得する
+
+
+算術演算関数
+
+VGet 　ベクトルを取得する
+VAdd 　二つのベクトルを加算する
+VSub 　二つのベクトルを減算する
+VDot 　二つのベクトルの内積を取得する
+VCross 　二つのベクトルの外積を取得する
+VScale 　ベクトルのスケーリングをする
+VSize 　ベクトルのサイズを取得する
+VSquareSize 　ベクトルのサイズの２乗を取得する
+VNorm 　正規化ベクトルを取得する
+VTransform 　行列を使ったベクトルの変換
+VTransformSR 　行列を使ったベクトルの変換( スケーリング＋回転成分のみ )
+
+MGetIdent 　単位行列を取得する
+MGetScale 　拡大行列を取得する
+MGetTranslate 　平行移動行列を取得する
+MGetRotX 　Ｘ軸回転行列を取得する
+MGetRotY 　Ｙ軸回転行列を取得する
+MGetRotZ 　Ｚ軸回転行列を取得する
+MGetRotAxis 　指定軸で指定角度回転する行列を取得する
+MGetRotVec2 　ある向きからある向きへ変換する回転行列を取得する
+MGetAxis1 　指定の３軸上のベクトルを基本軸上のベクトルに変換する行列を取得する
+MGetAxis2 　基本軸上のベクトルを指定の３軸上のベクトルに変換する行列を取得する
+MAdd 　二つの行列の足し算を行う
+MMult 　二つの行列の乗算を行う
+MScale 　行列のスケーリングを行う
+MTranspose 　転置行列を取得する
+MInverse 　逆行列を取得する
+
+
+衝突検出系関数
+
+Segment_Segment_MinLength 　二つの線分の最近点間の距離を得る
+Segment_Triangle_MinLength 　線分と三角形の最近点間の距離を得る
+Segment_Point_MinLength 　線分と点の一番近い距離を得る
+HitCheck_Line_Triangle 　三角形と線分の当たり判定
+
+
+３Ｄモデル関係の関数
+
+　　モデルの読み込み・複製関係の関数
+
+MV1LoadModel 　モデルの読み込み
+MV1DuplicateModel 　指定のモデルと同じ基礎データを使用してモデルを作成する
+MV1DeleteModel 　モデルを削除する
+MV1SetLoadModelUsePhysicsMode 　読み込むモデルの物理演算モードを設定する
+MV1SetLoadModelPhysicsWorldGravity 　読み込むモデルの物理演算に適用する重力パラメータを設定する
+
+
+　　モデル描画関数
+
+MV1DrawModel 　モデルを描画する
+MV1DrawFrame 　モデルの指定のフレームを描画する
+MV1DrawMesh 　モデルの指定のメッシュを描画する
+
+
+　　モデル基本制御関数
+
+MV1SetPosition 　モデルの座標をセットする
+MV1GetPosition 　モデルの座標を取得する
+MV1SetScale 　モデルの拡大値をセットする
+MV1GetScale 　モデルの拡大値を取得する
+MV1SetRotationXYZ 　モデルの回転値をセットする
+MV1GetRotationXYZ 　モデルの回転値を取得する
+MV1SetRotationZYAxis 　モデルのＺ軸とＹ軸の方向をセットする
+MV1SetMatrix 　モデルの座標変換用行列をセットする
+MV1GetMatrix 　モデルの座標変換用行列を取得する
+MV1SetVisible 　モデルを描画するかどうかを変更する
+MV1GetVisible 　モデルを描画するかどうかを取得する
+MV1SetDifColorScale 　モデルのディフューズカラーのスケール値を設定する
+MV1GetDifColorScale 　モデルのディフューズカラーのスケール値を取得する
+MV1SetSpcColorScale 　モデルのスペキュラカラーのスケール値を設定する
+MV1GetSpcColorScale  　モデルのスペキュラカラーのスケール値を取得する
+MV1SetEmiColorScale 　モデルのエミッシブカラーのスケール値を設定する
+MV1GetEmiColorScale 　モデルのエミッシブカラーのスケール値を取得する
+MV1SetAmbColorScale 　モデルのアンビエントカラーのスケール値を設定する
+MV1GetAmbColorScale 　モデルのアンビエントカラーのスケール値を取得する
+MV1GetSemiTransState 　モデルに半透明要素があるかどうかを取得する
+MV1SetOpacityRate 　モデルの不透明度を設定する
+MV1GetOpacityRate 　モデルの不透明度を取得する
+MV1SetUseZBuffer 　モデルを描画する際にＺバッファを使用するかどうかを設定する
+MV1SetWriteZBuffer 　モデルを描画する際にＺバッファに書き込みを行うかどうかを設定する
+MV1SetUseVertDifColor 　モデル描画のライティング計算に頂点データのディフューズカラーを使用するかどうかを設定する
+MV1SetUseVertSpcColor 　モデル描画のライティング計算に頂点データのスペキュラカラーを使用するかどうかを設定する
+MV1PhysicsCalculation 　モデルの物理演算を指定時間分経過したと仮定して計算する
+MV1PhysicsResetState 　モデルの物理演算の状態をリセットする
+
+
+　　アニメーション関数
+
+MV1AttachAnim 　アニメーションをアタッチする
+MV1DetachAnim 　アニメーションをデタッチする
+MV1SetAttachAnimTime 　アタッチしているアニメーションの再生時間を設定する
+MV1GetAttachAnimTime 　アタッチしているアニメーションの再生時間を取得する
+MV1GetAttachAnimTotalTime 　アタッチしているアニメーションの総時間を取得する
+MV1SetAttachAnimBlendRate 　アタッチしているアニメーションのブレンド率を設定する
+MV1GetAttachAnimBlendRate 　アタッチしているアニメーションのブレンド率を取得する
+MV1GetAttachAnim 　アタッチしているアニメーションのアニメーション番号を取得する
+MV1GetAnimNum 　アニメーションの数を取得する
+MV1GetAnimName 　指定番号のアニメーション名を取得する
+MV1GetAnimIndex 　指定名のアニメーション番号を取得する
+MV1GetAnimTotalTime 　指定番号のアニメーションの総時間を得る
+
+
+　　マテリアル関数
+
+MV1GetMaterialNum 　モデルで使用しているマテリアルの数を取得する
+MV1GetMaterialName 　指定のマテリアルの名前を取得する
+MV1SetMaterialDifColor 　指定のマテリアルのディフューズカラーを変更する
+MV1GetMaterialDifColor 　指定のマテリアルのディフューズカラーを取得する
+MV1SetMaterialSpcColor 　指定のマテリアルのスペキュラカラーを変更する
+MV1GetMaterialSpcColor 　指定のマテリアルのスペキュラカラーを取得する
+MV1SetMaterialEmiColor 　指定のマテリアルのエミッシブカラーを変更する
+MV1GetMaterialEmiColor 　指定のマテリアルのエミッシブカラーを取得する
+MV1SetMaterialAmbColor 　指定のマテリアルのアンビエントカラーを変更する
+MV1GetMaterialAmbColor 　指定のマテリアルのアンビエントカラーを取得する
+MV1SetMaterialSpcPower 　指定のマテリアルのスペキュラの強さを変更する
+MV1GetMaterialSpcPower 　指定のマテリアルのスペキュラの強さを取得する
+MV1GetMaterialDifMapTexture 　指定のマテリアルでディフューズマップとして使用されているテクスチャ番号を取得する
+MV1GetMaterialSpcMapTexture 　指定のマテリアルでスペキュラマップとして使用されているテクスチャ番号を取得する
+MV1GetMaterialNormalMapTexture 　指定のマテリアルで法線マップとして使用されているテクスチャ番号を取得する
+MV1SetMaterialDrawBlendMode 　指定のマテリアルの描画ブレンドモードを変更する
+MV1GetMaterialDrawBlendMode 　指定のマテリアルの描画ブレンドモードを取得する
+MV1SetMaterialDrawBlendParam 　指定のマテリアルの描画ブレンドパラメータを変更する
+MV1GetMaterialDrawBlendParam 　指定のマテリアルの描画ブレンドパラメータを取得する
+MV1SetMaterialOutLineWidth 　指定のマテリアルのトゥーンレンダリングで使用する輪郭線の太さを設定する
+MV1GetMaterialOutLineWidth 　指定のマテリアルのトゥーンレンダリングで使用する輪郭線の太さを取得する
+MV1SetMaterialOutLineDotWidth 　指定のマテリアルのトゥーンレンダリングで使用する輪郭線のドット単位の太さを設定する
+MV1GetMaterialOutLineDotWidth 　指定のマテリアルのトゥーンレンダリングで使用する輪郭線のドット単位の太さを取得する
+MV1SetMaterialOutLineColor 　指定のマテリアルのトゥーンレンダリングで使用する輪郭線の色を設定する
+MV1GetMaterialOutLineColor 　指定のマテリアルのトゥーンレンダリングで使用する輪郭線の色を取得する
+
+
+　　テクスチャ関係
+
+MV1GetTextureNum 　モデルで使用されているテクスチャの数を取得する
+MV1GetTextureName 　テクスチャの名前を取得する
+MV1SetTextureGraphHandle 　テクスチャとして使用するグラフィックハンドルを変更する
+MV1GetTextureGraphHandle 　テクスチャのグラフィックハンドルを取得する
+MV1SetTextureAddressMode 　テクスチャのアドレスモードを変更する
+MV1GetTextureAddressModeU 　テクスチャのＵ値のアドレスモードを取得する
+MV1GetTextureAddressModeV 　テクスチャのＶ値のアドレスモードを取得する
+MV1SetTextureSampleFilterMode 　テクスチャのフィルタリングモードを変更する
+MV1GetTextureSampleFilterMode 　テクスチャのフィルタリングモードを取得する
+
+
+　　フレーム関数
+
+MV1GetFrameNum 　フレームの数を取得する
+MV1SearchFrame 　指定名のフレームをモデル中から検索する
+MV1SearchFrameChild 　指定名のフレームを指定のフレームの子フレームの中から検索する
+MV1GetFrameName 　フレームの名前を取得する
+MV1GetFrameParent 　フレームの親フレームを取得する
+MV1GetFrameChildNum 　フレームの子フレームの数を取得する
+MV1GetFrameChild 　フレームの子フレームを取得する
+MV1GetFramePosition 　フレームの座標を取得する
+MV1GetFrameLocalMatrix 　フレームの座標変換行列を取得する
+MV1GetFrameLocalWorldMatrix 　フレームのローカル座標からワールド座標に変換する行列を取得する
+MV1SetFrameUserLocalMatrix 　フレームの座標変換行列を設定する
+MV1ResetFrameUserLocalMatrix 　フレームの座標変換行列をデフォルトに戻す
+MV1SetFrameVisible 　フレームの表示・非表示状態を変更する
+MV1GetFrameVisible 　フレームの表示・非表示状態を取得する
+MV1SetFrameDifColorScale 　フレームのディフューズカラーのスケール値を設定する
+MV1GetFrameDifColorScale 　フレームのディフューズカラーのスケール値を取得する
+MV1SetFrameSpcColorScale 　フレームのスペキュラカラーのスケール値を設定する
+MV1GetFrameSpcColorScale 　フレームのスペキュラカラーのスケール値を取得する
+MV1SetFrameEmiColorScale 　フレームのエミッシブカラーのスケール値を設定する
+MV1GetFrameEmiColorScale 　フレームのエミッシブカラーのスケール値を取得する
+MV1SetFrameAmbColorScale 　フレームのアンビエントカラーのスケール値を設定する
+MV1GetFrameAmbColorScale 　フレームのアンビエントカラーのスケール値を取得する
+MV1GetFrameSemiTransState 　フレームに半透明要素があるかどうかを取得する
+MV1SetFrameOpacityRate 　フレームの不透明度を設定する
+MV1GetFrameOpacityRate 　フレームの不透明度を取得する
+MV1SetFrameTextureAddressTransform 　フレームのテクスチャ座標変換パラメータを設定する
+MV1ResetFrameTextureAddressTransform 　フレームのテクスチャ座標変換パラメータをリセットする
+MV1GetFrameTriangleNum 　フレームに含まれるポリゴンの数を取得する
+MV1GetFrameMeshNum 　フレームに含まれるメッシュの数を取得する
+MV1GetFrameMesh 　フレームに含まれるメッシュを取得する
+
+
+　　メッシュ関数
+
+MV1GetMeshNum 　モデルに含まれるメッシュの数を取得する
+MV1GetMeshMaterial 　メッシュが使用しているマテリアルの番号を取得する
+MV1GetMeshTriangleNum 　メッシュに含まれる三角形ポリゴンの数を取得する
+MV1SetMeshVisible 　メッシュの表示・非表示状態を変更する
+MV1GetMeshVisible 　メッシュの表示・非表示状態を取得する
+MV1SetMeshDifColorScale 　メッシュのディフューズカラーのスケール値を設定する
+MV1GetMeshDifColorScale 　メッシュのディフューズカラーのスケール値を取得する
+MV1SetMeshSpcColorScale 　メッシュのスペキュラカラーのスケール値を設定する
+MV1GetMeshSpcColorScale 　メッシュのスペキュラカラーのスケール値を取得する
+MV1SetMeshEmiColorScale 　メッシュのエミッシブカラーのスケール値を設定する
+MV1GetMeshEmiColorScale 　メッシュのエミッシブカラーのスケール値を取得する
+MV1SetMeshAmbColorScale 　メッシュのアンビエントカラーのスケール値を設定する
+MV1GetMeshAmbColorScale 　メッシュのアンビエントカラーのスケール値を取得する
+MV1SetMeshOpacityRate 　メッシュの不透明度を設定する
+MV1GetMeshOpacityRate 　メッシュの不透明度を取得する
+MV1SetMeshDrawBlendMode 　メッシュの描画ブレンドモードを設定する
+MV1GetMeshDrawBlendMode 　メッシュの描画ブレンドモードを取得する
+MV1SetMeshDrawBlendParam 　メッシュの描画ブレンドパラメータを設定する
+MV1GetMeshDrawBlendParam 　メッシュの描画ブレンドパラメータを取得する
+MV1SetMeshBackCulling 　メッシュのバックカリングを行うかどうかを設定する
+MV1GetMeshBackCulling 　メッシュのバックカリングを行うかどうかを取得する
+MV1GetMeshMaxPosition 　メッシュに含まれる頂点のローカル座標での最大値を取得する
+MV1GetMeshMinPosition 　メッシュに含まれる頂点のローカル座標での最小値を取得する
+MV1GetMeshSemiTransState 　メッシュに半透明要素があるかどうかを取得する
+MV1SetMeshUseVertDifColor 　メッシュの頂点ディフューズカラーをマテリアルのディフューズカラーの代わりに使用するかどうかを設定する
+MV1GetMeshUseVertDifColor 　メッシュの頂点ディフューズカラーをマテリアルのディフューズカラーの代わりに使用するかどうかの設定を取得する
+MV1SetMeshUseVertSpcColor 　メッシュの頂点スペキュラカラーをマテリアルのスペキュラカラーの代わりに使用するかどうかを設定する
+MV1GetMeshUseVertSpcColor 　メッシュの頂点スペキュラカラーをマテリアルのスペキュラカラーの代わりに使用するかどうかの設定を取得する
+
+
+　　コリジョン( 衝突判定 )関数
+
+MV1SetupCollInfo 　コリジョン情報を構築する
+MV1TerminateCollInfo 　コリジョン情報の後始末をする
+MV1RefreshCollInfo 　コリジョン情報を更新する
+MV1CollCheck_Line 　線分とモデルの当たり判定
+MV1CollCheck_Sphere 　球とモデルの当たり判定
+MV1CollCheck_Capsule 　カプセルとモデルの当たり判定
+MV1CollCheck_GetResultPoly 　当たり判定結果ポリゴン配列から指定番のポリゴン情報を取得する
+MV1CollResultPolyDimTerminate 　当たり判定結果ポリゴン配列の後始末をする
+
+
+　　参照用メッシュ関数
+
+MV1SetupReferenceMesh 　参照用メッシュのセットアップ
+MV1TerminateReferenceMesh 　参照用メッシュの後始末をする
+MV1RefreshReferenceMesh 　参照用メッシュを更新する
+MV1GetReferenceMesh 　参照用メッシュを取得する
+
+
+

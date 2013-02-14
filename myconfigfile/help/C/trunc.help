@@ -1,0 +1,194 @@
+TITLE : C言語関数辞典 - trunc, truncf, truncl
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ math.h ≫ trunc, truncf, truncl
+
+The trunc functions (C99) - trunc, truncf, truncl
+
+引数を最も近い整数値に丸めます．(ただし，その絶対値が引数の絶対値より大きくない値)
+
+trunc (C99)
+
+
+#include <math.h>
+
+
+
+double trunc(
+    double x
+);
+
+
+trunc 関数は x を最も近い整数値に丸め，結果を double 型で返します．(ただし，その絶対値が x の絶対値より大きくない値)
+
+truncf (C99)
+
+
+#include <math.h>
+
+
+
+float truncf(
+    float x
+);
+
+
+truncf 関数は x を最も近い整数値に丸め，結果を float 型で返します．(ただし，その絶対値が x の絶対値より大きくない値)
+
+truncl (C99)
+
+
+#include <math.h>
+
+
+
+long double truncl(
+    long double x
+);
+
+
+truncl 関数は x を最も近い整数値に丸め，結果を long double 型で返します．(ただし，その絶対値が x の絶対値より大きくない値)
+
+戻り値
+
+  * 丸めた整数値
+
+C言語サンプルプログラム
+
+以下に trunc 関数を使用したサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* main */
+int main(void) {
+    double x1 = 5.0001, x2 = -5.0001;
+    double x3 = 0.0;
+    double x4 = 5.5000, x5 = -5.5000;
+    double y1, y2, y3, y4, y5;
+
+    y1 = trunc(x1);
+    y2 = trunc(x2);
+    y3 = trunc(x3);
+    y4 = trunc(x4);
+    y5 = trunc(x5);
+
+    printf("trunc(%.4f) = %.4f\n", x1, y1);
+    printf("trunc(%.4f) = %.4f\n", x2, y2);
+    printf("trunc(%.4f) = %.4f\n", x3, y3);
+    printf("trunc(%.4f) = %.4f\n", x4, y4);
+    printf("trunc(%.4f) = %.4f\n", x5, y5);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+trunc(5.0001) = 5.0000
+trunc(-5.0001) = -5.0000
+trunc(0.0000) = 0.0000
+trunc(5.5000) = 5.0000
+trunc(-5.5000) = -5.0000
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

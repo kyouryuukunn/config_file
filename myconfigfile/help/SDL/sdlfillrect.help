@@ -1,0 +1,39 @@
+TITLE : SDL_FillRect
+
+SDL Library Documentation
+PrevNext
+
+SDL_FillRect
+
+Name
+
+SDL_FillRect --  この関数は与えられた矩形領域と色で高速な塗り潰しを行います。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color);
+
+Description
+
+
+この関数は与えられた矩形領域と color で 高速な塗り潰しを行います。 dstrect が NULL ならば、 サーフェス全体が color で塗り潰されます。
+
+
+色はサーフェスで使われているフォーマットのピクセルでなければなりません。 そして、それは SDL_MapRGB か SDL_MapRGBA によって生成することができます。 色の値がα値を含んでいる場合は、塗り潰し先は単にそのα情報で「塗り潰され」、 ブレンディングは起こりません。
+
+
+塗り潰し先にクリッピング矩形がある場合 (SDL_SetClipRect によってセットされます) は、この関数はクリッピング矩形と dstrect 矩形が 重なった領域でクリッピングされ、 dstrect 矩形は実際に塗り潰された領域を表すよう 変更されます。
+
+Return Value
+
+
+この関数は成功した時は 0 を、 失敗した時は -1 を返します。
+
+See Also
+
+SDL_MapRGB, SDL_MapRGBA, SDL_BlitSurface, SDL_Rect
+
+PrevHomeNext
+SDL_BlitSurfaceUpSDL_DisplayFormat

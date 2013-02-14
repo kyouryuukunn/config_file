@@ -1,0 +1,208 @@
+TITLE : C言語関数辞典 - vsscanf
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdio.h ≫ vsscanf
+
+vsscanf
+
+指定した文字列から可変長引数リストを用いてデータを取得します．
+
+
+#include <stdio.h>
+
+
+
+int vsscanf(
+    const char * restrict s,
+    const char * restrict format,
+    va_list arg
+);
+
+
+vsscanf 関数は format が指す書式文字列と可変長引数リスト arg を用いて，引数 s で指定された文字列を取得します．
+
+vsscanf の呼び出し前には va_start マクロで引数 arg を初期化しておく必要があります．また，vfscanf は va_end マクロを呼び出しません．したがってユーザーが手動で va_end を呼び出す必要があります．
+
+vsscanf の動作は可変長引数 (variable arguments)を arg に置き換えた sscanf と同じです．
+
+引数
+
+  * s: 文字列
+  * format: 書式文字列 (詳しくは scanf の書式文字列を参照してください)
+  * arg: 変換するパラメータのリスト (可変長引数リスト)
+
+戻り値
+
+  * 成功した場合: 代入された入力項目の個数
+  * 失敗した場合: EOF
+
+C言語サンプルプログラム
+
+vsscanf 関数を使用して文字列から可変長引数リストを用いてデータを取得するサンプルプログラムを以下に示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+/* structures */
+typedef struct member_tag {
+    char no[5];
+    char name[256];
+    int age;
+} member;
+
+/* functions */
+int input(char *s, char *format, ...);
+
+/* main */
+int main(void) {
+    int i;
+    member list[3];
+    char *s[] = {"0001 スヌーピー 1", 
+        "0002 チャーリー・ブラウン 4", 
+        "0003 ウッドストック 3"};
+
+    for ( i = 0; i < 3; i++ ) {
+        input(s[i], "%s %s %d", list[i].no, list[i].name, &list[i].age);
+
+        printf("No: %s\n", list[i].no);
+        printf("氏名: %s\n", list[i].name);
+        printf("年齢: %d\n\n", list[i].age);
+    }
+
+    return EXIT_SUCCESS;
+}
+
+/**
+ * @brief 文字列から入力を行う
+ * @param[IN] s 文字列
+ * @param[IN] format 書式文字列
+ * @param[IN] ... 可変長引数
+ * @return EXIT_SUCCESS
+ */
+int input(char *s, char *format, ...) {
+    va_list arg;
+
+    va_start(arg, format);
+    vsscanf(s, format, arg);
+    va_end(arg);
+
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります．
+
+
+No: 0001
+氏名: スヌーピー
+年齢: 1
+
+No: 0002
+氏名: チャーリー・ブラウン
+年齢: 4
+
+No: 0003
+氏名: ウッドストック
+年齢: 3
+
+
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

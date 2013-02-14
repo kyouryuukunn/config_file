@@ -1,0 +1,163 @@
+TITLE : C言語関数辞典 - rand
+
+
+C言語関数辞典
+
+  * ホーム
+  * ヘッダファイル別一覧
+  * アルファベット別一覧
+  * C言語Tips集
+  * C言語用語集
+
+≫ ホーム ≫ C言語ヘッダファイル別一覧 | C言語アルファベット別一覧 ≫ stdlib.h ≫ rand
+
+rand
+
+擬似乱数を発生させます．
+
+
+#include <stdlib.h>
+
+
+
+int rand(void);
+
+
+rand 関数は 0 以上 RAND_MAX 以下の範囲の擬似乱数整数列を計算します．
+
+戻り値
+
+  * 擬似乱数整数
+
+C言語サンプルプログラム
+
+以下に rand 関数と srand 関数を使用して擬似乱数を生成するサンプルプログラムを示します．
+
+/* header files */
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+/* main */
+int main(void) {
+    int i, n;
+
+    /* 乱数のシードを与える */
+    srand((unsigned)time(NULL));
+
+    for ( i = 0; i <= 9; i++ ) {
+        /* 乱数を発生させる */
+        n = rand();
+
+        /* 表示 */
+        printf("%2d回目 = %3d\n", i + 1, n);
+    }
+    return EXIT_SUCCESS;
+}
+
+実行例
+
+サンプルプログラムの実行結果は以下のようになります※
+
+
+ 1回目 = 15661
+ 2回目 = 11978
+ 3回目 = 27417
+ 4回目 = 16229
+ 5回目 = 12484
+ 6回目 = 13329
+ 7回目 = 32098
+ 8回目 = 23411
+ 9回目 = 14372
+10回目 = 3736
+
+※ 実行のたびに結果は変わります．
+
+スポンサー
+
+C言語関数辞典 サイト内検索
+
+C言語関数辞典
+
+ヘッダファイル別
+
+  * assert.h
+  * complex.h
+  * ctype.h
+  * errno.h
+  * fenv.h
+  * float.h
+  * inttypes.h
+  * iso646.h
+  * limits.h
+  * locale.h
+  * math.h
+  * setjmp.h
+  * signal.h
+  * stdarg.h
+  * stdbool.h
+  * stddef.h
+  * stdint.h
+  * stdio.h
+  * stdlib.h
+  * string.h
+  * tgmath.h
+  * time.h
+  * wchar.h
+  * wctype.h
+  * 
+  * 
+  * 
+
+アルファベット別
+
+  * A
+  * B
+  * C
+  * D
+  * E
+  * F
+  * G
+  * H
+  * I
+  * J
+  * K
+  * L
+  * M
+  * N
+  * O
+  * P
+  * Q
+  * R
+  * S
+  * T
+  * U
+  * V
+  * W
+  * X
+  * Y
+  * Z
+  * Other
+
+C言語Tips集
+
+  * 文字
+  * 文字列
+  * 数学
+  * 日付・時刻
+  * 配列・メモリ領域
+  * ファイル
+  * 関数
+  * インターフェース
+
+リンク
+
+  * JavaScript Object Reference
+  * 逆引きSQL構文集
+  * LaTeXコマンド集
+  * gnuplotコマンド集
+
+| CSS | XHTML 1.1 |
+
+(C) Copyright 2010, C言語関数辞典 - Created by Kojo Sugita
+

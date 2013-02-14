@@ -1,0 +1,26 @@
+TITLE : SDL Event Structures.
+
+SDL Library Documentation
+PrevChapter 8. EventsNext
+SDL Event Structures.
+
+Table of Contents
+SDL_Event -- 総合的なイベント構造体
+SDL_ActiveEvent -- アプリケーションの可視性に関するイベント構造体
+SDL_KeyboardEvent --  キーボードイベントの構造体
+SDL_MouseMotionEvent --  マウスの動きイベントの構造体
+SDL_MouseButtonEvent --  マウスボタンイベントの構造体
+SDL_JoyAxisEvent -- ジョイスティックの軸イベントに関する構造体
+SDL_JoyButtonEvent --  ジョイスティックのボタンイベントの構造体
+SDL_JoyHatEvent --  ジョイスティックのハットスイッチの位置変化イベントの構造体
+SDL_JoyBallEvent --  ジョイスティックのトラックボールの動きイベントの構造体
+SDL_ResizeEvent --  ウィンドウのリサイズイベント構造体
+SDL_ExposeEvent -- 再描画に関するイベント
+SDL_SysWMEvent --  プラットフォーム依存のウィンドウマネージャイベント
+SDL_UserEvent --  ユーザー定義のイベント型
+SDL_QuitEvent --  終了要請イベント
+SDL_keysym --  キーシンボルの構造体
+SDLKey -- キーシンボルの定義
+
+PrevHomeNext
+EventsUpSDL_Event

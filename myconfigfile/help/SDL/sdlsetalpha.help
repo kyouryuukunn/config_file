@@ -1,0 +1,96 @@
+TITLE : SDL_SetAlpha
+
+SDL Library Documentation
+PrevNext
+
+SDL_SetAlpha
+
+Name
+
+SDL_SetAlpha --  サーフェスのアルファ値を調整します。
+
+Synopsis
+
+#include "SDL.h"
+
+int SDL_SetAlpha(SDL_Surface *surface, Uint32 flag, Uint8 alpha);
+
+Description
+
+Note: この関数と SDL のαブレンディングの意味合いがバージョン 1.1.4 から変わりました。 バージョン 1.1.5 までは、α値 0 は不透明で、255 は透明とみなされていました。 これは今では反転されました。 つまり、0 (SDL_ALPHA_TRANSPARENT) は透明であり、 255 (SDL_ALPHA_OPAQUE) は不透明とみなされています。
+
+
+SDL_SetAlpha はサーフェス単位のα値をセットしたり、 αブレンディングを有効に、また無効にするために使われます。
+
+
+surface パラメータは どのサーフェスのα属性を調整したいのかを指定します。 flags は、αブレンディングが使われるべきかどうか (SDL_SRCALPHA)、 また blit の際に RLE アクセラレーションを使うべきかどうか (SDL_RLEACCEL)を指定するのに使われます。 flags はこれらの 2 つのオプションの OR による 組み合わせか、どちらか 1 つか、または 0 になり得るでしょう。 SDL_SRCALPHA がフラグとして渡されないと、 サーフェスを blit するときに全てのα情報は無視されます。 alpha パラメータはサーフェス単位のα値です。 つまり、サーフェス単位のαを使うには、サーフェスのαチャンネルは不要であり、 blit は未だ SDL_RLEACCEL によってアクセラレートされる ことが可能です。
+
+Note: サーフェス単位のα値 128 は特殊な場合とみなされて最適化されるため、 他の値よりもはるかに高速です。
+
+
+αは以下の方法でサーフェスの blit に影響を及ぼします。
+
+
+RGBA->RGB SDL_SRCALPHA あり
+
+
+転送元のピクセルはαチャンネルを使って転送先のピクセルとαブレンドされます。
+
+
+RGBA->RGB SDL_SRCALPHA なし
+
+
+転送元ピクセルから RGB データがコピーされます。 転送元のαチャンネルとサーフェス単位のα値は無視されます。
+
+
+RGB->RGBA SDL_SRCALPHA あり
+
+
+転送元ピクセルはサーフェス単位のα値を使って転送先ピクセルとαブレンドされます。 SDL_SRCCOLORKEY がセットされている場合は、 カラーキーの値と一致しないピクセルだけがコピーされます。 コピーされるピクセルのαチャンネルは不透明にセットされます。
+
+
+RGB->RGBA SDL_SRCALPHA なし
+
+
+RGB データは転送元のピクセルからコピーされ、コピーされたピクセルのα値は不透明にセットされます。 SDL_SRCCOLORKEY がセットされている場合は、 カラーキーの値に一致しないピクセルだけがコピーされます。
+
+
+RGBA->RGBA SDL_SRCALPHA あり
+
+
+転送元のピクセルはαチャンネルを使って転送先のピクセルとαブレンドされます。 転送先のピクセルのαチャンネルは変更されません。 SDL_SRCCOLORKEY は無視されます。
+
+
+RGBA->RGBA SDL_SRCALPHA なし
+
+
+RGBA データが転送先サーフェスにコピーされます。 SDL_SRCCOLORKEY がセットされている場合は、 カラーキーの値と一致しないピクセルだけがコピーされます。
+
+
+RGB->RGB SDL_SRCALPHA あり
+
+
+転送元ピクセルはサーフェス単位のα値を使って転送先ピクセルとαブレンドされます。 SDL_SRCCOLORKEY がセットされている場合は、 カラーキーの値と一致しないピクセルだけがコピーされます。
+
+
+RGB->RGB SDL_SRCALPHA なし
+
+
+転送元ピクセルから RGB データがコピーされます。 SDL_SRCCOLORKEY がセットされている場合は、 カラーキーの値と一致しないピクセルだけがコピーされます。
+
+Note: SDL_SRCALPHA がセットされた状態での RGBA->RGBA の blit は 転送先サーフェスのαをそのまま維持することに注意して下さい。 これは、2 つの任意の RGBA サーフェスを合成して それらの「重ね合わせ」が期待されるような結果を得ることはできないということです。 転送先のαはマスクとして働きます。
+
+
+また、ピクセル単位のαとサーフェス単位のαは合成できないことにも注意して下さい。 ピクセル単位のαが有効な時は必ずそちらが使われます。
+
+Return Value
+
+
+この関数は 0 か、 エラーがあった場合は -1 を返します。
+
+See Also
+
+SDL_MapRGBA, SDL_GetRGBA, SDL_DisplayFormatAlpha, SDL_BlitSurface
+
+PrevHomeNext
+SDL_SetColorKeyUpSDL_SetClipRect

@@ -1,0 +1,38 @@
+TITLE : SDL_Color
+
+SDL Library Documentation
+PrevNext
+
+SDL_Color
+
+Name
+
+SDL_Color --  フォーマットに依存しない色表現
+
+Structure Definition
+
+typedef struct{ Uint8 r; Uint8 g; Uint8 b; Uint8 unused; } SDL_Color;
+
+
+Structure Data
+
+r
+赤の輝度
+g
+緑の輝度
+b
+青の輝度
+unused
+未使用
+
+Description
+
+
+SDL_Color は フォーマットに依存しない形で色を表現します。 SDL_MapRGB を 使って、SDL_Color を あるピクセルフォーマットのピクセル値に変換することができます。
+
+See Also
+
+SDL_PixelFormat, SDL_SetColors, SDL_Palette
+
+PrevHomeNext
+SDL_RectUpSDL_Palette

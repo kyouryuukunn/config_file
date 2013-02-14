@@ -1,0 +1,28 @@
+TITLE : SDL_GL_SwapBuffers
+
+SDL Library Documentation
+PrevNext
+
+SDL_GL_SwapBuffers
+
+Name
+
+SDL_GL_SwapBuffers --  OpenGL のフレームバッファを入れ替えます/表示を更新します。
+
+Synopsis
+
+#include "SDL.h"
+
+void SDL_GL_SwapBuffers(void );
+
+Description
+
+
+ダブルバッファがサポートされている場合に OpenGL のバッファを入れ替えます。
+
+See Also
+
+SDL_SetVideoMode, SDL_GL_SetAttribute
+
+PrevHomeNext
+SDL_GL_SetAttributeUpSDL_CreateYUVOverlay

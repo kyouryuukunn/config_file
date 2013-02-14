@@ -1,0 +1,173 @@
+TITLE : SDLKey
+
+SDL Library Documentation
+PrevNext
+
+SDLKey
+
+Name
+
+SDLKey -- キーシンボルの定義
+
+Description
+
+
+
+
+Table 8-1. SDLのキーシンボルの定義
+
+SDLKeyASCIIの表現通称
+SDLK_BACKSPACE'\b'backspace
+SDLK_TAB'\t'tab
+SDLK_CLEAR クリア
+SDLK_RETURN'\r'return
+SDLK_PAUSE pause
+SDLK_ESCAPE'^['escape
+SDLK_SPACE' 'スペース
+SDLK_EXCLAIM'!'感嘆符
+SDLK_QUOTEDBL'"'二重引用符
+SDLK_HASH'#'ハッシュ(シャープ)
+SDLK_DOLLAR'$'ドル
+SDLK_AMPERSAND'&'アンパサンド
+SDLK_QUOTE'''引用符
+SDLK_LEFTPAREN'('左丸括弧
+SDLK_RIGHTPAREN')'右丸括弧
+SDLK_ASTERISK'*'アスタリスク
+SDLK_PLUS'+'プラス
+SDLK_COMMA','カンマ
+SDLK_MINUS'-'マイナス
+SDLK_PERIOD'.'ピリオド
+SDLK_SLASH'/'スラッシュ
+SDLK_0'0'0
+SDLK_1'1'1
+SDLK_2'2'2
+SDLK_3'3'3
+SDLK_4'4'4
+SDLK_5'5'5
+SDLK_6'6'6
+SDLK_7'7'7
+SDLK_8'8'8
+SDLK_9'9'9
+SDLK_COLON':'コロン
+SDLK_SEMICOLON';'セミコロン
+SDLK_LESS'<'小なり
+SDLK_EQUALS'='イコール
+SDLK_GREATER'>'大なり
+SDLK_QUESTION'?'疑問符
+SDLK_AT'@'アットマーク
+SDLK_LEFTBRACKET'['左かぎ括弧
+SDLK_BACKSLASH'\'バックスラッシュ
+SDLK_RIGHTBRACKET']'右かぎ括弧
+SDLK_CARET'^'キャレット
+SDLK_UNDERSCORE'_'アンダースコア
+SDLK_BACKQUOTE'`'逆引用符
+SDLK_a'a'a
+SDLK_b'b'b
+SDLK_c'c'c
+SDLK_d'd'd
+SDLK_e'e'e
+SDLK_f'f'f
+SDLK_g'g'g
+SDLK_h'h'h
+SDLK_i'i'i
+SDLK_j'j'j
+SDLK_k'k'k
+SDLK_l'l'l
+SDLK_m'm'm
+SDLK_n'n'n
+SDLK_o'o'o
+SDLK_p'p'p
+SDLK_q'q'q
+SDLK_r'r'r
+SDLK_s's's
+SDLK_t't't
+SDLK_u'u'u
+SDLK_v'v'v
+SDLK_w'w'w
+SDLK_x'x'x
+SDLK_y'y'y
+SDLK_z'z'z
+SDLK_DELETE'^?'delete
+SDLK_KP0 キーバッド(テンキー)の0
+SDLK_KP1 キーバッドの1
+SDLK_KP2 キーバッドの2
+SDLK_KP3 キーバッドの3
+SDLK_KP4 キーバッドの4
+SDLK_KP5 キーバッドの5
+SDLK_KP6 キーバッドの6
+SDLK_KP7 キーバッドの7
+SDLK_KP8 キーバッドの8
+SDLK_KP9 キーバッドの9
+SDLK_KP_PERIOD'.'キーバッドのピリオド
+SDLK_KP_DIVIDE'/'キーパッドの除算記号
+SDLK_KP_MULTIPLY'*'キーバッドの乗算記号
+SDLK_KP_MINUS'-'キーバッドのマイナス
+SDLK_KP_PLUS'+'キーバッドのプラス
+SDLK_KP_ENTER'\r'キーパッドのenter
+SDLK_KP_EQUALS'='キーパッドのイコール
+SDLK_UP 上矢印
+SDLK_DOWN 下矢印
+SDLK_RIGHT 右矢印
+SDLK_LEFT 左矢印
+SDLK_INSERT insert
+SDLK_HOME home
+SDLK_END end
+SDLK_PAGEUP page up
+SDLK_PAGEDOWN page down
+SDLK_F1 F1
+SDLK_F2 F2
+SDLK_F3 F3
+SDLK_F4 F4
+SDLK_F5 F5
+SDLK_F6 F6
+SDLK_F7 F7
+SDLK_F8 F8
+SDLK_F9 F9
+SDLK_F10 F10
+SDLK_F11 F11
+SDLK_F12 F12
+SDLK_F13 F13
+SDLK_F14 F14
+SDLK_F15 F15
+SDLK_NUMLOCK numlock
+SDLK_CAPSLOCK capslock
+SDLK_SCROLLOCK scrollock
+SDLK_RSHIFT 右shift
+SDLK_LSHIFT 左shift
+SDLK_RCTRL 右ctrl
+SDLK_LCTRL 左ctrl
+SDLK_RALT 右alt
+SDLK_LALT 左alt
+SDLK_RMETA 右meta
+SDLK_LMETA 左meta
+SDLK_LSUPER 左windowsキー
+SDLK_RSUPER 右windowsキー
+SDLK_MODE モードシフト
+SDLK_HELP help
+SDLK_PRINT print-screen
+SDLK_SYSREQ SysRq
+SDLK_BREAK break
+SDLK_MENU menu
+SDLK_POWER power
+SDLK_EURO ユーロ
+
+Table 8-2. SDLモディファイヤの定義
+
+SDLモディファイヤ意味
+KMOD_NONEいずれのモディファイヤにもあてはまらない
+KMOD_NUMNumlock 押下
+KMOD_CAPSCapslock押下
+KMOD_LCTRL左ctrl押下
+KMOD_RCTRL右ctrl押下
+KMOD_RSHIFT右shift押下
+KMOD_LSHIFT左shift押下
+KMOD_RALT右alt押下
+KMOD_LALT左alt押下
+KMOD_CTRLctrl押下
+KMOD_SHIFTshift押下
+KMOD_ALTalt押下
+
+
+
+PrevHomeNext
+SDL_keysymUpEvent Functions.

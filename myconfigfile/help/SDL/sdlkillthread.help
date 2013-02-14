@@ -1,0 +1,28 @@
+TITLE : SDL_KillThread
+
+SDL Library Documentation
+PrevNext
+
+SDL_KillThread
+
+Name
+
+SDL_KillThread -- スレッドを無理矢理に終了させます。
+
+Synopsis
+
+#include "SDL.h" #include "SDL_thread.h"
+
+void SDL_KillThread(SDL_Thread *thread);
+
+Description
+
+
+SDL_KillThreadは、パラメータ threadで指定されたスレッドを無作法に 終了させます。 出来る限り、スレッドに終了シグナルを送るIPCを使うなどの方法を 利用してください。
+
+See Also
+
+SDL_CreateThread, SDL_WaitThread
+
+PrevHomeNext
+SDL_WaitThreadUpSDL_CreateMutex

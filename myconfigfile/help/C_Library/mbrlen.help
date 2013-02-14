@@ -1,0 +1,15 @@
+TITLE :         BohYoh.com【Ｃ言語講座】標準ライブラリ mbrlen    
+
+　mbrlen
+Ｃ言語 標準ライブラリ   アルファベット順索引   ヘッダ別索引   ホームページへ　Ｃ言語講座のページ
+
+再開始可能な多バイト文字・ワイド文字変換関数
+wcsftime
+ヘッダ  #include <wchar.h>
+形　式  size_t mbrlen(const char* restrict s, size_t n, mbstate_t* restrict ps);
+機　能  次の呼出しと等価である。
+　　mbrtowc(NULL, s, n, ps != NULL ? ps : &internal)
+ただし、式psの評価は1回だけである。ここでinternalは、mbrlen関数のmbstate_tオブジェクトとする。
+返却値  (size_t)(-2)、(size_t)(-1)または0以上n以下の値を返す。
+
+-------------------------------------------------------------------------------
