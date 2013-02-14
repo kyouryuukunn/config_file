@@ -80,6 +80,7 @@ NeoBundle 'taku-o/vim-toggle', {'stay_same' : 1}
 "NeoBundle 'kana/vim-tabpagecd'
 NeoBundle 'Lokaltog/vim-powerline'
 NeoBundle 'pentie/VimRepress'
+NeoBundle 'kyouryuukunn/config_file'
 if !g:portable
 	"NeoBundle 'tyru/eskk.vim', { 'stay_same' : 1 }
 	"NeoBundle 'tyru/skkdict.vim'
