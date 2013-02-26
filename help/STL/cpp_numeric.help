@@ -1,7 +1,0 @@
-
-<numeric>で定義されているもの
-
-accumulate()  (I, I)  各要素を積算して返す
-adjacent_difference()  (F, F)  隣接する等しい要素を探す
-inner_product()  (I, I), I  ２つの配列の内積を計算して返す
-patial_sum()  (I, I), O  積算の途中経過をすべて他の配列に残す

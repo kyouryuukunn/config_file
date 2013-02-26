@@ -6,19 +6,20 @@ let g:portable = 0
 if has('win32') || has('win64')
   let $DOTVIM = $VIM.'/vimfiles'
   let $DROPBOX = expand('d:/Box/Workspace/Dropbox/etc')
-  let $HELP = $DOTVIM.'bundle/config_file/help'
+  let $HELP = $DOTVIM.'/help'
   let $LLVM = expand('e:/llvm/bin')
   "let $DMD = expand('e:/dmd2/windows/bin')
   let $PYTHON2 = expand('C:/Python27;C:/Python27/Scripts')
   let $PYTHON3 = expand('C:/Python33;C:/Python33/Scripts')
   let $GIT = expand('e:/Soft/Git/bin')
-  let $MSYS = expand('e:/MinGW/bin')
+  let $MINGW = expand('e:/MinGW/bin')
+  let $MSYS = expand('e:/MinGW/msys/1.0/bin')
   let $CYGWIN = expand('e:/cygwin/bin')
-  let $PATH = $PATH . ";".$MSYS.";".$LLVM.';'.$PYTHON3.';'.$GIT.';'.$CYGWIN
+  let $PATH = $PATH . ";".$LLVM.';'.$PYTHON3.';'.$CYGWIN
 else
   let $DROPBOX = expand('~/Dropbox/etc')
   let $DOTVIM = expand('~/.vim')
-  let $HELP = $DOTVIM.'bundle/config_file/help'
+  let $HELP = $DOTVIM.'/help'
   let $LLVM = expand('/usr/local/bin')
 endif " }}}
 "set migemo
@@ -36,7 +37,7 @@ augroup END
 set laststatus=2
 set statusline=%F\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%y[buffer:%n]%=\ (%v,%l)/%L%8P\
 "不可視文字の表示
-set list listchars=tab:^_,trail:_  " }}}
+" set list listchars=tab:^_,trail:_  " }}}
 "------------------------------------------------------------------------------
 "スワップ,バックアップ保存場所 {{{
 if !g:portable
@@ -129,7 +130,7 @@ augroup MyFiletype
 	" Folding
 	autocmd FileType renpy setl foldmethod=indent
 	autocmd FileType renpy setl foldlevel=99
-	"autocmd FileType renpy inoremap <buffer> <CR><CR>   <CR><CR><C-D>
+	autocmd FileType renpy inoremap <buffer> <CR><CR>   <CR><CR><C-D>
 	autocmd FileType renpy nnoremap <buffer> <Leader>r :RenPyExe<CR>
 "" }}}
 " --------------------------------------------------------------------------
@@ -148,6 +149,22 @@ augroup MyFiletype
 " }}}
 "  -------------------------------------------------------------------------
 augroup END
+
+function! s:MarkdownToRenPy()
+	%s/^\t/\t\t/
+	%s/\v^#(.*)/\tlabel \1:/
+	" %s/\v(^[^*#$	].*)  \n(.*)/\l\\n\2/
+	%s/\v  \n/\\n/
+	%s/\v^\$(.*)\n(.*)/\t\t\1 "\2"/
+	%s/\v(^[^*$#	].*)/\t\t"\1"/
+	%s/\v^\* ([^[].*)/\t\tmenu:\r\t\t\t"\1"/
+	%s/\v^\*$/\t\tmenu:\r\t\t\t"\1"/
+	%s/\v\* \[(.*)\]\((.*)\)/\t\t\t"\1":\r\t\t\t\tjump \2/
+	%s/^\t//
+	%s/\t/    /g
+endfunction
+
+command RenPy call s:MarkdownToRenPy()
 "  }}}
 "  -------------------------------------------------------------------------
 "keymap {{{
@@ -186,10 +203,13 @@ if has('folding')
   nnoremap <expr> l foldlevel(line('.')) ? "\<Right>zo" : "\<Right>"
 endif " }}}
 "---------------------------------------------------------------------------
+nnoremap <C-W>Q :tabclose<CR>
+"---------------------------------------------------------------------------
 " 現在のタブを右へ移動 {{{
-nnoremap <Tab>n :MyTabMoveRight<CR>
+nnoremap <Tab>l :MyTabMoveRight<CR>
 " 現在のタブを左へ移動
-nnoremap <Tab>p :MyTabMoveLeft<CR>
+nnoremap <Tab>h :MyTabMoveLeft<CR>
+
 command! -count=1 MyTabMoveRight call MyTabMove(<count>)
 command! -count=1 MyTabMoveLeft  call MyTabMove(-<count>)
 function! MyTabMove(c)
@@ -257,7 +277,7 @@ inoremap <C-V> <esc>pa
 " 復元
 inoremap <C-Z> <C-O>u
 " 後削除
-inoremap <C-C> <C-O><S-D>
+inoremap <C-K> <C-O><S-D>
 " 一行削除
 inoremap <C-CR> <End><C-U><Del>
 "-------------------------------------------------------------------------------------
@@ -322,9 +342,9 @@ endfunction " }}}
 "------------------------------------------------------------------------------
 "grep {{{
 if has('win32') || has('win64')
-set grepprg=jvgrep\ --enc\ cp932,utf-8,utf-16
+	set grepprg=jvgrep\ -8
+	" set grepprg=grep\ -nH
 endif
-"set grepprg=grep\ -nH\ -P
 "自動でQuickfixを開く
 "autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
 "Quickfix用設定
@@ -358,9 +378,9 @@ augroup END
 
 function! s:MoveNowDir()
 	if isdirectory(expand("%:p:h"))
-		if getcwd() == expand("%:p:h") || getcwd() == expand("$VIM")
-			exec ":lcd ". expand("%:p:h")
-		endif
+		" if getcwd() == expand("%:p:h") || getcwd() == expand("$VIM")
+		exec ":cd ". expand("%:p:h")
+		" endif
 	endif
 endfunction
  " }}}

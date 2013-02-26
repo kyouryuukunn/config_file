@@ -76,10 +76,10 @@ let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
 " }}}
 ""------------------------------------------------------------------------------
 " スニペット {{{
-let g:neosnippet#snippets_directory = $DOTVIM.'/bundle/config_file/snippets'
+let g:neosnippet#snippets_directory = $DOTVIM.'/snippets'
 imap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neocomplcache_snippets_jump)" : "\<Esc>\<Tab>"
 smap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
-noremap <Space>s :VimFilerTab $DOTVIM/bundle/config_file/snippets<CR>
+noremap <Space>s :Unite file $DOTVIM/snippets<CR>
 " For snippet_complete marker.
 "if has('conceal')
 	"set conceallevel=2 concealcursor=i
@@ -160,42 +160,42 @@ let g:unite_source_menu_menus = {}
 let g:unite_source_menu_menus.bookmark = {
       \     'description' : 'bookmark menu',
       \ }
-let g:unite_source_menu_menus.bookmark.candidates = {
-      \       '_vimrc'     : 'tabe $DROPBOX/_vimrc',
-      \       '_gvimrc'    : 'tabe $DROPBOX/_gvimrc',
-      \       '_pluginvim' : 'tabe $DROPBOX/_pluginvim',
-      \       '_vundlevim' : 'tabe $DROPBOX/_vundlevim',
-      \       '_include'   : 'tabe $DROPBOX/_includevim',
-      \       '_vsvimrc'   : 'tabe $DROPBOX/_vsvimrc',
-      \       '_vimperatorrc'   : 'tabe $DROPBOX/_vimperatorrc',
-      \       'vimrc'      : 'tabe $VIM/vimrc',
-      \       'gvimrc'     : 'tabe $VIM/gvimrc',
-      \       'nodoka'	   : 'tabe $DROPBOX/kuma.nodoka',
-      \       'makefile'   : 'tabe d:/Box/Workspace/Makefile',
-      \       'workspace'  : 'VimFilerExplorer d:/Box/Workspace',
-      \       'cpp'  	   : 'VimFilerExplorer d:/Box/Workspace/cpp',
-      \       'D'  	   : 'VimFilerExplorer d:/Box/Workspace/D',
-      \       'python'     : 'VimFilerExplorer d:/Box/Workspace/py',
-      \       'renpy'  	   : 'VimFilerExplorer d:/Box/Workspace/renpy',
-      \       'git'  	   : 'VimFilerExplorer d:/Box/Workspace/git',
-      \       'kirikiri'   : 'VimFilerExplorer d:/Box/Workspace/kirikiri/practice/data/scenario',
-      \       'snippet'    : 'VimFilerExplorer $DOTVIM/bundle/config_file/snippets',
-      \       'outline'    : 'VimFilerExplorer $DOTVIM/autoload/unite/sources/outline',
-      \       'bundle'     : 'VimFilerExplorer $DOTVIM/bundle',
-      \       'kn'	   : 'tabe $DOTVIM/bundle/kirikiri_neocomplcache/autoload/neocomplcache/sources/kirikiri_complete.vim',
-      \       'ko'	   : 'tabe $DOTVIM/bundle/KirikiriOpen.vim/ftplugin/kirikiri.vim',
-      \       'rn'	   : 'tabe $DOTVIM/bundle/renpy_neocomplcache/autoload/neocomplcache/sources/renpy_complete.vim',
-      \       'ro'	   : 'tabe $DOTVIM/bundle/RenPyOpen.vim/ftplugin/kirikiri.vim',
-      \       'msys'   	   : 'VimFilerExplorer e:/MinGW/msys/1.0/home/Kuma',
-      \       'cygwin' 	   : 'VimFilerExplorer e:/cygwin/home/Kuma',
-      \       'mokuroku'   : 'VimFilerExplorer f:/ready/mokuroku',
-      \       'homepage'   : 'VimFilerExplorer d:/Box/Workspace/homepage',
-      \     }
+let g:unite_source_menu_menus.bookmark.command_candidates = [
+      \       ['_vimrc'        , 'tabe $DROPBOX/_vimrc'],
+      \       ['_gvimrc'       , 'tabe $DROPBOX/_gvimrc'],
+      \       ['_pluginvim'    , 'tabe $DROPBOX/_pluginvim'],
+      \       ['_vundlevim'    , 'tabe $DROPBOX/_vundlevim'],
+      \       ['_include'      , 'tabe $DROPBOX/_includevim'],
+      \       ['_vsvimrc'      , 'tabe $DROPBOX/_vsvimrc'],
+      \       ['_vimperatorrc' , 'tabe $DROPBOX/_vimperatorrc'],
+      \       ['vimrc'         , 'tabe $VIM/vimrc'],
+      \       ['gvimrc'        , 'tabe $VIM/gvimrc'],
+      \       ['nodoka'        , 'tabe $DROPBOX/kuma.nodoka'],
+      \       ['makefile'      , 'tabe d:/Box/Workspace/Makefile'],
+      \       ['workspace'     , 'Unite file:d:/Box/Workspace'],
+      \       ['cpp'           , 'Unite file:d:/Box/Workspace/cpp'],
+      \       ['D'             , 'Unite file:d:/Box/Workspace/D'],
+      \       ['python'        , 'Unite file:d:/Box/Workspace/py'],
+      \       ['renpy'         , 'Unite file:d:/Box/Workspace/renpy'],
+      \       ['git'           , 'Unite file:d:/Box/Workspace/git'],
+      \       ['kirikiri'      , 'Unite file:d:/Box/Workspace/kirikiri/practice/data/scenario'],
+      \       ['snippet'       , 'Unite file:$DOTVIM/snippets'],
+      \       ['outline'       , 'Unite file:$DOTVIM/autoload/unite/sources/outline'],
+      \       ['bundle'        , 'Unite file:$DOTVIM/bundle'],
+      \       ['kn'            , 'tabe $DOTVIM/bundle/kirikiri_neocomplcache/autoload/neocomplcache/sources/kirikiri_complete.vim'],
+      \       ['ko'            , 'tabe $DOTVIM/bundle/KirikiriOpen.vim/ftplugin/kirikiri.vim'],
+      \       ['rn'            , 'tabe $DOTVIM/bundle/renpy_neocomplcache/autoload/neocomplcache/sources/renpy_complete.vim'],
+      \       ['ro'            , 'tabe $DOTVIM/bundle/RenPyOpen.vim/ftplugin/kirikiri.vim'],
+      \       ['msys'          , 'Unite file:e:/MinGW/msys/1.0/home/Kuma'],
+      \       ['cygwin'        , 'Unite file:e:/cygwin/home/Kuma'],
+      \       ['mokuroku'      , 'Unite file:f:/ready/mokuroku'],
+      \       ['homepage'      , 'Unite file:d:/Box/Workspace/homepage']
+      \     ]
 
 if has('win32')
-	let g:unite_source_menu_menus.bookmark.candidates.Asr = 'VimFilerExplorer e:/Soft/Asr'
+	call add(g:unite_source_menu_menus.bookmark.command_candidates, ["Asr", 'Unite file:e:/Soft/Asr'])
 elseif has('win64')
-	let g:unite_source_menu_menus.bookmark.candidates.Asr = 'VimFilerExplorer e:/Softx64/Asr'
+	call add(g:unite_source_menu_menus.bookmark.command_candidates, ["Asr", 'Unite file:e:/Softx64/Asr'])
 endif
 
 function g:unite_source_menu_menus.bookmark.map(key, value)
@@ -238,32 +238,17 @@ let g:unite_source_menu_menus.manul = {
       \     'description' : 'manul menu',
       \ }
 let g:unite_source_menu_menus.manul.candidates = {
-      \       'C'       			: 'vsplit $HELP/C_Library/C_Library.help',
-      \       'SDL'     			: 'VimFiler $HELP/SDL/index',
-      \       'Dx'      			: 'VimFiler $HELP/DxLib/index',
-      \       'STL::stream'			: 'vsplit $HELP/STL/cppio.help',
-      \       'STL::string'			: 'vsplit $HELP/STL/cppstring.help',
-      \       'STL::vector'			: 'vsplit $HELP/STL/cppvector.help',
-      \       'STL::deque'			: 'vsplit $HELP/STL/cppdeque.help',
-      \       'STL::list'			: 'vsplit $HELP/STL/cpplist.help',
-      \       'STL::set'			: 'vsplit $HELP/STL/cppset.help',
-      \       'STL::multiset'			: 'vsplit $HELP/STL/cppmultiset.help',
-      \       'STL::map'			: 'vsplit $HELP/STL/cppmap.help',
-      \       'STL::multimap'			: 'vsplit $HELP/STL/cppmultimap.help',
-      \       'STL::stack'			: 'vsplit $HELP/STL/cppstack.help',
-      \       'STL::queue'			: 'vsplit $HELP/STL/cppqueue.help',
-      \       'STL::priority_queue'		: 'vsplit $HELP/STL/cpppriorityqueue.help',
-      \       'STL::bitset'			: 'vsplit $HELP/STL/cppbitset.help',
-      \       'STL::algorithm'			: 'vsplit $HELP/STL/cpp_algorithm.help',
-      \       'STL::numeric'			: 'vsplit $HELP/STL/cpp_numeric.help',
-      \       'STL::function'			: 'vsplit $HELP/STL/cpp_function.help',
-      \       'STL::iterator'			: 'vsplit $HELP/STL/iterators.help',
+      \       'C'       			: 'W3mSplit http://www.c-tipsref.com/reference.html',
+      \       'SDL'     			: 'W3mSplit http://www.tacoworks.jp/software/SDLdoc-jp/html/',
+      \       'Dx'      			: 'W3mSplit http://homepage2.nifty.com/natupaji/DxLib/dxfunc.html',
+      \       'CPP'      			: 'W3mSplit https://sites.google.com/site/cpprefjp/home',
       \       'boost'   			: 'W3mSplit http://www.kmonos.net/alang/boost/',
       \       'D'                               : 'W3mSplit http://www.kmonos.net/alang/d/comparison.html',
-      \       'Dlib'                            : 'W3mSplit http://www.kmonos.net/alang/d/phobos/phobos.html#std',
+      \       'Dxlib'                           : 'W3mSplit http://www.kmonos.net/alang/d/phobos/phobos.html#std',
       \       'python3'   			: 'W3mSplit http://docs.python.jp/3/library/index.html',
       \       'HTML5'                           : 'W3mSplit http://www.htmq.com/html5/index.shtml',
       \       'CSS3'                            : 'W3mSplit http://www.htmq.com/css3/index.shtml',
+      \       'Markdown'                        : 'W3mSplit hhttp://blog.2310.net/archives/6',
       \     }
 function g:unite_source_menu_menus.manul.map(key, value)
   return {
@@ -301,9 +286,39 @@ function g:unite_source_menu_menus.encode.map(key, value)
 	\     }
 endfunction " }}}
 "------------------------------------------------------------------------------------- 
+" command {{{
+let g:unite_source_menu_menus.command = {
+      \     'description' : 'command',
+      \ }
+let g:unite_source_menu_menus.command.candidates = {
+      \		'save'		:	'BlogSave',
+      \		'pagelist'	:	'exe "BlogList page" | exe "nnoremap <buffer> E :BlogOpen <C-R><C-W><CR>:call MyBlogMap()<CR>jjjjjjj:s/EditType   : post$/EditType   : page/<CR>" | exe "nnoremap <buffer> q <C-W>q"',
+      \		'postlist'	:	'exe "BlogList post" | exe "nnoremap <buffer> E :BlogOpen <C-R><C-W><CR>:call MyBlogMap()<CR>" | exe "nnoremap <buffer> q <C-W>q"',
+      \		'page'		:	'exe "tabe" | exe "BlogNew page" | call MyBlogMap()',
+      \		'post'		:	'exe "tabe" | exe "BlogNew post" | call MyBlogMap()',
+      \		'qfixhowm'	:	'Unite qfixhowm/new qfixhowm:nocach -hide-source-names',
+      \		'html'          :	'setf html',
+      \		'markdown'	:	'setf markdown'
+      \     }
+function g:unite_source_menu_menus.command.map(key, value)
+  return {
+	\       'word' : a:key, 'kind' : 'command',
+	\       'action__command' : a:value,
+	\     }
+endfunction " }}}
+
+
+function! MyBlogMap()
+	setf markdown
+	inoremap <buffer> <M-n> <Space><Space><CR>
+	nnoremap <buffer> Q :BlogPreview<CR>
+	nnoremap <buffer> <Space>w :BlogPreview publish<CR>
+endfunction
+"------------------------------------------------------------------------------------- 
 
 nnoremap <silent> <Space>f :<C-u>Unite -vertical -create menu:bookmark<CR>
 nnoremap <silent> <Space>c :<C-u>Unite -vertical -create menu:compile<CR>
+nnoremap <silent> <Space>q :<C-u>Unite -vertical -create menu:command<CR>
 nnoremap <silent> <Space>h :<C-u>Unite -vertical -create menu:manul<CR>
 nnoremap <silent> <Space>e :<C-u>Unite -vertical -create menu:encode<CR>
  " }}}
@@ -542,25 +557,25 @@ augroup smartchr
     " }}}
     "python  {{{
 	autocmd FileType python	inoremap <buffer><expr> : smartchr#loop(':', ':<CR>')
-	autocmd FileType python	inoremap <buffer><expr> + smartchr#loop(' + ', '++', ' += ')
-	autocmd FileType python	inoremap <buffer><expr> - smartchr#loop(' - ', '--', ' -= ')
+	autocmd FileType python	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++')
+	autocmd FileType python	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '--')
 	autocmd FileType python	inoremap <buffer><expr> / smartchr#loop(' / ', '/')
 	autocmd FileType python	inoremap <buffer><expr> * smartchr#loop(' * ', '*')
 	autocmd FileType python	inoremap <buffer><expr> , smartchr#loop(', ', ',')
 	autocmd FileType python	inoremap <buffer><expr> ( smartchr#loop('(', '(  )<Left><Left>')
-	autocmd FileType python	inoremap <buffer><expr> = smartchr#loop(' = ', ' == ', ' != ')
+	autocmd FileType python	inoremap <buffer><expr> = smartchr#loop(' = ', ' == ', ' != ', '=')
 	autocmd FileType python	inoremap <buffer><expr> < smartchr#loop(' < ', ' <= ','<')
 	autocmd FileType python	inoremap <buffer><expr> > smartchr#loop(' > ', ' >= ','>')
     " }}}
     "renpy  {{{
 	autocmd FileType renpy	inoremap <buffer><expr> : smartchr#loop(':', ':<CR>')
-	autocmd FileType renpy	inoremap <buffer><expr> + smartchr#loop(' + ', '++', ' += ')
-	autocmd FileType renpy	inoremap <buffer><expr> - smartchr#loop(' - ', '--', ' -= ')
+	autocmd FileType renpy	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '+', '++')
+	autocmd FileType renpy	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '-', '--')
 	autocmd FileType renpy	inoremap <buffer><expr> / smartchr#loop(' / ', '/')
 	autocmd FileType renpy	inoremap <buffer><expr> * smartchr#loop(' * ', '*')
 	autocmd FileType renpy	inoremap <buffer><expr> , smartchr#loop(', ', ',')
 	autocmd FileType renpy	inoremap <buffer><expr> ( smartchr#loop('(', '(  )<Left><Left>')
-	autocmd FileType renpy	inoremap <buffer><expr> = smartchr#loop(' = ', ' == ', ' != ')
+	autocmd FileType renpy	inoremap <buffer><expr> = smartchr#loop(' = ', ' == ', ' != ', '=')
 	autocmd FileType renpy	inoremap <buffer><expr> < smartchr#loop(' < ', ' <= ','<')
 	autocmd FileType renpy	inoremap <buffer><expr> > smartchr#loop(' > ', ' >= ','>')
     " }}}
@@ -934,7 +949,7 @@ let howm_filename          = "Mem-%Y/%m/%Y-%m-%d-%H%M%S.txt"
 " メモファイルのエンコーディング
 let howm_fileencoding      = 'utf-8'
 " メモファイルの改行コード
-let howm_fileformat        = 'dos'
+let howm_fileformat        = 'unix'
 " ファイルタイプ指定
 let QFixHowm_FileType = 'qfix_memo'
 "オートリンクでファイルを開く
@@ -957,6 +972,8 @@ let QFixHowm_WildCardChapter       = 1
 let QFixHowm_WildCardChapterMode   = 1"
 " QuickFixウィンドウでプレビューを有効にする
 let QFix_PreviewEnable = 0
+" QFixGrepの検索時にカーソル位置の単語を拾う/拾わない
+let MyGrep_DefaultSearchWord = 0
 " }}}
 " -------------------------------------------------------------------------- 
 "" jpformat {{{
@@ -999,12 +1016,15 @@ vnoremap <F4> :ExciteTranslate<CR>
 " vim-visualstar
 map * <Plug>(visualstar-*)N
 map # <Plug>(visualstar-#)N
+"---------------------------------------------------------------------------
 " powerline
 "source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim
 " --------------------------------------------------------------------------
 " powerline-vim
 let g:Powerline_cache_dir = expand('~/.powerline-cache')
-"let g:Powerline_symbols = 'fancy'
+if &enc == "utf-8"
+	let g:Powerline_symbols = 'fancy'
+endif
 set t_Co=256
 "call Pl#Theme#InsertSegment('pwd', 'after', 'fileinfo')
 "------------------------------------------------------------------------------------- 
@@ -1014,13 +1034,22 @@ autocmd FileType qfreplace nnoremap <buffer> <Space>w :w<CR>:close<CR>:cclose<CR
 " --------------------------------------------------------------------------
 "easy-motion
 let g:EasyMotion_leader_key = '<tab>'
+"---------------------------------------------------------------------------
 "nerdcommenter
-map <tab>cc <plug>NERDCommenterComment
-map <tab>cn <plug>NERDCommenterNested
-map <tab>cm <plug>NERDCommenterMinimal
-map <tab>cs <plug>NERDCommenterSexy
-map <tab>c<Space> <plug>NERDCommenterToggle
-map <tab>cu <plug>NERDCommenterUncomment
+"map <tab>cc <plug>NERDCommenterComment
+" map <tab>cn <plug>NERDCommenterNested
+" map <tab>cm <plug>NERDCommenterMinimal
+" map <tab>cs <plug>NERDCommenterSexy
+" map <tab>cc <plug>NERDCommenterToggle
+"map <tab>cu <plug>NERDCommenterUncomment
+"---------------------------------------------------------------------------
+" tcomment
+if !exists('g:tcomment_types')
+  let g:tcomment_types = {}
+endif
+let g:tcomment_types.renpy = '# %s'
+let g:tcomment_types.kirikiri = ';%s'
+let g:tcomment_types.D = '// %s'
 "------------------------------------------------------------------------------
 "}}}
 "------------------------------------------------------------------------------

@@ -25,8 +25,8 @@ set columns=140
 if has('win32')
   " Windows用
   "set guifont=Meiryoke_Gothic_for_Powerline:h12:cSHIFTJIS
-  "set guifont=Ricty_for_Powerline:h13.5:cSHIFTJIS
-  set guifont=Ricty:h13.5:cSHIFTJIS
+  set guifont=Ricty_for_Powerline:h13.5:cSHIFTJIS
+  " set guifont=Ricty:h13.5:cSHIFTJIS
   "set guifont=MS_Mincho:h12:cSHIFTJIS
   "set guifont=Osaka－等幅-NBAA:h12
   " 行間隔の設定

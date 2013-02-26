@@ -8,8 +8,18 @@ snippet     mod
 abbr        moa
 prev_word   '^'
         mod ${1} = ${2}
-        
+
 snippet     window
 abbr        window
 prev_word   '^'
         window ${1} /${2}/ :Global
+
+snippet     Novel
+abbr        Novel
+prev_word   '^'
+        window ${1} /${1}\.exe/ :Novel
+
+snippet     None
+abbr        None
+prev_word   '^'
+        window ${1} /${1}\.exe/ :None
