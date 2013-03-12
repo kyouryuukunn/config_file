@@ -27,13 +27,8 @@ endif " }}}
 " 辞書
 "set dictionary="spell"
 "-------------------------------------------------------------------------------------
-"入力モード時、ステータスラインのカラーを変更 {{{
-augroup InsertHook
-	autocmd!
-	autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
-	autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
-augroup END
-"ステータスラインに状態表示
+"表示 {{{
+"ステータスラインに状態
 set laststatus=2
 set statusline=%F\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%y[buffer:%n]%=\ (%v,%l)/%L%8P\
 "不可視文字の表示
@@ -95,8 +90,8 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif " }}}
 "---------------------------------------------------------------------------
-"{{{ FileType
-augroup MyFiletype
+"{{{ autocmd
+augroup MyAutocmd
 	autocmd!
 "-------------------------------------------------------------------------------------
 " python {{{
@@ -117,8 +112,6 @@ augroup MyFiletype
 " }}}
 "-------------------------------------------------------------------------------------
 " renpy {{{
-	autocmd BufNew,BufRead *.rpy setf renpy
-	autocmd BufNew,BufRead *.rpym setf renpy
 	autocmd FileType renpy setl tabstop=8
 	autocmd FileType renpy setl softtabstop=4
 	autocmd FileType renpy setl shiftwidth=4
@@ -130,7 +123,7 @@ augroup MyFiletype
 	" Folding
 	autocmd FileType renpy setl foldmethod=indent
 	autocmd FileType renpy setl foldlevel=99
-	autocmd FileType renpy inoremap <buffer> <CR><CR>   <CR><CR><C-D>
+	autocmd FileType renpy inoremap <buffer> <C-CR>  <CR><CR><C-D>
 	autocmd FileType renpy nnoremap <buffer> <Leader>r :RenPyExe<CR>
 "" }}}
 " --------------------------------------------------------------------------
@@ -147,10 +140,25 @@ augroup MyFiletype
 " Text {{{
 	autocmd FileType text setl textwidth=0
 " }}}
+"   ------------------------------------------------------------------------
+" snippet {{{
+	autocmd FileType snippet setl foldmethod=marker
+	autocmd FileType snippet setl noexpandtab
+" }}}
+"  -------------------------------------------------------------------------
+" extra {{{
+	autocmd BufRead _vundlevim,_pluginvim,_includevim set filetype=vim
+	" 常に開いているファイルと同じディレクトリをカレントディレクトリにする
+	autocmd BufEnter * call s:MoveNowDir()
+	"入力モード時、ステータスラインのカラーを変更
+	autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
+	autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
+" }}}
 "  -------------------------------------------------------------------------
 augroup END
-
-function! s:MarkdownToRenPy()
+" }}}
+"  -------------------------------------------------------------------------
+function! s:MarkdownToRenPy() " {{{
 	%s/^\t/\t\t/
 	%s/\v^#(.*)/\tlabel \1:/
 	" %s/\v(^[^*#$	].*)  \n(.*)/\l\\n\2/
@@ -361,21 +369,11 @@ set nf=alpha " }}}
 "------------------------------------------------------------------------------
 "挿入 {{{
 iab <expr> lin repeat('-',80 - col('.'))
-augroup nodoka
-	autocmd!
-	autocmd BufRead Kuma.nodoka iab ke key = <Left><Left><Left>
-	autocmd BufRead Kuma.nodoka iab mo mod += <Left><Left><Left><Left>
-	autocmd BufRead Kuma.nodoka iab wi window // : Global<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
-augroup END " }}}
+" }}}
 "------------------------------------------------------------------------------
 "}}}
 "---------------------------------------------------------------------------
 " 常に開いているファイルと同じディレクトリをカレントディレクトリにする {{{
-augroup group_vimrc_cd
-    autocmd!
-    autocmd BufEnter * call s:MoveNowDir()
-augroup END
-
 function! s:MoveNowDir()
 	if isdirectory(expand("%:p:h"))
 		" if getcwd() == expand("%:p:h") || getcwd() == expand("$VIM")
@@ -389,58 +387,53 @@ endfunction
 source $DROPBOX/_includevim
 source $DROPBOX/_vundlevim
 source $DROPBOX/_pluginvim
-augroup extrafile
-	autocmd!
-	autocmd BufRead _vundlevim,_pluginvim,_includevim set filetype=vim
-	autocmd BufRead *.nodoka,*.mayu	set filetype=conf
-augroup END
 "上書きされそうな設定
 set whichwrap=b,s,h,l,<,>,[,]
 "日本語の行の連結時には空白を入力しない。
 set formatoptions+=mM
 " }}}
 ""-------------------------------------------------------------------------------------
-""MSVCコンパイルオプション {{{
-if has('win32') || has('win64')
-	""使用する msvc を設定
-	let s:msvc_2012 = "C:/Program\ Files/Microsoft\ Visual\ Studio\ 11.0"
-	let s:msvc_2012_nov = "C:/Program\ Files/Microsoft\ Visual\ C++\ Compiler\ Nov\ 2012\ CTP;"
-
-	let $VSINSTALLDIR=s:msvc_2012
-	let $VCINSTALLDIR=$VSINSTALLDIR."/VC"
-
-	let $DevEnvDir=$VSINSTALLDIR."/Common7/IDE;"
-	let $PATH=$VSINSTALLDIR."Common7/Tools;".$PATH
-	let $PATH=$VCINSTALLDIR."/bin;".$PATH
-
-	let $PATH=$DevEnvDir.";".$PATH
-
-	let $INCLUDE=$VCINSTALLDIR."/include;".$INCLUDE
-	let $LIB=$VCINSTALLDIR."/LIB;".$LIB
-	let $LIBPATH=$VCINSTALLDIR."/LIB;".$LIBPATH
-
-	" 最後にこの2つを設定する
-	let $PATH=s:msvc_2012_nov."/bin;".$PATH
-	let $INCLUDE=s:msvc_2012_nov."/include;".$INCLUDE
-	" Windows SDK（or Platform SDK？）
-	let $WindowsSdkDir="C:/Program Files/Microsoft SDKs/Windows/v7.0A"
-	let $INCLUDE=$WindowsSdkDir."/include;".$INCLUDE
-	let $LIB=$WindowsSdkDir."/lib;".$LIB
-	""MFC/ATL
-	"let $INCLUDE=$WindowsSdkDir."/altmfc/include;".$INCLUDE
-	"let $LIB=$WindowsSdkDir."/altmfc/lib;".$LIB
-	""Net
-	"let $INCLUDE="C:/Program Files/Microsoft SDKs/Microsoft Sync Framework/v1.0/include;".$INCLUDE
-	"let $LIB="C:/Program Files/Microsoft SDKs/Microsoft Sync Framework/v1.0/lib;".$LIB
-	""DirectX SDK
-	"let $INCLUDE="C:/Program Files/Microsoft DirectX SDK (August 2009)/Include;".$INCLUDE
-	"let $LIB="C:/Progra Files/Microso Direc SDK (August 2009)/Lib/x86;".$LIB
-
-	"Dxライブラリ SDL babel Boost wxWidgets
-	let $INCLUDE="E:/msvc/include/;E:/msvc/lib/mswud;".$INCLUDE
-	"共通
-	let $LIB="e:/msvc/lib;".$LIB
-endif " }}}
+" ""MSVCコンパイルオプション {{{
+" if has('win32') || has('win64')
+" 	""使用する msvc を設定
+" 	let s:msvc_2012 = "C:/Program\ Files/Microsoft\ Visual\ Studio\ 11.0"
+" 	let s:msvc_2012_nov = "C:/Program\ Files/Microsoft\ Visual\ C++\ Compiler\ Nov\ 2012\ CTP;"
+" 
+" 	let $VSINSTALLDIR=s:msvc_2012
+" 	let $VCINSTALLDIR=$VSINSTALLDIR."/VC"
+" 
+" 	let $DevEnvDir=$VSINSTALLDIR."/Common7/IDE;"
+" 	let $PATH=$VSINSTALLDIR."Common7/Tools;".$PATH
+" 	let $PATH=$VCINSTALLDIR."/bin;".$PATH
+" 
+" 	let $PATH=$DevEnvDir.";".$PATH
+" 
+" 	let $INCLUDE=$VCINSTALLDIR."/include;".$INCLUDE
+" 	let $LIB=$VCINSTALLDIR."/LIB;".$LIB
+" 	let $LIBPATH=$VCINSTALLDIR."/LIB;".$LIBPATH
+" 
+" 	" 最後にこの2つを設定する
+" 	let $PATH=s:msvc_2012_nov."/bin;".$PATH
+" 	let $INCLUDE=s:msvc_2012_nov."/include;".$INCLUDE
+" 	" Windows SDK（or Platform SDK？）
+" 	let $WindowsSdkDir="C:/Program Files/Microsoft SDKs/Windows/v7.0A"
+" 	let $INCLUDE=$WindowsSdkDir."/include;".$INCLUDE
+" 	let $LIB=$WindowsSdkDir."/lib;".$LIB
+" 	""MFC/ATL
+" 	"let $INCLUDE=$WindowsSdkDir."/altmfc/include;".$INCLUDE
+" 	"let $LIB=$WindowsSdkDir."/altmfc/lib;".$LIB
+" 	""Net
+" 	"let $INCLUDE="C:/Program Files/Microsoft SDKs/Microsoft Sync Framework/v1.0/include;".$INCLUDE
+" 	"let $LIB="C:/Program Files/Microsoft SDKs/Microsoft Sync Framework/v1.0/lib;".$LIB
+" 	""DirectX SDK
+" 	"let $INCLUDE="C:/Program Files/Microsoft DirectX SDK (August 2009)/Include;".$INCLUDE
+" 	"let $LIB="C:/Progra Files/Microso Direc SDK (August 2009)/Lib/x86;".$LIB
+" 
+" 	"Dxライブラリ SDL babel Boost wxWidgets
+" 	let $INCLUDE="E:/msvc/include/;E:/msvc/lib/mswud;".$INCLUDE
+" 	"共通
+" 	let $LIB="e:/msvc/lib;".$LIB
+" endif " }}}
 ""-------------------------------------------------------------------------------------
 "" include {{{
 ""augroup path
@@ -583,4 +576,56 @@ endif " }}}
 "	":!clang++ -c % `wx-config --cxxflags --unicode=yes --debug=yes`
 ""endfunction " }}}
 ""-------------------------------------------------------------------------------------
+" fun! Renpycomplete(findstart, base)
+" 	if a:findstart
+" 		" 単語の始点を検索する
+" 		let l:line = getline('.')
+" 		let l:start = matchend(l:line, '^.\{-}[^ ]') " インデントからの最初の文字
+" 		" while start > 0 && line[start - 1] =~ '\a'
+" 		"   let start -= 1
+" 		" endwhile
+" 		return l:start
+" 	else
+" 		echo a:base
+" 		let l:candidate = [
+" 			\{'word': 'python'      , 'menu': ''},
+" 			\{'word': 'init'        , 'menu': ''},
+" 			\{'word': 'init python' , 'menu': ''},
+" 			\{'word': 'label '      , 'menu': ''},
+" 			\{'word': 'screen'      , 'menu': ''},
+" 			\{'word': 'image'       , 'menu': ''},
+" 			\{'word': 'define'      , 'menu': ''},
+" 			\{'word': 'menu'        , 'menu': ''},
+" 			\{'word': 'say'         , 'menu': ''},
+" 			\{'word': 'play'        , 'menu': ''},
+" 			\{'word': 'queue'       , 'menu': ''},
+" 			\{'word': 'stop'        , 'menu': ''},
+" 			\{'word': 'with'        , 'menu': ''},
+" 			\{'word': 'show'        , 'menu': ''},
+" 			\{'word': 'hide'        , 'menu': ''},
+" 			\{'word': 'scene'       , 'menu': ''},
+" 			\{'word': 'return'      , 'menu': ''},
+" 			\{'word': 'transform '  , 'menu': ''},
+" 			\{'word': 'window hide'      , 'menu': ''},
+" 			\{'word': 'window show'      , 'menu': ''},
+" 			\{'word': 'jump'        , 'menu': ''},
+" 			\{'word': 'call'        , 'menu': ''},
+" 			\{'word': 'while'       , 'menu': ''},
+" 			\{'word': 'if'          , 'menu': ''},
+" 			\{'word': 'else:'       , 'menu': ''},
+" 			\{'word': 'nvl clear'   , 'menu': ''},
+" 			\{'word': 'extend'      , 'menu': ''},
+" 			\{'word': 'center'      , 'menu': ''},
+" 			\{'word': 'pause'       , 'menu': ''},
+" 			\]
+" 		let l:res = []
+" 		for l:m in l:candidate
+" 			if l:m.word =~ '^' . a:base
+" 				call add(l:res, l:m)
+" 			endif
+" 		endfor
+" 		return l:res
+" 	endif
+" endfun
+" set omnifunc=Renpycomplete
 " vim: nowrap foldmethod=marker textwidth=0

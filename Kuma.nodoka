@@ -1,0 +1,227 @@
+include "109.nodoka"
+#include "tsuki3-154.nodoka" # Lock0 赤
+#include "contrib\DVORAKon109_kuma.nodoka" # Lock1 緑
+include "window-select.nodoka"
+include "add-mouse-gamepad.nodoka"
+# def option CaretBlinkTime = enable 500 50
+def option mouse-event = true
+#キー押しっぱ対策
+def option CheckModifier = enable 5
+key U-*WinDownOver   = U-LWin U-RWin
+key U-*CtrlDownOver  = U-LCtrl U-RCtrl
+key U-*ShiftDownOver = U-LCtrl U-RCtrl
+key U-*AltDownOver   = U-LAlt U-RAlt
+
+#-------------------------------------------------------------------------------------- 
+#英数からのツーストローク  {{{
+keymap2 Two_Strok_Of_CapsLocs
+
+key q = &WindowSetAlpha(70)
+key w = &WindowToggleTopMost
+key u = &LoadSetting()
+
+#key ~L0-i = &Toggle(Lock0,on) &IconColor(2)
+#key ~L1-L0-i = &Toggle(Lock0,off) &IconColor(0)
+#key  L1-L0-i = &Toggle(Lock0,off) &IconColor(4)
+#key ~L1-d = &Toggle(Lock1,on) &IconColor(4)
+#key ~L0-L1-d =   &Toggle(Lock1,off) &IconColor(0)
+#key  L0-L1-d =   &Toggle(Lock1,off) &IconColor(2)
+
+key a = W-_1
+key g = W-_2
+key f = W-_3
+key m = W-_4
+key c = W-_5
+key e = W-_6
+key n = W-_7
+key s = W-_8
+key d = W-_9
+key d = W-_9
+key Semicolon = &ShellExecute("open", "E:\Soft\Sylpheed\sylpheed.exe",,, ShowNormal) #mail
+
+key *h = W-*Left
+key *j = W-*Down
+key *k = W-*Up
+key *l = W-*Right 
+# }}}
+#------------------------------------------------------------------------------------- 
+#モデルファイアー "{{{
+keymap Global
+
+mod ctrl  += !!!Apps
+mod ctrl  += !!LCtrl
+mod shift += !!LShift
+mod shift += !!!Space
+mod Alt   += ひらがな
+mod mod0  += !!無変換
+mod mod1  += !!無変換
+mod mod0  += !!変換
+mod mod7  += !!!Apps
+mod mod8  += !!LCtrl
+mod mod9  += !!LShift
+mod mod9  += !!Space
+key *ひらがな            = *LAlt
+
+key *英数                = &Prefix(Two_Strok_Of_CapsLocs)
+key M0-*M1-*半角/全角    = ひらがな
+key M8-C-*LCtrl          = Esc
+key M9-S-LShift          = $ToggleIME
+
+key M7-C-*Apps           = Enter
+key M7-C-S-*Apps         = S-Enter
+key M7-M8-C-*Apps        = C-Enter
+key M7-M8-C-S-*Apps      = C-S-Enter
+key M0-M1-C-*Apps        = Apps
+#key *無変換             = Enter
+#key C-*無変換           = C-Enter
+#key S-*無変換           = S-Enter
+#key C-S-*無変換      = C-S-Enter
+key M0-M1-*変換       = 無変換
+key M0-M1-*無変換     = Enter
+key M0-M1-C-*無変換   = C-Enter
+key M0-M1-A-*無変換   = A-Enter
+key M0-M1-S-*無変換   = S-Enter
+key M0-M1-S-C-*無変換 = C-S-Enter
+key M0-M1-A-*ひらがな = ひらがな
+
+key M8-C-*I               = Tab
+key M8-M9-C-S-*I          = S-Tab
+key M8-M7-C-*I            = C-Tab
+key M8-M9-M7-C-S-*I       = C-S-Tab
+
+key M0-*F1               = &WindowSetAlpha(70)
+key M0-*F2               = &WindowToggleTopMost
+key M0-*F5               = &ShellExecute("open", "shutdown.exe", "-s -f -t 0",, ShowNormal) #シャットダウン
+key M0-*F6               = &ShellExecute("open", "shutdown.exe", "-r -f -t 0",, ShowNormal) #再起動
+key M0-*F7               = &ShellExecute("open", "E:\Soft\Sleep.bat",,, ShowNormal)  #スリープ
+key M0-*F8               = &ShellExecute("open", "rundll32.exe", "PowrProf.dll,SetSuspendState",, ShowNormal) #休止
+key M0-*F9               = &LoadSetting()
+key M0-*F10              = Mute
+key M0-*F11              = VolumeDown
+key M0-*F12              = VolumeUp
+
+key M0-*q                = *_1
+key M0-*w                = *_2
+key M0-*e                = *_3
+key M0-*r                = *_4
+key M0-*t                = *_5
+key M0-*y                = *_6
+key M0-*u                = *_7
+key M0-*i                = *_8
+key M0-*o                = *_9
+key M0-*p                = *_0
+key M0-*Atmark           = *HyphenMinus
+key M0-*OpenBracket      = *CircumflexAccent
+
+key M0-*_1               = *F1
+key M0-*_2               = *F2
+key M0-*_3               = *F3
+key M0-*_4               = *F4
+key M0-*_5               = *F5
+key M0-*_6               = *F6
+key M0-*_7               = *F7
+key M0-*_8               = *F8
+key M0-*_9               = *F9
+key M0-*_0               = *F10
+key M0-*HyphenMinus      = *F11
+key M0-*CircumflexAccent = *F12
+
+Key M0-*a                = C-S-Esc
+Key M0-*s                = $WindowSelectOpen
+Key M0-*d                = *Tab
+Key M0-*f                = A-F4
+Key M0-*g                = *End
+Key M0-*b                = *Home
+Key M0-*Semicolon        = *PageDown
+Key M0-*Colon            = *PageUp
+Key M0-*comma            = C-A-S-F1
+Key M0-*Period           = C-A-S-F2
+Key M0-*Slash            = C-A-L
+Key M0-*BackSlash        = C-A-Del
+
+key M0-*h                = *Left
+key M0-*j                = *Down
+key M0-*k                = *Up
+key M0-*l                = *Right
+key M0-*n                = *BS
+key M0-*m                = *Del
+# }}}
+# --------------------------------------------------------------------------
+# Atok IME
+key IJ-*Colon = Minus
+#------------------------------------------------------------------------------------- 
+#mouse {{{
+#mod mod7 += !!XButton1
+#key M8-*RButton = C-RButton
+#key M8-*LButton = C-LButton
+#key M9-*RButton = S-RButton
+#key M9-*LButton = S-LButton
+# }}}
+#------------------------------------------------------------------------------------- 
+window ConsoleWindowClass /^ConsoleWindowClass$/ : Global # {{{
+
+key C-*V = A-Space &Wait(100) e &Wait(100) p
+key M0-*f = A-Space &Wait(100) c
+#key M7-*LButton = A-Space &Wait(100) c
+#key M7-*MButton = A-Space &Wait(100) e &Wait(100) p
+#}}}
+#------------------------------------------------------------------------------------- 
+window mintty /mintty\.exe/ : Global
+key C-*V = S-Insert
+#key M7-*MButton = S-Insert
+#------------------------------------------------------------------------------------- 
+#window gvim /gvim\.exe/ : Global # {{{
+#key M8-C-I = C-I
+#key M8-M9-C-S-I = C-S-I
+#key M8-M6-C-I = C-I
+#key M8-M9-M6-C-S-I = C-S-I
+#key M3-*RButton = x
+#key M3-*MButton = p
+# }}}
+#------------------------------------------------------------------------------------- 
+window window-select /:window-select:SysListView32$/ : Global # {{{
+key M0-M1-*無変換     = &PostMessage(ToParentWindow, 0x8001, 0, 0)
+key M7-C-*Apps = &PostMessage(ToParentWindow, 0x8001, 0, 0)
+key M8-C-*LCtrl = &PostMessage(ToParentWindow, 0x8002, 0, 0)
+Key M0-d    = &PostMessage(ToParentWindow, 0x8003, -1, 0)
+Key M0-s    = &PostMessage(ToParentWindow, 0x8003, -1, 0)
+Key M0-~S-s = &PostMessage(ToParentWindow, 0x8003, +1, 0)
+key M0-~S-d = &PostMessage(ToParentWindow, 0x8003, +1, 0)
+# }}}
+#------------------------------------------------------------------------------------- 
+window Novel :Global #{{{}
+key *WheelBackward = Enter
+key D-*XButton1 = D-RCtrl
+key U-*XButton1 = U-RCtrl
+window Nscripter /NScripter/ :Novel
+#------------------------------------------------------------------------------------- 
+window kazoku /KIZUNAR\.EXE/ :Novel
+#------------------------------------------------------------------------------------- 
+window kazokuR /KZ_N\.EXE/ :Novel
+#}}}
+#------------------------------------------------------------------------------------- 
+#window pcsx2 /pcsx2-r4600\.exe/ :Global
+#key *WheelBackward = Down
+#key *WheelForward = Up
+#------------------------------------------------------------------------------------- 
+#window KirikiriDevelop ( /Vim/ && /\.ks/ ) :Global
+#key C-*K = C-K &Wait(500) W-_2
+#------------------------------------------------------------------------------------- 
+window MBAA /MBAA\.exe/ : Global #{{{
+key N = C
+key M = V
+key Comma = B
+key Period = F
+key J = E
+key F1 = Q
+key Up = W
+key DOWN = S
+key Left = A
+key Right = D
+key B =
+key H =
+# }}}
+window None
+window sotes /sotes\.exe/ :None
+window touhou /th[0-9]*\.exe/ :None
+# vim: foldmethod=marker
