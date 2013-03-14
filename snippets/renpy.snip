@@ -165,5 +165,101 @@ abbr		queue sound
 options	 head
 	queue sound ["${1}.ogg", "${2}.ogg"]
 	${2}
+# テキストタグ {{{
+snippet    a
+abbr    a
+options    head
+	{a=${1}}${2}{/a}${3}
+
+snippet    b
+abbr    b
+options    head
+	{b}${/b}${2}
+
+snippet    color
+abbr    color
+options    head
+	{color=#${1}}${2}{/color}${3}
+
+snippet    cps
+abbr    cps
+options    head
+	{cps=${1}}${2}{/cps}${3}
+
+snippet    font
+abbr    font
+options    head
+	{font=${1}}${2}{/font}${3}
+
+snippet    i
+abbr    i
+options    head
+	{i}${/i}${2}
+
+snippet    k
+abbr    k
+options    head
+	{k=${1}}${2}{/k}${3}
+
+snippet    image
+abbr    image
+options    head
+	{image=${1}}${2}{/image}${3}
+
+snippet    s
+abbr    s
+options    head
+	{s}${/s}${2}
+
+snippet    rb
+abbr    rb
+options    head
+	{rb}${/rb}${2}
+
+snippet    rt
+abbr    rt
+options    head
+	{rt}${/rt}${2}
+
+snippet    size
+abbr    size
+options    head
+	{size=${1}}${2}{/size}${3}
+
+snippet    space
+abbr    space
+options    head
+	{space=${1}}${2}{/space}${3}
+
+snippet    u
+abbr    u
+options    head
+	{u}${/u}${2}
+
+snippet    vspace
+abbr    vspace
+options    head
+	{vspace=${1}}${2}{/vspace}${3}
+
+snippet     fast
+abbr        fast
+options    head
+	{fast}${1}{/fast}${2}
+
+snippet     nw
+abbr        nw
+options    head
+	{nw}${1}{/nw}${2}
+
+snippet     p
+abbr        p
+options    head
+	{p=${1}}${2}{/p}${3}
+
+snippet     w
+abbr        w
+options    head
+	{w=${1}}${2}{/w}${3}
+#}}}
 # }}}
 # vim: noexpandtab
