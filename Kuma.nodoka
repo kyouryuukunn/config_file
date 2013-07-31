@@ -43,6 +43,7 @@ key *h = W-*Left
 key *j = W-*Down
 key *k = W-*Up
 key *l = W-*Right 
+Key *i = C-S-A-L
 # }}}
 #------------------------------------------------------------------------------------- 
 #モデルファイアー "{{{
@@ -89,8 +90,9 @@ key M8-M9-C-S-*I          = S-Tab
 key M8-M7-C-*I            = C-Tab
 key M8-M9-M7-C-S-*I       = C-S-Tab
 
-key M0-*F1               = &WindowSetAlpha(70)
-key M0-*F2               = &WindowToggleTopMost
+key M0-*F1               = C-A-S-F4
+key M0-*F2               = C-A-S-F5
+key M0-*F3               = C-A-S-F3
 key M0-*F5               = &ShellExecute("open", "shutdown.exe", "-s -f -t 0",, ShowNormal) #シャットダウン
 key M0-*F6               = &ShellExecute("open", "shutdown.exe", "-r -f -t 0",, ShowNormal) #再起動
 key M0-*F7               = &ShellExecute("open", "E:\Soft\Sleep.bat",,, ShowNormal)  #スリープ
@@ -198,6 +200,9 @@ window Nscripter /NScripter/ :Novel
 window kazoku /KIZUNAR\.EXE/ :Novel
 #------------------------------------------------------------------------------------- 
 window kazokuR /KZ_N\.EXE/ :Novel
+#------------------------------------------------------------------------------------- 
+# window tuino /SETUP.exe/ :Global
+# key *WheelBackward = LButton
 #}}}
 #------------------------------------------------------------------------------------- 
 #window pcsx2 /pcsx2-r4600\.exe/ :Global
@@ -223,5 +228,7 @@ key H =
 # }}}
 window None
 window sotes /sotes\.exe/ :None
-window touhou /th[0-9]*\.exe/ :None
+window touhou /th[0-9]+\.exe/ :None
+window touhou2 /th_dnh.exe/ :None
+window RPG /RPG_RT.exe/ :None
 # vim: foldmethod=marker

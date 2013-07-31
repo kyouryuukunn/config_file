@@ -22,7 +22,9 @@ else
   let $HELP = $DOTVIM.'/help'
   let $LLVM = expand('/usr/local/bin')
 endif " }}}
-"set migemo
+set migemo
+" nnoremap <Space>/ g/
+" nnoremap <Space>? g?
 "-------------------------------------------------------------------------------------
 " 辞書
 "set dictionary="spell"
@@ -52,6 +54,8 @@ endif
 " }}}
 "------------------------------------------------------------------------------
 " etc  {{{
+inoremap # X<C-H>#
+" #で行頭に飛ばないように
 set shellslash
 " ビープの代わりにビジュアルベル（画面フラッシュ）を使う
 set visualbell
@@ -83,7 +87,7 @@ set linebreak
 setlocal formatoptions-=ro
 " バッファを閉じる時にバッファリストから削除
 autocmd BufReadPre * setlocal bufhidden=delete
-" 括弧を入力した際、カーソルが一瞬移動してしまう場合に設定
+" 括弧を入力した際、カーソル。が一瞬移動してしまう場合に設定
 set matchtime=0
 if &t_Co > 2 || has("gui_running")
   syntax on
@@ -98,8 +102,8 @@ augroup MyAutocmd
 	autocmd FileType python setl tabstop=8
 	autocmd FileType python setl softtabstop=4
 	autocmd FileType python setl shiftwidth=4
-	autocmd FileType python setl smarttab
 	autocmd FileType python setl expandtab
+	autocmd FileType python setl smarttab
 	autocmd FileType python setl autoindent
 	autocmd FileType python setl nosmartindent
 	autocmd FileType python setl cindent
@@ -123,14 +127,28 @@ augroup MyAutocmd
 	" Folding
 	autocmd FileType renpy setl foldmethod=indent
 	autocmd FileType renpy setl foldlevel=99
-	autocmd FileType renpy inoremap <buffer> <C-CR>  <CR><CR><C-D>
+    autocmd FileType renpy inoremap <buffer> <expr><S-CR>  neocomplcache#smart_close_popup() . "\<CR><CR><C-D>"
+	autocmd FileType renpy inoremap <buffer> <C-Y>,  <Esc>vbyiX{<Left><C-H><Right><Esc>ea}{/<C-R>*}<Esc>bba
+	autocmd FileType renpy inoremap <buffer> <C-Y>n  <Esc>f}a
 	autocmd FileType renpy nnoremap <buffer> <Leader>r :RenPyExe<CR>
 "" }}}
+" --------------------------------------------------------------------------
+" dos {{{
+	autocmd FileType dosbatch e ++enc=cp932
+"   }}}
 " --------------------------------------------------------------------------
 " Asr {{{
 	autocmd BufRead e:/Soft/Asr/Ubar/Kuma/Script/*.txt,e:/Soft/Asr/Ubar/Kuma/Bar/Favorite/*,e:/Soft/Asr/Ubar/Kuma/Bar/Launch/*	e ++enc=utf-16le
 	autocmd BufRead e:/Softx64/Asr/Ubar/Kuma/Script/*.txt,e:/Softx64/Asr/Ubar/Kuma/Bar/Favorite/*,e:/Softx64/Asr/Ubar/Kuma/Bar/Launch/*	e ++enc=utf-16le
 "   }}}
+"   ------------------------------------------------------------------------
+" help {{{
+	autocmd BufRead $DOTVIM/bundle/.neobundle/doc/*.txt nnoremap q :q<CR>
+"   }}}
+"   ------------------------------------------------------------------------
+" tweet {{{
+	autocmd FileType twitvim nnoremap q <C-W>q
+" }}}
 "   ------------------------------------------------------------------------
 " html {{{
 	autocmd FileType html inoremap <M-n> <br><CR>
@@ -177,10 +195,11 @@ command RenPy call s:MarkdownToRenPy()
 "  -------------------------------------------------------------------------
 "keymap {{{
 "---------------------------------------------------------------------------
-nnoremap <Space>/ /\v
-nnoremap <Space>? ?\v
+" nnoremap <Space>/ /\v
+" nnoremap <Space>? ?\v
 nnoremap <silent> <F5> :e!<CR>
 nnoremap <silent> <F6> :tabe %<CR>
+nnoremap <silent> <F7> :tabe<CR>:tabonly!<CR>
 nnoremap <silent> <Space>w :w<CR>
 "-------------------------------------------------------------------------------------
 " session
@@ -285,9 +304,18 @@ inoremap <C-V> <esc>pa
 " 復元
 inoremap <C-Z> <C-O>u
 " 後削除
-inoremap <C-K> <C-O><S-D>
+inoremap <C-K> <C-g>u<C-O><S-D>
+" 前一文字削除
+inoremap <C-G> <C-g>u<Del>
 " 一行削除
-inoremap <C-CR> <End><C-U><Del>
+inoremap <C-CR> <C-g>u<End><C-U><Del>
+" 単語削除、(日本語用)。
+inoremap <C-W> <C-g>u<Esc>vbs
+
+inoremap <C-F>/ <C-O>g/
+inoremap <C-F>? <C-O>g?
+
+inoremap <C-U>  <C-g>u<C-u>
 "-------------------------------------------------------------------------------------
 "\から/へ置換
 vnoremap <silent> <Leader>/ :s/\\/\//g<CR>:nohlsearch<CR>
@@ -581,7 +609,7 @@ set formatoptions+=mM
 " 		" 単語の始点を検索する
 " 		let l:line = getline('.')
 " 		let l:start = matchend(l:line, '^.\{-}[^ ]') " インデントからの最初の文字
-" 		" while start > 0 && line[start - 1] =~ '\a'
+" 		" while start > 0 && line[start - 1] =~ \a'
 " 		"   let start -= 1
 " 		" endwhile
 " 		return l:start

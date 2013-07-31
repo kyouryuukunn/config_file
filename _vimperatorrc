@@ -3,3 +3,8 @@ noremap B :dialog bookmarks<CR>
 noremap <S-K> y tsite:<C-v> 
 noremap ; :
 noremap : ;
+" ヒントをアルファベットに
+set hintchars=asdfghjklqwertyuiop
+hi Hint z-index:5000; font-size:14px; color:white; background-color:red; border-color:ButtonShadow; border-width:0px; border-style:solid; padding:0px 2px 0px 2px; position:absolute; font-family: Menlo, Consolas, Monaco, monospace; text-transform: uppercase;
+" コマンドでIMEをOFFに
+style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
