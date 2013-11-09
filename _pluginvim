@@ -3,7 +3,7 @@ scriptencoding utf-8
 if 1
 " neocomplete {{{
 let g:neocomplete#enable_at_startup = 1 "  起動時に有効化
-let g:neocomplete#enable_auto_select = 1
+" let g:neocomplete#enable_auto_select = 1
 " let g:neocomplcache_enable_wildcard = 1
 let g:neocomplete#enable_smart_case = 1
 " let g:neocomplcache_enable_camel_case_completion = 1
@@ -14,7 +14,7 @@ let g:neocomplcache_max_menu_width = 30
 let g:neocomplete#max_list=1000
 "inoremap <expr><C-X><C-U> neocomplcache#start_manual_complete()
 
-inoremap <expr><S-CR> neocomplete#smart_close_popup()."\<CR>"
+" inoremap <expr><S-CR> neocomplete#smart_close_popup()."\<CR>"
 inoremap <expr><C-h>  neocomplete#smart_close_popup()."\<C-g>u\<C-h>"
 inoremap <expr><BS>   neocomplete#smart_close_popup()."\<C-g>u\<C-h>"
 inoremap <expr><C-y>  neocomplete#cancel_popup()."\<C-Y>"
@@ -153,14 +153,17 @@ endif
 let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
 " }}}
 endif
-" jedi----------------------------------------------------------------------
+" --------------------------------------------------------------------------
+" jedi {{{
 let g:jedi#auto_vim_configuration = 0
-let g:jedi#goto_command = "<leader>g"
-let g:jedi#get_definition_command = "<leader>d"
+let g:jedi#popup_select_first = 0
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
 let g:jedi#rename_command = "<leader>r"
-let g:jedi#related_names_command = "<leader>n"
-let g:jedi#show_function_definition = "0"
-let g:jedi#pydoc = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#show_call_signatures = "0"
+let g:jedi#documentation_command = "K"
+" }}}
 ""------------------------------------------------------------------------------
 " スニペット {{{
 let g:neosnippet#snippets_directory = $DOTVIM.'/bundle/config_file/snippets'
@@ -254,8 +257,8 @@ let g:unite_source_menu_menus.bookmark.command_candidates = [
       \       ['cpp'           , 'Unite file:d:/Box/Workspace/cpp'],
       \       ['D'             , 'Unite file:d:/Box/Workspace/D'],
       \       ['python'        , 'Unite file:d:/Box/Workspace/py'],
-      \       ['renpy'         , 'Unite file:d:/Box/Workspace/renpy'],
-      \       ['git'           , 'Unite file:d:/Box/Workspace/git'],
+      \       ['renpy'         , 'Unite file:e:/Soft/renpy/renpy'],
+      \       ['renpy-dep'     , 'Unite file:d:/Box/Workspace/renpy/renpy'],
       \       ['kirikiri'      , 'Unite file:d:/Box/Workspace/kirikiri/practice/data/scenario'],
       \       ['snippet'       , 'Unite neosnippet/user neosnippet/runtime'],
       \       ['outline'       , 'Unite file:$DOTVIM/bundle/config_file/autoload/unite/sources/outline'],
@@ -264,10 +267,9 @@ let g:unite_source_menu_menus.bookmark.command_candidates = [
       \       ['ko'            , 'tabe $DOTVIM/bundle/KirikiriOpen.vim/ftplugin/kirikiri.vim'],
       \       ['rn'            , 'tabe $DOTVIM/bundle/renpy_neocomplcache/autoload/neocomplcache/sources/renpy_complete.vim'],
       \       ['ro'            , 'tabe $DOTVIM/bundle/RenPyOpen.vim/ftplugin/kirikiri.vim'],
-      \       ['msys'          , 'Unite file:e:/MinGW/msys/1.0/home/Kuma'],
-      \       ['cygwin'        , 'Unite file:e:/cygwin/home/Kuma'],
-      \       ['mokuroku'      , 'Unite file:f:/ready/mokuroku'],
-      \       ['homepage'      , 'Unite file:d:/Box/Workspace/homepage'],
+      \       ['msys'          , 'Unite file:c:/MinGW/msys/1.0/home/Kuma'],
+      \       ['cygwin'        , 'Unite file:c:/cygwin64/home/Kuma'],
+      \       ['mokuroku'      , 'Unite file:d:/Box/Workspace/Dropbox/etc/mokuroku'],
       \       ['now'           , "exe 'call vimproc#system(''e:/Softx64/Asr/AsrLoad.exe \"'.substitute(expand('%:p:h'), '/', '\\\\\\\\', 'g').'\"'')'"]
       \     ]
 
@@ -379,8 +381,9 @@ let g:unite_source_menu_menus.command.candidates = {
       \		'qfixhowm'	:	'Unite qfixhowm/new qfixhowm:nocach -hide-source-names',
       \		'html'          :	'setf html',
       \		'markdown'	:	'setf markdown',
-      \		'tl'		:	'TweetVimHomeTimeline',
-      \		'tpost'		:	'TweetVimSay'
+      \		'timeline'	:	'TweetVimHomeTimeline',
+      \		'tweet'		:	'TweetVimSay',
+      \		'mention'	:	'TweetVimMentions'
       \     }
 function g:unite_source_menu_menus.command.map(key, value)
   return {
@@ -541,6 +544,9 @@ let g:quickrun_config["wxd"] = {
 	\ "runner"    : "vimproc",
 \}
 " }}}
+let g:quickrun_config['watchdogs_checker/_'] = {
+\       'outputter/quickfix/open_cmd' : ''
+\   }
 " }}}
 "------------------------------------------------------------------------------------- 
 " watchdogs {{{
@@ -760,7 +766,7 @@ let showmarks_include = "abcdefghijklmnorstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ""------------------------------------------------------------------------------
 " savevers.vim {{{
 " バックアップファイルの設定" savevers.vimのためにパッチモードにします
-set patchmode=.old
+set patchmode=.bak
 "  カンマで区切られたバックアップを作成するファイル名です "*.c,*.h,*.vim"
 let savevers_types = "*"
 "  バックアップファイルが書き込まれるディレクトリです ここでは、オプション"backupdir"と同じディレクトリにしています
@@ -768,12 +774,15 @@ let savevers_dirs = &backupdir
 "  バックアップファイルとの比較でウィンドウのサイズを変更する場合は0
 let versdiff_no_resize=1 " }}}
 ""------------------------------------------------------------------------------
-"vim-toggle {{{
-nmap T <Plug>ToggleN
-"imap T <Plug>ToggleI
-vmap T <Plug>ToggleV
-let g:toggle_pairs = { '1':'0', '0':'1', 'True':'False', 'False':'True', 'true':'false', 'false':'true' }
-" }}}
+" "vim-toggle {{{
+" nmap T <Plug>ToggleN
+" "imap T <Plug>ToggleI
+" vmap T <Plug>ToggleV
+" let g:toggle_pairs = { '1':'0', '0':'1', 'True':'False', 'False':'True', 'true':'false', 'false':'true', 
+" 			\ '=True':'False', '=False':'True', '=true':'false', '=false':'true' ,
+" 			\ '=True,':'False', '=False,':'True', '=true,':'false', '=false,':'true' ,
+" 			\ '(True)':'False', '(False)':'True', '(true)':'false', '(false)':'true' }
+" " }}}
  " ------------------------------------------------------------------------- 
  " renpy {{{
 let g:renpyopen_use_vimproc=1
@@ -824,24 +833,95 @@ let QFixHowm_WildCardChapterMode   = 1"
 " QuickFixウィンドウでプレビューを有効にする
 let QFix_PreviewEnable = 0
 " QFixGrepの検索時にカーソル位置の単語を拾う/拾わない
-let MyGrep_DefaultSearchWord = 0
+let MyGrep_DefaultSearchWord = 1
+
+let use_cygwingrep = 0
+let MyGrep_CurrentDirMode = 1
+if use_cygwingrep
+	" let MyGrep_error = 1
+	let mygrepprg = 'grep'
+	let MyGrep_cygwin17 = 1
+	let g:MyGrep_MultiEncoding = 1
+	let MyGrep_ShellEncoding = 'utf-8'
+	let g:MyGrep_MultiEncodingList = ['utf-8', 'cp932', 'euc-jp', 'utf-16le', 'utf-16']
+else
+	" let MyGrep_error = 1
+	let mygrepprg = 'jvgrep'
+	let MyGrep_ShellEncoding = 'utf-8'
+	" let MyGrepcmd_useropt = '8'
+	let g:MyGrep_MultiEncoding = 0
+	let MyGrep_Damemoji = 0
+endif
+
 " }}}
 " -------------------------------------------------------------------------- 
-" "" jpformat {{{
-" " smoopyで開く
-"  let ExtViewer_txt = '!start "'.'e:/Soft/smoopy/smoopy.exe'.'"'.' -l%l "%f"'
-" "  挿入モードでキー入力する度に自動整形を行う/行わない
-"  let JpFormatCursorMovedI = 1
-" "  原稿文字数(全角の折り返し文字数)
-"  let JpCountChars = 40
-" "  原稿行数
-"  let JpCountLines = 16
-" "  禁則処理の最大ぶら下がり字数(-1なら全てぶら下げ)
-"  let JpCountOverChars = -1
-" " neocomplcacheとunite-tagで宣言に飛ぶ
-" "}}}
+"" jpformat {{{
+" smoopyで開く
+ let ExtViewer_txt = '!start "'.'e:/Soft/smoopy/smoopy.exe'.'"'.' -l%l "%f"'
+"  挿入モードでキー入力する度に自動整形を行う/行わない
+ let JpFormatCursorMovedI = 1
+"  原稿文字数(全角の折り返し文字数)
+ let JpCountChars = 40
+"  原稿行数
+ let JpCountLines = 16
+"  禁則処理の最大ぶら下がり字数(-1なら全てぶら下げ)
+ let JpCountOverChars = -1
+" neocomplcacheとunite-tagで宣言に飛ぶ
+"}}}
+" --------------------------------------------------------------------------
+" gitv {{{
+autocmd FileType gitv call s:my_gitv_settings()
+function! s:my_gitv_settings()
+	setlocal iskeyword+=/,-,.
+	nnoremap <silent><buffer> C :<C-u>Git checkout <C-r><C-w><CR>
+	nnoremap <buffer> <Space>rb :<C-u>Git rebase       <C-r>=GitvGetCurrentHash()<CR><Space>
+	nnoremap <buffer> <Space>R :<C-u>Git revert        <C-r>=GitvGetCurrentHash()<CR><CR>
+	nnoremap <buffer> <Space>h :<C-u>Git cherry-pick   <C-r>=GitvGetCurrentHash()<CR><CR>
+	nnoremap <buffer> <Space>rh :<C-u>Git reset --hard <C-r>=GitvGetCurrentHash()<CR>
+	nnoremap <buffer> <Space>rs :<C-u>Git reset --soft <C-r>=GitvGetCurrentHash()<CR>
+endfunction
+" これは外に定義!
+function! GitvGetCurrentHash()
+  return matchstr(getline('.'), '\[\zs.\{7\}\ze\]$')
+endfunction
+command! Gbranch Git checkout -b <args><CR>
+command! Gcheckout Git checkout -b <args><CR>
+"}}}
 "------------------------------------------------------------------------------------- 
 " {{{その他
+" --------------------------------------------------------------------------
+" switch.vim
+let g:variable_style_switch_definitions = [
+\   {
+\     'T': {
+\       'True': 'False'
+\     },
+\
+\     'F': {
+\       'False': 'True'
+\     },
+\   },
+\   {
+\     't': {
+\       'true': 'false'
+\     },
+\
+\     'f': {
+\       'false': 'true'
+\     },
+\   }
+\ ]
+" nnoremap + :call switch#Switch(g:variable_style_switch_definitions)<cr>
+nnoremap T :Switch<cr>
+" --------------------------------------------------------------------------
+" accelerated-smooth-scroll
+" <C-d>/<C-u> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
+" Default : 10
+let g:ac_smooth_scroll_du_sleep_time_msec = 1
+
+" <C-f>/<C-b> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
+" Default : 10
+let g:ac_smooth_scroll_fb_sleep_time_msec = 1
 "------------------------------------------------------------------------------
 " vimshell
 nnoremap <Space>vs :VimShell<CR>
@@ -865,21 +945,51 @@ let b:match_words = "if:endif,foreach:endforeach,\<begin\>:\<end\>,<div.*>:</div
 vnoremap <F8> :ExciteTranslate<CR>
 "------------------------------------------------------------------------------
 " vim-visualstar
-map * <Plug>(visualstar-*)N
-map # <Plug>(visualstar-#)N
+xmap * <Plug>(visualstar-*)N
+xmap # <Plug>(visualstar-#)N
 "---------------------------------------------------------------------------
+"anzu.vim {{{
+" n や N の代わりに使用します。
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+nmap * <Plug>(anzu-star-with-echo)N
+nmap # <Plug>(anzu-sharp-with-echo)n
+let g:airline#extensions#anzu#enabled = 0
+" ステータス情報を statusline へと表示する
+" set statusline=%{anzu#search_status()}
+"}}}
+" ----------------------------------------------------------------------------
 " powerline
 "source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim
 " --------------------------------------------------------------------------
-" powerline-vim
-let g:Powerline_cache_dir = expand('~/.powerline-cache')
-" let g:powerline_theme="unite_status"
-" let g:powerline_colorscheme="unite_status"
-if &enc == "utf-8"
-	let g:Powerline_symbols = 'fancy'
-endif
-set t_Co=256
-"call Pl#Theme#InsertSegment('pwd', 'after', 'fileinfo')
+" powerline-vim {{{
+" let g:Powerline_cache_dir = expand('~/.powerline-cache')
+" " let g:powerline_theme="unite_status"
+" " let g:powerline_colorscheme="unite_status"
+" if &enc == "utf-8"
+" 	let g:Powerline_symbols = 'fancy'
+" endif
+" set t_Co=256
+" "call Pl#Theme#InsertSegment('pwd', 'after', 'fileinfo')
+"}}}
+" --------------------------------------------------------------------------
+" air_line {{{
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+let g:airline#extensions#branch#symbol = '⭠'
+let g:airline#extensions#readonly#symbol = '⭤'
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#branch#enabled = 0
+let g:airline_linecolumn_prefix = '⭡'
+let g:airline_theme = 'solarized'
+let g:airline_section_b = "%{airline#extensions#branch#get_head()} %{expand('%:p:h')}"
+let g:airline_section_c = "%f%m"
+let g:airline_section_x = ""
+let g:airline_section_y = "%{strlen(&filetype)>0?&filetype:'no-ft'} | %{strlen(&fenc)>0?&fenc:'no-fe'} | %{strlen(&ff)>0?&ff:'no-ff'}"
+let g:airline_section_z = '%3p%% '.get(g:, 'airline_linecolumn_prefix', '').'(%3l:%3c)'
+" }}}
 "------------------------------------------------------------------------------------- 
 " Qfreplace
 autocmd FileType qf nnoremap <buffer> R :Qfreplace<CR>
@@ -2039,241 +2149,241 @@ function! s:eskk_initial_pre()
 endfunction
 "}}}
 "--------------------------------------------------------------------------- 
-" " 吉里吉里用 {{{
-" let g:kirikiriopen_use_vimproc = 1
-" let g:kirikiriopen_jump_dict = {'tag': 'call\|jump\|link\|lk\|rmm\|button\|rclick', 'file': 'storage'}
-" let g:kirikiriopen_list = [
-" 	\{'tag':'\<trans\>','file':'rule','command':'e:/soft/Vix/ViX.exe','exelist':['png']},
-" 	\{'tag':'\<image\>\|\<tc\>\|\<tu\>','file':'storage','command':'e:/soft/Vix/ViX.exe','exelist':['png','jpg','tlg']},
-" 	\{'tag':'\<playse\>\|\<playbgm\>\|\<fadeinbgm\>\|\<fadeinse\>','file':'storage','command':'e:/soft/MPC-HC.1.6.2.4902.x86/mpc-hc.exe','exelist':['ogg']}
-" 	\]
-" " macro {{{
-" let g:kirikiri_neocomplcache_macro_list = [
-" 			\{'tag': 'lk',	   'menu': '', 'macrotype': [
-" 				\{'type': 'text','typemenu': ''},
-" 				\{'type': 'storage','typemenu': ''},
-" 				\{'type': 'target','typemenu': ''},
-" 				\]},
-" 			\{'tag': 'tu',	   'menu': '', 'macrotype': [
-" 				\{'type': 'rule','typemenu': ''},
-" 				\{'type': 'time','typemenu': ''},
-" 				\{'type': 'layer','typemenu': ''},
-" 				\{'type': 'vague','typemenu': ''},
-" 				\{'type': 'storage','typemenu': ''},
-" 				\{'type': 'children','typemenu': ''},
-" 				\]},
-" 			\{'tag': 'tc',	   'menu': '', 'macrotype': [
-" 				\{'type': 'time','typemenu': ''},
-" 				\{'type': 'layer','typemenu': ''},
-" 				\{'type': 'storage','typemenu': ''},
-" 				\]},
-" 			\{'tag': 'exmove', 'menu': '', 'macrotype': [
-" 				\{'type': 'cx','typemenu': ''},
-" 				\{'type': 'cy','typemenu': ''},
-" 				\{'type': 'layer','typemenu': '(必)対象となるレイヤを指定します。'},
-" 				\{'type': 'page',	'typemenu': 'layer 属性で指定したレイヤが、 表(fore)画面であるか、裏(back)画面であるかを指定します。 省略すると表ページであると見なされます。'},
-" 				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
-" 				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
-" 				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
-" 				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
-" 				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
-" 				\]},
-" 			\{'tag': 'eximage', 'menu': '', 'macrotype': [
-" 				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
-" 				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
-" 				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
-" 				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
-" 				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-" 				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-" 				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
-" 				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
-" 				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
-" 				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
-" 				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-" 				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-" 				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
-" 				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
-" 				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
-" 				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
-" 				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
-" 				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-" 				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-" 				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-" 				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-" 				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-" 				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-" 				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-" 				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-" 				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-" 				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
-" 				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
-" 				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
-" 				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
-" 				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
-" 				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
-" 				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
-" 				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
-" 				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
-" 				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
-" 				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
-" 				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
-" 				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
-" 				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
-" 				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
-" 				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
-" 				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
-" 				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
-" 				\]},
-" 			\{'tag': 'im', 'menu': '', 'macrotype': [
-" 				\{'type': 'name','typemenu': ''},
-" 				\{'type': 'charwidth','typemenu': ''},
-" 				\{'type': 'charheight','typemenu': ''},
-" 				\{'type': 'chartop','typemenu': ''},
-" 				\{'type': 'method','typemenu': ''},
-" 				\{'type': 'from','typemenu': ''},
-" 				\{'type': 'multi','typemenu': ''},
-" 				\{'type': 'emotion','typemenu': ''},
-" 				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
-" 				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
-" 				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
-" 				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
-" 				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-" 				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-" 				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-" 				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
-" 				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
-" 				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
-" 				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
-" 				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-" 				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-" 				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
-" 				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
-" 				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
-" 				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
-" 				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
-" 				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-" 				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-" 				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-" 				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-" 				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-" 				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-" 				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-" 				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-" 				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-" 				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
-" 				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
-" 				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
-" 				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
-" 				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
-" 				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
-" 				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
-" 				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
-" 				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
-" 				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
-" 				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
-" 				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
-" 				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
-" 				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
-" 				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
-" 				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
-" 				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
-" 				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
-" 				\{'type': 'cx','typemenu': ''},
-" 				\{'type': 'cy','typemenu': ''},
-" 				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
-" 				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
-" 				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
-" 				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
-" 				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
-" 				\]},
-" 			\] " }}}
-" 
-" 
-" 
-" " {{{ file list
-" " {{{picture_list
-" let s:kirikiri_picture_list = [
-" 			\{'word': 'black','menu': 'bgimage'},
-" 			\{'word': 'logo','menu': 'image'},
-" 			\]
-" "}}}
-" let s:kirikiri_rule_list = []
-" let s:kirikiri_scenario_list = []
-" let s:kirikiri_label_list = []
-" " {{{ bgm_list
-" let s:kirikiri_bgm_list = [
-" 			\{'word': 'kb1.ogg'},
-" 			\{'word': 'kb2.ogg'},
-" 			\{'word': 'kkhk.ogg'},
-" 			\{'word': 'kkn1.ogg'},
-" 			\{'word': 'knsm1.ogg'},
-" 			\{'word': 'knsm2.ogg'},
-" 			\{'word': 'knsm3.ogg'},
-" 			\{'word': 'ntj1.ogg'},
-" 			\{'word': 'ntj2.ogg'},
-" 			\{'word': 'ntj3.ogg'},
-" 			\{'word': 'ntj4.ogg'},
-" 			\{'word': 'ntj5.ogg'},
-" 			\{'word': 'rck2.ogg'},
-" 			\{'word': 'rck3.ogg'},
-" 			\{'word': 'rck4.ogg'},
-" 			\{'word': 'sekai1.ogg'},
-" 			\{'word': 'sjk1.ogg'},
-" 			\{'word': 'sr1.ogg'},
-" 			\{'word': 'sr2.ogg'},
-" 			\{'word': 'sr3.ogg'},
-" 			\{'word': 'srs1.ogg'},
-" 			\{'word': 'srs2.ogg'},
-" 			\{'word': 'ttl.ogg'},
-" 			\{'word': 'ynt1.ogg'},
-" 			\{'word': 'yss1.ogg'},
-" 			\{'word': 'yss2.ogg'},
-" 			\{'word': 'yss3.ogg'},
-" 			\]
-" "}}}
-" let s:kirikiri_se_list = []
-" " }}}
-" " {{{list adapt
-" let g:kirikiri_neocomplcache_list = [
-" 			\{'tagname': 'image',			'typename': 'storage',		'list': s:kirikiri_picture_list},
-" 			\{'tagname': 'trans',			'typename': 'rule',		'list': s:kirikiri_rule_list},
-" 			\{'tagname': 'link\|jump\|call',	'typename': 'storage',		'list': s:kirikiri_scenario_list},
-" 			\{'tagname': 'link\|jump\|call',	'typename': 'target',		'list': s:kirikiri_label_list},
-" 			\{'tagname': 'playbgm\|fadein',		'typename': 'storage',		'list': s:kirikiri_bgm_list},
-" 			\{'tagname': 'playse',			'typename': 'storage',		'list': s:kirikiri_se_list}
-" 			\]
-" "}}} 
-" " {{{ map
-" augroup kirikiri
-" autocmd!
-" autocmd BufNew,BufRead *.ks,*tjs	nnoremap <buffer> ,r 	:KirikiriExe<CR>
-" autocmd FileType tjs	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
-" autocmd FileType kirikiri	setl colorcolumn=53
-" autocmd FileType kirikiri	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
-" autocmd FileType kirikiri	nnoremap <buffer> <C-]> :KirikiriJump<CR>
-" autocmd FileType kirikiri	nnoremap <buffer> <Space>h    :split $HELP/Tags.help<CR>
-" autocmd FileType kirikiri	nnoremap <buffer> ,h    yiw:split $HELP/Tags.help<CR>gg/\<<C-R>*\><CR>:nohlsearch<CR>
-" autocmd FileType kirikiri	inoremap <buffer> <M-n> <CR>[pn]<CR><CR>
-" autocmd FileType kirikiri	inoremap <buffer> <M-r> [lr]<CR>
-" autocmd FileType kirikiri	inoremap <buffer> <M-l> [l]
-" autocmd FileType kirikiri	inoremap <buffer> <M-[> [「]
-" autocmd FileType kirikiri	inoremap <buffer> <M-]> [」][lr]<CR>
-" autocmd FileType kirikiri	inoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
-" autocmd FileType kirikiri	vnoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
-" augroup END
-" "}}} 
-"  " }}}
+" 吉里吉里用 {{{
+let g:kirikiriopen_use_vimproc = 1
+let g:kirikiriopen_jump_dict = {'tag': 'call\|jump\|link\|lk\|rmm\|button\|rclick', 'file': 'storage'}
+let g:kirikiriopen_list = [
+	\{'tag':'\<trans\>','file':'rule','command':'e:/soft/Vix/ViX.exe','exelist':['png']},
+	\{'tag':'\<image\>\|\<tc\>\|\<tu\>','file':'storage','command':'e:/soft/Vix/ViX.exe','exelist':['png','jpg','tlg']},
+	\{'tag':'\<playse\>\|\<playbgm\>\|\<fadeinbgm\>\|\<fadeinse\>','file':'storage','command':'e:/soft/MPC-HC.1.6.2.4902.x86/mpc-hc.exe','exelist':['ogg']}
+	\]
+" macro {{{
+let g:kirikiri_neocomplcache_macro_list = [
+			\{'tag': 'lk',	   'menu': '', 'macrotype': [
+				\{'type': 'text','typemenu': ''},
+				\{'type': 'storage','typemenu': ''},
+				\{'type': 'target','typemenu': ''},
+				\]},
+			\{'tag': 'tu',	   'menu': '', 'macrotype': [
+				\{'type': 'rule','typemenu': ''},
+				\{'type': 'time','typemenu': ''},
+				\{'type': 'layer','typemenu': ''},
+				\{'type': 'vague','typemenu': ''},
+				\{'type': 'storage','typemenu': ''},
+				\{'type': 'children','typemenu': ''},
+				\]},
+			\{'tag': 'tc',	   'menu': '', 'macrotype': [
+				\{'type': 'time','typemenu': ''},
+				\{'type': 'layer','typemenu': ''},
+				\{'type': 'storage','typemenu': ''},
+				\]},
+			\{'tag': 'exmove', 'menu': '', 'macrotype': [
+				\{'type': 'cx','typemenu': ''},
+				\{'type': 'cy','typemenu': ''},
+				\{'type': 'layer','typemenu': '(必)対象となるレイヤを指定します。'},
+				\{'type': 'page',	'typemenu': 'layer 属性で指定したレイヤが、 表(fore)画面であるか、裏(back)画面であるかを指定します。 省略すると表ページであると見なされます。'},
+				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
+				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
+				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
+				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
+				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
+				\]},
+			\{'tag': 'eximage', 'menu': '', 'macrotype': [
+				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
+				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
+				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
+				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
+				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
+				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
+				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
+				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
+				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
+				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
+				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
+				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
+				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
+				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
+				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
+				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
+				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
+				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
+				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
+				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
+				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
+				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
+				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
+				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
+				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
+				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
+				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
+				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
+				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
+				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
+				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
+				\]},
+			\{'tag': 'im', 'menu': '', 'macrotype': [
+				\{'type': 'name','typemenu': ''},
+				\{'type': 'charwidth','typemenu': ''},
+				\{'type': 'charheight','typemenu': ''},
+				\{'type': 'chartop','typemenu': ''},
+				\{'type': 'method','typemenu': ''},
+				\{'type': 'from','typemenu': ''},
+				\{'type': 'multi','typemenu': ''},
+				\{'type': 'emotion','typemenu': ''},
+				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
+				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
+				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
+				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
+				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
+				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
+				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
+				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
+				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
+				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
+				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
+				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
+				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
+				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
+				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
+				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
+				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
+				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
+				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
+				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
+				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
+				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
+				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
+				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
+				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
+				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
+				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
+				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
+				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
+				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
+				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
+				\{'type': 'cx','typemenu': ''},
+				\{'type': 'cy','typemenu': ''},
+				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
+				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
+				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
+				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
+				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
+				\]},
+			\] " }}}
+
+
+
+" {{{ file list
+" {{{picture_list
+let s:kirikiri_picture_list = [
+			\{'word': 'black','menu': 'bgimage'},
+			\{'word': 'logo','menu': 'image'},
+			\]
+"}}}
+let s:kirikiri_rule_list = []
+let s:kirikiri_scenario_list = []
+let s:kirikiri_label_list = []
+" {{{ bgm_list
+let s:kirikiri_bgm_list = [
+			\{'word': 'kb1.ogg'},
+			\{'word': 'kb2.ogg'},
+			\{'word': 'kkhk.ogg'},
+			\{'word': 'kkn1.ogg'},
+			\{'word': 'knsm1.ogg'},
+			\{'word': 'knsm2.ogg'},
+			\{'word': 'knsm3.ogg'},
+			\{'word': 'ntj1.ogg'},
+			\{'word': 'ntj2.ogg'},
+			\{'word': 'ntj3.ogg'},
+			\{'word': 'ntj4.ogg'},
+			\{'word': 'ntj5.ogg'},
+			\{'word': 'rck2.ogg'},
+			\{'word': 'rck3.ogg'},
+			\{'word': 'rck4.ogg'},
+			\{'word': 'sekai1.ogg'},
+			\{'word': 'sjk1.ogg'},
+			\{'word': 'sr1.ogg'},
+			\{'word': 'sr2.ogg'},
+			\{'word': 'sr3.ogg'},
+			\{'word': 'srs1.ogg'},
+			\{'word': 'srs2.ogg'},
+			\{'word': 'ttl.ogg'},
+			\{'word': 'ynt1.ogg'},
+			\{'word': 'yss1.ogg'},
+			\{'word': 'yss2.ogg'},
+			\{'word': 'yss3.ogg'},
+			\]
+"}}}
+let s:kirikiri_se_list = []
+" }}}
+" {{{list adapt
+let g:kirikiri_neocomplcache_list = [
+			\{'tagname': 'image',			'typename': 'storage',		'list': s:kirikiri_picture_list},
+			\{'tagname': 'trans',			'typename': 'rule',		'list': s:kirikiri_rule_list},
+			\{'tagname': 'link\|jump\|call',	'typename': 'storage',		'list': s:kirikiri_scenario_list},
+			\{'tagname': 'link\|jump\|call',	'typename': 'target',		'list': s:kirikiri_label_list},
+			\{'tagname': 'playbgm\|fadein',		'typename': 'storage',		'list': s:kirikiri_bgm_list},
+			\{'tagname': 'playse',			'typename': 'storage',		'list': s:kirikiri_se_list}
+			\]
+"}}} 
+" {{{ map
+augroup kirikiri
+autocmd!
+autocmd BufNew,BufRead *.ks,*tjs	nnoremap <buffer> ,r 	:KirikiriExe<CR>
+autocmd FileType tjs	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
+autocmd FileType kirikiri	setl colorcolumn=53
+autocmd FileType kirikiri	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
+autocmd FileType kirikiri	nnoremap <buffer> <C-]> :KirikiriJump<CR>
+autocmd FileType kirikiri	nnoremap <buffer> <Space>h    :split $HELP/Tags.help<CR>
+autocmd FileType kirikiri	nnoremap <buffer> ,h    yiw:split $HELP/Tags.help<CR>gg/\<<C-R>*\><CR>:nohlsearch<CR>
+autocmd FileType kirikiri	inoremap <buffer> <M-n> <CR>[pn]<CR><CR>
+autocmd FileType kirikiri	inoremap <buffer> <M-r> [lr]<CR>
+autocmd FileType kirikiri	inoremap <buffer> <M-l> [l]
+autocmd FileType kirikiri	inoremap <buffer> <M-[> [「]
+autocmd FileType kirikiri	inoremap <buffer> <M-]> [」][lr]<CR>
+autocmd FileType kirikiri	inoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
+autocmd FileType kirikiri	vnoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
+augroup END
+"}}} 
+ " }}}
 "------------------------------------------------------------------------------------- 
 ""   VimOrganizer {{{
 " au! BufRead,BufWrite,BufWritePost,BufNewFile *.org 

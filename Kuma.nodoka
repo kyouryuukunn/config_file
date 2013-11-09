@@ -164,6 +164,7 @@ window ConsoleWindowClass /^ConsoleWindowClass$/ : Global # {{{
 
 key C-*V = A-Space &Wait(100) e &Wait(100) p
 key M0-*f = A-Space &Wait(100) c
+key A-*F4 = A-Space &Wait(100) c
 #key M7-*LButton = A-Space &Wait(100) c
 #key M7-*MButton = A-Space &Wait(100) e &Wait(100) p
 #}}}

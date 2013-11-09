@@ -1,4 +1,5 @@
-noremap B :dialog bookmarks<CR>
+"noremap B :dialog bookmarks<CR>
+nnoremap B :tabopen about:mybookmarks<CR>
 "site:åüçı
 noremap <S-K> y tsite:<C-v> 
 noremap ; :

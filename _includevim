@@ -1,18 +1,18 @@
 "------------------------------------------------------------------------------------- 
 " コンパイラーオプション
-let s:mingw = 'E:/MinGW/lib/gcc/mingw32/4.7.2/include'
+let s:mingw = 'C:/MinGw/lib/gcc/mingw32/4.7.2/include'
 let mingwdir = 
 		\s:mingw.','.
 		\s:mingw.'/c++,'.
 		\s:mingw.'/c++/mingw32,'.
 		\s:mingw.'/c++/backward,'.
-		\'E:/MinGW/include,'
+		\'C:/MinGw/include,'
 let widgetdir = '
-		\E:/MinGW/msys/1.0/local/include/wx-2.9,
-		\E:/MinGW/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9,
+		\C:/MinGw/msys/1.0/local/include/wx-2.9,
+		\C:/MinGw/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9,
 		\'
 let localdir = 	'
-		\E:/MinGW/msys/1.0/local/include,
+		\C:/MinGw/msys/1.0/local/include,
 		\'
 let Qtdir = '
 		\E:/Qt/4.8.1/include,
@@ -47,7 +47,7 @@ let mingwoption =
 		\' -I '.s:mingw.'/c++'.
 		\' -I '.s:mingw.'/c++/mingw32'.
 		\' -I '.s:mingw.'/c++/backward'.
-		\' -I E:/MinGW/include'
+		\' -I C:/MinGw/include'
 let msvcoption = '
 		\ -I "C:/Program Files/Microsoft Visual Studio 10.0/VC/include"
 		\ -I "C:/Program Files/Microsoft SDKs/Windows/v7.0A/Include"
@@ -57,11 +57,11 @@ let msvcoption = '
 		\ -fms-extensions -fmsc-version=1600 -fgnu-runtime
 		\'
 let widgetoption = '
-		\ -I E:/MinGW/msys/1.0/local/include/wx-2.9
-		\ -I E:/MinGW/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9
+		\ -I C:/MinGw/msys/1.0/local/include/wx-2.9
+		\ -I C:/MinGw/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9
 		\'
 let localoption ='
-		\ -I E:/MinGW/msys/1.0/local/include
+		\ -I C:/MinGw/msys/1.0/local/include
 		\'
 		
 let Qtoption = '

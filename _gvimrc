@@ -13,6 +13,8 @@ endif
 highlight Pmenu ctermbg=8 guibg=#303030
 highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#000060
 highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
+
+set guitablabel=%M%n\ %t
 "------------------------------------------------------------------------------------- 
 " 起動位置
 winpos 960 0

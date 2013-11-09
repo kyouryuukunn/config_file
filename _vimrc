@@ -12,10 +12,12 @@ if has('win32') || has('win64')
   let $PYTHON2 = expand('C:/Python27;C:/Python27/Scripts')
   let $PYTHON3 = expand('C:/Python33;C:/Python33/Scripts')
   let $GIT = expand('e:/Soft/Git/bin')
-  let $MINGW = expand('e:/MinGW/bin')
-  let $MSYS = expand('e:/MinGW/msys/1.0/bin')
-  let $CYGWIN = expand('e:/cygwin/bin')
-  let $PATH = $PATH . ";".$LLVM.';'.$PYTHON3.';'.$CYGWIN
+  let $BZR = expand('c:/Program Files (x86)/Bazaar')
+  let $MINGW = expand('c:/MinGW/bin')
+  let $MSYS = expand('c:/MinGW/msys/1.0/bin')
+  let $CYG = expand('c:/cygwin64/bin')
+  let $PATH = $PATH .";".$LLVM.';'.$PYTHON3.";".$MSYS.";".$MINGW.";".$CYG.";".$BZR
+  let $CYGWIN = "nodosfilewarning"
 else
   let $DROPBOX = expand('~/Dropbox/etc')
   let $DOTVIM = expand('~/.vim')
@@ -33,6 +35,12 @@ set migemo
 "ステータスラインに状態
 set laststatus=2
 set statusline=%F\ %m\ %r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%y[buffer:%n]%=\ (%v,%l)/%L%8P\
+sign define anchor text=\
+function! s:ShowSign()
+	if filereadable(expand("%:p"))
+		execute "sign place 134893619283 line=1 name=anchor file=".expand("%:p")
+	endif
+endfunction
 "不可視文字の表示
 " set list listchars=tab:^_,trail:_  " }}}
 "------------------------------------------------------------------------------
@@ -168,9 +176,11 @@ augroup MyAutocmd
 	autocmd BufRead _vundlevim,_pluginvim,_includevim set filetype=vim
 	" 常に開いているファイルと同じディレクトリをカレントディレクトリにする
 	autocmd BufEnter * call s:MoveNowDir()
+    " signを表示し続ける
+	autocmd BufEnter * call s:ShowSign()
 	"入力モード時、ステータスラインのカラーを変更
-	autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
-	autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
+	" autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
+	" autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 " }}}
 "  -------------------------------------------------------------------------
 augroup END
@@ -278,8 +288,8 @@ vnoremap > >gv
 "nnoremap # #N
 "-------------------------------------------------------------------------------------
 "検索後画面の中心に。
-nmap n nzz
-nmap N Nzz
+" nmap n nzz
+" nmap N Nzz
 "-------------------------------------------------------------------------------------
 "ハイライト停止
 "nnoremap <ESC><ESC> :nohlsearch<CR>
@@ -378,7 +388,7 @@ endfunction " }}}
 "------------------------------------------------------------------------------
 "grep {{{
 if has('win32') || has('win64')
-	set grepprg=jvgrep\ -8
+	set grepprg=jvgrep
 	" set grepprg=grep\ -nH
 endif
 "自動でQuickfixを開く
