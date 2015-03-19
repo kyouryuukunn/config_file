@@ -1,18 +1,11 @@
 scriptencoding utf-8
 ""--------------------------------------------------------------------------------------
-if 1
 " neocomplete {{{
 let g:neocomplete#enable_at_startup = 1 "  起動時に有効化
 " let g:neocomplete#enable_auto_select = 1
-" let g:neocomplcache_enable_wildcard = 1
 let g:neocomplete#enable_smart_case = 1
-" let g:neocomplcache_enable_camel_case_completion = 1
-" let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 2
-let g:neocomplcache_max_keyword_width = 100
-let g:neocomplcache_max_menu_width = 30
 let g:neocomplete#max_list=1000
-"inoremap <expr><C-X><C-U> neocomplcache#start_manual_complete()
 
 " inoremap <expr><S-CR> neocomplete#smart_close_popup()."\<CR>"
 inoremap <expr><C-h>  neocomplete#smart_close_popup()."\<C-g>u\<C-h>"
@@ -23,9 +16,9 @@ inoremap <expr><C-e>  neocomplete#cancel_popup()."\<C-E>"
 " inoremap <expr> <C-G> neocomplete#undo_completion()
 set completeopt=menuone
 
-"if !exists('g:neocomplete#keyword_patterns')
-"      let g:neocomplete#keyword_patterns = {}
-"endif
+if !exists('g:neocomplete#keyword_patterns')
+     let g:neocomplete#keyword_patterns = {}
+endif
 let g:neocomplete#keyword_patterns = {
 			\'default': '\h\w*',
 			\'text': '\k\+'
@@ -40,33 +33,35 @@ let g:neocomplete#keyword_patterns = {
 
 augroup completefunc
 	autocmd!
-	" autocmd FileType python setlocal omnifunc=python3complete#Complete
+	autocmd FileType python setlocal omnifunc=jedi#completions
+	autocmd FileType d setlocal omnifunc=dutyl#dComplete
 	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 	autocmd FileType html,htm,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup END
 " include用の設定 {{{
-if has('win32') || has('win64')
-	let g:neocomplcache_include_paths = {
-				\'cpp'		:includecppdir,
-				\'d'		:'E:/D/dmd2/src/phobos,E:/D/dmd2/src/druntime/import',
-				\'python'	:'C:/Python32/Lib,C:/Python32/lib/site-packages',
-				\}
-elseif has('unix')
-	let g:neocomplcache_include_paths = {
-	\'cpp' : '/usr/include,/usr/include/c++,/usr/include/c++/4.6.1,/usr/include/c++/4.6.1/backward,/usr/include/c++/4.6.1/i686-linux-gnu'
-	\}
-endif
-let g:neocomplcache_include_patterns = {
-			\'d'	:'^\s*\<import'
-			\}
-let g:neocomplcache_include_exprs = {
-			\'d'	:"substitute(v:fname, '\.', '/','g')"
-			\}
-let g:neocomplcache_include_suffixes = {
-			\'d'	:'.d'
-			\}
+" if has('win32') || has('win64')
+" 	let g:neocomplete_include_paths = {
+" 				\'cpp'		:includecppdir,
+" 				\'d'		:'E:/D/dmd2/src/phobos,E:/D/dmd2/src/druntime/import',
+" 				\'python'	:'C:/Python27/Lib,C:/Python27/lib/site-packages',
+" 				\}
+" elseif has('unix')
+" 	let g:neocomplcache_include_paths = {
+" 	\'cpp' :includecppdir,
+" 	\'d'   : '/usr/include/dlang/dmd',
+" 	\}
+" endif
+" let g:neocomplcache_include_patterns = {
+" 			\'d'	:'^\s*\<import'
+" 			\}
+" let g:neocomplcache_include_exprs = {
+" 			\'d'	:"substitute(v:fname, '\.', '/','g')"
+" 			\}
+" let g:neocomplcache_include_suffixes = {
+" 			\'d'	:'.d'
+" 			\}
 " }}}
 " Clang用の設定
 let g:neocomplete#force_overwrite_completefunc=1
@@ -76,107 +71,49 @@ endif
 " omnifunc が呼び出される場合の正規表現パターンを設定しておく
 let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
 let g:neocomplete#force_omni_input_patterns.c   = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplete#force_omni_input_patterns.d = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
 " }}}
-else
-" neocomplcache {{{
-let g:neocomplcache_enable_at_startup = 1 "  起動時に有効化
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_wildcard = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_auto_completion_start_length = 2
-let g:neocomplcache_max_keyword_width = 100
-let g:neocomplcache_max_menu_width = 30
-let g:neocomplcache_max_list=1000
-"inoremap <expr><C-X><C-U> neocomplcache#start_manual_complete()
-inoremap <expr><S-CR> neocomplcache#smart_close_popup()."\<CR>"
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-g>u\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-g>u\<C-h>"
-inoremap <expr><C-y> neocomplcache#cancel_popup()."\<C-Y>"
-inoremap <expr><C-e> neocomplcache#cancel_popup()."\<C-E>"
-" 1つ前の補完を取り消す
-" inoremap <expr> <C-G> neocomplcache#undo_completion()
-set completeopt=menuone
-
-"if !exists('g:neocomplcache_keyword_patterns')
-"      let g:neocomplcache_keyword_patterns = {}
-"endif
-let g:neocomplcache_keyword_patterns = {
-			\'default': '\h\w*',
-			\'text': '\k\+'
-			\}
-
-"if !exists('g:neocomplcache_dictionary_filetype_lists')
-        "let g:neocomplcache_dictionary_filetype_lists = {}
-"endif
-"let g:neocomplcache_dictionary_filetype_lists = {
-		"\ 'text' : $DOTVIM.'/american-english',
-		"\ }
-
-augroup completefunc
-	autocmd!
-	" autocmd FileType python setlocal omnifunc=python3complete#Complete
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType html,htm,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-augroup END
-" include用の設定 {{{
+" --------------------------------------------------------------------------
+"  dutyl(Dlang) {{{
+" 開始時にDUDCDstartServer終了時にDUDCDstopServer
+" DU(v)jumpで定義にジャンプ DUupdateCtagsでタグ作成
+" DUddoc でドキュメントを開く
+autocmd FileType d nnoremap <buffer> <F1> :DUddoc<CR>
+autocmd FileType d nnoremap <buffer> \d :DUjump<CR>
+autocmd BufAdd *.d DUDCDstartServer
+autocmd BufDelete *.d DUDCDstopServer
 if has('win32') || has('win64')
-	let g:neocomplcache_include_paths = {
-				\'cpp'		:includecppdir,
-				\'d'		:'E:/D/dmd2/src/phobos,E:/D/dmd2/src/druntime/import',
-				\'python'	:'C:/Python32/Lib,C:/Python32/lib/site-packages',
-				\}
+  let g:dutyl_stdImportPaths=['E:/D/dmd2/src/phobos','E:/D/dmd2/src/druntime/import']
+  call dutyl#register#tool('dcd-client', $DOTVIM.'/bundle/DCD/dcd-client.exe')
+  call dutyl#register#tool('dcd-server', $DOTVIM.'/bundle/DCD/dcd-server.exe')
+  call dutyl#register#tool('dscanner',   $DOTVIM.'/bundle/Dscanner/dscanner.exe')
 elseif has('unix')
-	let g:neocomplcache_include_paths = {
-	\'cpp' : '/usr/include,/usr/include/c++,/usr/include/c++/4.6.1,/usr/include/c++/4.6.1/backward,/usr/include/c++/4.6.1/i686-linux-gnu'
-	\}
+  let g:dutyl_stdImportPaths=['/usr/include/dlang/dmd']
 endif
-let g:neocomplcache_include_patterns = {
-			\'d'	:'^\s*\<import'
-			\}
-let g:neocomplcache_include_exprs = {
-			\'d'	:"substitute(v:fname, '\.', '/','g')"
-			\}
-let g:neocomplcache_include_suffixes = {
-			\'d'	:'.d'
-			\}
-" }}}
-" Clang用の設定
-let g:neocomplcache_force_overwrite_completefunc=1
-if !exists("g:neocomplcache_force_omni_patterns")
-    let g:neocomplcache_force_omni_patterns = {}
-endif
-" omnifunc が呼び出される場合の正規表現パターンを設定しておく
-let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
-" }}}
-endif
+"  }}}
 " --------------------------------------------------------------------------
 " jedi {{{
+" let g:jedi#popup_select_first = 0
+let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
-let g:jedi#popup_select_first = 0
 let g:jedi#goto_assignments_command = "<leader>g"
 let g:jedi#goto_definitions_command = "<leader>d"
 let g:jedi#rename_command = "<leader>r"
 let g:jedi#usages_command = "<leader>n"
 let g:jedi#show_call_signatures = "0"
-let g:jedi#documentation_command = "K"
+let g:jedi#documentation_command = "<F1>"
 " }}}
 ""------------------------------------------------------------------------------
-" スニペット {{{
-let g:neosnippet#snippets_directory = $DOTVIM.'/bundle/config_file/snippets'
-" imap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neocomplcache_snippets_jump)" : "\<Esc>\<Tab>"
-imap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Esc>\<Tab>"
-smap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
-" noremap <Space>s :Unite file $DOTVIM/bundle/config_file/snippets<CR>
-" For snippet_complete marker.
-"if has('conceal')
-	"set conceallevel=2 concealcursor=i
-"endif
+" Go {{{
+autocmd FileType go autocmd BufWritePre <buffer> Fmt
+autocmd FileType go nnoremap <buffer> <F1> :Godoc<CR>
+autocmd FileType godoc nnoremap <buffer> q :q<CR>
+"補完にvimprocを使用する
+let g:gocomplete#system_function = 'vimproc#system'
 " }}}
-" ------------------------------------------------------------------------------------ 
+""------------------------------------------------------------------------------
 "" clang_complete {{{
 let g:clang_exec = $LLVM.'/clang'
 let g:clang_complete_auto=0
@@ -188,10 +125,20 @@ let g:clang_periodic_quickfix=0
 let g:clang_hl_errors=0
 if has('win32') || has('win64')
 	let g:clang_library_path = $LLVM
-	let g:clang_user_options = includecppoption." -std=c++11 -fgnu-runtime"
+	let g:clang_user_options = includecppoption." -std=c++1y -fgnu-runtime"
 elseif has('unix')
 	let g:clang_library_path = $LLVM.'/../lib'
 endif
+" }}}
+" ------------------------------------------------------------------------------------ 
+" スニペット {{{
+let g:neosnippet#snippets_directory = $DOTVIM.'/bundle/config_file/snippets'
+imap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Esc>\<Tab>"
+smap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
+" For snippet_complete marker.
+"if has('conceal')
+	"set conceallevel=2 concealcursor=i
+"endif
 " }}}
 "------------------------------------------------------------------------------
 "" unite {{{
@@ -210,8 +157,8 @@ nnoremap <silent> <Space>l :<C-u>Unite line -create<CR>
 "  レジスタ一覧
 "nnoremap <silent> <Space>r :<C-u>Unite -vertical -winwidth=30 register<CR>
 " レジスタ履歴一覧
-nnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 history/yank<CR>
-xnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 history/yank<CR>
+nnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 -wrap history/yank<CR>
+xnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 -wrap history/yank<CR>
 "  バッファ一覧
 nnoremap <silent> <Space>b :<C-u>Unite -create -toggle buffer<CR>
 " tab一覧
@@ -221,17 +168,19 @@ nnoremap <silent> <Space>m :<C-u>Unite -create -default-action=tabopen file_mru<
 "File
 nnoremap ,f :<C-U>Unite -vertical -create file<CR>
 "  ウィンドウを分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-au FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+au FileType unite nnoremap <silent> <buffer> <expr> <C-s> unite#do_action('split')
+au FileType unite inoremap <silent> <buffer> <expr> <C-s> unite#do_action('split')
 "  ウィンドウを縦に分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
+au FileType unite nnoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
+au FileType unite inoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
 "  ウィンドウをタブで開く
 au FileType unite nnoremap <silent> <buffer> <expr> <C-T> unite#do_action('tabopen')
 au FileType unite inoremap <silent> <buffer> <expr> <C-T> unite#do_action('tabopen')
 "  ディレクトリを開く
 au FileType unite nnoremap <silent> <buffer> <expr> <C-O> unite#do_action('vimfiler')
 au FileType unite inoremap <silent> <buffer> <expr> <C-O> unite#do_action('vimfiler')
+
+" au FileType unite nmap p <Plug>(unite_toggle_auto_preview)
 "  }}}
 "------------------------------------------------------------------------------------- 
 " menu {{{
@@ -252,6 +201,7 @@ let g:unite_source_menu_menus.bookmark.command_candidates = [
       \       ['vimrc'         , 'tabe $VIM/vimrc'],
       \       ['gvimrc'        , 'tabe $VIM/gvimrc'],
       \       ['nodoka'        , 'tabe $DROPBOX/kuma.nodoka'],
+      \       ['mayu'          , 'tabe ~/.mayu'],
       \       ['makefile'      , 'tabe d:/Box/Workspace/Makefile'],
       \       ['workspace'     , 'Unite file:d:/Box/Workspace'],
       \       ['cpp'           , 'Unite file:d:/Box/Workspace/cpp'],
@@ -259,17 +209,15 @@ let g:unite_source_menu_menus.bookmark.command_candidates = [
       \       ['python'        , 'Unite file:d:/Box/Workspace/py'],
       \       ['renpy'         , 'Unite file:e:/Soft/renpy/renpy'],
       \       ['renpy-dep'     , 'Unite file:d:/Box/Workspace/renpy/renpy'],
+      \       ['renpy-sample'  , 'Unite file:d:/Box/Workspace/renpy/sample/game/'],
+      \       ['fault'         , 'Unite file:d:/Box/Workspace/Dropbox/Muni\ -\ Hare\ -\ Akakyouryuu/renpy-6.18.0-sdk/faultms2/game/'],
       \       ['kirikiri'      , 'Unite file:d:/Box/Workspace/kirikiri/practice/data/scenario'],
       \       ['snippet'       , 'Unite neosnippet/user neosnippet/runtime'],
       \       ['outline'       , 'Unite file:$DOTVIM/bundle/config_file/autoload/unite/sources/outline'],
       \       ['bundle'        , 'Unite file:$DOTVIM/bundle'],
-      \       ['kn'            , 'tabe $DOTVIM/bundle/kirikiri_neocomplcache/autoload/neocomplcache/sources/kirikiri_complete.vim'],
-      \       ['ko'            , 'tabe $DOTVIM/bundle/KirikiriOpen.vim/ftplugin/kirikiri.vim'],
-      \       ['rn'            , 'tabe $DOTVIM/bundle/renpy_neocomplcache/autoload/neocomplcache/sources/renpy_complete.vim'],
-      \       ['ro'            , 'tabe $DOTVIM/bundle/RenPyOpen.vim/ftplugin/kirikiri.vim'],
       \       ['msys'          , 'Unite file:c:/MinGW/msys/1.0/home/Kuma'],
       \       ['cygwin'        , 'Unite file:c:/cygwin64/home/Kuma'],
-      \       ['mokuroku'      , 'Unite file:d:/Box/Workspace/Dropbox/etc/mokuroku'],
+      \       ['mokuroku'      , 'Unite file:$DROPBOX/mokuroku'],
       \       ['now'           , "exe 'call vimproc#system(''e:/Softx64/Asr/AsrLoad.exe \"'.substitute(expand('%:p:h'), '/', '\\\\\\\\', 'g').'\"'')'"]
       \     ]
 
@@ -286,28 +234,52 @@ function g:unite_source_menu_menus.bookmark.map(key, value)
 	\     }
 endfunction " }}}
 "-------------------------------------------------------------------------------------- 
-" compile {{{
-let g:unite_source_menu_menus.compile= {
-      \     'description' : 'compile menu',
+" command {{{
+let g:unite_source_menu_menus.command= {
+      \     'description' : 'command menu',
       \ }
-let g:unite_source_menu_menus.compile.candidates = {
-      \       'g'     : 'QuickRun g++',
-      \       'gsdl'  : 'QuickRun g++_SDL',
-      \       'gdx'   : 'QuickRun g++_DxLib',
-      \       'gwx'   : 'QuickRun g++_widget',
-      \       'clang' : 'QuickRun clang++',
-      \       'csdl'  : 'QuickRun clang_SDL',
-      \       'cdx'   : 'QuickRun clang_DxLib',
-      \       'cwx'   : 'QuickRun clang_widget',
-      \       'cl'    : 'QuickRun cpp/vc',
-      \       'D'     : 'QuickRun d2',
-      \       'D1.0'  : 'QuickRun d1',
-      \       'rd'    : 'QuickRun rd',
-      \       'wxd'   : 'QuickRun wxd',
-      \       'check' : 'QuickRun CppCheck',
-      \       'run'   : '!% :p:r.exe',
+let g:unite_source_menu_menus.command.candidates = {
+      \  'gcc'   : 'QuickRun g++',
+      \  'gsdl'  : 'QuickRun g++_SDL',
+      \  'gdx'   : 'QuickRun g++_DxLib',
+      \  'gwx'   : 'QuickRun g++_widget',
+      \  'clang' : 'QuickRun clang++',
+      \  'csdl'  : 'QuickRun clang_SDL',
+      \  'cdx'   : 'QuickRun clang_DxLib',
+      \  'cwx'   : 'QuickRun clang_widget',
+      \  'cl'    : 'QuickRun cpp/vc',
+      \  'D'     : 'QuickRun d',
+      \  'rd'    : 'QuickRun rd',
+      \  'wxd'   : 'QuickRun wxd',
+      \  'run'   : '!% :p:r.exe',
+      \
+      \  'Dstart': 'DUDCDstartServer',
+      \  'Dstop' : 'DUDCDstopServer',
+      \  'Dtags' : 'DUupdateCtags',
+      \
+      \  'save'              : 'BlogSave',
+      \  'pagelist'          : 'exe "BlogList page" | exe "nnoremap <buffer> q <C-W>q" | exe "nnoremap <buffer> E :BlogOpen <C-R><C-W><CR>:%s/post/page/<CR>:call MyBlogMap()<CR>"',
+      \  'postlist'          : 'exe "BlogList post" | exe "nnoremap <buffer> q <C-W>q" | exe "nnoremap <buffer> E :BlogOpen <C-R><C-W><CR>:call MyBlogMap()<CR>"',
+      \  'npage(固定ページ)' : 'exe "tabe" | exe "BlogNew page" | call MyBlogMap()',
+      \  'npost(投稿)'       : 'exe "tabe" | exe "BlogNew" | call MyBlogMap()',
+      \  'qfixhowm'          : 'Unite qfixhowm/new qfixhowm:nocach -hide-source-names',
+      \  'html'              : 'setf html',
+      \  'markdown'          : 'setf markdown',
+      \  'timeline'          : 'TweetVimHomeTimeline',
+      \  'tweet'             : 'TweetVimSay',
+      \  'mention'           : 'TweetVimMentions',
+      \  'git pull upstream' : 'cd d:/Box/Workspace/renpy/renpy | call vimproc#system_bg("sh -c `git pull upstream master`")',
+      \  'vim_update'        : 'Unite neobundle/update -auto-quit',
       \     }
-function g:unite_source_menu_menus.compile.map(key, value)
+
+function! MyBlogMap()
+	setf markdown
+	inoremap <buffer> <M-n> <Space><Space><CR>
+	nnoremap <buffer> Q :BlogPreview<CR>
+	nnoremap <buffer> <Space>w :BlogPreview publish<CR>
+endfunction
+
+function g:unite_source_menu_menus.command.map(key, value)
   return {
 	\       'word' : a:key, 'kind' : 'command',
 	\       'action__command' : a:value,
@@ -326,11 +298,12 @@ let g:unite_source_menu_menus.manul.candidates = {
       \       'boost'    : 'W3mSplit http://www.kmonos.net/alang/boost/',
       \       'D'        : 'W3mSplit http://www.kmonos.net/alang/d/comparison.html',
       \       'Dxlib'    : 'W3mSplit http://www.kmonos.net/alang/d/phobos/phobos.html#std',
-      \       'python3'  : 'W3mSplit http://docs.python.jp/3/library/index.html',
       \       'HTML5'    : 'W3mSplit http://www.htmq.com/html5/index.shtml',
       \       'CSS3'     : 'W3mSplit http://www.htmq.com/css3/index.shtml',
       \       'Markdown' : 'W3mSplit http://blog.2310.net/archives/6',
-      \       'renpy'    : 'W3mSplit http://www.renpy.org/doc/html/',
+      \       'renpy'    : 'W3mSplit http://www.ja.renpy.org/doc/html/index.html',
+      \       'python3'  : 'W3mSplit http://docs.python.jp/3/library/index.html',
+      \       'pygame'   : 'W3mSplit http://westplain.sakuraweb.com/',
       \     }
 function g:unite_source_menu_menus.manul.map(key, value)
   return {
@@ -368,42 +341,9 @@ function g:unite_source_menu_menus.encode.map(key, value)
 	\     }
 endfunction " }}}
 "------------------------------------------------------------------------------------- 
-" command {{{
-let g:unite_source_menu_menus.command = {
-      \     'description' : 'command',
-      \ }
-let g:unite_source_menu_menus.command.candidates = {
-      \		'save'		:	'BlogSave',
-      \		'pagelist'	:	'exe "BlogList page" | exe "nnoremap <buffer> E :BlogOpen <C-R><C-W><CR>:call MyBlogMap()<CR>jjjjjjj:s/EditType   : post$/EditType   : page/<CR>" | exe "nnoremap <buffer> q <C-W>q"',
-      \		'postlist'	:	'exe "BlogList post" | exe "nnoremap <buffer> E :BlogOpen <C-R><C-W><CR>:call MyBlogMap()<CR>" | exe "nnoremap <buffer> q <C-W>q"',
-      \		'npage'		:	'exe "tabe" | exe "BlogNew page" | call MyBlogMap()',
-      \		'npost'		:	'exe "tabe" | exe "BlogNew post" | call MyBlogMap()',
-      \		'qfixhowm'	:	'Unite qfixhowm/new qfixhowm:nocach -hide-source-names',
-      \		'html'          :	'setf html',
-      \		'markdown'	:	'setf markdown',
-      \		'timeline'	:	'TweetVimHomeTimeline',
-      \		'tweet'		:	'TweetVimSay',
-      \		'mention'	:	'TweetVimMentions'
-      \     }
-function g:unite_source_menu_menus.command.map(key, value)
-  return {
-	\       'word' : a:key, 'kind' : 'command',
-	\       'action__command' : a:value,
-	\     }
-endfunction " }}}
-
-
-function! MyBlogMap()
-	setf markdown
-	inoremap <buffer> <M-n> <Space><Space><CR>
-	nnoremap <buffer> Q :BlogPreview<CR>
-	nnoremap <buffer> <Space>w :BlogPreview publish<CR>
-endfunction
-"------------------------------------------------------------------------------------- 
 
 nnoremap <silent> <Space>f :<C-u>Unite -vertical -create menu:bookmark<CR>
-nnoremap <silent> <Space>c :<C-u>Unite -vertical -create menu:compile<CR>
-nnoremap <silent> <Space>q :<C-u>Unite -vertical -create menu:command<CR>
+nnoremap <silent> <Space>c :<C-u>Unite -vertical -create menu:command<CR>
 nnoremap <silent> <Space>h :<C-u>Unite -vertical -create menu:manul<CR>
 nnoremap <silent> <Space>e :<C-u>Unite -vertical -create menu:encode<CR>
  " }}}
@@ -422,6 +362,12 @@ let g:vimfiler_safe_mode_by_default = 0
 let g:quickrun_config={}
 " -------------------------------------------------------------------------- 
 "cppコンパイル {{{
+if has('win32') || has('win64')
+  let s:common_opt=" -g -static-libgcc -static-libstdc++ -Wall -std=c++11 -L C:/MinGw/msys/1.0/local/lib"
+elseif has('unix')
+  let s:common_opt=" -g -static-libgcc -static-libstdc++ -Wall -std=c++11 -L /usr/local/lib"
+endif
+
 let g:quickrun_config["cl"] = {
 	\ "exec"     	: "%c %o %s:p",
 	\ "command" 	: "cl",
@@ -432,42 +378,43 @@ let g:quickrun_config["cl"] = {
 let g:quickrun_config["clang++"] = {
 	\ "exec"     	: "%c %o -o %s:p:r.exe %s:p ",
 	\ "command" 	: "clang++",
-	\ "cmdopt"  	: "-std=c++11 -fgnu-runtime -Wall ".includecppoption,
+	\ "cmdopt"  	: s:common_opt." -fgnu-runtime ".includecppoption,
 	\ "outputter" 	: "quickfix",
 	\ "runner" 	: "vimproc",
 \}
 let g:quickrun_config["g++"] = {
 	\ "exec"      : "%c %o %s:p -o %s:r.exe ",
 	\ "command" : "g++",
-	\ "cmdopt"  : "-g -Wall -std=c++11 ".localoption,
+	\ "cmdopt"  : s:common_opt.localoption,
 	\ "outputter" : "quickfix",
 	\ "runner" : "vimproc",
 \}
+let g:quickrun_config["cpp"] = g:quickrun_config["g++"]
 let g:quickrun_config["g++_DxLib"] = {
 	\ "exec"      : "%c %s:p %o -o %s:r.exe ",
 	\ "command" : "g++",
-	\ "cmdopt"  : "-g -Wall -std=c++11 -mwindows -lDxLib -lDxUseCLib -lDxDrawFunc -ljpeg -lpng -lzlib -ltheora_static -lvorbis_static -lvorbisfile_static -logg_static -lbulletdynamics -lbulletcollision -lbulletmath -static-libgcc -static-libstdc++ -DDX_GCC_COMPILE -DDX_NON_INLINE_ASM -L e:/MinGW/msys/1.0/local/lib".localoption,
+	\ "cmdopt"  : s:common_opt." -mwindows -lDxLib -lDxUseCLib -lDxDrawFunc -ljpeg -lpng -lzlib -ltheora_static -lvorbis_static -lvorbisfile_static -logg_static -lbulletdynamics -lbulletcollision -lbulletmath -static-libgcc -static-libstdc++ -DDX_GCC_COMPILE -DDX_NON_INLINE_ASM -L e:/MinGW/msys/1.0/local/lib".localoption,
 	\ "outputter" : "quickfix",
 	\ "runner" : "vimproc",
 \}
 let g:quickrun_config["clang_DxLib"] = {
 	\ "exec"      : "%c %s:p %o -o %s:r.exe ",
 	\ "command" : "clang++",
-	\ "cmdopt"  : "-Wall -std=c++11 -mwindows -lDxLib -lDxUseCLib -lDxDrawFunc -ljpeg -lpng -lzlib -ltheora_static -lvorbis_static -lvorbisfile_static -logg_static -lbulletdynamics -lbulletcollision -lbulletmath -static-libgcc -static-libstdc++ -DDX_GCC_COMPILE -DDX_NON_INLINE_ASM -L e:/MinGW/msys/1.0/local/lib".includecppoption,
+	\ "cmdopt"  : s:common_opt." -fgnu-runtime -mwindows -lDxLib -lDxUseCLib -lDxDrawFunc -ljpeg -lpng -lzlib -ltheora_static -lvorbis_static -lvorbisfile_static -logg_static -lbulletdynamics -lbulletcollision -lbulletmath -static-libgcc -static-libstdc++ -DDX_GCC_COMPILE -DDX_NON_INLINE_ASM -L e:/MinGW/msys/1.0/local/lib".includecppoption,
 	\ "outputter" : "quickfix",
 	\ "runner" : "vimproc",
 \}
 let g:quickrun_config["g++_SDL"] = {
 	\ "exec"      : "%c %s:p %o -o %s:r.exe ",
 	\ "command" : "g++",
-	\ "cmdopt"  : "-g -std=c++11 -Wall -mwindows -std=c++11 -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_mixer -lSDL_net -lSDL_ttf -L e:/MinGW/msys/1.0/local/lib".localoption,
+	\ "cmdopt"  : s:common_opt." -mwindows -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_mixer -lSDL_net -lSDL_ttf -L e:/MinGW/msys/1.0/local/lib".localoption,
 	\ "outputter" : "quickfix",
 	\ "runner" : "vimproc",
 \}
 let g:quickrun_config["clang_SDL"] = {
 	\ "exec"      : "%c %s:p %o -o %s:r.exe ",
 	\ "command" : "clang++",
-	\ "cmdopt"  : "-Wall -mwindows -std=c++11 -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_mixer -lSDL_net -lSDL_ttf -L e:/MinGW/msys/1.0/local/lib".includecppoption,
+	\ "cmdopt"  : s:common_opt." -mwindows -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_mixer -lSDL_net -lSDL_ttf -L e:/MinGW/msys/1.0/local/lib".includecppoption,
 	\ "outputter" : "quickfix",
 	\ "runner" : "vimproc",
 \}
@@ -481,26 +428,26 @@ let g:quickrun_config["clang_SDL"] = {
 let g:quickrun_config["g++_widget"] = {
 	\ "exec"      : "%c %s:p -o %s:r.exe %o",
 	\ "command" : "g++",
-	\ "cmdopt"  : "-g -Wall -std=c++11 -D_LARGEFILE_SOURCE=unknown -D__WXMSW__ -mthreads -L E:/MinGW/msys/1.0/local/lib   -Wl,--subsystem,windows -mwindows /local/lib/libwx_mswu-2.9.a -lwxregexu-2.9 -lwxexpat-2.9 -lwxtiff-2.9 -lwxjpeg-2.9 -lwxpng-2.9 -lwxzlib-2.9 -lrpcrt4 -loleaut32 -lole32 -luuid -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32".localoption,
+	\ "cmdopt"  : "-g -Wall -std=gnu++11 -I/local/lib/wx/include/msw-unicode-static-3.0 -I/local/include/wx-3.0 -D_LARGEFILE_SOURCE=unknown -DwxDEBUG_LEVEL=0 -D__WXMSW__ -mthreads -L/local/lib -Wl,--subsystem,windows -mwindows /local/lib/libwx_mswu-3.0.a -lwxregexu-3.0 -lwxexpat-3.0 -lwxtiff-3.0 -lwxjpeg-3.0 -lwxpng-3.0 -lwxzlib-3.0 -lrpcrt4 -loleaut32 -lole32 -luuid -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32 ".localoption,
 	\ "outputter" : "quickfix",
 	\ "runner" : "vimproc",
 \}
 
-let g:quickrun_config["clang_widget"] = {
-	\ "exec"      : "%c %s:p -o %s:r.exe %o",
-	\ "command" : "clang++",
-	\ "cmdopt"  : "-Wall -std=c++11 -D_LARGEFILE_SOURCE=unknown -D__WXMSW__ -mthreads -L E:/MinGW/msys/1.0//local/lib   -Wl,--subsystem,windows -mwindows /local/lib/libwx_mswu-2.9.a -lwxregexu-2.9 -lwxexpat-2.9 -lwxtiff-2.9 -lwxjpeg-2.9 -lwxpng-2.9 -lwxzlib-2.9 -lrpcrt4 -loleaut32 -lole32 -luuid -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32".includecppoption,
-	\ "outputter" : "quickfix",
-	\ "runner" : "vimproc",
-\}
-let g:quickrun_config["CppCheck"] = {
-	\ "type" : "",
-	\ "exec"      : "%c %o %s:p ",
-	\ "command" : "e:/Soft/cppcheck/cppcheck.exe",
-	\ "cmdopt"  : "--enable=all",
-	\ "outputter" : "buffer",
-	\ "runner" : "vimproc",
-\}
+" let g:quickrun_config["clang_widget"] = {
+" 	\ "exec"      : "%c %s:p -o %s:r.exe %o",
+" 	\ "command" : "clang++",
+" 	\ "cmdopt"  : "-Wall -std=c++11 -D_LARGEFILE_SOURCE=unknown -D__WXMSW__ -mthreads -L E:/MinGW/msys/1.0//local/lib   -Wl,--subsystem,windows -mwindows /local/lib/libwx_mswu-2.9.a -lwxregexu-2.9 -lwxexpat-2.9 -lwxtiff-2.9 -lwxjpeg-2.9 -lwxpng-2.9 -lwxzlib-2.9 -lrpcrt4 -loleaut32 -lole32 -luuid -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -ladvapi32 -lwsock32 -lgdi32".includecppoption,
+" 	\ "outputter" : "quickfix",
+" 	\ "runner" : "vimproc",
+" \}
+" let g:quickrun_config["CppCheck"] = {
+" 	\ "type" : "",
+" 	\ "exec"      : "%c %o %s:p ",
+" 	\ "command" : "e:/Soft/cppcheck/cppcheck.exe",
+" 	\ "cmdopt"  : "--enable=all",
+" 	\ "outputter" : "buffer",
+" 	\ "runner" : "vimproc",
+" \}
 "let g:quickrun_config["g++_widget"] = {
 "	\ "exec"      : "%c -c \"g++ %s -o %s:r.exe -g -Wall %o\"",
 "	\ "command" : "sh",
@@ -512,15 +459,7 @@ let g:quickrun_config["CppCheck"] = {
 " }}}
 "--------------------------------------------------------------------------- 
 "{{{ D
-let g:quickrun_config["d1"] = {
-	\ "exec"      : "%c %o %s:p",
-	\ "command"   : "E:/D/dmd/windows/bin/dmd",
-	\ "cmdopt"    : "",
-	\ "outputter" : "quickfix",
-	\ "runner"    : "vimproc",
-\}
-
-let g:quickrun_config["d2"] = {
+let g:quickrun_config["d"] = {
 	\ "exec"      : "%c %o %s:p",
 	\ "command"   : "dmd",
 	\ "cmdopt"    : "",
@@ -554,7 +493,7 @@ let g:quickrun_config['watchdogs_checker/_'] = {
 let s:watchdogs_config = {
 \
 \   "watchdogs_checker/clang++" : {
-\	"cmdopt"  : includecppoption
+\	"cmdopt"  : includecppoption." -Wall -std=c++1y"
 \   },
 \
 \   "watchdogs_checker/g++" : {
@@ -565,20 +504,42 @@ let s:watchdogs_config = {
 \       "type" : "watchdogs_checker/clang++",
 \   },
 \
-\   "watchdogs_checker/pyflakes3" : {
-\       "command" : 'python',
-\       "exec"    : '%c C:/Python33/Scripts/pyflakes %o %s:p',
+\   "watchdogs_checker/flake8" : {
+\       "command" : 'flake8',
+\       "exec"    : '%c %o %s:p',
 \	"quickfix/errorformat" : '%f:%l:%m',
 \   },
 \
 \   "python/watchdogs_checker" : {
-\       "type" : "watchdogs_checker/pyflakes3",
+\       "type" : "watchdogs_checker/flake8",
 \   },
+\
+\    'watchdogs_checker/mcs' : {
+\       'command'              : 'mcs',
+\       'exec'                 : '%c %o %s:p',
+\       'cmdopt'               : '--parse',
+\       'quickfix/errorformat' : '%f\\(%l\\,%c\\):\ error\ CS%n:\ %m',
+\   },
+\    'cs/watchdogs_checker'  : {
+\       'type' : 'watchdogs_checker/mcs',
+\   },
+\
+\    'watchdogs_checker/golint' : {
+\       'command'              : 'golint',
+\       'exec'                 : '%c %o %s:p',
+\       'cmdopt'               : '-min_confidence=0.8',
+\	"quickfix/errorformat" : '%f:%l:%m',
+\   },
+\    'go/watchdogs_checker'  : {
+\       'type' : 'watchdogs_checker/golint',
+\   },
+\
+\
 \    "watchdogs_checker/_" : {
 \       "hook/close_quickfix/enable_exit" : 1,
 \       "hook/u_nya_/enable"              : 1,
 \  },
-\}
+\ }
  " }}}
 call extend(g:quickrun_config,s:watchdogs_config)
 unlet s:watchdogs_config
@@ -588,15 +549,19 @@ let g:watchdogs_check_BufWritePost_enables = {}
 let g:watchdogs_check_BufWritePost_enables.cpp = 1
 let g:watchdogs_check_BufWritePost_enables.python = 1
 let g:watchdogs_check_BufWritePost_enables.d = 1
+let g:watchdogs_check_BufWritePost_enables.haskell = 1
+let g:watchdogs_check_BufWritePost_enables.go = 1
+let g:watchdogs_check_BufWritePost_enables.csharp = 1
 " }}}
 " -------------------------------------------------------------------------- 
 " w3m {{{
-nnoremap <silent> <Leader>w :<C-u>W3mSplit alc <C-r><C-w><CR>
+nnoremap <silent> <Leader>w :<C-u>W3mSplit <C-r><C-w><CR>
 augroup w3m
 	autocmd!
+	autocmd FileType vim nnoremap <buffer> <F1> :help <C-R><C-W><CR>
+	autocmd FileType text	nnoremap <buffer><silent> <F1> :<C-u>W3mSplit <C-r><C-w><CR>
+	" autocmd FileType python	nnoremap <buffer><silent> <F1> :<C-u>W3mSplit python <C-r><C-w><CR>
 	autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
-	autocmd FileType text	nnoremap <buffer><silent> <C-k> :<C-u>W3mSplit alc <C-r><C-w><CR>
-	autocmd FileType python	nnoremap <buffer><silent> <C-k> :<C-u>W3mSplit python <C-r><C-w><CR>
 augroup end " }}}
 " -------------------------------------------------------------------------- 
 "  openbrowser{{{
@@ -729,41 +694,87 @@ augroup smartchr
 	autocmd FileType css	inoremap <buffer><expr> ; smartchr#loop(';', ';<CR>')
 	autocmd FileType css	inoremap <buffer><expr> { smartchr#loop('{', ' {<CR>}<LEFT><LEFT><CR>')
     " }}}
+    "haskell  {{{
+	" 演算子の間に空白を入れる
+	autocmd FileType haskell	inoremap <buffer><expr> < smartchr#loop(' < ', ' <= ', '<' )
+	autocmd FileType haskell	inoremap <buffer><expr> > smartchr#loop(' > ', ' >= ', '>')
+	"何故か += , -= は出来ない
+	autocmd FileType haskell	inoremap <buffer><expr> + smartchr#loop(' + ', '+')
+	autocmd FileType haskell	inoremap <buffer><expr> - smartchr#loop(' - ', '-')
+	autocmd FileType haskell	inoremap <buffer><expr> / smartchr#loop(' / ', '/')
+	autocmd FileType haskell	inoremap <buffer><expr> * smartchr#loop(' * ', '*')
+
+	" =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
+	" 複合演算代入としての入力の場合は、直前のスペースを削除して=を入力
+	autocmd FileType haskell	inoremap <buffer><expr> = smartchr#loop(' = ', ' /= ', '=')
+    " }}}
 augroup END 
 " }}}
 "------------------------------------------------------------------------------------- 
 " pcyle {{{
-nnoremap \d '0:Cfile %:p:r.exe<CR>:MyPyclewn<CR>
+command! GdbStart call s:GdbStart()
+if has('win32') || has('win64')
+	command! Gdb call vimproc#system_bg("Python C:/Python34/Scripts/pyclewn")
+endif
 command! MyPyclewn call s:MyPyclewn()
 
+function! s:GdbStart() abort
+	let l:path = expand("%:p")
+	silent! Cfile %:p:r.exe
+	"<C-O>で手動で開く
+	" silent! exe "e ".l:path
+	call s:MyPyclewn()
+endfunction
+
 function! s:MyPyclewn()
-	nnoremap <buffer> b :exe "Cbreak " . expand("%:p") . ":" . line(".")<CR>
-	nnoremap <buffer> e :exe "Cclear " . expand("%:p") . ":" . line(".")<CR>
+	"ブレークポイント設定
+	nnoremap b :exe "Cbreak " . expand("%:p") . ":" . line(".")<CR>
+	"ブレークポイント解除
+	nnoremap e :exe "Cclear " . expand("%:p") . ":" . line(".")<CR>
 	"開始             
-	nnoremap <buffer> r :exe "Crun"<CR>
+	nnoremap r :exe "Crun"<CR>
 	"ステップオーバー 
-	nnoremap <buffer> <C-N> :exe "Cnext"<CR>
+	nnoremap <C-N> :exe "Cnext"<CR>
 	"ステップイン     
-	nnoremap <buffer> <C-S> :exe "Cstep"<CR>
+	nnoremap <C-S> :exe "Cstep"<CR>
 	"ステップアウト   
-	nnoremap <buffer> <C-F> :exe "Cfinish"<CR>
+	nnoremap <C-F> :exe "Cfinish"<CR>
 	"続行             
-	nnoremap <buffer> <C-C> :exe "Ccontinue"<CR>
+	nnoremap <C-C> :exe "Ccontinue"<CR>
 	"変数の内容を表示
-	nnoremap <buffer> p :exe "Cprint " . expand("<cword>") <CR>
-	nnoremap <buffer> w :exe "Cwhere"<CR>
-	nnoremap <buffer> ia :exe "Cinfo args"<CR>
-	nnoremap <buffer> il :exe "Cinfo locals"<CR>
-	nnoremap <buffer> ib :exe "Cinfo breakpoints"<CR>
-	nnoremap <buffer> u :exe "Cup"<CR>
-	nnoremap <buffer> d :exe "Cdown"<CR>
-	nnoremap <buffer> q :exe "Cquit"<CR>:tabclose<CR>
+	nnoremap p :exe "Cprint " . expand("<cword>") <CR>
+	nnoremap w :exe "Cwhere"<CR>
+	nnoremap ia :exe "Cinfo args"<CR>
+	nnoremap il :exe "Cinfo locals"<CR>
+	nnoremap ib :exe "Cinfo breakpoints"<CR>
+	nnoremap u :exe "Cup"<CR>
+	nnoremap d :exe "Cdown"<CR>
+	nnoremap q :exe "Cquit"<CR>:qa<CR>
 endfunction " }}}
 "------------------------------------------------------------------------------
 " showmarks {{{
 let showmarks_include = "abcdefghijklmnorstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 " }}}
 ""------------------------------------------------------------------------------
+" textobj {{{
+" ヤンク
+nmap YY <Plug>(operator-blockwise-yank)
+" 削除
+nmap DD <Plug>(operator-blockwise-delete)
+" 変更
+nmap CC <Plug>(operator-blockwise-change)
+
+omap ib <Plug>(textobj-between-i)
+omap ab <Plug>(textobj-between-a)
+vmap ib <Plug>(textobj-between-i)
+vmap ab <Plug>(textobj-between-a)
+
+omap if <Plug>(textobj-function-i)
+omap af <Plug>(textobj-function-a)
+vmap if <Plug>(textobj-function-i)
+vmap af <Plug>(textobj-function-a)
+" }}}
+" --------------------------------------------------------------------------
 " savevers.vim {{{
 " バックアップファイルの設定" savevers.vimのためにパッチモードにします
 set patchmode=.bak
@@ -774,19 +785,35 @@ let savevers_dirs = &backupdir
 "  バックアップファイルとの比較でウィンドウのサイズを変更する場合は0
 let versdiff_no_resize=1 " }}}
 ""------------------------------------------------------------------------------
-" "vim-toggle {{{
-" nmap T <Plug>ToggleN
-" "imap T <Plug>ToggleI
-" vmap T <Plug>ToggleV
-" let g:toggle_pairs = { '1':'0', '0':'1', 'True':'False', 'False':'True', 'true':'false', 'false':'true', 
-" 			\ '=True':'False', '=False':'True', '=true':'false', '=false':'true' ,
-" 			\ '=True,':'False', '=False,':'True', '=true,':'false', '=false,':'true' ,
-" 			\ '(True)':'False', '(False)':'True', '(true)':'false', '(false)':'true' }
-" " }}}
+" switch.vim {{{
+let g:variable_style_switch_definitions = [
+\   {
+\     'T': {
+\       'True': 'False'
+\     },
+\
+\     'F': {
+\       'False': 'True'
+\     },
+\   },
+\   {
+\     't': {
+\       'true': 'false'
+\     },
+\
+\     'f': {
+\       'false': 'true'
+\     },
+\   }
+\ ]
+nnoremap T :Switch<cr>
+" }}}
  " ------------------------------------------------------------------------- 
  " renpy {{{
 let g:renpyopen_use_vimproc=1
-let g:renpy_exepath="e:/Soft/renpy/renpy.exe"
+if has('win32') || has('win64')
+  let g:renpy_exepath="e:/Soft/renpy/renpy.exe"
+endif
  "}}}
 ""------------------------------------------------------------------------------
 " QFixhowm {{{
@@ -821,7 +848,7 @@ let QFixHowm_WikiDir = 'wiki'
 " 折りたたみを有効にする。
 let QFixHowm_Folding               = 2
 " 階層折りたたみ設定
-let QFixHowm_FoldingMode           = 0
+let QFixHowm_FoldingMode           = 1
 " 折りたたみのパターン
 let QFixHowm_FoldingPattern        = '^[.*]'
 " チャプターのタイトル行を折りたたまない
@@ -834,25 +861,34 @@ let QFixHowm_WildCardChapterMode   = 1"
 let QFix_PreviewEnable = 0
 " QFixGrepの検索時にカーソル位置の単語を拾う/拾わない
 let MyGrep_DefaultSearchWord = 1
+" プレビューや絞り込みの拡張機能有効化オプション
+" 1 : QuickFix/ロケーションリストの両方で有効
+let QFixWin_EnableMode = 1
+" QFixHowm/QFixGrepの結果表示にロケーションリストを使用する/しない
+let QFix_UseLocationList = 1
+" tabで開く
+let QFix_Edit = "tab"
+nnoremap <C-W>, :copen<CR>
 
-let use_cygwingrep = 0
-let MyGrep_CurrentDirMode = 1
-if use_cygwingrep
-	" let MyGrep_error = 1
-	let mygrepprg = 'grep'
-	let MyGrep_cygwin17 = 1
-	let g:MyGrep_MultiEncoding = 1
-	let MyGrep_ShellEncoding = 'utf-8'
-	let g:MyGrep_MultiEncodingList = ['utf-8', 'cp932', 'euc-jp', 'utf-16le', 'utf-16']
-else
-	" let MyGrep_error = 1
-	let mygrepprg = 'jvgrep'
-	let MyGrep_ShellEncoding = 'utf-8'
-	" let MyGrepcmd_useropt = '8'
-	let g:MyGrep_MultiEncoding = 0
-	let MyGrep_Damemoji = 0
-endif
+" let use_cygwingrep = 0
+" let MyGrep_CurrentDirMode = 1
+" if use_cygwingrep
+" 	" let MyGrep_error = 1
+" 	let mygrepprg = 'grep'
+" 	let MyGrep_cygwin17 = 1
+" 	let g:MyGrep_MultiEncoding = 1
+" 	let MyGrep_ShellEncoding = 'utf-8'
+" 	let g:MyGrep_MultiEncodingList = ['utf-8', 'cp932', 'euc-jp', 'utf-16le', 'utf-16']
+" else
+" 	" let MyGrep_error = 1
+" 	let mygrepprg = 'jvgrep'
+" 	let MyGrep_ShellEncoding = 'utf-8'
+" 	" let MyGrepcmd_useropt = '8'
+" 	let g:MyGrep_MultiEncoding = 0
+" 	let MyGrep_Damemoji = 0
+" endif
 
+nnoremap g,o :Unite qfixhowm:!<CR>
 " }}}
 " -------------------------------------------------------------------------- 
 "" jpformat {{{
@@ -868,71 +904,56 @@ endif
  let JpCountOverChars = -1
 " neocomplcacheとunite-tagで宣言に飛ぶ
 "}}}
-" --------------------------------------------------------------------------
-" gitv {{{
-autocmd FileType gitv call s:my_gitv_settings()
-function! s:my_gitv_settings()
-	setlocal iskeyword+=/,-,.
-	nnoremap <silent><buffer> C :<C-u>Git checkout <C-r><C-w><CR>
-	nnoremap <buffer> <Space>rb :<C-u>Git rebase       <C-r>=GitvGetCurrentHash()<CR><Space>
-	nnoremap <buffer> <Space>R :<C-u>Git revert        <C-r>=GitvGetCurrentHash()<CR><CR>
-	nnoremap <buffer> <Space>h :<C-u>Git cherry-pick   <C-r>=GitvGetCurrentHash()<CR><CR>
-	nnoremap <buffer> <Space>rh :<C-u>Git reset --hard <C-r>=GitvGetCurrentHash()<CR>
-	nnoremap <buffer> <Space>rs :<C-u>Git reset --soft <C-r>=GitvGetCurrentHash()<CR>
-endfunction
-" これは外に定義!
-function! GitvGetCurrentHash()
-  return matchstr(getline('.'), '\[\zs.\{7\}\ze\]$')
-endfunction
-command! Gbranch Git checkout -b <args><CR>
-command! Gcheckout Git checkout -b <args><CR>
+"------------------------------------------------------------------------------
+" 検索移動まとめ{{{
+" vim-visualstar
+xmap * <Plug>(visualstar-*)N
+xmap # <Plug>(visualstar-#)N
+"anzu.vim
+" n や N の代わりに使用します。
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+nmap * <Plug>(anzu-star-with-echo)``
+nmap # <Plug>(anzu-sharp-with-echo)``
+let g:airline#extensions#anzu#enabled = 0
+" ステータス情報を statusline へと表示する
+" set statusline=%{anzu#search_status()}
+"easy-motion
+let g:EasyMotion_leader_key = '<tab>'
+nmap K <Plug>(easymotion-s)
+vmap K <Plug>(easymotion-s)
+omap K <Plug>(easymotion-s)
+inoremap <C-F> <C-O><Plug>(easymotion-s)
+
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_use_migemo = 1
+let g:EasyMotion_startofline=0
 "}}}
-"------------------------------------------------------------------------------------- 
-" {{{その他
 " --------------------------------------------------------------------------
-" switch.vim
-let g:variable_style_switch_definitions = [
-\   {
-\     'T': {
-\       'True': 'False'
-\     },
-\
-\     'F': {
-\       'False': 'True'
-\     },
-\   },
-\   {
-\     't': {
-\       'true': 'false'
-\     },
-\
-\     'f': {
-\       'false': 'true'
-\     },
-\   }
-\ ]
-" nnoremap + :call switch#Switch(g:variable_style_switch_definitions)<cr>
-nnoremap T :Switch<cr>
+" {{{その他
 " --------------------------------------------------------------------------
 " accelerated-smooth-scroll
 " <C-d>/<C-u> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
 " Default : 10
-let g:ac_smooth_scroll_du_sleep_time_msec = 1
-
+" let g:ac_smooth_scroll_du_sleep_time_msec = 1
+"
 " <C-f>/<C-b> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
 " Default : 10
-let g:ac_smooth_scroll_fb_sleep_time_msec = 1
+" let g:ac_smooth_scroll_fb_sleep_time_msec = 1
 "------------------------------------------------------------------------------
 " vimshell
 nnoremap <Space>vs :VimShell<CR>
 "  ------------------------------------------------------------------------- 
 "  Gundo
-nnoremap U :<C-u>GundoToggle<CR>
+nnoremap <Space>u :<C-u>GundoToggle<CR>
 "--------------------------------------------------------------------------- 
 " hier
 "ハイライト停止
-nnoremap <silent> <ESC><ESC> :nohlsearch<CR>:HierClear<CR>:ShowMarksClearAll<CR>
-":SearchBuffersReset<CR>
+nnoremap <silent> <ESC><ESC> :nohlsearch<CR>:HierClear<CR>:ShowMarksClearAll<CR>:QuickhlManualReset<CR>
+" quickhl
+nmap <Space>i <Plug>(quickhl-manual-this)
+xmap <Space>i <Plug>(quickhl-manual-this)
+let g:quickhl_manual_enable_at_startup = 1
 "------------------------------------------------------------------------------------- 
 " vim-indent-guide
 if has('gui_running')
@@ -943,21 +964,6 @@ runtime macros/matchit.vim
 let b:match_words = "if:endif,foreach:endforeach,\<begin\>:\<end\>,<div.*>:</div>"
 " -------------------------------------------------------------------------- 
 vnoremap <F8> :ExciteTranslate<CR>
-"------------------------------------------------------------------------------
-" vim-visualstar
-xmap * <Plug>(visualstar-*)N
-xmap # <Plug>(visualstar-#)N
-"---------------------------------------------------------------------------
-"anzu.vim {{{
-" n や N の代わりに使用します。
-nmap n <Plug>(anzu-n-with-echo)
-nmap N <Plug>(anzu-N-with-echo)
-nmap * <Plug>(anzu-star-with-echo)N
-nmap # <Plug>(anzu-sharp-with-echo)n
-let g:airline#extensions#anzu#enabled = 0
-" ステータス情報を statusline へと表示する
-" set statusline=%{anzu#search_status()}
-"}}}
 " ----------------------------------------------------------------------------
 " powerline
 "source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim
@@ -974,6 +980,9 @@ let g:airline#extensions#anzu#enabled = 0
 "}}}
 " --------------------------------------------------------------------------
 " air_line {{{
+if !exists('g:airline_symbols')
+ let g:airline_symbols = {}
+endif
 let g:airline_left_sep = '⮀'
 let g:airline_left_alt_sep = '⮁'
 let g:airline_right_sep = '⮂'
@@ -982,21 +991,18 @@ let g:airline#extensions#branch#symbol = '⭠'
 let g:airline#extensions#readonly#symbol = '⭤'
 let g:airline#extensions#whitespace#enabled = 0
 let g:airline#extensions#branch#enabled = 0
-let g:airline_linecolumn_prefix = '⭡'
+let g:airline_symbols.linenr = '⭡'
 let g:airline_theme = 'solarized'
-let g:airline_section_b = "%{airline#extensions#branch#get_head()} %{expand('%:p:h')}"
+let g:airline_section_b = "%{expand('%:p:h')}"
 let g:airline_section_c = "%f%m"
-let g:airline_section_x = ""
+let g:airline_section_x = "%{airline#extensions#branch#get_head()}"
 let g:airline_section_y = "%{strlen(&filetype)>0?&filetype:'no-ft'} | %{strlen(&fenc)>0?&fenc:'no-fe'} | %{strlen(&ff)>0?&ff:'no-ff'}"
-let g:airline_section_z = '%3p%% '.get(g:, 'airline_linecolumn_prefix', '').'(%3l:%3c)'
+let g:airline_section_z = '%3p%% '.airline_symbols.linenr.'(%3l:%3c)'
 " }}}
 "------------------------------------------------------------------------------------- 
 " Qfreplace
 autocmd FileType qf nnoremap <buffer> R :Qfreplace<CR>
 autocmd FileType qfreplace nnoremap <buffer> <Space>w :w<CR>:close<CR>:cclose<CR>
-" --------------------------------------------------------------------------
-"easy-motion
-let g:EasyMotion_leader_key = '<tab>'
 "---------------------------------------------------------------------------
 "nerdcommenter
 "map <tab>cc <plug>NERDCommenterComment
@@ -1013,11 +1019,248 @@ endif
 let g:tcomment_types.renpy = '# %s'
 let g:tcomment_types.kirikiri = ';%s'
 let g:tcomment_types.D = '// %s'
+let g:tcommentTextObjectInlineComment=0
 "------------------------------------------------------------------------------
 "twitvim
 let twitvim_count = 100
 "---------------------------------------------------------------------------
 "}}}
+"--------------------------------------------------------------------------- 
+" " 吉里吉里用 {{{
+" let g:kirikiriopen_use_vimproc = 1
+" let g:kirikiriopen_jump_dict = {'tag': 'call\|jump\|link\|lk\|rmm\|button\|rclick', 'file': 'storage'}
+" let g:kirikiriopen_list = [
+" 	\{'tag':'\<trans\>','file':'rule','command':'e:/soft/Vix/ViX.exe','exelist':['png']},
+" 	\{'tag':'\<image\>\|\<tc\>\|\<tu\>','file':'storage','command':'e:/soft/Vix/ViX.exe','exelist':['png','jpg','tlg']},
+" 	\{'tag':'\<playse\>\|\<playbgm\>\|\<fadeinbgm\>\|\<fadeinse\>','file':'storage','command':'e:/soft/MPC-HC.1.6.2.4902.x86/mpc-hc.exe','exelist':['ogg']}
+" 	\]
+" " macro {{{
+" let g:kirikiri_neocomplcache_macro_list = [
+" 			\{'tag': 'lk',	   'menu': '', 'macrotype': [
+" 				\{'type': 'text','typemenu': ''},
+" 				\{'type': 'storage','typemenu': ''},
+" 				\{'type': 'target','typemenu': ''},
+" 				\]},
+" 			\{'tag': 'tu',	   'menu': '', 'macrotype': [
+" 				\{'type': 'rule','typemenu': ''},
+" 				\{'type': 'time','typemenu': ''},
+" 				\{'type': 'layer','typemenu': ''},
+" 				\{'type': 'vague','typemenu': ''},
+" 				\{'type': 'storage','typemenu': ''},
+" 				\{'type': 'children','typemenu': ''},
+" 				\]},
+" 			\{'tag': 'tc',	   'menu': '', 'macrotype': [
+" 				\{'type': 'time','typemenu': ''},
+" 				\{'type': 'layer','typemenu': ''},
+" 				\{'type': 'storage','typemenu': ''},
+" 				\]},
+" 			\{'tag': 'exmove', 'menu': '', 'macrotype': [
+" 				\{'type': 'cx','typemenu': ''},
+" 				\{'type': 'cy','typemenu': ''},
+" 				\{'type': 'layer','typemenu': '(必)対象となるレイヤを指定します。'},
+" 				\{'type': 'page',	'typemenu': 'layer 属性で指定したレイヤが、 表(fore)画面であるか、裏(back)画面であるかを指定します。 省略すると表ページであると見なされます。'},
+" 				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
+" 				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
+" 				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
+" 				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
+" 				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
+" 				\]},
+" 			\{'tag': 'eximage', 'menu': '', 'macrotype': [
+" 				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
+" 				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
+" 				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
+" 				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
+" 				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+" 				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+" 				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
+" 				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
+" 				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
+" 				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
+" 				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+" 				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+" 				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
+" 				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
+" 				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
+" 				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
+" 				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
+" 				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+" 				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+" 				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+" 				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+" 				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+" 				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+" 				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+" 				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+" 				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+" 				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
+" 				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
+" 				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
+" 				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
+" 				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
+" 				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
+" 				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
+" 				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
+" 				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
+" 				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
+" 				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
+" 				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
+" 				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
+" 				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
+" 				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
+" 				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
+" 				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
+" 				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
+" 				\]},
+" 			\{'tag': 'im', 'menu': '', 'macrotype': [
+" 				\{'type': 'name','typemenu': ''},
+" 				\{'type': 'charwidth','typemenu': ''},
+" 				\{'type': 'charheight','typemenu': ''},
+" 				\{'type': 'chartop','typemenu': ''},
+" 				\{'type': 'method','typemenu': ''},
+" 				\{'type': 'from','typemenu': ''},
+" 				\{'type': 'multi','typemenu': ''},
+" 				\{'type': 'emotion','typemenu': ''},
+" 				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
+" 				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
+" 				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
+" 				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
+" 				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
+" 				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+" 				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
+" 				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
+" 				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
+" 				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
+" 				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
+" 				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+" 				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
+" 				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
+" 				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
+" 				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
+" 				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
+" 				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
+" 				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+" 				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+" 				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
+" 				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+" 				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+" 				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
+" 				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+" 				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+" 				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
+" 				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
+" 				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
+" 				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
+" 				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
+" 				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
+" 				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
+" 				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
+" 				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
+" 				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
+" 				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
+" 				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
+" 				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
+" 				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
+" 				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
+" 				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
+" 				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
+" 				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
+" 				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
+" 				\{'type': 'cx','typemenu': ''},
+" 				\{'type': 'cy','typemenu': ''},
+" 				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
+" 				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
+" 				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
+" 				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
+" 				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
+" 				\]},
+" 			\] " }}}
+"
+"
+"
+" " {{{ file list
+" " {{{picture_list
+" let s:kirikiri_picture_list = [
+" 			\{'word': 'black','menu': 'bgimage'},
+" 			\{'word': 'logo','menu': 'image'},
+" 			\]
+" "}}}
+" let s:kirikiri_rule_list = []
+" let s:kirikiri_scenario_list = []
+" let s:kirikiri_label_list = []
+" " {{{ bgm_list
+" let s:kirikiri_bgm_list = [
+" 			\{'word': 'kb1.ogg'},
+" 			\{'word': 'kb2.ogg'},
+" 			\{'word': 'kkhk.ogg'},
+" 			\{'word': 'kkn1.ogg'},
+" 			\{'word': 'knsm1.ogg'},
+" 			\{'word': 'knsm2.ogg'},
+" 			\{'word': 'knsm3.ogg'},
+" 			\{'word': 'ntj1.ogg'},
+" 			\{'word': 'ntj2.ogg'},
+" 			\{'word': 'ntj3.ogg'},
+" 			\{'word': 'ntj4.ogg'},
+" 			\{'word': 'ntj5.ogg'},
+" 			\{'word': 'rck2.ogg'},
+" 			\{'word': 'rck3.ogg'},
+" 			\{'word': 'rck4.ogg'},
+" 			\{'word': 'sekai1.ogg'},
+" 			\{'word': 'sjk1.ogg'},
+" 			\{'word': 'sr1.ogg'},
+" 			\{'word': 'sr2.ogg'},
+" 			\{'word': 'sr3.ogg'},
+" 			\{'word': 'srs1.ogg'},
+" 			\{'word': 'srs2.ogg'},
+" 			\{'word': 'ttl.ogg'},
+" 			\{'word': 'ynt1.ogg'},
+" 			\{'word': 'yss1.ogg'},
+" 			\{'word': 'yss2.ogg'},
+" 			\{'word': 'yss3.ogg'},
+" 			\]
+" "}}}
+" let s:kirikiri_se_list = []
+" " }}}
+" " {{{list adapt
+" let g:kirikiri_neocomplcache_list = [
+" 			\{'tagname': 'image',			'typename': 'storage',		'list': s:kirikiri_picture_list},
+" 			\{'tagname': 'trans',			'typename': 'rule',		'list': s:kirikiri_rule_list},
+" 			\{'tagname': 'link\|jump\|call',	'typename': 'storage',		'list': s:kirikiri_scenario_list},
+" 			\{'tagname': 'link\|jump\|call',	'typename': 'target',		'list': s:kirikiri_label_list},
+" 			\{'tagname': 'playbgm\|fadein',		'typename': 'storage',		'list': s:kirikiri_bgm_list},
+" 			\{'tagname': 'playse',			'typename': 'storage',		'list': s:kirikiri_se_list}
+" 			\]
+" "}}} 
+" " {{{ map
+" augroup kirikiri
+" autocmd!
+" autocmd BufNew,BufRead *.ks,*tjs	nnoremap <buffer> ,r 	:KirikiriExe<CR>
+" autocmd FileType tjs	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
+" autocmd FileType kirikiri	setl colorcolumn=53
+" autocmd FileType kirikiri	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
+" autocmd FileType kirikiri	nnoremap <buffer> <C-]> :KirikiriJump<CR>
+" autocmd FileType kirikiri	nnoremap <buffer> <Space>h    :split $HELP/Tags.help<CR>
+" autocmd FileType kirikiri	nnoremap <buffer> ,h    yiw:split $HELP/Tags.help<CR>gg/\<<C-R>*\><CR>:nohlsearch<CR>
+" autocmd FileType kirikiri	inoremap <buffer> <M-n> <CR>[pn]<CR><CR>
+" autocmd FileType kirikiri	inoremap <buffer> <M-r> [lr]<CR>
+" autocmd FileType kirikiri	inoremap <buffer> <M-l> [l]
+" autocmd FileType kirikiri	inoremap <buffer> <M-[> [「]
+" autocmd FileType kirikiri	inoremap <buffer> <M-]> [」][lr]<CR>
+" autocmd FileType kirikiri	inoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
+" autocmd FileType kirikiri	vnoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
+" augroup END
+" "}}} 
+"  " }}}
 "------------------------------------------------------------------------------
 " " skk {{{
 " if g:portable
@@ -1032,1399 +1275,1081 @@ let twitvim_count = 100
 " 	let skk_egg_like_newline = 1
 " endif
 " "}}}
+"------------------------------------------------------------------------------
+" " eskk {{{
+" let g:eskk#directory = $DOTVIM.'/skk'
+" let g:eskk#dictionary = { 'path': $DOTVIM.'/skk/mydict', 'sorted': 0, 'encoding': 'utf-8', }
+" let g:eskk#large_dictionary = { 'path': $DOTVIM.'/skk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
+" let g:eskk#show_candidates_count = 2
+" let g:eskk#egg_like_newline = 0
+" let g:eskk#keep_state = 1
+" let g:azik = 1
+" autocmd User eskk-initialize-pre call s:eskk_initial_pre()
+" function! s:eskk_initial_pre()
+" 	"{{{ rom_to_hira
+" 	let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
+" 	call t.add_map('-', 'ー')
+" 	call t.add_map('~', '?')
+" 	call t.add_map('.', '。')
+" 	call t.add_map(',', '、')
+" 	call t.add_map('/', '・')
+" 	call t.add_map(':', 'ー')
+" 	call t.add_map(';', 'っ')
+" 	call t.add_map('tm', 'っ')
+" 	call t.add_map('[', '「')
+" 	call t.add_map(']', '」')
+" 	call t.add_map('a', 'あ')
+" 	call t.add_map('ba', 'ば')
+" 	call t.add_map('bd', 'べん')
+" 	call t.add_map('be', 'べ')
+" 	call t.add_map('bh', 'ぶう')
+" 	call t.add_map('bi', 'び')
+" 	call t.add_map('bj', 'ぶん')
+" 	call t.add_map('bk', 'びん')
+" 	call t.add_map('bl', 'ぼん')
+" 	call t.add_map('bn', 'ばん')
+" 	call t.add_map('bo', 'ぼ')
+" 	call t.add_map('bp', 'ぼう')
+" 	call t.add_map('bq', 'ばい')
+" 	call t.add_map('bt', 'びと')
+" 	call t.add_map('bu', 'ぶ')
+" 	call t.add_map('bv', 'びゅう')
+" 	call t.add_map('bw', 'べい')
+" 	call t.add_map('bx', 'びょう')
+" 	call t.add_map('bya', 'びゃ')
+" 	call t.add_map('byd', 'びぇん')
+" 	call t.add_map('bye', 'びぇ')
+" 	call t.add_map('byh', 'びゅう')
+" 	call t.add_map('byj', 'びゅん')
+" 	call t.add_map('byl', 'びょん')
+" 	call t.add_map('byn', 'びゃん')
+" 	call t.add_map('byo', 'びょ')
+" 	call t.add_map('byp', 'びょう')
+" 	call t.add_map('byq', 'びゃい')
+" 	call t.add_map('byu', 'びゅ')
+" 	call t.add_map('byw', 'びぇい')
+" 	call t.add_map('byz', 'びゃん')
+" 	call t.add_map('bz', 'ばん')
+" 	call t.add_map('ca', 'ちゃ')
+" 	call t.add_map('cd', 'ちぇん')
+" 	call t.add_map('ce', 'ちぇ')
+" 	call t.add_map('cf', 'ちぇ')
+" 	call t.add_map('ch', 'ちゅう')
+" 	call t.add_map('ci', 'ち')
+" 	call t.add_map('cj', 'ちゅん')
+" 	call t.add_map('ck', 'ちん')
+" 	call t.add_map('cl', 'ちょん')
+" 	call t.add_map('cn', 'ちゃん')
+" 	call t.add_map('co', 'ちょ')
+" 	call t.add_map('cp', 'ちょう')
+" 	call t.add_map('cq', 'ちゃい')
+" 	call t.add_map('cu', 'ちゅ')
+" 	call t.add_map('cw', 'ちぇい')
+" 	call t.add_map('cz', 'ちゃん')
+" 	call t.add_map('da', 'だ')
+" 	call t.add_map('dch', 'どぅー')
+" 	call t.add_map('dci', 'でぃ')
+" 	call t.add_map('dcj', 'どぅん')
+" 	call t.add_map('dck', 'でぃん')
+" 	call t.add_map('dcu', 'どぅ')
+" 	call t.add_map('dd', 'でん')
+" 	call t.add_map('de', 'で')
+" 	call t.add_map('df', 'で')
+" 	call t.add_map('dga', 'ぢゃ')
+" 	call t.add_map('dge', 'ぢぇ')
+" 	call t.add_map('dgh', 'でゅー')
+" 	call t.add_map('dgi', 'でぃ')
+" 	call t.add_map('dgj', 'ぢゅん')
+" 	call t.add_map('dgl', 'ぢょん')
+" 	call t.add_map('dgo', 'ぢょ')
+" 	call t.add_map('dgq', 'ぢゃい')
+" 	call t.add_map('dgu', 'ぢゅ')
+" 	call t.add_map('dgz', 'ぢゃん')
+" 	call t.add_map('dh', 'づう')
+" 	call t.add_map('di', 'ぢ')
+" 	call t.add_map('dj', 'づん')
+" 	call t.add_map('dk', 'ぢん')
+" 	call t.add_map('dl', 'どん')
+" 	call t.add_map('dm', 'でも')
+" 	call t.add_map('dn', 'だん')
+" 	call t.add_map('do', 'ど')
+" 	call t.add_map('dp', 'どう')
+" 	call t.add_map('dq', 'だい')
+" 	call t.add_map('dr', 'である')
+" 	call t.add_map('ds', 'です')
+" 	call t.add_map('dt', 'だち')
+" 	call t.add_map('du', 'づ')
+" 	call t.add_map('dv', 'ぢゅう')
+" 	call t.add_map('dw', 'でい')
+" 	call t.add_map('dx', 'ぢょう')
+" 	call t.add_map('dy', 'でぃ')
+" 	call t.add_map('dz', 'だん')
+" 	call t.add_map('e', 'え')
+" 	call t.add_map('fa', 'ふぁ')
+" 	call t.add_map('fd', 'ふぇん')
+" 	call t.add_map('fe', 'ふぇ')
+" 	call t.add_map('fh', 'ふう')
+" 	call t.add_map('fi', 'ふぃ')
+" 	call t.add_map('fj', 'ふん')
+" 	call t.add_map('fk', 'ふぃん')
+" 	call t.add_map('fl', 'ふぉん')
+" 	call t.add_map('fn', 'ふぁん')
+" 	call t.add_map('fo', 'ふぉ')
+" 	call t.add_map('fp', 'ふぉー')
+" 	call t.add_map('fq', 'ふぁい')
+" 	call t.add_map('fu', 'ふ')
+" 	call t.add_map('fv', 'ふゅー')
+" 	call t.add_map('fw', 'ふぇい')
+" 	call t.add_map('fyh', 'ふゅー')
+" 	call t.add_map('fyj', 'ふゅん')
+" 	call t.add_map('fyu', 'ふゅ')
+" 	call t.add_map('fz', 'ふぁん')
+" 	call t.add_map('ga', 'が')
+" 	call t.add_map('gd', 'げん')
+" 	call t.add_map('ge', 'げ')
+" 	call t.add_map('gh', 'ぐう')
+" 	call t.add_map('gi', 'ぎ')
+" 	call t.add_map('gj', 'ぐん')
+" 	call t.add_map('gk', 'ぎん')
+" 	call t.add_map('gl', 'ごん')
+" 	call t.add_map('gn', 'がん')
+" 	call t.add_map('go', 'ご')
+" 	call t.add_map('gp', 'ごう')
+" 	call t.add_map('gq', 'がい')
+" 	call t.add_map('gr', 'がら')
+" 	call t.add_map('gt', 'ごと')
+" 	call t.add_map('gu', 'ぐ')
+" 	call t.add_map('gv', 'ぎゅう')
+" 	call t.add_map('gw', 'げい')
+" 	call t.add_map('gx', 'ぎょう')
+" 	call t.add_map('gya', 'ぎゃ')
+" 	call t.add_map('gyd', 'ぎぇん')
+" 	call t.add_map('gye', 'ぎぇ')
+" 	call t.add_map('gyh', 'ぎゅう')
+" 	call t.add_map('gyj', 'ぎゅん')
+" 	call t.add_map('gyl', 'ぎょん')
+" 	call t.add_map('gyn', 'ぎゃん')
+" 	call t.add_map('gyo', 'ぎょ')
+" 	call t.add_map('gyp', 'ぎょう')
+" 	call t.add_map('gyq', 'ぎゃい')
+" 	call t.add_map('gyu', 'ぎゅ')
+" 	call t.add_map('gyw', 'ぎぇい')
+" 	call t.add_map('gyz', 'ぎゃん')
+" 	call t.add_map('gz', 'がん')
+" 	call t.add_map('ha', 'は')
+" 	call t.add_map('hd', 'へん')
+" 	call t.add_map('he', 'へ')
+" 	call t.add_map('hf', 'ふ')
+" 	call t.add_map('hga', 'ひゃ')
+" 	call t.add_map('hgd', 'ひぇん')
+" 	call t.add_map('hge', 'ひぇ')
+" 	call t.add_map('hgh', 'ひゅう')
+" 	call t.add_map('hgj', 'ひゅん')
+" 	call t.add_map('hgl', 'ひょん')
+" 	call t.add_map('hgn', 'ひゃん')
+" 	call t.add_map('hgo', 'ひょ')
+" 	call t.add_map('hgp', 'ひょう')
+" 	call t.add_map('hgq', 'ひゃい')
+" 	call t.add_map('hgu', 'ひゅ')
+" 	call t.add_map('hgz', 'ひゃん')
+" 	call t.add_map('hh', 'ふう')
+" 	call t.add_map('hi', 'ひ')
+" 	call t.add_map('hj', 'ふん')
+" 	call t.add_map('hk', 'ひん')
+" 	call t.add_map('hl', 'ほん')
+" 	call t.add_map('ho', 'ほ')
+" 	call t.add_map('hp', 'ほう')
+" 	call t.add_map('hq', 'はい')
+" 	call t.add_map('hr', 'はら')
+" 	call t.add_map('ht', 'ひと')
+" 	call t.add_map('hu', 'ふ')
+" 	call t.add_map('hv', 'ひゅう')
+" 	call t.add_map('hw', 'へい')
+" 	call t.add_map('hx', 'ひょう')
+" 	call t.add_map('hya', 'ひゃ')
+" 	call t.add_map('hyd', 'ひぇん')
+" 	call t.add_map('hye', 'ひぇ')
+" 	call t.add_map('hyh', 'ひゅう')
+" 	call t.add_map('hyj', 'ひゅん')
+" 	call t.add_map('hyl', 'ひょん')
+" 	call t.add_map('hyo', 'ひょ')
+" 	call t.add_map('hyp', 'ひょう')
+" 	call t.add_map('hyq', 'ひゃい')
+" 	call t.add_map('hyu', 'ひゅ')
+" 	call t.add_map('hyz', 'ひゃん')
+" 	call t.add_map('hz', 'はん')
+" 	call t.add_map('i', 'い')
+" 	call t.add_map('ja', 'じゃ')
+" 	call t.add_map('jd', 'じぇん')
+" 	call t.add_map('je', 'じぇ')
+" 	call t.add_map('jf', 'じゅ')
+" 	call t.add_map('jh', 'じゅう')
+" 	call t.add_map('ji', 'じ')
+" 	call t.add_map('jj', 'じゅん')
+" 	call t.add_map('jk', 'じん')
+" 	call t.add_map('jl', 'じょん')
+" 	call t.add_map('jo', 'じょ')
+" 	call t.add_map('jp', 'じょう')
+" 	call t.add_map('jq', 'じゃい')
+" 	call t.add_map('ju', 'じゅ')
+" 	call t.add_map('jw', 'じぇい')
+" 	call t.add_map('jz', 'じゃん')
+" 	call t.add_map('ka', 'か')
+" 	call t.add_map('kd', 'けん')
+" 	call t.add_map('ke', 'け')
+" 	call t.add_map('kf', 'き')
+" 	call t.add_map('kga', 'きゃ')
+" 	call t.add_map('kgh', 'きゅう')
+" 	call t.add_map('kgj', 'きゅん')
+" 	call t.add_map('kgl', 'きょん')
+" 	call t.add_map('kgn', 'きゃん')
+" 	call t.add_map('kgo', 'きょ')
+" 	call t.add_map('kgp', 'きょう')
+" 	call t.add_map('kgq', 'きゃい')
+" 	call t.add_map('kgu', 'きゅ')
+" 	call t.add_map('kgz', 'きゃん')
+" 	call t.add_map('kh', 'くう')
+" 	call t.add_map('ki', 'き')
+" 	call t.add_map('kj', 'くん')
+" 	call t.add_map('kk', 'きん')
+" 	call t.add_map('kl', 'こん')
+" 	call t.add_map('km', 'かも')
+" 	call t.add_map('ko', 'こ')
+" 	call t.add_map('kp', 'こう')
+" 	call t.add_map('kq', 'かい')
+" 	call t.add_map('kr', 'から')
+" 	call t.add_map('kt', 'こと')
+" 	call t.add_map('ku', 'く')
+" 	call t.add_map('kv', 'きゅう')
+" 	call t.add_map('kw', 'けい')
+" 	call t.add_map('kx', 'きょう')
+" 	call t.add_map('kz', 'かん')
+" 	call t.add_map('la', 'ぁ')
+" 	call t.add_map('le', 'ぇ')
+" 	call t.add_map('li', 'ぃ')
+" 	call t.add_map('lka', 'ヵ')
+" 	call t.add_map('lke', 'ヶ')
+" 	call t.add_map('lo', 'ぉ')
+" 	call t.add_map('ltu', 'っ')
+" 	call t.add_map('lu', 'ぅ')
+" 	call t.add_map('lwa', 'ゎ')
+" 	call t.add_map('lya', 'ゃ')
+" 	call t.add_map('lye', 'ぇ')
+" 	call t.add_map('lyi', 'ぃ')
+" 	call t.add_map('lyo', 'ょ')
+" 	call t.add_map('lyu', 'ゅ')
+" 	call t.add_map('ma', 'ま')
+" 	call t.add_map('md', 'めん')
+" 	call t.add_map('me', 'め')
+" 	call t.add_map('mf', 'む')
+" 	call t.add_map('mga', 'みゃ')
+" 	call t.add_map('mgd', 'みぇん')
+" 	call t.add_map('mge', 'みぇ')
+" 	call t.add_map('mgh', 'みゅう')
+" 	call t.add_map('mgj', 'みゅん')
+" 	call t.add_map('mgl', 'みょん')
+" 	call t.add_map('mgn', 'みゃん')
+" 	call t.add_map('mgo', 'みょ')
+" 	call t.add_map('mgp', 'みょう')
+" 	call t.add_map('mgq', 'みゃい')
+" 	call t.add_map('mgu', 'みゅ')
+" 	call t.add_map('mgw', 'みぇい')
+" 	call t.add_map('mgz', 'みゃん')
+" 	call t.add_map('mh', 'むう')
+" 	call t.add_map('mi', 'み')
+" 	call t.add_map('mj', 'むん')
+" 	call t.add_map('mk', 'みん')
+" 	call t.add_map('ml', 'もん')
+" 	call t.add_map('mn', 'もの')
+" 	call t.add_map('mo', 'も')
+" 	call t.add_map('mp', 'もう')
+" 	call t.add_map('mq', 'まい')
+" 	call t.add_map('mr', 'まる')
+" 	call t.add_map('ms', 'ます')
+" 	call t.add_map('mt', 'また')
+" 	call t.add_map('mu', 'む')
+" 	call t.add_map('mv', 'みゅう')
+" 	call t.add_map('mw', 'めい')
+" 	call t.add_map('mx', 'みょう')
+" 	call t.add_map('mz', 'まん')
+" 	call t.add_map('na', 'な')
+" 	call t.add_map('nb', 'ねば')
+" 	call t.add_map('nd', 'ねん')
+" 	call t.add_map('ne', 'ね')
+" 	call t.add_map('nf', 'ぬ')
+" 	call t.add_map('nga', 'にゃ')
+" 	call t.add_map('ngd', 'にぇん')
+" 	call t.add_map('nge', 'にぇ')
+" 	call t.add_map('ngh', 'にゅう')
+" 	call t.add_map('ngj', 'にゅん')
+" 	call t.add_map('ngl', 'にょん')
+" 	call t.add_map('ngn', 'にゃん')
+" 	call t.add_map('ngo', 'にょ')
+" 	call t.add_map('ngp', 'にょう')
+" 	call t.add_map('ngq', 'にゃい')
+" 	call t.add_map('ngu', 'にゅ')
+" 	call t.add_map('ngw', 'にぇい')
+" 	call t.add_map('ngz', 'にゃん')
+" 	call t.add_map('nh', 'ぬう')
+" 	call t.add_map('ni', 'に')
+" 	call t.add_map('nj', 'ぬん')
+" 	call t.add_map('nk', 'にん')
+" 	call t.add_map('nl', 'のん')
+" 	call t.add_map('nn', 'ん')
+" 	call t.add_map('no', 'の')
+" 	call t.add_map('np', 'のう')
+" 	call t.add_map('nq', 'ない')
+" 	call t.add_map('nr', 'なる')
+" 	call t.add_map('nt', 'にち')
+" 	call t.add_map('nu', 'ぬ')
+" 	call t.add_map('nv', 'にゅう')
+" 	call t.add_map('nw', 'ねい')
+" 	call t.add_map('nx', 'にょう')
+" 	call t.add_map('nz', 'なん')
+" 	call t.add_map('o', 'お')
+" 	call t.add_map('pa', 'ぱ')
+" 	call t.add_map('pd', 'ぺん')
+" 	call t.add_map('pe', 'ぺ')
+" 	call t.add_map('pf', 'ぽん')
+" 	call t.add_map('pga', 'ぴゃ')
+" 	call t.add_map('pgh', 'ぴゅう')
+" 	call t.add_map('pgj', 'ぴゅん')
+" 	call t.add_map('pgl', 'ぴょん')
+" 	call t.add_map('pgn', 'ぴゃん')
+" 	call t.add_map('pgo', 'ぴょ')
+" 	call t.add_map('pgp', 'ぴょう')
+" 	call t.add_map('pgq', 'ぴゃい')
+" 	call t.add_map('pgu', 'ぴゅ')
+" 	call t.add_map('pgz', 'ぴゃん')
+" 	call t.add_map('ph', 'ぷう')
+" 	call t.add_map('pi', 'ぴ')
+" 	call t.add_map('pj', 'ぷん')
+" 	call t.add_map('pk', 'ぴん')
+" 	call t.add_map('pl', 'ぽん')
+" 	call t.add_map('po', 'ぽ')
+" 	call t.add_map('pp', 'ぽう')
+" 	call t.add_map('pq', 'ぱい')
+" 	call t.add_map('pu', 'ぷ')
+" 	call t.add_map('pv', 'ぴゅう')
+" 	call t.add_map('pw', 'ぺい')
+" 	call t.add_map('px', 'ぴょう')
+" 	call t.add_map('pyu', 'ぴゅ')
+" 	call t.add_map('pz', 'ぱん')
+" 	"call t.add_map('q', 'ん')
+" 	call t.add_map('ra', 'ら')
+" 	call t.add_map('rd', 'れん')
+" 	call t.add_map('re', 'れ')
+" 	call t.add_map('rh', 'るう')
+" 	call t.add_map('ri', 'り')
+" 	call t.add_map('rj', 'るん')
+" 	call t.add_map('rk', 'りん')
+" 	call t.add_map('rl', 'ろん')
+" 	call t.add_map('rn', 'らん')
+" 	call t.add_map('ro', 'ろ')
+" 	call t.add_map('rp', 'ろう')
+" 	call t.add_map('rq', 'らい')
+" 	call t.add_map('rr', 'られ')
+" 	call t.add_map('ru', 'る')
+" 	call t.add_map('rv', 'りゅう')
+" 	call t.add_map('rw', 'れい')
+" 	call t.add_map('rx', 'りょう')
+" 	call t.add_map('rya', 'りゃ')
+" 	call t.add_map('ryh', 'りゅう')
+" 	call t.add_map('ryj', 'りゅん')
+" 	call t.add_map('ryl', 'りょん')
+" 	call t.add_map('ryo', 'りょ')
+" 	call t.add_map('ryp', 'りょう')
+" 	call t.add_map('ryq', 'りゃい')
+" 	call t.add_map('ryu', 'りゅ')
+" 	call t.add_map('ryz', 'りゃん')
+" 	call t.add_map('rz', 'らん')
+" 	call t.add_map('sa', 'さ')
+" 	call t.add_map('sd', 'せん')
+" 	call t.add_map('se', 'せ')
+" 	call t.add_map('sf', 'さい')
+" 	call t.add_map('sh', 'すう')
+" 	call t.add_map('si', 'し')
+" 	call t.add_map('sj', 'すん')
+" 	call t.add_map('sk', 'しん')
+" 	call t.add_map('sl', 'そん')
+" 	call t.add_map('sn', 'さん')
+" 	call t.add_map('so', 'そ')
+" 	call t.add_map('sp', 'そう')
+" 	call t.add_map('sq', 'さい')
+" 	call t.add_map('sr', 'する')
+" 	call t.add_map('ss', 'せい')
+" 	call t.add_map('st', 'した')
+" 	call t.add_map('su', 'す')
+" 	call t.add_map('sv', 'しゅう')
+" 	call t.add_map('sw', 'せい')
+" 	call t.add_map('sx', 'しょう')
+" 	call t.add_map('syi', 'すぃ')
+" 	call t.add_map('syk', 'すぃん')
+" 	call t.add_map('sz', 'さん')
+" 	call t.add_map('ta', 'た')
+" 	call t.add_map('tb', 'たび')
+" 	call t.add_map('td', 'てん')
+" 	call t.add_map('te', 'て')
+" 	call t.add_map('tgh', 'てゅー')
+" 	call t.add_map('tgi', 'てぃ')
+" 	call t.add_map('tgj', 'とぅん')
+" 	call t.add_map('tgk', 'てぃん')
+" 	call t.add_map('tgp', 'とぅー')
+" 	call t.add_map('tgu', 'とぅ')
+" 	call t.add_map('th', 'つう')
+" 	call t.add_map('ti', 'ち')
+" 	call t.add_map('tj', 'つん')
+" 	call t.add_map('tk', 'ちん')
+" 	call t.add_map('tl', 'とん')
+" 	"call t.add_map('tm', 'ため')
+" 	call t.add_map('tn', 'たん')
+" 	call t.add_map('to', 'と')
+" 	call t.add_map('tp', 'とう')
+" 	call t.add_map('tq', 'たい')
+" 	call t.add_map('tr', 'たら')
+" 	call t.add_map('tsa', 'つぁ')
+" 	call t.add_map('tsd', 'つぇん')
+" 	call t.add_map('tse', 'つぇ')
+" 	call t.add_map('tsh', 'つう')
+" 	call t.add_map('tsi', 'つぃ')
+" 	call t.add_map('tsj', 'つん')
+" 	call t.add_map('tsk', 'つぃん')
+" 	call t.add_map('tsl', 'つぉん')
+" 	call t.add_map('tso', 'つぉ')
+" 	call t.add_map('tsq', 'つぁい')
+" 	call t.add_map('tst', 'として')
+" 	call t.add_map('tsu', 'つ')
+" 	call t.add_map('tsz', 'つぁん')
+" 	call t.add_map('tt', 'たち')
+" 	call t.add_map('tu', 'つ')
+" 	call t.add_map('tw', 'てい')
+" 	call t.add_map('tya', 'てゃ')
+" 	call t.add_map('tyh', 'てゅー')
+" 	call t.add_map('tyj', 'てゅん')
+" 	call t.add_map('tyq', 'てゃい')
+" 	call t.add_map('tyu', 'てゅ')
+" 	call t.add_map('tyz', 'てゃん')
+" 	call t.add_map('tz', 'たん')
+" 	call t.add_map('u', 'う')
+" 	call t.add_map('va', 'ヴぁ')
+" 	call t.add_map('vd', 'ヴぇん')
+" 	call t.add_map('ve', 'ヴぇ')
+" 	call t.add_map('vh', 'ヴー')
+" 	call t.add_map('vi', 'ヴぃ')
+" 	call t.add_map('vj', 'ヴん')
+" 	call t.add_map('vk', 'ヴぃん')
+" 	call t.add_map('vl', 'ヴぉん')
+" 	call t.add_map('vn', 'ヴぁん')
+" 	call t.add_map('vo', 'ヴぉ')
+" 	call t.add_map('vp', 'ヴぉう')
+" 	call t.add_map('vq', 'ヴぁい')
+" 	call t.add_map('vu', 'ヴ')
+" 	call t.add_map('vv', 'ヴゅー')
+" 	call t.add_map('vw', 'ヴぇい')
+" 	call t.add_map('vyu', 'ヴゅ')
+" 	call t.add_map('vz', 'ヴぁん')
+" 	call t.add_map('wa', 'わ')
+" 	call t.add_map('wd', 'うぇん')
+" 	call t.add_map('we', 'うぇ')
+" 	call t.add_map('whe', 'ゑ')
+" 	call t.add_map('whi', 'ゐ')
+" 	call t.add_map('who', 'うぉ')
+" 	call t.add_map('wi', 'うぃ')
+" 	call t.add_map('wk', 'うぃん')
+" 	call t.add_map('wl', 'うぉん')
+" 	call t.add_map('wn', 'わん')
+" 	call t.add_map('wo', 'を')
+" 	call t.add_map('wp', 'うぉー')
+" 	call t.add_map('wq', 'わい')
+" 	call t.add_map('wr', 'われ')
+" 	call t.add_map('wso', 'うぉ')
+" 	call t.add_map('wt', 'わた')
+" 	call t.add_map('ww', 'うぇい')
+" 	call t.add_map('wz', 'わん')
+" 	call t.add_map('xa', 'しゃ')
+" 	call t.add_map('xd', 'しぇん')
+" 	call t.add_map('xe', 'しぇ')
+" 	call t.add_map('xh', 'しゅう')
+" 	call t.add_map('xi', 'し')
+" 	call t.add_map('xj', 'しゅん')
+" 	call t.add_map('xk', 'しん')
+" 	call t.add_map('xl', 'しょん')
+" 	call t.add_map('xn', 'しゃん')
+" 	call t.add_map('xo', 'しょ')
+" 	call t.add_map('xp', 'しょう')
+" 	call t.add_map('xq', 'しゃい')
+" 	call t.add_map('xu', 'しゅ')
+" 	call t.add_map('xw', 'しぇい')
+" 	call t.add_map('xz', 'しゃん')
+" 	call t.add_map('ya', 'や')
+" 	call t.add_map('yd', 'いぇん')
+" 	call t.add_map('ye', 'いぇ')
+" 	call t.add_map('yf', 'ゆ')
+" 	call t.add_map('yh', 'ゆう')
+" 	call t.add_map('yj', 'ゆん')
+" 	call t.add_map('yl', 'よん')
+" 	call t.add_map('yo', 'よ')
+" 	call t.add_map('yp', 'よう')
+" 	call t.add_map('yq', 'やい')
+" 	call t.add_map('yr', 'よる')
+" 	call t.add_map('yu', 'ゆ')
+" 	call t.add_map('yw', 'いぇい')
+" 	call t.add_map('yz', 'やん')
+" 	call t.add_map('za', 'ざ')
+" 	call t.add_map('zc', 'ざ')
+" 	call t.add_map('zd', 'ぜん')
+" 	call t.add_map('ze', 'ぜ')
+" 	call t.add_map('zh', 'ずう')
+" 	call t.add_map('zi', 'じ')
+" 	call t.add_map('zj', 'ずん')
+" 	call t.add_map('zk', 'じん')
+" 	call t.add_map('zl', 'ぞん')
+" 	call t.add_map('zn', 'ざん')
+" 	call t.add_map('zo', 'ぞ')
+" 	call t.add_map('zp', 'ぞう')
+" 	call t.add_map('zq', 'ざい')
+" 	call t.add_map('zr', 'ざる')
+" 	call t.add_map('zu', 'ず')
+" 	call t.add_map('zv', 'ざい')
+" 	call t.add_map('zw', 'ぜい')
+" 	call t.add_map('zx', 'ぜい')
+" 	call t.add_map('zz', 'ざん')
+" 	call eskk#register_mode_table('hira', t)
+" 	" }}}
+" 	"{{{ rom_to_kata
+" 	let t = eskk#table#new('rom_to_kata*', 'rom_to_kata')
+" 	call t.add_map('-', 'ー')
+" 	call t.add_map('~', '?')
+" 	call t.add_map('.', '。')
+" 	call t.add_map(',', '、')
+" 	call t.add_map('/', '・')
+" 	call t.add_map(':', 'ー')
+" 	"call t.add_map(';', 'ッ')
+" 	call t.add_map('tm', 'ッ')
+" 	call t.add_map('[', '「')
+" 	call t.add_map(']', '」')
+" 	call t.add_map('a', 'ア')
+" 	call t.add_map('ba', 'バ')
+" 	call t.add_map('bd', 'ベン')
+" 	call t.add_map('be', 'ベ')
+" 	call t.add_map('bh', 'ブウ')
+" 	call t.add_map('bi', 'ビ')
+" 	call t.add_map('bj', 'ブン')
+" 	call t.add_map('bk', 'ビン')
+" 	call t.add_map('bl', 'ボン')
+" 	call t.add_map('bn', 'バン')
+" 	call t.add_map('bo', 'ボ')
+" 	call t.add_map('bp', 'ボウ')
+" 	call t.add_map('bq', 'バイ')
+" 	call t.add_map('bt', 'ビト')
+" 	call t.add_map('bu', 'ブ')
+" 	call t.add_map('bv', 'ビュウ')
+" 	call t.add_map('bw', 'ベイ')
+" 	call t.add_map('bx', 'ビョウ')
+" 	call t.add_map('bya', 'ビャ')
+" 	call t.add_map('byd', 'ビェン')
+" 	call t.add_map('bye', 'ビェ')
+" 	call t.add_map('byh', 'ビュウ')
+" 	call t.add_map('byj', 'ビュン')
+" 	call t.add_map('byl', 'ビョン')
+" 	call t.add_map('byn', 'ビャン')
+" 	call t.add_map('byo', 'ビョ')
+" 	call t.add_map('byp', 'ビョウ')
+" 	call t.add_map('byq', 'ビャイ')
+" 	call t.add_map('byu', 'ビュ')
+" 	call t.add_map('byw', 'ビェイ')
+" 	call t.add_map('byz', 'ビャン')
+" 	call t.add_map('bz', 'バン')
+" 	call t.add_map('ca', 'チャ')
+" 	call t.add_map('cd', 'チェン')
+" 	call t.add_map('ce', 'チェ')
+" 	call t.add_map('cf', 'チェ')
+" 	call t.add_map('ch', 'チュウ')
+" 	call t.add_map('ci', 'チ')
+" 	call t.add_map('cj', 'チュン')
+" 	call t.add_map('ck', 'チン')
+" 	call t.add_map('cl', 'チョン')
+" 	call t.add_map('cn', 'チャン')
+" 	call t.add_map('co', 'チョ')
+" 	call t.add_map('cp', 'チョウ')
+" 	call t.add_map('cq', 'チャイ')
+" 	call t.add_map('cu', 'チュ')
+" 	call t.add_map('cw', 'チェイ')
+" 	call t.add_map('cz', 'チャン')
+" 	call t.add_map('da', 'ダ')
+" 	call t.add_map('dch', 'ドゥー')
+" 	call t.add_map('dci', 'ディ')
+" 	call t.add_map('dcj', 'ドゥン')
+" 	call t.add_map('dck', 'ディン')
+" 	call t.add_map('dcu', 'ドゥ')
+" 	call t.add_map('dd', 'デン')
+" 	call t.add_map('de', 'デ')
+" 	call t.add_map('df', 'デ')
+" 	call t.add_map('dga', 'ヂャ')
+" 	call t.add_map('dge', 'ヂェ')
+" 	call t.add_map('dgh', 'デュー')
+" 	call t.add_map('dgi', 'ディ')
+" 	call t.add_map('dgj', 'ヂュン')
+" 	call t.add_map('dgl', 'ヂョン')
+" 	call t.add_map('dgo', 'ヂョ')
+" 	call t.add_map('dgq', 'ヂャイ')
+" 	call t.add_map('dgu', 'ヂュ')
+" 	call t.add_map('dgz', 'ヂャン')
+" 	call t.add_map('dh', 'ヅウ')
+" 	call t.add_map('di', 'ヂ')
+" 	call t.add_map('dj', 'ヅン')
+" 	call t.add_map('dk', 'ヂン')
+" 	call t.add_map('dl', 'ドン')
+" 	call t.add_map('dm', 'デモ')
+" 	call t.add_map('dn', 'ダン')
+" 	call t.add_map('do', 'ド')
+" 	call t.add_map('dp', 'ドウ')
+" 	call t.add_map('dq', 'ダイ')
+" 	call t.add_map('dr', 'デアル')
+" 	call t.add_map('ds', 'デス')
+" 	call t.add_map('dt', 'ダチ')
+" 	call t.add_map('du', 'ヅ')
+" 	call t.add_map('dv', 'ヂュウ')
+" 	call t.add_map('dw', 'デイ')
+" 	call t.add_map('dx', 'ヂョウ')
+" 	call t.add_map('dy', 'ディ')
+" 	call t.add_map('dz', 'ダン')
+" 	call t.add_map('e', 'エ')
+" 	call t.add_map('fa', 'ファ')
+" 	call t.add_map('fd', 'フェン')
+" 	call t.add_map('fe', 'フェ')
+" 	call t.add_map('fh', 'フウ')
+" 	call t.add_map('fi', 'フィ')
+" 	call t.add_map('fj', 'フン')
+" 	call t.add_map('fk', 'フィン')
+" 	call t.add_map('fl', 'フォン')
+" 	call t.add_map('fn', 'ファン')
+" 	call t.add_map('fo', 'フォ')
+" 	call t.add_map('fp', 'フォー')
+" 	call t.add_map('fq', 'ファイ')
+" 	call t.add_map('fu', 'フ')
+" 	call t.add_map('fv', 'フュー')
+" 	call t.add_map('fw', 'フェイ')
+" 	call t.add_map('fyh', 'フュー')
+" 	call t.add_map('fyj', 'フュン')
+" 	call t.add_map('fyu', 'フュ')
+" 	call t.add_map('fz', 'ファン')
+" 	call t.add_map('ga', 'ガ')
+" 	call t.add_map('gd', 'ゲン')
+" 	call t.add_map('ge', 'ゲ')
+" 	call t.add_map('gh', 'グウ')
+" 	call t.add_map('gi', 'ギ')
+" 	call t.add_map('gj', 'グン')
+" 	call t.add_map('gk', 'ギン')
+" 	call t.add_map('gl', 'ゴン')
+" 	call t.add_map('gn', 'ガン')
+" 	call t.add_map('go', 'ゴ')
+" 	call t.add_map('gp', 'ゴウ')
+" 	call t.add_map('gq', 'ガイ')
+" 	call t.add_map('gr', 'ガラ')
+" 	call t.add_map('gt', 'ゴト')
+" 	call t.add_map('gu', 'グ')
+" 	call t.add_map('gv', 'ギュウ')
+" 	call t.add_map('gw', 'ゲイ')
+" 	call t.add_map('gx', 'ギョウ')
+" 	call t.add_map('gya', 'ギャ')
+" 	call t.add_map('gyd', 'ギェン')
+" 	call t.add_map('gye', 'ギェ')
+" 	call t.add_map('gyh', 'ギュウ')
+" 	call t.add_map('gyj', 'ギュン')
+" 	call t.add_map('gyl', 'ギョン')
+" 	call t.add_map('gyn', 'ギャン')
+" 	call t.add_map('gyo', 'ギョ')
+" 	call t.add_map('gyp', 'ギョウ')
+" 	call t.add_map('gyq', 'ギャイ')
+" 	call t.add_map('gyu', 'ギュ')
+" 	call t.add_map('gyw', 'ギェイ')
+" 	call t.add_map('gyz', 'ギャン')
+" 	call t.add_map('gz', 'ガン')
+" 	call t.add_map('ha', 'ハ')
+" 	call t.add_map('hd', 'ヘン')
+" 	call t.add_map('he', 'ヘ')
+" 	call t.add_map('hf', 'フ')
+" 	call t.add_map('hga', 'ヒャ')
+" 	call t.add_map('hgd', 'ヒェン')
+" 	call t.add_map('hge', 'ヒェ')
+" 	call t.add_map('hgh', 'ヒュウ')
+" 	call t.add_map('hgj', 'ヒュン')
+" 	call t.add_map('hgl', 'ヒョン')
+" 	call t.add_map('hgn', 'ヒャン')
+" 	call t.add_map('hgo', 'ヒョ')
+" 	call t.add_map('hgp', 'ヒョウ')
+" 	call t.add_map('hgq', 'ヒャイ')
+" 	call t.add_map('hgu', 'ヒュ')
+" 	call t.add_map('hgz', 'ヒャン')
+" 	call t.add_map('hh', 'フウ')
+" 	call t.add_map('hi', 'ヒ')
+" 	call t.add_map('hj', 'フン')
+" 	call t.add_map('hk', 'ヒン')
+" 	call t.add_map('hl', 'ホン')
+" 	call t.add_map('ho', 'ホ')
+" 	call t.add_map('hp', 'ホウ')
+" 	call t.add_map('hq', 'ハイ')
+" 	call t.add_map('hr', 'ハラ')
+" 	call t.add_map('ht', 'ヒト')
+" 	call t.add_map('hu', 'フ')
+" 	call t.add_map('hv', 'ヒュウ')
+" 	call t.add_map('hw', 'ヘイ')
+" 	call t.add_map('hx', 'ヒョウ')
+" 	call t.add_map('hya', 'ヒャ')
+" 	call t.add_map('hyd', 'ヒェン')
+" 	call t.add_map('hye', 'ヒェ')
+" 	call t.add_map('hyh', 'ヒュウ')
+" 	call t.add_map('hyj', 'ヒュン')
+" 	call t.add_map('hyl', 'ヒョン')
+" 	call t.add_map('hyo', 'ヒョ')
+" 	call t.add_map('hyp', 'ヒョウ')
+" 	call t.add_map('hyq', 'ヒャイ')
+" 	call t.add_map('hyu', 'ヒュ')
+" 	call t.add_map('hyz', 'ヒャン')
+" 	call t.add_map('hz', 'ハン')
+" 	call t.add_map('i', 'イ')
+" 	call t.add_map('ja', 'ジャ')
+" 	call t.add_map('jd', 'ジェン')
+" 	call t.add_map('je', 'ジェ')
+" 	call t.add_map('jf', 'ジュ')
+" 	call t.add_map('jh', 'ジュウ')
+" 	call t.add_map('ji', 'ジ')
+" 	call t.add_map('jj', 'ジュン')
+" 	call t.add_map('jk', 'ジン')
+" 	call t.add_map('jl', 'ジョン')
+" 	call t.add_map('jo', 'ジョ')
+" 	call t.add_map('jp', 'ジョウ')
+" 	call t.add_map('jq', 'ジャイ')
+" 	call t.add_map('ju', 'ジュ')
+" 	call t.add_map('jw', 'ジェイ')
+" 	call t.add_map('jz', 'ジャン')
+" 	call t.add_map('ka', 'カ')
+" 	call t.add_map('kd', 'ケン')
+" 	call t.add_map('ke', 'ケ')
+" 	call t.add_map('kf', 'キ')
+" 	call t.add_map('kga', 'キャ')
+" 	call t.add_map('kgh', 'キュウ')
+" 	call t.add_map('kgj', 'キュン')
+" 	call t.add_map('kgl', 'キョン')
+" 	call t.add_map('kgn', 'キャン')
+" 	call t.add_map('kgo', 'キョ')
+" 	call t.add_map('kgp', 'キョウ')
+" 	call t.add_map('kgq', 'キャイ')
+" 	call t.add_map('kgu', 'キュ')
+" 	call t.add_map('kgz', 'キャン')
+" 	call t.add_map('kh', 'クウ')
+" 	call t.add_map('ki', 'キ')
+" 	call t.add_map('kj', 'クン')
+" 	call t.add_map('kk', 'キン')
+" 	call t.add_map('kl', 'コン')
+" 	call t.add_map('km', 'カモ')
+" 	call t.add_map('ko', 'コ')
+" 	call t.add_map('kp', 'コウ')
+" 	call t.add_map('kq', 'カイ')
+" 	call t.add_map('kr', 'カラ')
+" 	call t.add_map('kt', 'コト')
+" 	call t.add_map('ku', 'ク')
+" 	call t.add_map('kv', 'キュウ')
+" 	call t.add_map('kw', 'ケイ')
+" 	call t.add_map('kx', 'キョウ')
+" 	call t.add_map('kz', 'カン')
+" 	call t.add_map('la', 'ァ')
+" 	call t.add_map('le', 'ェ')
+" 	call t.add_map('li', 'ィ')
+" 	call t.add_map('lka', 'ヵ')
+" 	call t.add_map('lke', 'ヶ')
+" 	call t.add_map('lo', 'ォ')
+" 	call t.add_map('ltu', 'ッ')
+" 	call t.add_map('lu', 'ゥ')
+" 	call t.add_map('lwa', 'ヮ')
+" 	call t.add_map('lya', 'ャ')
+" 	call t.add_map('lye', 'ェ')
+" 	call t.add_map('lyi', 'ィ')
+" 	call t.add_map('lyo', 'ョ')
+" 	call t.add_map('lyu', 'ュ')
+" 	call t.add_map('ma', 'マ')
+" 	call t.add_map('md', 'メン')
+" 	call t.add_map('me', 'メ')
+" 	call t.add_map('mf', 'ム')
+" 	call t.add_map('mga', 'ミャ')
+" 	call t.add_map('mgd', 'ミェン')
+" 	call t.add_map('mge', 'ミェ')
+" 	call t.add_map('mgh', 'ミュウ')
+" 	call t.add_map('mgj', 'ミュン')
+" 	call t.add_map('mgl', 'ミョン')
+" 	call t.add_map('mgn', 'ミャン')
+" 	call t.add_map('mgo', 'ミョ')
+" 	call t.add_map('mgp', 'ミョウ')
+" 	call t.add_map('mgq', 'ミャイ')
+" 	call t.add_map('mgu', 'ミュ')
+" 	call t.add_map('mgw', 'ミェイ')
+" 	call t.add_map('mgz', 'ミャン')
+" 	call t.add_map('mh', 'ムウ')
+" 	call t.add_map('mi', 'ミ')
+" 	call t.add_map('mj', 'ムン')
+" 	call t.add_map('mk', 'ミン')
+" 	call t.add_map('ml', 'モン')
+" 	call t.add_map('mn', 'モノ')
+" 	call t.add_map('mo', 'モ')
+" 	call t.add_map('mp', 'モウ')
+" 	call t.add_map('mq', 'マイ')
+" 	call t.add_map('mr', 'マル')
+" 	call t.add_map('ms', 'マス')
+" 	call t.add_map('mt', 'マタ')
+" 	call t.add_map('mu', 'ム')
+" 	call t.add_map('mv', 'ミュウ')
+" 	call t.add_map('mw', 'メイ')
+" 	call t.add_map('mx', 'ミョウ')
+" 	call t.add_map('mz', 'マン')
+" 	call t.add_map('na', 'ナ')
+" 	call t.add_map('nb', 'ネバ')
+" 	call t.add_map('nd', 'ネン')
+" 	call t.add_map('ne', 'ネ')
+" 	call t.add_map('nf', 'ヌ')
+" 	call t.add_map('nga', 'ニャ')
+" 	call t.add_map('ngd', 'ニェン')
+" 	call t.add_map('nge', 'ニェ')
+" 	call t.add_map('ngh', 'ニュウ')
+" 	call t.add_map('ngj', 'ニュン')
+" 	call t.add_map('ngl', 'ニョン')
+" 	call t.add_map('ngn', 'ニャン')
+" 	call t.add_map('ngo', 'ニョ')
+" 	call t.add_map('ngp', 'ニョウ')
+" 	call t.add_map('ngq', 'ニャイ')
+" 	call t.add_map('ngu', 'ニュ')
+" 	call t.add_map('ngw', 'ニェイ')
+" 	call t.add_map('ngz', 'ニャン')
+" 	call t.add_map('nh', 'ヌウ')
+" 	call t.add_map('ni', 'ニ')
+" 	call t.add_map('nj', 'ヌン')
+" 	call t.add_map('nk', 'ニン')
+" 	call t.add_map('nl', 'ノン')
+" 	call t.add_map('nn', 'ン')
+" 	call t.add_map('no', 'ノ')
+" 	call t.add_map('np', 'ノウ')
+" 	call t.add_map('nq', 'ナイ')
+" 	call t.add_map('nr', 'ナル')
+" 	call t.add_map('nt', 'ニチ')
+" 	call t.add_map('nu', 'ヌ')
+" 	call t.add_map('nv', 'ニュウ')
+" 	call t.add_map('nw', 'ネイ')
+" 	call t.add_map('nx', 'ニョウ')
+" 	call t.add_map('nz', 'ナン')
+" 	call t.add_map('o', 'オ')
+" 	call t.add_map('pa', 'パ')
+" 	call t.add_map('pd', 'ペン')
+" 	call t.add_map('pe', 'ペ')
+" 	call t.add_map('pf', 'ポン')
+" 	call t.add_map('pga', 'ピャ')
+" 	call t.add_map('pgh', 'ピュウ')
+" 	call t.add_map('pgj', 'ピュン')
+" 	call t.add_map('pgl', 'ピョン')
+" 	call t.add_map('pgn', 'ピャン')
+" 	call t.add_map('pgo', 'ピョ')
+" 	call t.add_map('pgp', 'ピョウ')
+" 	call t.add_map('pgq', 'ピャイ')
+" 	call t.add_map('pgu', 'ピュ')
+" 	call t.add_map('pgz', 'ピャン')
+" 	call t.add_map('ph', 'プウ')
+" 	call t.add_map('pi', 'ピ')
+" 	call t.add_map('pj', 'プン')
+" 	call t.add_map('pk', 'ピン')
+" 	call t.add_map('pl', 'ポン')
+" 	call t.add_map('po', 'ポ')
+" 	call t.add_map('pp', 'ポウ')
+" 	call t.add_map('pq', 'パイ')
+" 	call t.add_map('pu', 'プ')
+" 	call t.add_map('pv', 'ピュウ')
+" 	call t.add_map('pw', 'ペイ')
+" 	call t.add_map('px', 'ピョウ')
+" 	call t.add_map('pyu', 'ピュ')
+" 	call t.add_map('pz', 'パン')
+" 	call t.add_map('q', 'ン')
+" 	call t.add_map('ra', 'ラ')
+" 	call t.add_map('rd', 'レン')
+" 	call t.add_map('re', 'レ')
+" 	call t.add_map('rh', 'ルウ')
+" 	call t.add_map('ri', 'リ')
+" 	call t.add_map('rj', 'ルン')
+" 	call t.add_map('rk', 'リン')
+" 	call t.add_map('rl', 'ロン')
+" 	call t.add_map('rn', 'ラン')
+" 	call t.add_map('ro', 'ロ')
+" 	call t.add_map('rp', 'ロウ')
+" 	call t.add_map('rq', 'ライ')
+" 	call t.add_map('rr', 'ラレ')
+" 	call t.add_map('ru', 'ル')
+" 	call t.add_map('rv', 'リュウ')
+" 	call t.add_map('rw', 'レイ')
+" 	call t.add_map('rx', 'リョウ')
+" 	call t.add_map('rya', 'リャ')
+" 	call t.add_map('ryh', 'リュウ')
+" 	call t.add_map('ryj', 'リュン')
+" 	call t.add_map('ryl', 'リョン')
+" 	call t.add_map('ryo', 'リョ')
+" 	call t.add_map('ryp', 'リョウ')
+" 	call t.add_map('ryq', 'リャイ')
+" 	call t.add_map('ryu', 'リュ')
+" 	call t.add_map('ryz', 'リャン')
+" 	call t.add_map('rz', 'ラン')
+" 	call t.add_map('sa', 'サ')
+" 	call t.add_map('sd', 'セン')
+" 	call t.add_map('se', 'セ')
+" 	call t.add_map('sf', 'サイ')
+" 	call t.add_map('sh', 'スウ')
+" 	call t.add_map('si', 'シ')
+" 	call t.add_map('sj', 'スン')
+" 	call t.add_map('sk', 'シン')
+" 	call t.add_map('sl', 'ソン')
+" 	call t.add_map('sn', 'サン')
+" 	call t.add_map('so', 'ソ')
+" 	call t.add_map('sp', 'ソウ')
+" 	call t.add_map('sq', 'サイ')
+" 	call t.add_map('sr', 'スル')
+" 	call t.add_map('ss', 'セイ')
+" 	call t.add_map('st', 'シタ')
+" 	call t.add_map('su', 'ス')
+" 	call t.add_map('sv', 'シュウ')
+" 	call t.add_map('sw', 'セイ')
+" 	call t.add_map('sx', 'ショウ')
+" 	call t.add_map('syi', 'スィ')
+" 	call t.add_map('syk', 'スィン')
+" 	call t.add_map('sz', 'サン')
+" 	call t.add_map('ta', 'タ')
+" 	call t.add_map('tb', 'タビ')
+" 	call t.add_map('td', 'テン')
+" 	call t.add_map('te', 'テ')
+" 	call t.add_map('tgh', 'テュー')
+" 	call t.add_map('tgi', 'ティ')
+" 	call t.add_map('tgj', 'トゥン')
+" 	call t.add_map('tgk', 'ティン')
+" 	call t.add_map('tgp', 'トゥー')
+" 	call t.add_map('tgu', 'トゥ')
+" 	call t.add_map('th', 'ツウ')
+" 	call t.add_map('ti', 'チ')
+" 	call t.add_map('tj', 'ツン')
+" 	call t.add_map('tk', 'チン')
+" 	call t.add_map('tl', 'トン')
+" 	"call t.add_map('tm', 'タメ')
+" 	call t.add_map('tn', 'タン')
+" 	call t.add_map('to', 'ト')
+" 	call t.add_map('tp', 'トウ')
+" 	call t.add_map('tq', 'タイ')
+" 	call t.add_map('tr', 'タラ')
+" 	call t.add_map('tsa', 'ツァ')
+" 	call t.add_map('tsd', 'ツェン')
+" 	call t.add_map('tse', 'ツェ')
+" 	call t.add_map('tsh', 'ツウ')
+" 	call t.add_map('tsi', 'ツィ')
+" 	call t.add_map('tsj', 'ツン')
+" 	call t.add_map('tsk', 'ツィン')
+" 	call t.add_map('tsl', 'ツォン')
+" 	call t.add_map('tso', 'ツォ')
+" 	call t.add_map('tsq', 'ツァイ')
+" 	call t.add_map('tst', 'トシテ')
+" 	call t.add_map('tsu', 'ツ')
+" 	call t.add_map('tsz', 'ツァン')
+" 	call t.add_map('tt', 'タチ')
+" 	call t.add_map('tu', 'ツ')
+" 	call t.add_map('tw', 'テイ')
+" 	call t.add_map('tya', 'テャ')
+" 	call t.add_map('tyh', 'テュー')
+" 	call t.add_map('tyj', 'テュン')
+" 	call t.add_map('tyq', 'テャイ')
+" 	call t.add_map('tyu', 'テュ')
+" 	call t.add_map('tyz', 'テャン')
+" 	call t.add_map('tz', 'タン')
+" 	call t.add_map('u', 'ウ')
+" 	call t.add_map('va', 'ヴァ')
+" 	call t.add_map('vd', 'ヴェン')
+" 	call t.add_map('ve', 'ヴェ')
+" 	call t.add_map('vh', 'ヴー')
+" 	call t.add_map('vi', 'ヴィ')
+" 	call t.add_map('vj', 'ヴン')
+" 	call t.add_map('vk', 'ヴィン')
+" 	call t.add_map('vl', 'ヴォン')
+" 	call t.add_map('vn', 'ヴァン')
+" 	call t.add_map('vo', 'ヴォ')
+" 	call t.add_map('vp', 'ヴォウ')
+" 	call t.add_map('vq', 'ヴァイ')
+" 	call t.add_map('vu', 'ヴ')
+" 	call t.add_map('vv', 'ヴュー')
+" 	call t.add_map('vw', 'ヴェイ')
+" 	call t.add_map('vyu', 'ヴュ')
+" 	call t.add_map('vz', 'ヴァン')
+" 	call t.add_map('wa', 'ワ')
+" 	call t.add_map('wd', 'ウェン')
+" 	call t.add_map('we', 'ウェ')
+" 	call t.add_map('whe', 'ヱ')
+" 	call t.add_map('whi', 'ヰ')
+" 	call t.add_map('who', 'ウォ')
+" 	call t.add_map('wi', 'ウィ')
+" 	call t.add_map('wk', 'ウィン')
+" 	call t.add_map('wl', 'ウォン')
+" 	call t.add_map('wn', 'ワン')
+" 	call t.add_map('wo', 'ヲ')
+" 	call t.add_map('wp', 'ウォー')
+" 	call t.add_map('wq', 'ワイ')
+" 	call t.add_map('wr', 'ワレ')
+" 	call t.add_map('wso', 'ウォ')
+" 	call t.add_map('wt', 'ワタ')
+" 	call t.add_map('ww', 'ウェイ')
+" 	call t.add_map('wz', 'ワン')
+" 	call t.add_map('xa', 'シャ')
+" 	call t.add_map('xd', 'シェン')
+" 	call t.add_map('xe', 'シェ')
+" 	call t.add_map('xh', 'シュウ')
+" 	call t.add_map('xi', 'シ')
+" 	call t.add_map('xj', 'シュン')
+" 	call t.add_map('xk', 'シン')
+" 	call t.add_map('xl', 'ション')
+" 	call t.add_map('xn', 'シャン')
+" 	call t.add_map('xo', 'ショ')
+" 	call t.add_map('xp', 'ショウ')
+" 	call t.add_map('xq', 'シャイ')
+" 	call t.add_map('xu', 'シュ')
+" 	call t.add_map('xw', 'シェイ')
+" 	call t.add_map('xz', 'シャン')
+" 	call t.add_map('ya', 'ヤ')
+" 	call t.add_map('yd', 'イェン')
+" 	call t.add_map('ye', 'イェ')
+" 	call t.add_map('yf', 'ユ')
+" 	call t.add_map('yh', 'ユウ')
+" 	call t.add_map('yj', 'ユン')
+" 	call t.add_map('yl', 'ヨン')
+" 	call t.add_map('yo', 'ヨ')
+" 	call t.add_map('yp', 'ヨウ')
+" 	call t.add_map('yq', 'ヤイ')
+" 	call t.add_map('yr', 'ヨル')
+" 	call t.add_map('yu', 'ユ')
+" 	call t.add_map('yw', 'イェイ')
+" 	call t.add_map('yz', 'ヤン')
+" 	call t.add_map('za', 'ザ')
+" 	call t.add_map('zc', 'ザ')
+" 	call t.add_map('zd', 'ゼン')
+" 	call t.add_map('ze', 'ゼ')
+" 	call t.add_map('zh', 'ズウ')
+" 	call t.add_map('zi', 'ジ')
+" 	call t.add_map('zj', 'ズン')
+" 	call t.add_map('zk', 'ジン')
+" 	call t.add_map('zl', 'ゾン')
+" 	call t.add_map('zn', 'ザン')
+" 	call t.add_map('zo', 'ゾ')
+" 	call t.add_map('zp', 'ゾウ')
+" 	call t.add_map('zq', 'ザイ')
+" 	call t.add_map('zr', 'ザル')
+" 	call t.add_map('zu', 'ズ')
+" 	call t.add_map('zv', 'ザイ')
+" 	call t.add_map('zw', 'ゼイ')
+" 	call t.add_map('zx', 'ゼイ')
+" 	call t.add_map('zz', 'ザン')
+" 	call eskk#register_mode_table('kata', t)
+" 	" }}} 
+" endfunction
+" "}}}
 "------------------------------------------------------------------------------------- 
 " vinarise
 "let g:vinarise_enable_auto_detect = 0
-"------------------------------------------------------------------------------------ 
-" ref-lynx {{{ 
-" "if has('win32') || has('win64')
-	"let s:lynx = 'e:/Soft/Lynx/lynx.exe'
-	"let s:cfg  = 'e:/Soft/Lynx/lynx.cfg'
-	"let g:ref_lynx_cmd = s:lynx.' -cfg='.s:cfg.' -dump -nonumbers %s'
-"endif
-
-"let g:ref_lynx_use_cache = 1
-"let g:ref_lynx_start_linenumber = 0 " 余計な行を読み飛ばす
-"}}}
-"------------------------------------------------------------------------------
-"""  ref.vim {{{
-"let g:ref_alc_encoding = 'cp932'    " イマイチよく分かってない
-"let g:ref_alc_start_linenumber = 39 " 余計な行を読み飛ばす
-
-"if has('win32') || has('win64')
-	"let $PATH = $PATH . ';e:/Soft/Lynx'
-	"let g:ref_pydoc_cmd = "c:/Python32/python.exe c:/Python32/Lib/pydoc.py"
-	"let g:ref_alc_cmd = s:lynx.' -cfg='.s:cfg.' -dump -nonumbers %s'
-"endif
-
-"if exists('*ref#register_detection')
-	"" filetypeが分からんならalc
-	"call ref#register_detection('_', 'alc')
-"endif
-
-"augroup refvim
-	"autocmd!
-	"autocmd FileType python	nnoremap <buffer><silent> <C-k> :<C-u>Ref pydoc <C-r><C-w><CR>
-	"autocmd FileType text	nnoremap <buffer><silent> <C-k> :<C-u>Ref alc <C-r><C-w><CR>
-	"autocmd FileType ref call s:ref_config()
-"augroup END
-
-"function! s:ref_config()
-  "nnoremap <buffer> q :<C-u>close<CR>
-  "nmap <buffer> f <Plug>(ref-forward)
-  "nmap <buffer> b <Plug>(ref-back)
-"endfunction
-"}}}
-"------------------------------------------------------------------------------
-" eskk {{{
-let g:eskk#directory = $DOTVIM.'/skk'
-let g:eskk#dictionary = { 'path': $DOTVIM.'/skk/mydict', 'sorted': 0, 'encoding': 'utf-8', }
-let g:eskk#large_dictionary = { 'path': $DOTVIM.'/skk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
-let g:eskk#show_candidates_count = 2
-let g:eskk#egg_like_newline = 0
-let g:eskk#keep_state = 1
-let g:azik = 1
-autocmd User eskk-initialize-pre call s:eskk_initial_pre()
-function! s:eskk_initial_pre()
-	"{{{ rom_to_hira
-	let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
-	call t.add_map('-', 'ー')
-	call t.add_map('~', '?')
-	call t.add_map('.', '。')
-	call t.add_map(',', '、')
-	call t.add_map('/', '・')
-	call t.add_map(':', 'ー')
-	call t.add_map(';', 'っ')
-	call t.add_map('tm', 'っ')
-	call t.add_map('[', '「')
-	call t.add_map(']', '」')
-	call t.add_map('a', 'あ')
-	call t.add_map('ba', 'ば')
-	call t.add_map('bd', 'べん')
-	call t.add_map('be', 'べ')
-	call t.add_map('bh', 'ぶう')
-	call t.add_map('bi', 'び')
-	call t.add_map('bj', 'ぶん')
-	call t.add_map('bk', 'びん')
-	call t.add_map('bl', 'ぼん')
-	call t.add_map('bn', 'ばん')
-	call t.add_map('bo', 'ぼ')
-	call t.add_map('bp', 'ぼう')
-	call t.add_map('bq', 'ばい')
-	call t.add_map('bt', 'びと')
-	call t.add_map('bu', 'ぶ')
-	call t.add_map('bv', 'びゅう')
-	call t.add_map('bw', 'べい')
-	call t.add_map('bx', 'びょう')
-	call t.add_map('bya', 'びゃ')
-	call t.add_map('byd', 'びぇん')
-	call t.add_map('bye', 'びぇ')
-	call t.add_map('byh', 'びゅう')
-	call t.add_map('byj', 'びゅん')
-	call t.add_map('byl', 'びょん')
-	call t.add_map('byn', 'びゃん')
-	call t.add_map('byo', 'びょ')
-	call t.add_map('byp', 'びょう')
-	call t.add_map('byq', 'びゃい')
-	call t.add_map('byu', 'びゅ')
-	call t.add_map('byw', 'びぇい')
-	call t.add_map('byz', 'びゃん')
-	call t.add_map('bz', 'ばん')
-	call t.add_map('ca', 'ちゃ')
-	call t.add_map('cd', 'ちぇん')
-	call t.add_map('ce', 'ちぇ')
-	call t.add_map('cf', 'ちぇ')
-	call t.add_map('ch', 'ちゅう')
-	call t.add_map('ci', 'ち')
-	call t.add_map('cj', 'ちゅん')
-	call t.add_map('ck', 'ちん')
-	call t.add_map('cl', 'ちょん')
-	call t.add_map('cn', 'ちゃん')
-	call t.add_map('co', 'ちょ')
-	call t.add_map('cp', 'ちょう')
-	call t.add_map('cq', 'ちゃい')
-	call t.add_map('cu', 'ちゅ')
-	call t.add_map('cw', 'ちぇい')
-	call t.add_map('cz', 'ちゃん')
-	call t.add_map('da', 'だ')
-	call t.add_map('dch', 'どぅー')
-	call t.add_map('dci', 'でぃ')
-	call t.add_map('dcj', 'どぅん')
-	call t.add_map('dck', 'でぃん')
-	call t.add_map('dcu', 'どぅ')
-	call t.add_map('dd', 'でん')
-	call t.add_map('de', 'で')
-	call t.add_map('df', 'で')
-	call t.add_map('dga', 'ぢゃ')
-	call t.add_map('dge', 'ぢぇ')
-	call t.add_map('dgh', 'でゅー')
-	call t.add_map('dgi', 'でぃ')
-	call t.add_map('dgj', 'ぢゅん')
-	call t.add_map('dgl', 'ぢょん')
-	call t.add_map('dgo', 'ぢょ')
-	call t.add_map('dgq', 'ぢゃい')
-	call t.add_map('dgu', 'ぢゅ')
-	call t.add_map('dgz', 'ぢゃん')
-	call t.add_map('dh', 'づう')
-	call t.add_map('di', 'ぢ')
-	call t.add_map('dj', 'づん')
-	call t.add_map('dk', 'ぢん')
-	call t.add_map('dl', 'どん')
-	call t.add_map('dm', 'でも')
-	call t.add_map('dn', 'だん')
-	call t.add_map('do', 'ど')
-	call t.add_map('dp', 'どう')
-	call t.add_map('dq', 'だい')
-	call t.add_map('dr', 'である')
-	call t.add_map('ds', 'です')
-	call t.add_map('dt', 'だち')
-	call t.add_map('du', 'づ')
-	call t.add_map('dv', 'ぢゅう')
-	call t.add_map('dw', 'でい')
-	call t.add_map('dx', 'ぢょう')
-	call t.add_map('dy', 'でぃ')
-	call t.add_map('dz', 'だん')
-	call t.add_map('e', 'え')
-	call t.add_map('fa', 'ふぁ')
-	call t.add_map('fd', 'ふぇん')
-	call t.add_map('fe', 'ふぇ')
-	call t.add_map('fh', 'ふう')
-	call t.add_map('fi', 'ふぃ')
-	call t.add_map('fj', 'ふん')
-	call t.add_map('fk', 'ふぃん')
-	call t.add_map('fl', 'ふぉん')
-	call t.add_map('fn', 'ふぁん')
-	call t.add_map('fo', 'ふぉ')
-	call t.add_map('fp', 'ふぉー')
-	call t.add_map('fq', 'ふぁい')
-	call t.add_map('fu', 'ふ')
-	call t.add_map('fv', 'ふゅー')
-	call t.add_map('fw', 'ふぇい')
-	call t.add_map('fyh', 'ふゅー')
-	call t.add_map('fyj', 'ふゅん')
-	call t.add_map('fyu', 'ふゅ')
-	call t.add_map('fz', 'ふぁん')
-	call t.add_map('ga', 'が')
-	call t.add_map('gd', 'げん')
-	call t.add_map('ge', 'げ')
-	call t.add_map('gh', 'ぐう')
-	call t.add_map('gi', 'ぎ')
-	call t.add_map('gj', 'ぐん')
-	call t.add_map('gk', 'ぎん')
-	call t.add_map('gl', 'ごん')
-	call t.add_map('gn', 'がん')
-	call t.add_map('go', 'ご')
-	call t.add_map('gp', 'ごう')
-	call t.add_map('gq', 'がい')
-	call t.add_map('gr', 'がら')
-	call t.add_map('gt', 'ごと')
-	call t.add_map('gu', 'ぐ')
-	call t.add_map('gv', 'ぎゅう')
-	call t.add_map('gw', 'げい')
-	call t.add_map('gx', 'ぎょう')
-	call t.add_map('gya', 'ぎゃ')
-	call t.add_map('gyd', 'ぎぇん')
-	call t.add_map('gye', 'ぎぇ')
-	call t.add_map('gyh', 'ぎゅう')
-	call t.add_map('gyj', 'ぎゅん')
-	call t.add_map('gyl', 'ぎょん')
-	call t.add_map('gyn', 'ぎゃん')
-	call t.add_map('gyo', 'ぎょ')
-	call t.add_map('gyp', 'ぎょう')
-	call t.add_map('gyq', 'ぎゃい')
-	call t.add_map('gyu', 'ぎゅ')
-	call t.add_map('gyw', 'ぎぇい')
-	call t.add_map('gyz', 'ぎゃん')
-	call t.add_map('gz', 'がん')
-	call t.add_map('ha', 'は')
-	call t.add_map('hd', 'へん')
-	call t.add_map('he', 'へ')
-	call t.add_map('hf', 'ふ')
-	call t.add_map('hga', 'ひゃ')
-	call t.add_map('hgd', 'ひぇん')
-	call t.add_map('hge', 'ひぇ')
-	call t.add_map('hgh', 'ひゅう')
-	call t.add_map('hgj', 'ひゅん')
-	call t.add_map('hgl', 'ひょん')
-	call t.add_map('hgn', 'ひゃん')
-	call t.add_map('hgo', 'ひょ')
-	call t.add_map('hgp', 'ひょう')
-	call t.add_map('hgq', 'ひゃい')
-	call t.add_map('hgu', 'ひゅ')
-	call t.add_map('hgz', 'ひゃん')
-	call t.add_map('hh', 'ふう')
-	call t.add_map('hi', 'ひ')
-	call t.add_map('hj', 'ふん')
-	call t.add_map('hk', 'ひん')
-	call t.add_map('hl', 'ほん')
-	call t.add_map('ho', 'ほ')
-	call t.add_map('hp', 'ほう')
-	call t.add_map('hq', 'はい')
-	call t.add_map('hr', 'はら')
-	call t.add_map('ht', 'ひと')
-	call t.add_map('hu', 'ふ')
-	call t.add_map('hv', 'ひゅう')
-	call t.add_map('hw', 'へい')
-	call t.add_map('hx', 'ひょう')
-	call t.add_map('hya', 'ひゃ')
-	call t.add_map('hyd', 'ひぇん')
-	call t.add_map('hye', 'ひぇ')
-	call t.add_map('hyh', 'ひゅう')
-	call t.add_map('hyj', 'ひゅん')
-	call t.add_map('hyl', 'ひょん')
-	call t.add_map('hyo', 'ひょ')
-	call t.add_map('hyp', 'ひょう')
-	call t.add_map('hyq', 'ひゃい')
-	call t.add_map('hyu', 'ひゅ')
-	call t.add_map('hyz', 'ひゃん')
-	call t.add_map('hz', 'はん')
-	call t.add_map('i', 'い')
-	call t.add_map('ja', 'じゃ')
-	call t.add_map('jd', 'じぇん')
-	call t.add_map('je', 'じぇ')
-	call t.add_map('jf', 'じゅ')
-	call t.add_map('jh', 'じゅう')
-	call t.add_map('ji', 'じ')
-	call t.add_map('jj', 'じゅん')
-	call t.add_map('jk', 'じん')
-	call t.add_map('jl', 'じょん')
-	call t.add_map('jo', 'じょ')
-	call t.add_map('jp', 'じょう')
-	call t.add_map('jq', 'じゃい')
-	call t.add_map('ju', 'じゅ')
-	call t.add_map('jw', 'じぇい')
-	call t.add_map('jz', 'じゃん')
-	call t.add_map('ka', 'か')
-	call t.add_map('kd', 'けん')
-	call t.add_map('ke', 'け')
-	call t.add_map('kf', 'き')
-	call t.add_map('kga', 'きゃ')
-	call t.add_map('kgh', 'きゅう')
-	call t.add_map('kgj', 'きゅん')
-	call t.add_map('kgl', 'きょん')
-	call t.add_map('kgn', 'きゃん')
-	call t.add_map('kgo', 'きょ')
-	call t.add_map('kgp', 'きょう')
-	call t.add_map('kgq', 'きゃい')
-	call t.add_map('kgu', 'きゅ')
-	call t.add_map('kgz', 'きゃん')
-	call t.add_map('kh', 'くう')
-	call t.add_map('ki', 'き')
-	call t.add_map('kj', 'くん')
-	call t.add_map('kk', 'きん')
-	call t.add_map('kl', 'こん')
-	call t.add_map('km', 'かも')
-	call t.add_map('ko', 'こ')
-	call t.add_map('kp', 'こう')
-	call t.add_map('kq', 'かい')
-	call t.add_map('kr', 'から')
-	call t.add_map('kt', 'こと')
-	call t.add_map('ku', 'く')
-	call t.add_map('kv', 'きゅう')
-	call t.add_map('kw', 'けい')
-	call t.add_map('kx', 'きょう')
-	call t.add_map('kz', 'かん')
-	call t.add_map('la', 'ぁ')
-	call t.add_map('le', 'ぇ')
-	call t.add_map('li', 'ぃ')
-	call t.add_map('lka', 'ヵ')
-	call t.add_map('lke', 'ヶ')
-	call t.add_map('lo', 'ぉ')
-	call t.add_map('ltu', 'っ')
-	call t.add_map('lu', 'ぅ')
-	call t.add_map('lwa', 'ゎ')
-	call t.add_map('lya', 'ゃ')
-	call t.add_map('lye', 'ぇ')
-	call t.add_map('lyi', 'ぃ')
-	call t.add_map('lyo', 'ょ')
-	call t.add_map('lyu', 'ゅ')
-	call t.add_map('ma', 'ま')
-	call t.add_map('md', 'めん')
-	call t.add_map('me', 'め')
-	call t.add_map('mf', 'む')
-	call t.add_map('mga', 'みゃ')
-	call t.add_map('mgd', 'みぇん')
-	call t.add_map('mge', 'みぇ')
-	call t.add_map('mgh', 'みゅう')
-	call t.add_map('mgj', 'みゅん')
-	call t.add_map('mgl', 'みょん')
-	call t.add_map('mgn', 'みゃん')
-	call t.add_map('mgo', 'みょ')
-	call t.add_map('mgp', 'みょう')
-	call t.add_map('mgq', 'みゃい')
-	call t.add_map('mgu', 'みゅ')
-	call t.add_map('mgw', 'みぇい')
-	call t.add_map('mgz', 'みゃん')
-	call t.add_map('mh', 'むう')
-	call t.add_map('mi', 'み')
-	call t.add_map('mj', 'むん')
-	call t.add_map('mk', 'みん')
-	call t.add_map('ml', 'もん')
-	call t.add_map('mn', 'もの')
-	call t.add_map('mo', 'も')
-	call t.add_map('mp', 'もう')
-	call t.add_map('mq', 'まい')
-	call t.add_map('mr', 'まる')
-	call t.add_map('ms', 'ます')
-	call t.add_map('mt', 'また')
-	call t.add_map('mu', 'む')
-	call t.add_map('mv', 'みゅう')
-	call t.add_map('mw', 'めい')
-	call t.add_map('mx', 'みょう')
-	call t.add_map('mz', 'まん')
-	call t.add_map('na', 'な')
-	call t.add_map('nb', 'ねば')
-	call t.add_map('nd', 'ねん')
-	call t.add_map('ne', 'ね')
-	call t.add_map('nf', 'ぬ')
-	call t.add_map('nga', 'にゃ')
-	call t.add_map('ngd', 'にぇん')
-	call t.add_map('nge', 'にぇ')
-	call t.add_map('ngh', 'にゅう')
-	call t.add_map('ngj', 'にゅん')
-	call t.add_map('ngl', 'にょん')
-	call t.add_map('ngn', 'にゃん')
-	call t.add_map('ngo', 'にょ')
-	call t.add_map('ngp', 'にょう')
-	call t.add_map('ngq', 'にゃい')
-	call t.add_map('ngu', 'にゅ')
-	call t.add_map('ngw', 'にぇい')
-	call t.add_map('ngz', 'にゃん')
-	call t.add_map('nh', 'ぬう')
-	call t.add_map('ni', 'に')
-	call t.add_map('nj', 'ぬん')
-	call t.add_map('nk', 'にん')
-	call t.add_map('nl', 'のん')
-	call t.add_map('nn', 'ん')
-	call t.add_map('no', 'の')
-	call t.add_map('np', 'のう')
-	call t.add_map('nq', 'ない')
-	call t.add_map('nr', 'なる')
-	call t.add_map('nt', 'にち')
-	call t.add_map('nu', 'ぬ')
-	call t.add_map('nv', 'にゅう')
-	call t.add_map('nw', 'ねい')
-	call t.add_map('nx', 'にょう')
-	call t.add_map('nz', 'なん')
-	call t.add_map('o', 'お')
-	call t.add_map('pa', 'ぱ')
-	call t.add_map('pd', 'ぺん')
-	call t.add_map('pe', 'ぺ')
-	call t.add_map('pf', 'ぽん')
-	call t.add_map('pga', 'ぴゃ')
-	call t.add_map('pgh', 'ぴゅう')
-	call t.add_map('pgj', 'ぴゅん')
-	call t.add_map('pgl', 'ぴょん')
-	call t.add_map('pgn', 'ぴゃん')
-	call t.add_map('pgo', 'ぴょ')
-	call t.add_map('pgp', 'ぴょう')
-	call t.add_map('pgq', 'ぴゃい')
-	call t.add_map('pgu', 'ぴゅ')
-	call t.add_map('pgz', 'ぴゃん')
-	call t.add_map('ph', 'ぷう')
-	call t.add_map('pi', 'ぴ')
-	call t.add_map('pj', 'ぷん')
-	call t.add_map('pk', 'ぴん')
-	call t.add_map('pl', 'ぽん')
-	call t.add_map('po', 'ぽ')
-	call t.add_map('pp', 'ぽう')
-	call t.add_map('pq', 'ぱい')
-	call t.add_map('pu', 'ぷ')
-	call t.add_map('pv', 'ぴゅう')
-	call t.add_map('pw', 'ぺい')
-	call t.add_map('px', 'ぴょう')
-	call t.add_map('pyu', 'ぴゅ')
-	call t.add_map('pz', 'ぱん')
-	"call t.add_map('q', 'ん')
-	call t.add_map('ra', 'ら')
-	call t.add_map('rd', 'れん')
-	call t.add_map('re', 'れ')
-	call t.add_map('rh', 'るう')
-	call t.add_map('ri', 'り')
-	call t.add_map('rj', 'るん')
-	call t.add_map('rk', 'りん')
-	call t.add_map('rl', 'ろん')
-	call t.add_map('rn', 'らん')
-	call t.add_map('ro', 'ろ')
-	call t.add_map('rp', 'ろう')
-	call t.add_map('rq', 'らい')
-	call t.add_map('rr', 'られ')
-	call t.add_map('ru', 'る')
-	call t.add_map('rv', 'りゅう')
-	call t.add_map('rw', 'れい')
-	call t.add_map('rx', 'りょう')
-	call t.add_map('rya', 'りゃ')
-	call t.add_map('ryh', 'りゅう')
-	call t.add_map('ryj', 'りゅん')
-	call t.add_map('ryl', 'りょん')
-	call t.add_map('ryo', 'りょ')
-	call t.add_map('ryp', 'りょう')
-	call t.add_map('ryq', 'りゃい')
-	call t.add_map('ryu', 'りゅ')
-	call t.add_map('ryz', 'りゃん')
-	call t.add_map('rz', 'らん')
-	call t.add_map('sa', 'さ')
-	call t.add_map('sd', 'せん')
-	call t.add_map('se', 'せ')
-	call t.add_map('sf', 'さい')
-	call t.add_map('sh', 'すう')
-	call t.add_map('si', 'し')
-	call t.add_map('sj', 'すん')
-	call t.add_map('sk', 'しん')
-	call t.add_map('sl', 'そん')
-	call t.add_map('sn', 'さん')
-	call t.add_map('so', 'そ')
-	call t.add_map('sp', 'そう')
-	call t.add_map('sq', 'さい')
-	call t.add_map('sr', 'する')
-	call t.add_map('ss', 'せい')
-	call t.add_map('st', 'した')
-	call t.add_map('su', 'す')
-	call t.add_map('sv', 'しゅう')
-	call t.add_map('sw', 'せい')
-	call t.add_map('sx', 'しょう')
-	call t.add_map('syi', 'すぃ')
-	call t.add_map('syk', 'すぃん')
-	call t.add_map('sz', 'さん')
-	call t.add_map('ta', 'た')
-	call t.add_map('tb', 'たび')
-	call t.add_map('td', 'てん')
-	call t.add_map('te', 'て')
-	call t.add_map('tgh', 'てゅー')
-	call t.add_map('tgi', 'てぃ')
-	call t.add_map('tgj', 'とぅん')
-	call t.add_map('tgk', 'てぃん')
-	call t.add_map('tgp', 'とぅー')
-	call t.add_map('tgu', 'とぅ')
-	call t.add_map('th', 'つう')
-	call t.add_map('ti', 'ち')
-	call t.add_map('tj', 'つん')
-	call t.add_map('tk', 'ちん')
-	call t.add_map('tl', 'とん')
-	"call t.add_map('tm', 'ため')
-	call t.add_map('tn', 'たん')
-	call t.add_map('to', 'と')
-	call t.add_map('tp', 'とう')
-	call t.add_map('tq', 'たい')
-	call t.add_map('tr', 'たら')
-	call t.add_map('tsa', 'つぁ')
-	call t.add_map('tsd', 'つぇん')
-	call t.add_map('tse', 'つぇ')
-	call t.add_map('tsh', 'つう')
-	call t.add_map('tsi', 'つぃ')
-	call t.add_map('tsj', 'つん')
-	call t.add_map('tsk', 'つぃん')
-	call t.add_map('tsl', 'つぉん')
-	call t.add_map('tso', 'つぉ')
-	call t.add_map('tsq', 'つぁい')
-	call t.add_map('tst', 'として')
-	call t.add_map('tsu', 'つ')
-	call t.add_map('tsz', 'つぁん')
-	call t.add_map('tt', 'たち')
-	call t.add_map('tu', 'つ')
-	call t.add_map('tw', 'てい')
-	call t.add_map('tya', 'てゃ')
-	call t.add_map('tyh', 'てゅー')
-	call t.add_map('tyj', 'てゅん')
-	call t.add_map('tyq', 'てゃい')
-	call t.add_map('tyu', 'てゅ')
-	call t.add_map('tyz', 'てゃん')
-	call t.add_map('tz', 'たん')
-	call t.add_map('u', 'う')
-	call t.add_map('va', 'ヴぁ')
-	call t.add_map('vd', 'ヴぇん')
-	call t.add_map('ve', 'ヴぇ')
-	call t.add_map('vh', 'ヴー')
-	call t.add_map('vi', 'ヴぃ')
-	call t.add_map('vj', 'ヴん')
-	call t.add_map('vk', 'ヴぃん')
-	call t.add_map('vl', 'ヴぉん')
-	call t.add_map('vn', 'ヴぁん')
-	call t.add_map('vo', 'ヴぉ')
-	call t.add_map('vp', 'ヴぉう')
-	call t.add_map('vq', 'ヴぁい')
-	call t.add_map('vu', 'ヴ')
-	call t.add_map('vv', 'ヴゅー')
-	call t.add_map('vw', 'ヴぇい')
-	call t.add_map('vyu', 'ヴゅ')
-	call t.add_map('vz', 'ヴぁん')
-	call t.add_map('wa', 'わ')
-	call t.add_map('wd', 'うぇん')
-	call t.add_map('we', 'うぇ')
-	call t.add_map('whe', 'ゑ')
-	call t.add_map('whi', 'ゐ')
-	call t.add_map('who', 'うぉ')
-	call t.add_map('wi', 'うぃ')
-	call t.add_map('wk', 'うぃん')
-	call t.add_map('wl', 'うぉん')
-	call t.add_map('wn', 'わん')
-	call t.add_map('wo', 'を')
-	call t.add_map('wp', 'うぉー')
-	call t.add_map('wq', 'わい')
-	call t.add_map('wr', 'われ')
-	call t.add_map('wso', 'うぉ')
-	call t.add_map('wt', 'わた')
-	call t.add_map('ww', 'うぇい')
-	call t.add_map('wz', 'わん')
-	call t.add_map('xa', 'しゃ')
-	call t.add_map('xd', 'しぇん')
-	call t.add_map('xe', 'しぇ')
-	call t.add_map('xh', 'しゅう')
-	call t.add_map('xi', 'し')
-	call t.add_map('xj', 'しゅん')
-	call t.add_map('xk', 'しん')
-	call t.add_map('xl', 'しょん')
-	call t.add_map('xn', 'しゃん')
-	call t.add_map('xo', 'しょ')
-	call t.add_map('xp', 'しょう')
-	call t.add_map('xq', 'しゃい')
-	call t.add_map('xu', 'しゅ')
-	call t.add_map('xw', 'しぇい')
-	call t.add_map('xz', 'しゃん')
-	call t.add_map('ya', 'や')
-	call t.add_map('yd', 'いぇん')
-	call t.add_map('ye', 'いぇ')
-	call t.add_map('yf', 'ゆ')
-	call t.add_map('yh', 'ゆう')
-	call t.add_map('yj', 'ゆん')
-	call t.add_map('yl', 'よん')
-	call t.add_map('yo', 'よ')
-	call t.add_map('yp', 'よう')
-	call t.add_map('yq', 'やい')
-	call t.add_map('yr', 'よる')
-	call t.add_map('yu', 'ゆ')
-	call t.add_map('yw', 'いぇい')
-	call t.add_map('yz', 'やん')
-	call t.add_map('za', 'ざ')
-	call t.add_map('zc', 'ざ')
-	call t.add_map('zd', 'ぜん')
-	call t.add_map('ze', 'ぜ')
-	call t.add_map('zh', 'ずう')
-	call t.add_map('zi', 'じ')
-	call t.add_map('zj', 'ずん')
-	call t.add_map('zk', 'じん')
-	call t.add_map('zl', 'ぞん')
-	call t.add_map('zn', 'ざん')
-	call t.add_map('zo', 'ぞ')
-	call t.add_map('zp', 'ぞう')
-	call t.add_map('zq', 'ざい')
-	call t.add_map('zr', 'ざる')
-	call t.add_map('zu', 'ず')
-	call t.add_map('zv', 'ざい')
-	call t.add_map('zw', 'ぜい')
-	call t.add_map('zx', 'ぜい')
-	call t.add_map('zz', 'ざん')
-	call eskk#register_mode_table('hira', t)
-	" }}}
-	"{{{ rom_to_kata
-	let t = eskk#table#new('rom_to_kata*', 'rom_to_kata')
-	call t.add_map('-', 'ー')
-	call t.add_map('~', '?')
-	call t.add_map('.', '。')
-	call t.add_map(',', '、')
-	call t.add_map('/', '・')
-	call t.add_map(':', 'ー')
-	"call t.add_map(';', 'ッ')
-	call t.add_map('tm', 'ッ')
-	call t.add_map('[', '「')
-	call t.add_map(']', '」')
-	call t.add_map('a', 'ア')
-	call t.add_map('ba', 'バ')
-	call t.add_map('bd', 'ベン')
-	call t.add_map('be', 'ベ')
-	call t.add_map('bh', 'ブウ')
-	call t.add_map('bi', 'ビ')
-	call t.add_map('bj', 'ブン')
-	call t.add_map('bk', 'ビン')
-	call t.add_map('bl', 'ボン')
-	call t.add_map('bn', 'バン')
-	call t.add_map('bo', 'ボ')
-	call t.add_map('bp', 'ボウ')
-	call t.add_map('bq', 'バイ')
-	call t.add_map('bt', 'ビト')
-	call t.add_map('bu', 'ブ')
-	call t.add_map('bv', 'ビュウ')
-	call t.add_map('bw', 'ベイ')
-	call t.add_map('bx', 'ビョウ')
-	call t.add_map('bya', 'ビャ')
-	call t.add_map('byd', 'ビェン')
-	call t.add_map('bye', 'ビェ')
-	call t.add_map('byh', 'ビュウ')
-	call t.add_map('byj', 'ビュン')
-	call t.add_map('byl', 'ビョン')
-	call t.add_map('byn', 'ビャン')
-	call t.add_map('byo', 'ビョ')
-	call t.add_map('byp', 'ビョウ')
-	call t.add_map('byq', 'ビャイ')
-	call t.add_map('byu', 'ビュ')
-	call t.add_map('byw', 'ビェイ')
-	call t.add_map('byz', 'ビャン')
-	call t.add_map('bz', 'バン')
-	call t.add_map('ca', 'チャ')
-	call t.add_map('cd', 'チェン')
-	call t.add_map('ce', 'チェ')
-	call t.add_map('cf', 'チェ')
-	call t.add_map('ch', 'チュウ')
-	call t.add_map('ci', 'チ')
-	call t.add_map('cj', 'チュン')
-	call t.add_map('ck', 'チン')
-	call t.add_map('cl', 'チョン')
-	call t.add_map('cn', 'チャン')
-	call t.add_map('co', 'チョ')
-	call t.add_map('cp', 'チョウ')
-	call t.add_map('cq', 'チャイ')
-	call t.add_map('cu', 'チュ')
-	call t.add_map('cw', 'チェイ')
-	call t.add_map('cz', 'チャン')
-	call t.add_map('da', 'ダ')
-	call t.add_map('dch', 'ドゥー')
-	call t.add_map('dci', 'ディ')
-	call t.add_map('dcj', 'ドゥン')
-	call t.add_map('dck', 'ディン')
-	call t.add_map('dcu', 'ドゥ')
-	call t.add_map('dd', 'デン')
-	call t.add_map('de', 'デ')
-	call t.add_map('df', 'デ')
-	call t.add_map('dga', 'ヂャ')
-	call t.add_map('dge', 'ヂェ')
-	call t.add_map('dgh', 'デュー')
-	call t.add_map('dgi', 'ディ')
-	call t.add_map('dgj', 'ヂュン')
-	call t.add_map('dgl', 'ヂョン')
-	call t.add_map('dgo', 'ヂョ')
-	call t.add_map('dgq', 'ヂャイ')
-	call t.add_map('dgu', 'ヂュ')
-	call t.add_map('dgz', 'ヂャン')
-	call t.add_map('dh', 'ヅウ')
-	call t.add_map('di', 'ヂ')
-	call t.add_map('dj', 'ヅン')
-	call t.add_map('dk', 'ヂン')
-	call t.add_map('dl', 'ドン')
-	call t.add_map('dm', 'デモ')
-	call t.add_map('dn', 'ダン')
-	call t.add_map('do', 'ド')
-	call t.add_map('dp', 'ドウ')
-	call t.add_map('dq', 'ダイ')
-	call t.add_map('dr', 'デアル')
-	call t.add_map('ds', 'デス')
-	call t.add_map('dt', 'ダチ')
-	call t.add_map('du', 'ヅ')
-	call t.add_map('dv', 'ヂュウ')
-	call t.add_map('dw', 'デイ')
-	call t.add_map('dx', 'ヂョウ')
-	call t.add_map('dy', 'ディ')
-	call t.add_map('dz', 'ダン')
-	call t.add_map('e', 'エ')
-	call t.add_map('fa', 'ファ')
-	call t.add_map('fd', 'フェン')
-	call t.add_map('fe', 'フェ')
-	call t.add_map('fh', 'フウ')
-	call t.add_map('fi', 'フィ')
-	call t.add_map('fj', 'フン')
-	call t.add_map('fk', 'フィン')
-	call t.add_map('fl', 'フォン')
-	call t.add_map('fn', 'ファン')
-	call t.add_map('fo', 'フォ')
-	call t.add_map('fp', 'フォー')
-	call t.add_map('fq', 'ファイ')
-	call t.add_map('fu', 'フ')
-	call t.add_map('fv', 'フュー')
-	call t.add_map('fw', 'フェイ')
-	call t.add_map('fyh', 'フュー')
-	call t.add_map('fyj', 'フュン')
-	call t.add_map('fyu', 'フュ')
-	call t.add_map('fz', 'ファン')
-	call t.add_map('ga', 'ガ')
-	call t.add_map('gd', 'ゲン')
-	call t.add_map('ge', 'ゲ')
-	call t.add_map('gh', 'グウ')
-	call t.add_map('gi', 'ギ')
-	call t.add_map('gj', 'グン')
-	call t.add_map('gk', 'ギン')
-	call t.add_map('gl', 'ゴン')
-	call t.add_map('gn', 'ガン')
-	call t.add_map('go', 'ゴ')
-	call t.add_map('gp', 'ゴウ')
-	call t.add_map('gq', 'ガイ')
-	call t.add_map('gr', 'ガラ')
-	call t.add_map('gt', 'ゴト')
-	call t.add_map('gu', 'グ')
-	call t.add_map('gv', 'ギュウ')
-	call t.add_map('gw', 'ゲイ')
-	call t.add_map('gx', 'ギョウ')
-	call t.add_map('gya', 'ギャ')
-	call t.add_map('gyd', 'ギェン')
-	call t.add_map('gye', 'ギェ')
-	call t.add_map('gyh', 'ギュウ')
-	call t.add_map('gyj', 'ギュン')
-	call t.add_map('gyl', 'ギョン')
-	call t.add_map('gyn', 'ギャン')
-	call t.add_map('gyo', 'ギョ')
-	call t.add_map('gyp', 'ギョウ')
-	call t.add_map('gyq', 'ギャイ')
-	call t.add_map('gyu', 'ギュ')
-	call t.add_map('gyw', 'ギェイ')
-	call t.add_map('gyz', 'ギャン')
-	call t.add_map('gz', 'ガン')
-	call t.add_map('ha', 'ハ')
-	call t.add_map('hd', 'ヘン')
-	call t.add_map('he', 'ヘ')
-	call t.add_map('hf', 'フ')
-	call t.add_map('hga', 'ヒャ')
-	call t.add_map('hgd', 'ヒェン')
-	call t.add_map('hge', 'ヒェ')
-	call t.add_map('hgh', 'ヒュウ')
-	call t.add_map('hgj', 'ヒュン')
-	call t.add_map('hgl', 'ヒョン')
-	call t.add_map('hgn', 'ヒャン')
-	call t.add_map('hgo', 'ヒョ')
-	call t.add_map('hgp', 'ヒョウ')
-	call t.add_map('hgq', 'ヒャイ')
-	call t.add_map('hgu', 'ヒュ')
-	call t.add_map('hgz', 'ヒャン')
-	call t.add_map('hh', 'フウ')
-	call t.add_map('hi', 'ヒ')
-	call t.add_map('hj', 'フン')
-	call t.add_map('hk', 'ヒン')
-	call t.add_map('hl', 'ホン')
-	call t.add_map('ho', 'ホ')
-	call t.add_map('hp', 'ホウ')
-	call t.add_map('hq', 'ハイ')
-	call t.add_map('hr', 'ハラ')
-	call t.add_map('ht', 'ヒト')
-	call t.add_map('hu', 'フ')
-	call t.add_map('hv', 'ヒュウ')
-	call t.add_map('hw', 'ヘイ')
-	call t.add_map('hx', 'ヒョウ')
-	call t.add_map('hya', 'ヒャ')
-	call t.add_map('hyd', 'ヒェン')
-	call t.add_map('hye', 'ヒェ')
-	call t.add_map('hyh', 'ヒュウ')
-	call t.add_map('hyj', 'ヒュン')
-	call t.add_map('hyl', 'ヒョン')
-	call t.add_map('hyo', 'ヒョ')
-	call t.add_map('hyp', 'ヒョウ')
-	call t.add_map('hyq', 'ヒャイ')
-	call t.add_map('hyu', 'ヒュ')
-	call t.add_map('hyz', 'ヒャン')
-	call t.add_map('hz', 'ハン')
-	call t.add_map('i', 'イ')
-	call t.add_map('ja', 'ジャ')
-	call t.add_map('jd', 'ジェン')
-	call t.add_map('je', 'ジェ')
-	call t.add_map('jf', 'ジュ')
-	call t.add_map('jh', 'ジュウ')
-	call t.add_map('ji', 'ジ')
-	call t.add_map('jj', 'ジュン')
-	call t.add_map('jk', 'ジン')
-	call t.add_map('jl', 'ジョン')
-	call t.add_map('jo', 'ジョ')
-	call t.add_map('jp', 'ジョウ')
-	call t.add_map('jq', 'ジャイ')
-	call t.add_map('ju', 'ジュ')
-	call t.add_map('jw', 'ジェイ')
-	call t.add_map('jz', 'ジャン')
-	call t.add_map('ka', 'カ')
-	call t.add_map('kd', 'ケン')
-	call t.add_map('ke', 'ケ')
-	call t.add_map('kf', 'キ')
-	call t.add_map('kga', 'キャ')
-	call t.add_map('kgh', 'キュウ')
-	call t.add_map('kgj', 'キュン')
-	call t.add_map('kgl', 'キョン')
-	call t.add_map('kgn', 'キャン')
-	call t.add_map('kgo', 'キョ')
-	call t.add_map('kgp', 'キョウ')
-	call t.add_map('kgq', 'キャイ')
-	call t.add_map('kgu', 'キュ')
-	call t.add_map('kgz', 'キャン')
-	call t.add_map('kh', 'クウ')
-	call t.add_map('ki', 'キ')
-	call t.add_map('kj', 'クン')
-	call t.add_map('kk', 'キン')
-	call t.add_map('kl', 'コン')
-	call t.add_map('km', 'カモ')
-	call t.add_map('ko', 'コ')
-	call t.add_map('kp', 'コウ')
-	call t.add_map('kq', 'カイ')
-	call t.add_map('kr', 'カラ')
-	call t.add_map('kt', 'コト')
-	call t.add_map('ku', 'ク')
-	call t.add_map('kv', 'キュウ')
-	call t.add_map('kw', 'ケイ')
-	call t.add_map('kx', 'キョウ')
-	call t.add_map('kz', 'カン')
-	call t.add_map('la', 'ァ')
-	call t.add_map('le', 'ェ')
-	call t.add_map('li', 'ィ')
-	call t.add_map('lka', 'ヵ')
-	call t.add_map('lke', 'ヶ')
-	call t.add_map('lo', 'ォ')
-	call t.add_map('ltu', 'ッ')
-	call t.add_map('lu', 'ゥ')
-	call t.add_map('lwa', 'ヮ')
-	call t.add_map('lya', 'ャ')
-	call t.add_map('lye', 'ェ')
-	call t.add_map('lyi', 'ィ')
-	call t.add_map('lyo', 'ョ')
-	call t.add_map('lyu', 'ュ')
-	call t.add_map('ma', 'マ')
-	call t.add_map('md', 'メン')
-	call t.add_map('me', 'メ')
-	call t.add_map('mf', 'ム')
-	call t.add_map('mga', 'ミャ')
-	call t.add_map('mgd', 'ミェン')
-	call t.add_map('mge', 'ミェ')
-	call t.add_map('mgh', 'ミュウ')
-	call t.add_map('mgj', 'ミュン')
-	call t.add_map('mgl', 'ミョン')
-	call t.add_map('mgn', 'ミャン')
-	call t.add_map('mgo', 'ミョ')
-	call t.add_map('mgp', 'ミョウ')
-	call t.add_map('mgq', 'ミャイ')
-	call t.add_map('mgu', 'ミュ')
-	call t.add_map('mgw', 'ミェイ')
-	call t.add_map('mgz', 'ミャン')
-	call t.add_map('mh', 'ムウ')
-	call t.add_map('mi', 'ミ')
-	call t.add_map('mj', 'ムン')
-	call t.add_map('mk', 'ミン')
-	call t.add_map('ml', 'モン')
-	call t.add_map('mn', 'モノ')
-	call t.add_map('mo', 'モ')
-	call t.add_map('mp', 'モウ')
-	call t.add_map('mq', 'マイ')
-	call t.add_map('mr', 'マル')
-	call t.add_map('ms', 'マス')
-	call t.add_map('mt', 'マタ')
-	call t.add_map('mu', 'ム')
-	call t.add_map('mv', 'ミュウ')
-	call t.add_map('mw', 'メイ')
-	call t.add_map('mx', 'ミョウ')
-	call t.add_map('mz', 'マン')
-	call t.add_map('na', 'ナ')
-	call t.add_map('nb', 'ネバ')
-	call t.add_map('nd', 'ネン')
-	call t.add_map('ne', 'ネ')
-	call t.add_map('nf', 'ヌ')
-	call t.add_map('nga', 'ニャ')
-	call t.add_map('ngd', 'ニェン')
-	call t.add_map('nge', 'ニェ')
-	call t.add_map('ngh', 'ニュウ')
-	call t.add_map('ngj', 'ニュン')
-	call t.add_map('ngl', 'ニョン')
-	call t.add_map('ngn', 'ニャン')
-	call t.add_map('ngo', 'ニョ')
-	call t.add_map('ngp', 'ニョウ')
-	call t.add_map('ngq', 'ニャイ')
-	call t.add_map('ngu', 'ニュ')
-	call t.add_map('ngw', 'ニェイ')
-	call t.add_map('ngz', 'ニャン')
-	call t.add_map('nh', 'ヌウ')
-	call t.add_map('ni', 'ニ')
-	call t.add_map('nj', 'ヌン')
-	call t.add_map('nk', 'ニン')
-	call t.add_map('nl', 'ノン')
-	call t.add_map('nn', 'ン')
-	call t.add_map('no', 'ノ')
-	call t.add_map('np', 'ノウ')
-	call t.add_map('nq', 'ナイ')
-	call t.add_map('nr', 'ナル')
-	call t.add_map('nt', 'ニチ')
-	call t.add_map('nu', 'ヌ')
-	call t.add_map('nv', 'ニュウ')
-	call t.add_map('nw', 'ネイ')
-	call t.add_map('nx', 'ニョウ')
-	call t.add_map('nz', 'ナン')
-	call t.add_map('o', 'オ')
-	call t.add_map('pa', 'パ')
-	call t.add_map('pd', 'ペン')
-	call t.add_map('pe', 'ペ')
-	call t.add_map('pf', 'ポン')
-	call t.add_map('pga', 'ピャ')
-	call t.add_map('pgh', 'ピュウ')
-	call t.add_map('pgj', 'ピュン')
-	call t.add_map('pgl', 'ピョン')
-	call t.add_map('pgn', 'ピャン')
-	call t.add_map('pgo', 'ピョ')
-	call t.add_map('pgp', 'ピョウ')
-	call t.add_map('pgq', 'ピャイ')
-	call t.add_map('pgu', 'ピュ')
-	call t.add_map('pgz', 'ピャン')
-	call t.add_map('ph', 'プウ')
-	call t.add_map('pi', 'ピ')
-	call t.add_map('pj', 'プン')
-	call t.add_map('pk', 'ピン')
-	call t.add_map('pl', 'ポン')
-	call t.add_map('po', 'ポ')
-	call t.add_map('pp', 'ポウ')
-	call t.add_map('pq', 'パイ')
-	call t.add_map('pu', 'プ')
-	call t.add_map('pv', 'ピュウ')
-	call t.add_map('pw', 'ペイ')
-	call t.add_map('px', 'ピョウ')
-	call t.add_map('pyu', 'ピュ')
-	call t.add_map('pz', 'パン')
-	call t.add_map('q', 'ン')
-	call t.add_map('ra', 'ラ')
-	call t.add_map('rd', 'レン')
-	call t.add_map('re', 'レ')
-	call t.add_map('rh', 'ルウ')
-	call t.add_map('ri', 'リ')
-	call t.add_map('rj', 'ルン')
-	call t.add_map('rk', 'リン')
-	call t.add_map('rl', 'ロン')
-	call t.add_map('rn', 'ラン')
-	call t.add_map('ro', 'ロ')
-	call t.add_map('rp', 'ロウ')
-	call t.add_map('rq', 'ライ')
-	call t.add_map('rr', 'ラレ')
-	call t.add_map('ru', 'ル')
-	call t.add_map('rv', 'リュウ')
-	call t.add_map('rw', 'レイ')
-	call t.add_map('rx', 'リョウ')
-	call t.add_map('rya', 'リャ')
-	call t.add_map('ryh', 'リュウ')
-	call t.add_map('ryj', 'リュン')
-	call t.add_map('ryl', 'リョン')
-	call t.add_map('ryo', 'リョ')
-	call t.add_map('ryp', 'リョウ')
-	call t.add_map('ryq', 'リャイ')
-	call t.add_map('ryu', 'リュ')
-	call t.add_map('ryz', 'リャン')
-	call t.add_map('rz', 'ラン')
-	call t.add_map('sa', 'サ')
-	call t.add_map('sd', 'セン')
-	call t.add_map('se', 'セ')
-	call t.add_map('sf', 'サイ')
-	call t.add_map('sh', 'スウ')
-	call t.add_map('si', 'シ')
-	call t.add_map('sj', 'スン')
-	call t.add_map('sk', 'シン')
-	call t.add_map('sl', 'ソン')
-	call t.add_map('sn', 'サン')
-	call t.add_map('so', 'ソ')
-	call t.add_map('sp', 'ソウ')
-	call t.add_map('sq', 'サイ')
-	call t.add_map('sr', 'スル')
-	call t.add_map('ss', 'セイ')
-	call t.add_map('st', 'シタ')
-	call t.add_map('su', 'ス')
-	call t.add_map('sv', 'シュウ')
-	call t.add_map('sw', 'セイ')
-	call t.add_map('sx', 'ショウ')
-	call t.add_map('syi', 'スィ')
-	call t.add_map('syk', 'スィン')
-	call t.add_map('sz', 'サン')
-	call t.add_map('ta', 'タ')
-	call t.add_map('tb', 'タビ')
-	call t.add_map('td', 'テン')
-	call t.add_map('te', 'テ')
-	call t.add_map('tgh', 'テュー')
-	call t.add_map('tgi', 'ティ')
-	call t.add_map('tgj', 'トゥン')
-	call t.add_map('tgk', 'ティン')
-	call t.add_map('tgp', 'トゥー')
-	call t.add_map('tgu', 'トゥ')
-	call t.add_map('th', 'ツウ')
-	call t.add_map('ti', 'チ')
-	call t.add_map('tj', 'ツン')
-	call t.add_map('tk', 'チン')
-	call t.add_map('tl', 'トン')
-	"call t.add_map('tm', 'タメ')
-	call t.add_map('tn', 'タン')
-	call t.add_map('to', 'ト')
-	call t.add_map('tp', 'トウ')
-	call t.add_map('tq', 'タイ')
-	call t.add_map('tr', 'タラ')
-	call t.add_map('tsa', 'ツァ')
-	call t.add_map('tsd', 'ツェン')
-	call t.add_map('tse', 'ツェ')
-	call t.add_map('tsh', 'ツウ')
-	call t.add_map('tsi', 'ツィ')
-	call t.add_map('tsj', 'ツン')
-	call t.add_map('tsk', 'ツィン')
-	call t.add_map('tsl', 'ツォン')
-	call t.add_map('tso', 'ツォ')
-	call t.add_map('tsq', 'ツァイ')
-	call t.add_map('tst', 'トシテ')
-	call t.add_map('tsu', 'ツ')
-	call t.add_map('tsz', 'ツァン')
-	call t.add_map('tt', 'タチ')
-	call t.add_map('tu', 'ツ')
-	call t.add_map('tw', 'テイ')
-	call t.add_map('tya', 'テャ')
-	call t.add_map('tyh', 'テュー')
-	call t.add_map('tyj', 'テュン')
-	call t.add_map('tyq', 'テャイ')
-	call t.add_map('tyu', 'テュ')
-	call t.add_map('tyz', 'テャン')
-	call t.add_map('tz', 'タン')
-	call t.add_map('u', 'ウ')
-	call t.add_map('va', 'ヴァ')
-	call t.add_map('vd', 'ヴェン')
-	call t.add_map('ve', 'ヴェ')
-	call t.add_map('vh', 'ヴー')
-	call t.add_map('vi', 'ヴィ')
-	call t.add_map('vj', 'ヴン')
-	call t.add_map('vk', 'ヴィン')
-	call t.add_map('vl', 'ヴォン')
-	call t.add_map('vn', 'ヴァン')
-	call t.add_map('vo', 'ヴォ')
-	call t.add_map('vp', 'ヴォウ')
-	call t.add_map('vq', 'ヴァイ')
-	call t.add_map('vu', 'ヴ')
-	call t.add_map('vv', 'ヴュー')
-	call t.add_map('vw', 'ヴェイ')
-	call t.add_map('vyu', 'ヴュ')
-	call t.add_map('vz', 'ヴァン')
-	call t.add_map('wa', 'ワ')
-	call t.add_map('wd', 'ウェン')
-	call t.add_map('we', 'ウェ')
-	call t.add_map('whe', 'ヱ')
-	call t.add_map('whi', 'ヰ')
-	call t.add_map('who', 'ウォ')
-	call t.add_map('wi', 'ウィ')
-	call t.add_map('wk', 'ウィン')
-	call t.add_map('wl', 'ウォン')
-	call t.add_map('wn', 'ワン')
-	call t.add_map('wo', 'ヲ')
-	call t.add_map('wp', 'ウォー')
-	call t.add_map('wq', 'ワイ')
-	call t.add_map('wr', 'ワレ')
-	call t.add_map('wso', 'ウォ')
-	call t.add_map('wt', 'ワタ')
-	call t.add_map('ww', 'ウェイ')
-	call t.add_map('wz', 'ワン')
-	call t.add_map('xa', 'シャ')
-	call t.add_map('xd', 'シェン')
-	call t.add_map('xe', 'シェ')
-	call t.add_map('xh', 'シュウ')
-	call t.add_map('xi', 'シ')
-	call t.add_map('xj', 'シュン')
-	call t.add_map('xk', 'シン')
-	call t.add_map('xl', 'ション')
-	call t.add_map('xn', 'シャン')
-	call t.add_map('xo', 'ショ')
-	call t.add_map('xp', 'ショウ')
-	call t.add_map('xq', 'シャイ')
-	call t.add_map('xu', 'シュ')
-	call t.add_map('xw', 'シェイ')
-	call t.add_map('xz', 'シャン')
-	call t.add_map('ya', 'ヤ')
-	call t.add_map('yd', 'イェン')
-	call t.add_map('ye', 'イェ')
-	call t.add_map('yf', 'ユ')
-	call t.add_map('yh', 'ユウ')
-	call t.add_map('yj', 'ユン')
-	call t.add_map('yl', 'ヨン')
-	call t.add_map('yo', 'ヨ')
-	call t.add_map('yp', 'ヨウ')
-	call t.add_map('yq', 'ヤイ')
-	call t.add_map('yr', 'ヨル')
-	call t.add_map('yu', 'ユ')
-	call t.add_map('yw', 'イェイ')
-	call t.add_map('yz', 'ヤン')
-	call t.add_map('za', 'ザ')
-	call t.add_map('zc', 'ザ')
-	call t.add_map('zd', 'ゼン')
-	call t.add_map('ze', 'ゼ')
-	call t.add_map('zh', 'ズウ')
-	call t.add_map('zi', 'ジ')
-	call t.add_map('zj', 'ズン')
-	call t.add_map('zk', 'ジン')
-	call t.add_map('zl', 'ゾン')
-	call t.add_map('zn', 'ザン')
-	call t.add_map('zo', 'ゾ')
-	call t.add_map('zp', 'ゾウ')
-	call t.add_map('zq', 'ザイ')
-	call t.add_map('zr', 'ザル')
-	call t.add_map('zu', 'ズ')
-	call t.add_map('zv', 'ザイ')
-	call t.add_map('zw', 'ゼイ')
-	call t.add_map('zx', 'ゼイ')
-	call t.add_map('zz', 'ザン')
-	call eskk#register_mode_table('kata', t)
-	" }}} 
-endfunction
-"}}}
-"--------------------------------------------------------------------------- 
-" 吉里吉里用 {{{
-let g:kirikiriopen_use_vimproc = 1
-let g:kirikiriopen_jump_dict = {'tag': 'call\|jump\|link\|lk\|rmm\|button\|rclick', 'file': 'storage'}
-let g:kirikiriopen_list = [
-	\{'tag':'\<trans\>','file':'rule','command':'e:/soft/Vix/ViX.exe','exelist':['png']},
-	\{'tag':'\<image\>\|\<tc\>\|\<tu\>','file':'storage','command':'e:/soft/Vix/ViX.exe','exelist':['png','jpg','tlg']},
-	\{'tag':'\<playse\>\|\<playbgm\>\|\<fadeinbgm\>\|\<fadeinse\>','file':'storage','command':'e:/soft/MPC-HC.1.6.2.4902.x86/mpc-hc.exe','exelist':['ogg']}
-	\]
-" macro {{{
-let g:kirikiri_neocomplcache_macro_list = [
-			\{'tag': 'lk',	   'menu': '', 'macrotype': [
-				\{'type': 'text','typemenu': ''},
-				\{'type': 'storage','typemenu': ''},
-				\{'type': 'target','typemenu': ''},
-				\]},
-			\{'tag': 'tu',	   'menu': '', 'macrotype': [
-				\{'type': 'rule','typemenu': ''},
-				\{'type': 'time','typemenu': ''},
-				\{'type': 'layer','typemenu': ''},
-				\{'type': 'vague','typemenu': ''},
-				\{'type': 'storage','typemenu': ''},
-				\{'type': 'children','typemenu': ''},
-				\]},
-			\{'tag': 'tc',	   'menu': '', 'macrotype': [
-				\{'type': 'time','typemenu': ''},
-				\{'type': 'layer','typemenu': ''},
-				\{'type': 'storage','typemenu': ''},
-				\]},
-			\{'tag': 'exmove', 'menu': '', 'macrotype': [
-				\{'type': 'cx','typemenu': ''},
-				\{'type': 'cy','typemenu': ''},
-				\{'type': 'layer','typemenu': '(必)対象となるレイヤを指定します。'},
-				\{'type': 'page',	'typemenu': 'layer 属性で指定したレイヤが、 表(fore)画面であるか、裏(back)画面であるかを指定します。 省略すると表ページであると見なされます。'},
-				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
-				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
-				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
-				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
-				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
-				\]},
-			\{'tag': 'eximage', 'menu': '', 'macrotype': [
-				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
-				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
-				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
-				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
-				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
-				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
-				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
-				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
-				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
-				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
-				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
-				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
-				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
-				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
-				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
-				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
-				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
-				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
-				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
-				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
-				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
-				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
-				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
-				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
-				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
-				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
-				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
-				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
-				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
-				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
-				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
-				\]},
-			\{'tag': 'im', 'menu': '', 'macrotype': [
-				\{'type': 'name','typemenu': ''},
-				\{'type': 'charwidth','typemenu': ''},
-				\{'type': 'charheight','typemenu': ''},
-				\{'type': 'chartop','typemenu': ''},
-				\{'type': 'method','typemenu': ''},
-				\{'type': 'from','typemenu': ''},
-				\{'type': 'multi','typemenu': ''},
-				\{'type': 'emotion','typemenu': ''},
-				\{'type': 'scale'  , 'typemenu': '縦・横方向共通拡大率(％)'},
-				\{'type': 'angle'  , 'typemenu': '回転する角度(°)'},
-				\{'type': 'xscale', 'typemenu': '横方向拡大率(％)'},
-				\{'type': 'yscale', 'typemenu': '縦方向拡大率(％)'},
-				\{'type': 'x1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-				\{'type': 'y1' 	  , 'typemenu': 'コピー元四角形の左上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-				\{'type': 'x2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-				\{'type': 'y2' 	  , 'typemenu': 'コピー元四角形の右上の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-				\{'type': 'x3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの x 座標(画像を変形する場合に指定)'},
-				\{'type': 'y3' 	  , 'typemenu': 'コピー元四角形の右下の点のコピー先レイヤでの y 座標(画像を変形する場合に指定)'},
-				\{'type': 'xblur'  , 'typemenu': '横方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-				\{'type': 'yblur'  , 'typemenu': '縦方向のブラーの範囲(ピクセル)(画像をぼかす場合に指定)'},
-				\{'type': 'storage',	'typemenu': '(必)読み込みたい画像を指定します。拡張子は省略可能です。'},
-				\{'type': 'layer',	'typemenu': '(必)画像を読み込むレイヤを指定します。'},
-				\{'type': 'page',	'typemenu': '表(fore)画面を対象とするか、裏(back)画面を対象とするかを指定します。 省略すると表ページであると見なされます。'},
-				\{'type': 'visible',	'typemenu': 'layer 属性で指定したレイヤを表示するか、しないかを指定 します。visible=true と 指定すれば、レイヤは表示状態になります。visible=false と指定すれば、 非表示状態になります。省略すると表示状態は変わりませ ん。layer=base を指定した場合はこの属性は指定しないでください。'},
-				\{'type': 'left',	'typemenu': 'layer 属性で指定したレイヤの左端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-				\{'type': 'top',	'typemenu': 'layer 属性で指定したレイヤの上端位置を指定します。 省略すると、画像読み込み前の位置を保持します。layer=base と指定した場合は この属性は指定しないでください。'},
-				\{'type': 'pos',	'typemenu': 'レイヤ位置を自動的に決定します。前景レイヤに対して使います。'},
-				\{'type': 'opacity',	'typemenu': 'layer 属性で指定したレイヤの不透明度を指定します。'},
-				\{'type': 'key',	'typemenu': 'どの色を抜き色とするかを指定します。省略すると抜き色は無効になります。'},
-				\{'type': 'mode',	'typemenu': '前景レイヤの透過モードを指定します。前景レイヤ以外には 指定しないでください。'},
-				\{'type': 'grayscale',	'typemenu': '画像をグレースケールにするかどうかを指定します。 grayscale=true と指定すると、画像をグレースケールにします。 省略すると false であると見なされます。'},
-				\{'type': 'rgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-				\{'type': 'ggamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-				\{'type': 'bgamma',	'typemenu': 'r (赤) 、g (緑) 、 b (青) の各成分のガンマ値を指定します。 たとえば画像をセピア調にするには、 grayscale=true rgamma=1.3 ggamma=1.1 と指定します。'},
-				\{'type': 'rfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-				\{'type': 'gfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-				\{'type': 'bfloor',	'typemenu': '各成分の輝度最低値を指定します。'},
-				\{'type': 'rceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-				\{'type': 'gceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-				\{'type': 'bceil',	'typemenu': '各成分の輝度最高値を指定します。 たとえば、 rfloor=255 gfloor=255 bfloor=255 rceil=0 gceil=0 bceil=0 と 指定すると、色が反転します。'},
-				\{'type': 'mcolor',	'typemenu': '色ブレンドによる色調効果において、ブレンドする色を 0xRRGGBB 形式で指定しま す。濃度は mopacity 属性で指定します。'},
-				\{'type': 'mopacity',	'typemenu': '色ブレンドによる色調効果で、mcolor で指定した色をどれぐらいの不透 明度でブレンドするかを指定します。'},
-				\{'type': 'lightcolor',	'typemenu': '光ブレンドによる色調効果の、ブレンドする色を 0xAARRGGBB 形式で指定します。 α値を含むのに注意してください。'},
-				\{'type': 'lighttype',	'typemenu': '光ブレンドによる色調効果の、合成モードを指定します。'},
-				\{'type': 'shadow',	'typemenu': 'レイヤの画像に影をつけます。影色を 0xRRGGBB 形式で指定します。数値省略時は 0x000000 扱いです。 shadowopacity,shadowx,shadowy,shadowblur でつける影のパラメータを指定できます。'},
-				\{'type': 'shadowopacity', 'typemenu': 'shadowで影をつけるときの影の濃度を指定します。未指定時の値は200です。'},
-				\{'type': 'shadowx',	'typemenu': 'shadowで影をつけるときの影のX方向のずれの量を指定します。未指定時の値は10です。'},
-				\{'type': 'shadowy',	'typemenu': 'shadowで影をつけるときの影のY方向のずれの量を指定します。未指定時の値は10です。'},
-				\{'type': 'shadowblur',	'typemenu': 'shadowで影をつけるときの影のぼかし具合を指定します。未指定時の値は 3 です。'},
-				\{'type': 'clipleft',	'typemenu': '画像クリップ矩形の左端位置を指定し ます。clipleft, cliptop, clipwidth, clipheight で矩形を指定 すると、storage 属性で指定された画像のその矩形のみが切り取られ、 指定されたレイヤの画像になります。画像の一部だけを切り取って 表示したいときなどに使用します。'},
-				\{'type': 'cliptop',	'typemenu': '画像クリップ矩形の上端位置を指定し ます。'},
-				\{'type': 'clipwidth',	'typemenu': '画像クリップ矩形の幅を指定します。'},
-				\{'type': 'clipheight',	'typemenu': '画像クリップ矩形の高さを指定し ます'},
-				\{'type': 'flipud',	'typemenu': '画像の上下反転を行いたい場合に true を指定します。'},
-				\{'type': 'fliplr',	'typemenu': '画像の左右反転を行いたい場合に true を指定します。'},
-				\{'type': 'mapimage',	'typemenu': 'クリッカブルマップに用いる領域画像を指定します。'},
-				\{'type': 'mapaction',	'typemenu': 'クリッカブルマップに用いる領域アクション定義ファイルを指定します。'},
-				\{'type': 'index',	'typemenu': '背景レイヤには指定しないでください。'},
-				\{'type': 'cx','typemenu': ''},
-				\{'type': 'cy','typemenu': ''},
-				\{'type': 'spline',	'typemenu': 'true を指定すると、path 属性で指定した位置をＢスプラインで 曲線補間した線上をレイヤが移動するようになります。'},
-				\{'type': 'time',	'typemenu': '(必)レイヤが path を指定した点から点を移動するのに必要な時間を指定します。'},
-				\{'type': 'delay',	'typemenu': 'レイヤの自動移動が開始されるまでの時間を ms で指定します。'},
-				\{'type': 'path',	'typemenu': '(必)レイヤの位置・不透明度・拡大率・回転角'},
-				\{'type': 'accel',	'typemenu': '加速度的な動きを行わせるかどうかを指定します。'},
-				\]},
-			\] " }}}
-
-
-
-" {{{ file list
-" {{{picture_list
-let s:kirikiri_picture_list = [
-			\{'word': 'black','menu': 'bgimage'},
-			\{'word': 'logo','menu': 'image'},
-			\]
-"}}}
-let s:kirikiri_rule_list = []
-let s:kirikiri_scenario_list = []
-let s:kirikiri_label_list = []
-" {{{ bgm_list
-let s:kirikiri_bgm_list = [
-			\{'word': 'kb1.ogg'},
-			\{'word': 'kb2.ogg'},
-			\{'word': 'kkhk.ogg'},
-			\{'word': 'kkn1.ogg'},
-			\{'word': 'knsm1.ogg'},
-			\{'word': 'knsm2.ogg'},
-			\{'word': 'knsm3.ogg'},
-			\{'word': 'ntj1.ogg'},
-			\{'word': 'ntj2.ogg'},
-			\{'word': 'ntj3.ogg'},
-			\{'word': 'ntj4.ogg'},
-			\{'word': 'ntj5.ogg'},
-			\{'word': 'rck2.ogg'},
-			\{'word': 'rck3.ogg'},
-			\{'word': 'rck4.ogg'},
-			\{'word': 'sekai1.ogg'},
-			\{'word': 'sjk1.ogg'},
-			\{'word': 'sr1.ogg'},
-			\{'word': 'sr2.ogg'},
-			\{'word': 'sr3.ogg'},
-			\{'word': 'srs1.ogg'},
-			\{'word': 'srs2.ogg'},
-			\{'word': 'ttl.ogg'},
-			\{'word': 'ynt1.ogg'},
-			\{'word': 'yss1.ogg'},
-			\{'word': 'yss2.ogg'},
-			\{'word': 'yss3.ogg'},
-			\]
-"}}}
-let s:kirikiri_se_list = []
-" }}}
-" {{{list adapt
-let g:kirikiri_neocomplcache_list = [
-			\{'tagname': 'image',			'typename': 'storage',		'list': s:kirikiri_picture_list},
-			\{'tagname': 'trans',			'typename': 'rule',		'list': s:kirikiri_rule_list},
-			\{'tagname': 'link\|jump\|call',	'typename': 'storage',		'list': s:kirikiri_scenario_list},
-			\{'tagname': 'link\|jump\|call',	'typename': 'target',		'list': s:kirikiri_label_list},
-			\{'tagname': 'playbgm\|fadein',		'typename': 'storage',		'list': s:kirikiri_bgm_list},
-			\{'tagname': 'playse',			'typename': 'storage',		'list': s:kirikiri_se_list}
-			\]
-"}}} 
-" {{{ map
-augroup kirikiri
-autocmd!
-autocmd BufNew,BufRead *.ks,*tjs	nnoremap <buffer> ,r 	:KirikiriExe<CR>
-autocmd FileType tjs	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
-autocmd FileType kirikiri	setl colorcolumn=53
-autocmd FileType kirikiri	nnoremap <buffer> <C-K> :KirikiriOpen<CR>
-autocmd FileType kirikiri	nnoremap <buffer> <C-]> :KirikiriJump<CR>
-autocmd FileType kirikiri	nnoremap <buffer> <Space>h    :split $HELP/Tags.help<CR>
-autocmd FileType kirikiri	nnoremap <buffer> ,h    yiw:split $HELP/Tags.help<CR>gg/\<<C-R>*\><CR>:nohlsearch<CR>
-autocmd FileType kirikiri	inoremap <buffer> <M-n> <CR>[pn]<CR><CR>
-autocmd FileType kirikiri	inoremap <buffer> <M-r> [lr]<CR>
-autocmd FileType kirikiri	inoremap <buffer> <M-l> [l]
-autocmd FileType kirikiri	inoremap <buffer> <M-[> [「]
-autocmd FileType kirikiri	inoremap <buffer> <M-]> [」][lr]<CR>
-autocmd FileType kirikiri	inoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
-autocmd FileType kirikiri	vnoremap <buffer> <Leader>@ :s/\[\(.*\)]/@\1/<CR>
-augroup END
-"}}} 
- " }}}
 "------------------------------------------------------------------------------------- 
-""   VimOrganizer {{{
-" au! BufRead,BufWrite,BufWritePost,BufNewFile *.org 
-" au BufEnter *.org            call org#SetOrgFileType()
-" let g:org_command_for_emacsclient = 'e:\Soft\emacs-23.3\bin\emacsclientw.exe'
-" let g:org_agenda_select_dirs=["~/.vim_junk/org_files"]
-" let g:org_agenda_files = split(glob("~/.vim_junk/org_files/*.org"),"\n")
-"}}}
-"-------------------------------------------------------------------------------------- 
-"" syntastic {{{
-"" cpp shellslashで動かない clangも動かない
-"let g:syntastic_enable_signs=1
-"let g:syntastic_check_on_open=1
-"let g:syntastic_auto_loc_list=2
-"let g:syntastic_cpp_compiler = 'clang++'
-"let g:syntastic_cpp_compiler_options = mingwoption.localoption.widgetoption.Qtoption." -std=c++11 -Wall -fgnu-runtime"
-""let g:syntastic_cpp_compiler_options = localoption.widgetoption.Qtoption." -std=c++11 -Wall -fgnu-runtime"
-"" python
-"let g:syntastic_python_checker = 'pyflakes'
-""let g:syntastic_python_checker = 'pylint'
-"" }}}
-" -------------------------------------------------------------------------- 
-""  eregex {{{
-"nnoremap / :M/
-"nnoremap ? :M?
-"nnoremap <Space>/ :M/
-"nnoremap <Space>? :M?
-"" }}}
-"-------------------------------------------------------------------------------------- 
-" " clang_declared.vim {{{
-" nnoremap <F7> :ClangDeclaredOpenTab<CR>
-" 	let g:clang_declared_c_index_test_cmd = $LLVM."/c-index-test"
-" if has('win32') || has('win64')
-" 	let g:clang_declared_c_index_test_option = includecppoption." -std=c++11 -fgnu-runtime"
-" else
-" 	let g:clnag_declared_c_index_test_option = "-fgnu-runtime"
-" endif
-" " }}}
-"--------------------------------------------------------------------------- 
-" MyMoveWord
-"let MyMoveWord_enable_WBE = 1
-"let g:MyMoveWord_JpSep = '　。、．，／！？「」'
-"--------------------------------------------------------------------------- 
 " vim: nowrap foldmethod=marker textwidth=0 ft=vim

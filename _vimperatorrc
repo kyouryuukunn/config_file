@@ -9,3 +9,6 @@ set hintchars=asdfghjklqwertyuiop
 hi Hint z-index:5000; font-size:14px; color:white; background-color:red; border-color:ButtonShadow; border-width:0px; border-style:solid; padding:0px 2px 0px 2px; position:absolute; font-family: Menlo, Consolas, Monaco, monospace; text-transform: uppercase;
 " コマンドでIMEをOFFに
 style -name commandline-ime chrome://* #liberator-commandline-command input {ime-mode: inactive;}
+command renpy :tabopen https://translations.launchpad.net/renpy-doc/trunk/+lang/ja<CR> ":tabopen http://ja.renpy.org/doc/html/<CR>:tabopen http://www.renpy.org/doc/html/<CR>:tabopen https://github.com/kyouryuukunn/renpy<CR>:tabopen https://github.com/renpy/renpy<CR>
+" 緑のgooを標準エンジンに
+"set defsearch=goo1

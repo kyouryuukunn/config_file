@@ -16,9 +16,10 @@ key U-*AltDownOver   = U-LAlt U-RAlt
 #âpêîÇ©ÇÁÇÃÉcÅ[ÉXÉgÉçÅ[ÉN  {{{
 keymap2 Two_Strok_Of_CapsLocs
 
-key q = &WindowSetAlpha(70)
-key w = &WindowToggleTopMost
+key o = &WindowSetAlpha(70)
+key t = &WindowToggleTopMost
 key u = &LoadSetting()
+key q = &ShellExecute("open", "E:\Soft\kmmacro\KMmacro.exe",,"E:\Soft\kmmacro", ShowNormal)
 
 #key ~L0-i = &Toggle(Lock0,on) &IconColor(2)
 #key ~L1-L0-i = &Toggle(Lock0,off) &IconColor(0)
@@ -27,16 +28,15 @@ key u = &LoadSetting()
 #key ~L0-L1-d =   &Toggle(Lock1,off) &IconColor(0)
 #key  L0-L1-d =   &Toggle(Lock1,off) &IconColor(2)
 
-key a = W-_1
-key g = W-_2
-key f = W-_3
-key m = W-_4
-key c = W-_5
-key e = W-_6
-key n = W-_7
-key s = W-_8
-key d = W-_9
-key d = W-_9
+key *a = W-_1
+key *g = W-_2
+key *f = W-_3
+key *m = W-_4
+key *n = W-_5
+key *s = W-_6
+key *d = W-_7
+key *w = W-_8
+key *e = W-_9
 key Semicolon = &ShellExecute("open", "E:\Soft\Sylpheed\sylpheed.exe",,, ShowNormal) #mail
 
 key *h = W-*Left
@@ -60,13 +60,14 @@ mod mod0  += !!ïœä∑
 mod mod7  += !!!Apps
 mod mod8  += !!LCtrl
 mod mod9  += !!LShift
-mod mod9  += !!Space
+mod mod6  += !!Space
 key *Ç–ÇÁÇ™Ç»            = *LAlt
 
 key *âpêî                = &Prefix(Two_Strok_Of_CapsLocs)
 key M0-*M1-*îºäp/ëSäp    = Ç–ÇÁÇ™Ç»
 key M8-C-*LCtrl          = Esc
 key M9-S-LShift          = $ToggleIME
+key M6-M9-S-Space           = S-Space
 
 key M7-C-*Apps           = Enter
 key M7-C-S-*Apps         = S-Enter
@@ -86,9 +87,9 @@ key M0-M1-S-C-*ñ≥ïœä∑ = C-S-Enter
 key M0-M1-A-*Ç–ÇÁÇ™Ç» = Ç–ÇÁÇ™Ç»
 
 key M8-C-*I               = Tab
-key M8-M9-C-S-*I          = S-Tab
+key M8-M6-C-S-*I          = S-Tab
 key M8-M7-C-*I            = C-Tab
-key M8-M9-M7-C-S-*I       = C-S-Tab
+key M8-M7-M6-C-S-*I       = C-S-Tab
 
 key M0-*F1               = C-A-S-F4
 key M0-*F2               = C-A-S-F5
@@ -158,6 +159,8 @@ key IJ-*Colon = Minus
 #key M8-*LButton = C-LButton
 #key M9-*RButton = S-RButton
 #key M9-*LButton = S-LButton
+# key *NumLock = MButton
+
 # }}}
 #------------------------------------------------------------------------------------- 
 window ConsoleWindowClass /^ConsoleWindowClass$/ : Global # {{{
@@ -192,15 +195,15 @@ Key M0-~S-s = &PostMessage(ToParentWindow, 0x8003, +1, 0)
 key M0-~S-d = &PostMessage(ToParentWindow, 0x8003, +1, 0)
 # }}}
 #------------------------------------------------------------------------------------- 
-window Novel :Global #{{{}
+window Novel :Global #{{{
 key *WheelBackward = Enter
 key D-*XButton1 = D-RCtrl
 key U-*XButton1 = U-RCtrl
+#------------------------------------------------------------------------------------- 
 window Nscripter /NScripter/ :Novel
-#------------------------------------------------------------------------------------- 
 window kazoku /KIZUNAR\.EXE/ :Novel
-#------------------------------------------------------------------------------------- 
 window kazokuR /KZ_N\.EXE/ :Novel
+window KYOJINTACHI4Cs /KYOJINTACHI4Cs/ :Novel
 #------------------------------------------------------------------------------------- 
 # window tuino /SETUP.exe/ :Global
 # key *WheelBackward = LButton
@@ -227,9 +230,33 @@ key Right = D
 key B =
 key H =
 # }}}
+#------------------------------------------------------------------------------------- 
+window FL_pianoroll ( /FL Studio/ && /Piano roll/ ) : Global #{{{
+Key Left            = NumSlash
+Key Right           = NumAsterisk
+window FL_playlist ( /FL Studio/ && /Playlist/ ) : Global
+key *_1 = Num1
+key *_2 = Num2
+key *_3 = Num3
+key *_4 = Num4
+key *_5 = Num5
+key *_6 = Num6
+key *_7 = Num7
+key *_8 = Num8
+key *_9 = Num9
+window FL /FL Studio/ : Global
+key S-*Insert = C-V
+# key A-Y = F6
+# key A-N = F7
+# key M0-F11 = C-F8
+# key M0-C-*F11 = C-A-F8
+# key M0-*F12 = F9
+
+# }}}
 window None
 window sotes /sotes\.exe/ :None
 window touhou /th[0-9]+\.exe/ :None
 window touhou2 /th_dnh.exe/ :None
 window RPG /RPG_RT.exe/ :None
+window oblivion /oblivion.exe/ :None
 # vim: foldmethod=marker

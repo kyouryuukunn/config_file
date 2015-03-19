@@ -1,32 +1,40 @@
 " --------------------------------------------------------------------------
 let g:portable = 0
 " --------------------------------------------------------------------------
-" path {{{
+" 各種path {{{
 "win、linux互換用
 if has('win32') || has('win64')
-  let $DOTVIM = $VIM.'/vimfiles'
+  let $DOTVIM = expand($VIM.'/vimfiles')
   let $DROPBOX = expand('d:/Box/Workspace/Dropbox/etc')
-  let $HELP = $DOTVIM.'/help'
+  let $HELP = expand($DOTVIM.'/help')
   let $LLVM = expand('e:/llvm/bin')
-  "let $DMD = expand('e:/dmd2/windows/bin')
+  let $DMD = expand('e:/D/dmd2/windows/bin')
+  let $DUB = expand('e:/D/dub')
+  let $GOROOT = expand('e:/go')
+  let $GOPATH = expand($GOROOT.'/local')
+  let $HASKELL = expand('C:/Users/kuma/AppData/Roaming/cabal/bin;C:/Program Files (x86)/Haskell/bin;E:/Haskell/lib/extralibs/bin;E:/Haskell/bin')
   let $PYTHON2 = expand('C:/Python27;C:/Python27/Scripts')
-  let $PYTHON3 = expand('C:/Python33;C:/Python33/Scripts')
+  let $PYTHON3 = expand('C:/Python34;C:/Python34/Scripts')
   let $GIT = expand('e:/Soft/Git/bin')
   let $BZR = expand('c:/Program Files (x86)/Bazaar')
   let $MINGW = expand('c:/MinGW/bin')
   let $MSYS = expand('c:/MinGW/msys/1.0/bin')
   let $CYG = expand('c:/cygwin64/bin')
-  let $PATH = $PATH .";".$LLVM.';'.$PYTHON3.";".$MSYS.";".$MINGW.";".$CYG.";".$BZR
+  let $PATH = $PATH .";".$LLVM.';'.$PYTHON3.";".$MSYS.";".$MINGW.";".$CYG.";".$BZR.";".$DMD.";".$DUB.";".$HASKELL.";".expand($GOROOT.'/bin;'.$GOPATH.'/bin')
   let $CYGWIN = "nodosfilewarning"
 else
-  let $DROPBOX = expand('~/Dropbox/etc')
   let $DOTVIM = expand('~/.vim')
+  let $DROPBOX = expand('~/Dropbox/etc')
   let $HELP = $DOTVIM.'/help'
   let $LLVM = expand('/usr/local/bin')
 endif " }}}
 set migemo
-" nnoremap <Space>/ g/
-" nnoremap <Space>? g?
+
+let $JVGREP_ENCODINGS = 'utf-8,cp932,euc-jp,utf-16'
+" nnoremap / g/
+" nnoremap ? g?
+" nnoremap g/ /
+" nnoremap g? ?
 "-------------------------------------------------------------------------------------
 " 辞書
 "set dictionary="spell"
@@ -41,27 +49,32 @@ function! s:ShowSign()
 		execute "sign place 134893619283 line=1 name=anchor file=".expand("%:p")
 	endif
 endfunction
+set spelllang+=cjk
+set spell
 "不可視文字の表示
 " set list listchars=tab:^_,trail:_  " }}}
 "------------------------------------------------------------------------------
 "スワップ,バックアップ保存場所 {{{
 if !g:portable
-	set backup
-	if has('win32') || has('win64')
-		set backupdir=D:/App/back
-		set directory=D:/App/swap
-	else
-		set backupdir=~/.back
-		set directory=~/.swap
-	endif
-	"永続アンドゥ
-	set undofile
-	" アンドゥの保存場所(7.3)
-	let &undodir = &directory
+    if has('win32') || has('win64')
+        set backupdir=D:/App/back
+        set directory=D:/App/swap
+    else
+        set backupdir=~/.back
+        set directory=~/.swap
+    endif
+else
+    set backupdir=$VIM.'/back'
+    set directory=$VIM.'/swap'
 endif
+set backup
+"永続アンドゥ
+set undofile
+" アンドゥの保存場所(7.3)
+let &undodir = &directory
 " }}}
-"------------------------------------------------------------------------------
-" etc  {{{
+"""------------------------------------------------------------------------------
+""" etc  {{{
 inoremap # X<C-H>#
 " #で行頭に飛ばないように
 set shellslash
@@ -89,7 +102,11 @@ set ignorecase
 set smartcase
 set incsearch "<C-R><C-W>に影響
 set wildmenu
-set nowrap
+" 行を折り返す
+" set nowrap
+" 折り返された行を同じインデントで表示する
+set breakindent
+" 折り返し位置をbreakatに指定した文字のみにする
 set linebreak
 " 改行時にコメントしない
 setlocal formatoptions-=ro
@@ -123,6 +140,10 @@ augroup MyAutocmd
 	autocmd FileType python inoremap <buffer> <CR><CR>   <CR><CR><C-D>
 " }}}
 "-------------------------------------------------------------------------------------
+" d {{{
+	" autocmd FileType d DUDCDstartServer
+" }}}
+"-------------------------------------------------------------------------------------
 " renpy {{{
 	autocmd FileType renpy setl tabstop=8
 	autocmd FileType renpy setl softtabstop=4
@@ -135,10 +156,30 @@ augroup MyAutocmd
 	" Folding
 	autocmd FileType renpy setl foldmethod=indent
 	autocmd FileType renpy setl foldlevel=99
-    autocmd FileType renpy inoremap <buffer> <expr><S-CR>  neocomplcache#smart_close_popup() . "\<CR><CR><C-D>"
+    	autocmd FileType renpy inoremap <buffer> <expr><S-CR>  neocomplcache#smart_close_popup() . "\<CR><CR><C-D>"
+    	   " fast<C-Y>, で {fast}#{/fast}
 	autocmd FileType renpy inoremap <buffer> <C-Y>,  <Esc>vbyiX{<Left><C-H><Right><Esc>ea}{/<C-R>*}<Esc>bba
+       	" <C-Y>n で {fast}{/fast}#
 	autocmd FileType renpy inoremap <buffer> <C-Y>n  <Esc>f}a
+       	" Ren'Py 起動
 	autocmd FileType renpy nnoremap <buffer> <Leader>r :RenPyExe<CR>
+
+    function! s:MarkdownToRenPy() " {{{
+        %s/^\t/\t\t/
+        %s/\v^#(.*)/\tlabel \1:/
+        " %s/\v(^[^*#$	].*)  \n(.*)/\l\\n\2/
+        %s/\v  \n/\\n/
+        %s/\v^\$(.*)\n(.*)/\t\t\1 "\2"/
+        %s/\v(^[^*$#	].*)/\t\t"\1"/
+        %s/\v^\* ([^[].*)/\t\tmenu:\r\t\t\t"\1"/
+        %s/\v^\*$/\t\tmenu:\r\t\t\t"\1"/
+        %s/\v\* \[(.*)\]\((.*)\)/\t\t\t"\1":\r\t\t\t\tjump \2/
+        %s/^\t//
+        %s/\t/    /g
+    endfunction
+
+    autocmd FileType renpy command! RenPy call s:MarkdownToRenPy()
+"  }}}
 "" }}}
 " --------------------------------------------------------------------------
 " dos {{{
@@ -151,7 +192,8 @@ augroup MyAutocmd
 "   }}}
 "   ------------------------------------------------------------------------
 " help {{{
-	autocmd BufRead $DOTVIM/bundle/.neobundle/doc/*.txt nnoremap q :q<CR>
+	autocmd BufRead $DOTVIM/bundle/.neobundle/doc/*.txt nnoremap <buffer> q :q<CR>
+	autocmd FileType help nnoremap <buffer> q :q<CR>
 "   }}}
 "   ------------------------------------------------------------------------
 " tweet {{{
@@ -176,9 +218,9 @@ augroup MyAutocmd
 	autocmd BufRead _vundlevim,_pluginvim,_includevim set filetype=vim
 	" 常に開いているファイルと同じディレクトリをカレントディレクトリにする
 	autocmd BufEnter * call s:MoveNowDir()
-    " signを表示し続ける
+ 	" signを表示し続ける
 	autocmd BufEnter * call s:ShowSign()
-	"入力モード時、ステータスラインのカラーを変更
+	" 入力モード時、ステータスラインのカラーを変更
 	" autocmd InsertEnter * highlight StatusLine guifg=#ccdc90 guibg=#2E4340
 	" autocmd InsertLeave * highlight StatusLine guifg=#2E4340 guibg=#ccdc90
 " }}}
@@ -186,27 +228,8 @@ augroup MyAutocmd
 augroup END
 " }}}
 "  -------------------------------------------------------------------------
-function! s:MarkdownToRenPy() " {{{
-	%s/^\t/\t\t/
-	%s/\v^#(.*)/\tlabel \1:/
-	" %s/\v(^[^*#$	].*)  \n(.*)/\l\\n\2/
-	%s/\v  \n/\\n/
-	%s/\v^\$(.*)\n(.*)/\t\t\1 "\2"/
-	%s/\v(^[^*$#	].*)/\t\t"\1"/
-	%s/\v^\* ([^[].*)/\t\tmenu:\r\t\t\t"\1"/
-	%s/\v^\*$/\t\tmenu:\r\t\t\t"\1"/
-	%s/\v\* \[(.*)\]\((.*)\)/\t\t\t"\1":\r\t\t\t\tjump \2/
-	%s/^\t//
-	%s/\t/    /g
-endfunction
-
-command RenPy call s:MarkdownToRenPy()
-"  }}}
-"  -------------------------------------------------------------------------
 "keymap {{{
 "---------------------------------------------------------------------------
-" nnoremap <Space>/ /\v
-" nnoremap <Space>? ?\v
 nnoremap <silent> <F5> :e!<CR>
 nnoremap <silent> <F6> :tabe %<CR>
 nnoremap <silent> <F7> :tabe<CR>:tabonly!<CR>
@@ -217,9 +240,6 @@ nnoremap <Space>ss :mksession! $DOTVIM/session/temp<CR>
 nnoremap <Space>sl :source $DOTVIM/session/temp<CR>
 nnoremap <Space>mks :mksession! $DOTVIM/session/
 nnoremap <Space>so :source $DOTVIM/session/
-"-------------------------------------------------------------------------------------
-"nnoremap _ $
-"vnoremap _ $
 "-------------------------------------------------------------------------------------
 " カーソルをj k では表示行で移動する。物理行移動は<C-n>,<C-p> {{{
 " キーボードマクロには物理行移動を推奨
@@ -295,8 +315,8 @@ vnoremap > >gv
 "nnoremap <ESC><ESC> :nohlsearch<CR>
 "-------------------------------------------------------------------------------------
 "終了
-nnoremap <F1> :qa!<CR>
-nnoremap <F2> :wqa<CR>
+" nnoremap <F1> :qa!<CR>
+" nnoremap <F2> :wqa<CR>
 "-------------------------------------------------------------------------------------
 " タブの移動
 nnoremap <silent> <C-l> :tabnext<CR>
@@ -322,9 +342,6 @@ inoremap <C-CR> <C-g>u<End><C-U><Del>
 " 単語削除、(日本語用)。
 inoremap <C-W> <C-g>u<Esc>vbs
 
-inoremap <C-F>/ <C-O>g/
-inoremap <C-F>? <C-O>g?
-
 inoremap <C-U>  <C-g>u<C-u>
 "-------------------------------------------------------------------------------------
 "\から/へ置換
@@ -336,13 +353,13 @@ vnoremap <silent> <Leader><Leader> :s+/+\\+g<CR>:nohlsearch<CR>
 nnoremap <silent> <Leader><Leader> :s+/+\\+g<CR>:nohlsearch<CR>
 "-------------------------------------------------------------------------------------
 "再設定
-command! Reset call s:Reset()
-nnoremap <silent> <F3> :Reset<CR>
-
-function! s:Reset()
-	source ~/_vimrc
-	source ~/_gvimrc
-endfunction
+" command! Reset call s:Reset()
+" nnoremap <silent> <F3> :Reset<CR>
+"
+" function! s:Reset()
+" 	source ~/_vimrc
+" 	source ~/_gvimrc
+" endfunction
 "-------------------------------------------------------------------------------------
 " gtags {{{
 noremap <C-G><C-T> :!gtags -v
@@ -388,7 +405,7 @@ endfunction " }}}
 "------------------------------------------------------------------------------
 "grep {{{
 if has('win32') || has('win64')
-	set grepprg=jvgrep
+	set grepprg=jvgrep\ -n
 	" set grepprg=grep\ -nH
 endif
 "自動でQuickfixを開く
@@ -406,7 +423,7 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
 set nf=alpha " }}}
 "------------------------------------------------------------------------------
 "挿入 {{{
-iab <expr> lin repeat('-',80 - col('.'))
+ab <expr> lin repeat('-',80 - col('.'))
 " }}}
 "------------------------------------------------------------------------------
 "}}}

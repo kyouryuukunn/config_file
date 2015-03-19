@@ -1,6 +1,6 @@
 "------------------------------------------------------------------------------------- 
 " コンパイラーオプション
-let s:mingw = 'C:/MinGw/lib/gcc/mingw32/4.7.2/include'
+let s:mingw = 'C:/MinGw/lib/gcc/mingw32/4.8.1/include'
 let mingwdir = 
 		\s:mingw.','.
 		\s:mingw.'/c++,'.
@@ -8,12 +8,9 @@ let mingwdir =
 		\s:mingw.'/c++/backward,'.
 		\'C:/MinGw/include,'
 let widgetdir = '
-		\C:/MinGw/msys/1.0/local/include/wx-2.9,
-		\C:/MinGw/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9,
-		\'
-let localdir = 	'
-		\C:/MinGw/msys/1.0/local/include,
-		\'
+		\C:/MinGw/msys/1.0/local/include/wx-3.0,
+		\C:/MinGw/msys/1.0/local/lib/wx/include/msw-unicode-static-3.0,'
+let localdir = 	'C:/MinGw/msys/1.0/local/include,'
 let Qtdir = '
 		\E:/Qt/4.8.1/include,
 		\E:/Qt/4.8.1/include/ActiveQt,
@@ -40,14 +37,14 @@ let Qtdir = '
 		\E:/Qt/4.8.1/include/QtXml,
 		\E:/Qt/4.8.1/include/QtXmlPatterns,
 		\E:/Qt/4.8.1/include/phonon,
-		\E:/Qt/4.8.1/include/phonon_compat,
-		\'
+		\E:/Qt/4.8.1/include/phonon_compat,'
 let mingwoption = 
 		\' -I '.s:mingw.
 		\' -I '.s:mingw.'/c++'.
 		\' -I '.s:mingw.'/c++/mingw32'.
 		\' -I '.s:mingw.'/c++/backward'.
-		\' -I C:/MinGw/include'
+		\' -I C:/MinGw/include '
+		\
 let msvcoption = '
 		\ -I "C:/Program Files/Microsoft Visual Studio 10.0/VC/include"
 		\ -I "C:/Program Files/Microsoft SDKs/Windows/v7.0A/Include"
@@ -55,14 +52,21 @@ let msvcoption = '
 		\ -I "C:/Program Files/Microsoft SDKs/Microsoft Sync Framework/v1.0/include"
 		\ -DWIN32 -D_WINDOWS -DNDEBUG -D_MSC_VER=1600 -D__MSVCRT_VERSION__=0x700 -D_WIN32_WINNT=0x0500
 		\ -fms-extensions -fmsc-version=1600 -fgnu-runtime
-		\'
+		\ '
 let widgetoption = '
-		\ -I C:/MinGw/msys/1.0/local/include/wx-2.9
-		\ -I C:/MinGw/msys/1.0/local/lib/wx/include/msw-unicode-static-2.9
-		\'
-let localoption ='
-		\ -I C:/MinGw/msys/1.0/local/include
-		\'
+		\ -I C:/MinGw/msys/1.0/local/include/wx-3.0
+		\ -I C:/MinGw/msys/1.0/local/lib/wx/include/msw-unicode-static-3.0
+		\ '
+
+if has('win32') || has('win64')
+  let localoption ='
+  		\ -I C:/MinGw/msys/1.0/local/include
+  		\ '
+elseif has('unix')
+  let localoption ='
+  		\ -I /user/local/include
+  		\ '
+endif
 		
 let Qtoption = '
 		\ -I E:/Qt/4.8.1/include
@@ -92,7 +96,81 @@ let Qtoption = '
 		\ -I E:/Qt/4.8.1/include/QtXmlPatterns
 		\ -I E:/Qt/4.8.1/include/phonon
 		\ -I E:/Qt/4.8.1/include/phonon_compat
-		\'
+		\ '
 
-let includecppdir = mingwdir.widgetdir.localdir.Qtdir
-let includecppoption = mingwoption.widgetoption.localoption.Qtoption
+let libboost = '
+		\ -l boost_atomic-mgw48-mt-1_57
+		\ -l boost_atomic-mgw48-mt-d-1_57
+		\ -l boost_chrono-mgw48-mt-1_57
+		\ -l boost_chrono-mgw48-mt-d-1_57
+		\ -l boost_container-mgw48-mt-1_57
+		\ -l boost_container-mgw48-mt-d-1_57
+		\ -l boost_coroutine-mgw48-mt-d-1_57
+		\ -l boost_date_time-mgw48-mt-1_57
+		\ -l boost_date_time-mgw48-mt-d-1_57
+		\ -l boost_exception-mgw48-mt-d-1_57
+		\ -l boost_filesystem-mgw48-mt-1_57
+		\ -l boost_filesystem-mgw48-mt-d-1_57
+		\ -l boost_graph-mgw48-mt-1_57
+		\ -l boost_graph-mgw48-mt-d-1_57
+		\ -l boost_iostreams-mgw48-mt-1_57
+		\ -l boost_iostreams-mgw48-mt-d-1_57
+		\ -l boost_locale-mgw48-mt-1_57
+		\ -l boost_locale-mgw48-mt-d-1_57
+		\ -l boost_log_setup-mgw48-mt-1_57
+		\ -l boost_log_setup-mgw48-mt-d-1_57
+		\ -l boost_log-mgw48-mt-1_57
+		\ -l boost_log-mgw48-mt-d-1_57
+		\ -l boost_math_c99f-mgw48-mt-1_57
+		\ -l boost_math_c99f-mgw48-mt-d-1_57
+		\ -l boost_math_c99l-mgw48-mt-1_57
+		\ -l boost_math_c99l-mgw48-mt-d-1_57
+		\ -l boost_math_c99-mgw48-mt-1_57
+		\ -l boost_math_c99-mgw48-mt-d-1_57
+		\ -l boost_math_tr1f-mgw48-mt-1_57
+		\ -l boost_math_tr1f-mgw48-mt-d-1_57
+		\ -l boost_math_tr1l-mgw48-mt-1_57
+		\ -l boost_math_tr1l-mgw48-mt-d-1_57
+		\ -l boost_math_tr1-mgw48-mt-1_57
+		\ -l boost_math_tr1-mgw48-mt-d-1_57
+		\ -l boost_prg_exec_monitor-mgw48-mt-1_57
+		\ -l boost_prg_exec_monitor-mgw48-mt-d-1_57
+		\ -l boost_program_options-mgw48-mt-1_57
+		\ -l boost_program_options-mgw48-mt-d-1_57
+		\ -l boost_python3-mgw48-mt-1_57
+		\ -l boost_python3-mgw48-mt-d-1_57
+		\ -l boost_python-mgw48-mt-1_57
+		\ -l boost_python-mgw48-mt-d-1_57
+		\ -l boost_random-mgw48-mt-1_57
+		\ -l boost_random-mgw48-mt-d-1_57
+		\ -l boost_regex-mgw48-mt-1_57
+		\ -l boost_regex-mgw48-mt-d-1_57
+		\ -l boost_serialization-mgw48-mt-1_57
+		\ -l boost_serialization-mgw48-mt-d-1_57
+		\ -l boost_signals-mgw48-mt-1_57
+		\ -l boost_signals-mgw48-mt-d-1_57
+		\ -l boost_system-mgw48-mt-1_57
+		\ -l boost_system-mgw48-mt-d-1_57
+		\ -l boost_test_exec_monitor-mgw48-mt-d-1_57
+		\ -l boost_thread-mgw48-mt-1_57
+		\ -l boost_thread-mgw48-mt-d-1_57
+		\ -l boost_timer-mgw48-mt-1_57
+		\ -l boost_timer-mgw48-mt-d-1_57
+		\ -l boost_unit_test_framework-mgw48-mt-1_57
+		\ -l boost_unit_test_framework-mgw48-mt-d-1_57
+		\ -l boost_wave-mgw48-mt-1_57
+		\ -l boost_wave-mgw48-mt-d-1_57
+		\ -l boost_wserialization-mgw48-mt-1_57
+		\ -l boost_wserialization-mgw48-mt-d-1_57
+		\ '
+
+if has('win32') || has('win64')
+  let includecppdir = localdir.mingwdir.widgetdir.Qtdir
+  let includecppoption = localoption.mingwoption.widgetoption.Qtoption
+elseif has('unix')
+  let l:ver = '4.8.1'
+  let includecppdir = '/usr/local/include,/usr/include,/usr/include/c++,/usr/include/c++/'.l:ver.',/usr/include/c++/'.l:ver.'/backward,/usr/include/c++/'.l:ver.'/i686-linux-gnu'
+  let includecppoption = '-I /usr/local/include -I /usr/include -I /usr/include/c++ -I /usr/include/c++/'.l:ver.' -I /usr/include/c++/'.l:ver.'/backward -I /usr/include/c++/'.l:ver.'/i686-linux-gnu'
+endif
+exe 'set path+='.includecppdir
+

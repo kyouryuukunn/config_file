@@ -12,6 +12,8 @@ let s:outline_info = {
       \ 'heading'  : '
       \^\s*\%(class\|def\)\>
       \\|label .*:
+      \\|init .*:
+      \\|screen .*:
       \',
       \
       \ 'skip': {
