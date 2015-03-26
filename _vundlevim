@@ -1,105 +1,186 @@
 " プラグイン
-set nocompatible
-filetype off
-filetype plugin indent off
-
 if has('vim_starting')
+	if &compatible
+		set nocompatible
+	endif
+	" Required:
 	set rtp+=$DOTVIM/bundle/neobundle.vim
-	call neobundle#rc(expand('$DOTVIM/bundle'))
 endif
 
-" syntaxチェック"
-NeoBundle "osyo-manga/shabadou.vim",  {'autoload': {'filetypes': ['cpp','python','d']}}
-NeoBundle "osyo-manga/vim-watchdogs",  {'autoload': {'filetypes': ['cpp','python','d']}}
-NeoBundle 'dannyob/quickfixstatus',  {'autoload': {'filetypes': ['cpp','python','d']}}
-NeoBundle 'jceb/vim-hier',  {'autoload': {'filetypes': ['cpp','python','d']}}
+call neobundle#begin(expand('$DOTVIM/bundle'))
+NeoBundleFetch 'Shougo/neobundle.vim'
 
+if has('win32') || has('win64')
+  set rtp+=C:/Python34/pyclewn
+endif
+
+"---------------------------------------------------------------------------
+" syntaxチェック{{{
+NeoBundleLazy "osyo-manga/shabadou.vim",  {'autoload': {'filetypes': ['cpp','python','d','haskell','go','cs']}}
+NeoBundleLazy "osyo-manga/vim-watchdogs",  {'autoload': {'filetypes': ['cpp','python','d','haskell','go','cs']}}
+NeoBundleLazy 'dannyob/quickfixstatus',  {'autoload': {'filetypes': ['cpp','python','d','haskell','go','cs']}}
+NeoBundleLazy 'cohama/vim-hier',  {'autoload': {'filetypes': ['cpp','python','d','haskell','go','cs']}}
+"}}}
+"---------------------------------------------------------------------------
+"{{{言語別
 "c++
-NeoBundle 'Rip-Rip/clang_complete',  {'autoload': {'filetypes': ['cpp']}}
+NeoBundleLazy 'Rip-Rip/clang_complete',  {'autoload': {'filetypes': ['cpp']}}
 "NeoBundle 'eclim', { 'stay_same' : 1 }
 "NeoBundle 'gtags', { 'stay_same' : 1 }
 "NeoBundle 'pyclew', { 'stay_same' : 1 }
 
+"C#
+" NeoBundleLazy 'OmniSharp/omnisharp-vim', {
+" \   'autoload': {'filetypes': ['cs','csi','csx']},
+" \   'build': {
+" \     'windows': 'sh -c "git submodule update --init" && "C:/Program Files (x86)/MSBuild/12.0/Bin/MSBuild.exe" server/OmniSharp.sln /p:Platform="Any CPU"',
+" \     'mac': 'xbuild server/OmniSharp.sln',
+" \     'unix': 'xbuild server/OmniSharp.sln',
+" \   }
+" \ }
+
+"go
+NeoBundleLazy 'dgryski/vim-godef',  {"autoload":{'filetypes':['go']}}
+NeoBundleLazy 'vim-jp/vim-go-extra',{"autoload":{'filetypes':['go']}} 
+
+"d
+NeoBundleLazy 'Hackerpilot/DCD',  {
+    \ 'build' : {
+      \ 'windows' : 'build.bat',
+      \ 'unix' : 'make',
+  \ },
+\ }
+NeoBundleLazy 'Hackerpilot/Dscanner',  {'autoload': {'filetypes': ['d']},
+    \ 'build' : {
+      \ 'windows' : 'build.bat',
+      \ 'unix' : 'make',
+  \ },
+\ }
+NeoBundleLazy 'kyouryuukunn/vim-dutyl',  {'autoload': {'filetypes': ['d']}}
+
 "python
-NeoBundle 'davidhalter/jedi-vim', {'autoload': {'filetypes': ['python']}}
-NeoBundle 'python_match.vim', {'autoload': {'filetypes': ['python']}}
+NeoBundleLazy 'davidhalter/jedi-vim', {'autoload': {'filetypes': ['python']},
+    \ 'build' : {
+      \ 'windows' : 'sh -c "git submodule update --init"',
+      \ 'unix' : 'git submodule update --init',
+  \ },
+\ }
+NeoBundleLazy 'python_match.vim', {'autoload': {'filetypes': ['python']}}
+
 "html
-NeoBundle 'othree/html5.vim',  {'autoload': {'filetypes': ['html']}}
-" NeoBundle 'hokaccha/vim-html5validator', {'autoload': {'filetypes': ['html']}}
+NeoBundleLazy 'othree/html5.vim',  {'autoload': {'filetypes': ['html']}}
+" NeoBundleLazy 'hokaccha/vim-html5validator', {'autoload': {'filetypes': ['html']}}
 "css
-NeoBundle 'hail2u/vim-css3-syntax',  {'autoload': {'filetypes': ['css']}}
-NeoBundle 'css_color.vim',  {'autoload': {'filetypes': ['css']}}
-NeoBundle 'mattn/zencoding-vim', {'autoload': {'filetypes': ['markdown', 'html']}}
+NeoBundleLazy 'hail2u/vim-css3-syntax',  {'autoload': {'filetypes': ['css']}}
+NeoBundleLazy 'css_color.vim',  {'autoload': {'filetypes': ['css']}}
+NeoBundleLazy 'mattn/emmet-vim', {'autoload': {'filetypes': ['markdown', 'html']}}
+
+"haskell
+NeoBundleLazy 'kana/vim-filetype-haskell', {'autoload': {'filetypes': ['haskell']}}
+NeoBundleLazy 'eagletmt/ghcmod-vim', {'autoload': {'filetypes': ['haskell']}}
+NeoBundleLazy 'ujihisa/neco-ghc', {'autoload': {'filetypes': ['haskell']}}
+NeoBundleLazy 'ujihisa/ref-hoogle', {'autoload': {'filetypes': ['haskell']}}
+NeoBundleLazy 'ujihisa/unite-haskellimport', {'autoload': {'filetypes': ['haskell']}}
 
 "renpy
-NeoBundle 'kyouryuukunn/my-renpy', { 'autoload': {'filetypes': ['renpy']}}
-NeoBundle 'kyouryuukunn/RenPyOpen.vim',  {'autoload': {'filetypes': ['renpy']}}
+NeoBundleLazy 'kyouryuukunn/my-renpy', { 'autoload': {'filetypes': ['renpy']}}
+NeoBundleLazy 'kyouryuukunn/RenPyOpen.vim',  {'autoload': {'filetypes': ['renpy']}}
 " NeoBundle 'kyouryuukunn/renpy_neocomplcache',  {'autoload': {'filetypes': ['renpy']}}
 
-" kirikiri
+" 吉里吉里
 " NeoBundle 'kyouryuukunn/KirikiriOpen.vim',  {'autoload': {'filetypes': ['kirikiri']}}
 " NeoBundle 'kyouryuukunn/kirikiri_neocomplcache',  {'autoload': {'filetypes': ['kirikiri']}}
 " NeoBundle 'tyru/kirikiri.vim',  {'autoload': {'filetypes': ['kirikiri']}}
 " NeoBundle 'tyru/tjs.vim',  {'autoload': {'filetypes': ['tjs']}}
-
-"textオブジェ"
-NeoBundle 'h1mesuke/textobj-wiw'
-NeoBundle 'kana/vim-textobj-fold'
-NeoBundle 'kana/vim-textobj-function'
-NeoBundle 'kana/vim-textobj-indent'
+""}}}
+"---------------------------------------------------------------------------
+"text-obj追加 {{{
 NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kyouryuukunn/my-vim-textobj-plugins'
-
-NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundle 'vim-scripts/savevers.vim'
-NeoBundle 'kyouryuukunn/my-Changed'
-NeoBundle 'CmdlineCompl.vim'
-NeoBundle 'MultipleSearch'
-NeoBundle 'Shougo/neobundle.vim'
-" NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Shougo/neosnippet'
+"z: 折り畳み
+NeoBundle 'kana/vim-textobj-fold'
+"f: 関数
+NeoBundle 'kana/vim-textobj-function'
+"i: インデント
+NeoBundle 'kana/vim-textobj-indent'
+"jk:「,jK:『, j(:（
+NeoBundle 'kana/vim-textobj-jabraces'
+",w ,e: _, 大文字,小文字,_区切り
+NeoBundle 'vim-scripts/camelcasemotion'
+"YY,DD,CC: 横幅の違う矩形選択
+NeoBundle 'osyo-manga/vim-operator-blockwise'
+" "C-V dIw cIw: 矩形選択 
+" NeoBundle "osyo-manga/vim-textobj-blockwise"
+"b 任意の文字
+NeoBundle 'thinca/vim-textobj-plugins'
+"v 短形選択 
+NeoBundle 'rhysd/vim-textobj-word-column'
+" }}}
+"---------------------------------------------------------------------------
+" 移動系"{{{
+NeoBundle 'deton/jasegment.vim' "WEgEを日本語文節に合わせて移動
+NeoBundle 'rhysd/clever-f.vim' " f or F or t or T(文字)でジャンプ、もう一度f or F or t or Tでジャンプ
+NeoBundle 'Lokaltog/vim-easymotion' "<S-K>(移動先文字)でジャンプ
+""}}}
+"---------------------------------------------------------------------------
+NeoBundle 'CmdlineCompl.vim' "コマンドモード補完 <C-X><C-P> <C-X><C-N>
+NeoBundle 'Shougo/neocomplete.vim' "補完
+NeoBundle 'Shougo/neosnippet' "スニペット
+NeoBundle 'Shougo/neosnippet-snippets' "スニペット定義
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-outline'
-" NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimproc', {
-  \ 'build' : {
-    \ 'windows' : 'make -f make_mingw32.mak',
-    \ 'cygwin' : 'make -f make_cygwin.mak',
-    \ 'mac' : 'make -f make_mac.mak',
-    \ 'unix' : 'make -f make_unix.mak',
-  \ },
-\ }
-NeoBundle 'fuenor/qfixhowm'
-NeoBundle 'fuenor/JpFormat.vim'
-NeoBundle 'osyo-manga/unite-qfixhowm'
-NeoBundle 'h1mesuke/vim-alignta'
-NeoBundle 'kana/vim-smartchr'
-NeoBundle 'mattn/excitetranslate-vim'
+NeoBundle 'Shougo/unite-outline' "アウトライン表示 <Space>o
+NeoBundle 'Shougo/neomru.vim' "履歴 <space>m
+NeoBundle 'Shougo/vimshell' "vim上でシェル
+" NeoBundle 'Shougo/vimfiler' "ファイラー
+if has('unix')
+  NeoBundle 'Shougo/vimproc', {
+    \ 'build' : {
+      \ 'windows' : 'make -f make_mingw32.mak',
+      \ 'mac' : 'make -f make_mac.mak',
+      \ 'unix' : 'make -f make_unix.mak',
+    \ },
+  \ }
+  " NeoBundle 'fuenor/im_control.vim'
+endif
+NeoBundle 'fuenor/qfixhowm' "howmメモ帳
+NeoBundle 'fuenor/JpFormat.vim' 
+NeoBundle 'h1mesuke/vim-alignta' "整形 :Alingta (文字)
+NeoBundle 'kana/vim-smartchr' "繰り返し入力で文字変更
+NeoBundle 'mattn/excitetranslate-vim' "翻訳 <F8>
 NeoBundle 'mattn/webapi-vim'
-NeoBundle 'gregsexton/gitv'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'kokukuma/vim-unite-bzr'
-NeoBundle 'nathanaelkane/vim-indent-guides'
-" NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'sjl/gundo.vim'
-NeoBundle 'thinca/vim-qfreplace'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'thinca/vim-visualstar'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'kyouryuukunn/my-ShowMarks7'
-" NeoBundle 'kyouryuukunn/my-vim-toggle'
-NeoBundle 'AndrewRadev/switch.vim'
-NeoBundle 'bling/vim-airline'
-NeoBundle "osyo-manga/vim-anzu"
-NeoBundle 'pentie/VimRepress'
-NeoBundle 'tomtom/tcomment_vim'
+" git--------------------------------------------------------------------{{{
+NeoBundle 'cohama/agit.vim' "履歴を表示 :Agit
+NeoBundle 'tpope/vim-fugitive' "gitコマンド実行
+NeoBundle 'idanarye/vim-merginal' "ブランチ表示 :Merginal
+"------------------------------------------------------------------------}}}
+NeoBundle 'kokukuma/vim-unite-bzr' "bzr接続
+NeoBundle 'vim-scripts/savevers.vim' "バージョン毎にバックアップ
+NeoBundle 'kyouryuukunn/my-Changed' "変更行にマークを表示
+NeoBundle 'sjl/gundo.vim' "アンドゥーツリーを表示 <Space>u
+NeoBundle 'nathanaelkane/vim-indent-guides' "インデントを見やすく
+NeoBundle 't9md/vim-quickhl' "複数同時ハイライト <Space>i
+NeoBundle 'thinca/vim-qfreplace' "grepして置換 quicfix上で<S-r>,編集したら<Space>w
+NeoBundle 'thinca/vim-quickrun' " 色々実行する \r
+NeoBundle 'thinca/vim-visualstar' "ビジュアルモードから検索出来るようにする
+NeoBundle 'tpope/vim-surround' " 文字で囲む ys(テキストオブジェクト)(囲み文字) or ビジュアルモードで<S-s>(囲み文字) 囲み文字変更 cs(テキストオブジェ)(囲み文字)
+NeoBundle 'tpope/vim-repeat' " .でvim-surroundの結果も繰り返せるようにする
+NeoBundle 'kyouryuukunn/my-ShowMarks7' "マークする m<マークする文字>
+NeoBundle 'AndrewRadev/switch.vim' "True,Falseなど特定文字をスイッチする <S-t>
+NeoBundle 'bling/vim-airline' "ステータスラインを見やすく
+NeoBundle 'osyo-manga/unite-qfixhowm' "howmをuniteで表示 g,o
+" NeoBundle "osyo-manga/unite-quickfix.git" "quicfixをuniteで表示
+NeoBundle "osyo-manga/vim-anzu" "検索結果数を表示する
+NeoBundle 'pentie/VimRepress' "vimからWordPressを編集
+NeoBundle 'tomtom/tcomment_vim' "コメントをトグル gcc
 NeoBundle 'kyouryuukunn/config_file'
-NeoBundle 'tyru/open-browser.vim'
+NeoBundle 'tyru/open-browser.vim' "単語やurlからブラウザを開く <F4>
+NeoBundle 'thinca/vim-ref' "マニュアルを開く
+NeoBundle 'LeafCage/foldCC.vim' "折り畳みを見やすく
+" Twitter-------------------------------------------------------------------
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
-NeoBundle 'yonchu/accelerated-smooth-scroll'
+" ローグライクゲーム
+NeoBundle 'katono/rogue.vim'
+
 if !g:portable
 	NeoBundle 'yuratomo/w3m.vim'
 else
@@ -107,9 +188,10 @@ else
 	NeoBundle 'tyru/skkdict.vim'
 endif
 
+call neobundle#end()
 filetype plugin indent on
 
-nnoremap <Space>u :Unite neobundle/update -auto-quit<CR>
+" nnoremap <Space>u :Unite neobundle/update -auto-quit<CR>
 ""------------------------------------------------------------------------------------- 
 
 " NeoBundle 'vim-scripts/TwitVim'
@@ -121,8 +203,6 @@ nnoremap <Space>u :Unite neobundle/update -auto-quit<CR>
 "NeoBundle 'scrooloose/syntastic'
 "NeoBundle 'CmdlineCompl.vim'
 "NeoBundle 'SearchComplete'
-"NeoBundle 'Shougo/vimshell'
-"NeoBundle 'Shougo/neobundle.vim'
 "NeoBundle 'Shougo/unite-build'
 "NeoBundle 'Shougo/vinarise'
 "NeoBundle 'Source-Explorer-srcexpl.vim'
@@ -136,7 +216,6 @@ nnoremap <Space>u :Unite neobundle/update -auto-quit<CR>
 "NeoBundle 'osyo-manga/unite-boost-online-doc'
 "NeoBundle 'rson/vim-conque'
 "NeoBundle 'taglist.vim'
-"NeoBundle 'thinca/vim-ref'
 "NeoBundle 'trinity.vim'
 "NeoBundle 'tyru/skk.vim'
 "NeoBundle 'vim-scripts/SingleCompile'
@@ -144,3 +223,6 @@ nnoremap <Space>u :Unite neobundle/update -auto-quit<CR>
 "NeoBundle 'othree/eregex.vim'
 "NeoBundle 'fuenor/MyMoveWord.vim', {'stay_same' : 1}
 "NeoBundle 'motemen/git-vim'
+
+"--------------------------------------------------------------------------- 
+" vim: nowrap foldmethod=marker textwidth=0 ft=vim

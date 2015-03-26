@@ -33,6 +33,7 @@ let g:neocomplete#keyword_patterns = {
 
 augroup completefunc
 	autocmd!
+	autocmd FileType go setlocal omnifunc=go#completions
 	autocmd FileType python setlocal omnifunc=jedi#completions
 	autocmd FileType d setlocal omnifunc=dutyl#dComplete
 	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -71,8 +72,8 @@ endif
 " omnifunc が呼び出される場合の正規表現パターンを設定しておく
 let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
 let g:neocomplete#force_omni_input_patterns.c   = '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplete#force_omni_input_patterns.d = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
-let g:neocomplete#force_omni_input_patterns.go = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+let g:neocomplete#force_omni_input_patterns.d   = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+let g:neocomplete#force_omni_input_patterns.go  = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
 let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
 " }}}
 " --------------------------------------------------------------------------
@@ -80,17 +81,35 @@ let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
 " 開始時にDUDCDstartServer終了時にDUDCDstopServer
 " DU(v)jumpで定義にジャンプ DUupdateCtagsでタグ作成
 " DUddoc でドキュメントを開く
-autocmd FileType d nnoremap <buffer> <F1> :DUddoc<CR>
-autocmd FileType d nnoremap <buffer> \d :DUjump<CR>
-autocmd BufAdd *.d DUDCDstartServer
-autocmd BufDelete *.d DUDCDstopServer
+augroup Duty
+  autocmd!
+  autocmd FileType d nnoremap <buffer> <F1> :DUddoc<CR>
+  autocmd FileType d nnoremap <buffer> \d :DUjump<CR>
+  autocmd BufAdd *.d DUDCDstartServer
+  autocmd BufDelete *.d DUDCDstopServer
+augroup END
+
+" DUB追加分をパスに含める
+function s:AddDubPath(paths, dub_path)
+  let s:packages = split(vimproc#system("ls ".a:dub_path), "\n")
+  let l:dub_paths = []
+  for package in s:packages
+    let l:dub_paths += [a:dub_path."/".package."/source"]
+  endfor
+
+  return a:paths + l:dub_paths
+endfunction
+
 if has('win32') || has('win64')
-  let g:dutyl_stdImportPaths=['E:/D/dmd2/src/phobos','E:/D/dmd2/src/druntime/import']
+  let g:dutyl_stdImportPaths=s:AddDubPath(['E:/D/dmd2/src/phobos', 'E:/D/dmd2/src/druntime/import'], "E:/D/dub/dub/packages")
   call dutyl#register#tool('dcd-client', $DOTVIM.'/bundle/DCD/dcd-client.exe')
   call dutyl#register#tool('dcd-server', $DOTVIM.'/bundle/DCD/dcd-server.exe')
   call dutyl#register#tool('dscanner',   $DOTVIM.'/bundle/Dscanner/dscanner.exe')
 elseif has('unix')
-  let g:dutyl_stdImportPaths=['/usr/include/dlang/dmd']
+  let g:dutyl_stdImportPaths=s:AddDubPath(['usr/include/dmd/phobos', 'usr/include/dmd/druntime/import'], "E:/D/dub/dub/packages")
+  call dutyl#register#tool('dcd-client', $DOTVIM.'/bundle/DCD/bin/dcd-client')
+  call dutyl#register#tool('dcd-server', $DOTVIM.'/bundle/DCD/bin/dcd-server')
+  call dutyl#register#tool('dscanner',   $DOTVIM.'/bundle/Dscanner/bin/dscanner')
 endif
 "  }}}
 " --------------------------------------------------------------------------
@@ -111,7 +130,9 @@ autocmd FileType go autocmd BufWritePre <buffer> Fmt
 autocmd FileType go nnoremap <buffer> <F1> :Godoc<CR>
 autocmd FileType godoc nnoremap <buffer> q :q<CR>
 "補完にvimprocを使用する
-let g:gocomplete#system_function = 'vimproc#system'
+if has('win32') || has('win64')
+  let g:gocomplete#system_function = 'vimproc#system'
+endif
 " }}}
 ""------------------------------------------------------------------------------
 "" clang_complete {{{
@@ -125,10 +146,10 @@ let g:clang_periodic_quickfix=0
 let g:clang_hl_errors=0
 if has('win32') || has('win64')
 	let g:clang_library_path = $LLVM
-	let g:clang_user_options = includecppoption." -std=c++1y -fgnu-runtime"
 elseif has('unix')
-	let g:clang_library_path = $LLVM.'/../lib'
+	let g:clang_library_path = '/usr/local/lib'
 endif
+let g:clang_user_options = includecppoption." -std=c++1y -fgnu-runtime"
 " }}}
 " ------------------------------------------------------------------------------------ 
 " スニペット {{{
@@ -207,6 +228,8 @@ let g:unite_source_menu_menus.bookmark.command_candidates = [
       \       ['cpp'           , 'Unite file:d:/Box/Workspace/cpp'],
       \       ['D'             , 'Unite file:d:/Box/Workspace/D'],
       \       ['python'        , 'Unite file:d:/Box/Workspace/py'],
+      \       ['haskell'       , 'Unite file:d:/Box/Workspace/haskell'],
+      \       ['Go'            , 'Unite file:d:/Box/Workspace/go'],
       \       ['renpy'         , 'Unite file:e:/Soft/renpy/renpy'],
       \       ['renpy-dep'     , 'Unite file:d:/Box/Workspace/renpy/renpy'],
       \       ['renpy-sample'  , 'Unite file:d:/Box/Workspace/renpy/sample/game/'],
@@ -349,7 +372,35 @@ nnoremap <silent> <Space>e :<C-u>Unite -vertical -create menu:encode<CR>
  " }}}
 ""------------------------------------------------------------------------------
 " outline
-nnoremap <Space>o :Unite -vertical -winwidth=60 -create -no-quit outline:!<CR>
+nnoremap <Space>o :Unite -vertical -winwidth=20 -create -no-quit -truncate outline:!<CR>
+" --------------------------------------------------------------------------
+" startup"{{{
+" let g:unite_source_alias_aliases = {
+" \   "startup_file_mru" : {
+" \       "source" : "file_mru",
+" \   },
+" \   "startup_directory_mru" : {
+" \       "source" : "directory_mru",
+" \   },
+" \}
+"
+" call unite#custom_max_candidates("startup_file_mru", 10)
+" call unite#custom_max_candidates("startup_directory_mru", 10)
+"
+" " output の最後の引数に ! を渡せば dummy として扱われる
+" command! UniteStartup
+" \   Unite
+" \   output:echo:"===:file:mru:===":! startup_file_mru
+" \   output:echo:"===:directory:mru:===":! startup_directory_mru
+" \   -hide-source-names
+" \   -no-split
+" " \   -quick-match
+"
+" augroup startup
+"     autocmd!
+"     autocmd VimEnter * nested :UniteStartup
+" augroup END
+""}}}
 " }}}
 "------------------------------------------------------------------------------
 " VimFiler {{{
@@ -580,11 +631,12 @@ augroup smartchr
      "cpp {{{
 	" 演算子の間に空白を入れる
 	autocmd FileType c,cpp	inoremap <buffer><expr> < search('^#include\%#', 'bcn', line("."))? ' <><Left>': smartchr#loop('<', ' < ', ' << ', ' <= ' )
-	autocmd FileType c,cpp	inoremap <buffer><expr> <C-;> search('^#include <.*\%#', 'bcn')? '>': smartchr#loop(' > ', ' >> ', ' >= ', '>')
+	" autocmd FileType c,cpp	inoremap <buffer><expr> <C-;> search('^#include <.*\%#', 'bcn')? '>': smartchr#loop(' > ', ' >> ', ' >= ', '>')
 	"何故か += , -= は出来ない
-	autocmd FileType c,cpp	inoremap <buffer><expr> + smartchr#loop(' + ', '++', '+')
-	autocmd FileType c,cpp	inoremap <buffer><expr> - smartchr#loop(' - ', '--', '-')
-	autocmd FileType c,cpp	inoremap <buffer><expr> / search('^#include <.*\%#', 'bcn')? '/': smartchr#loop(' / ', ' // ', ' /= ', '/')
+	autocmd FileType c,cpp	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++')
+	autocmd FileType c,cpp	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '++')
+	autocmd FileType c,cpp	inoremap <buffer><expr> * smartchr#loop('*', ' * ', ' *= ')
+	autocmd FileType c,cpp	inoremap <buffer><expr> / search('^#include <.*\%#', 'bcn')? '/': smartchr#loop(' / ', ' /= ', '/')
 	autocmd FileType c,cpp	inoremap <buffer><expr> % search('\(printf\<bar>format\)(".*\%#', 'bcn')? '%': smartchr#loop(' % ', ' %= ', '%')
 	" *はポインタで使うので、空白はいれない
 	" ビット演算子
@@ -598,21 +650,22 @@ augroup smartchr
 	autocmd FileType c,cpp	inoremap <buffer><expr> : smartchr#loop(': ', '::', ':')
 
 	" =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
+	" 制御文後の()中では比較優先
 	" 複合演算代入としての入力の場合は、直前のスペースを削除して=を入力
 	autocmd FileType c,cpp	inoremap <buffer><expr> = search('\(&\<bar><bar>\<bar>^\<bar>\~\<bar>+\<bar>-\<bar>/\<bar>*\<bar>%\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-								\ : smartchr#loop(' = ', ' == ', ' != ', '=')
-	autocmd FileType c,cpp	inoremap <buffer><expr> ! smartchr#loop('!', ' != ')
+							\ : search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\) ([^)]*\%#', 'bcn')? smartchr#loop(' == ', ' != ', '=')
+							\ : smartchr#loop(' = ', '=', ' == ', ' != ')
 
 	" 下記の文字は連続して現れることがまれなので、二回続けて入力したら改行する
 	autocmd FileType c,cpp	inoremap <buffer><expr> } smartchr#loop('}', '}<cr>')
 	autocmd FileType c,cpp	inoremap <buffer><expr> ; smartchr#loop('; ', ';<cr>')
 	autocmd FileType c,cpp	inoremap <buffer><expr> { smartchr#loop('{', '<CR>{<CR>}<Up><CR>')
 	" 「->」は入力しづらいので、..で置換え,clang関係で出来ない
-	"autocmd FileType c,cpp	inoremap <buffer><expr> . smartchr#loop('.', '->', '...')
+	" autocmd FileType c,cpp	inoremap <buffer><expr> . smartchr#loop('.', '->', '...')
 	" 行先頭での@入力で、プリプロセス命令文を入力
 	autocmd FileType c,cpp	inoremap <buffer><expr> @ search('^\(#.\+\)\?\%#','bcn')? smartchr#loop('#include', '#ifndef', '#define', '#endif', '#ifdef', '@'): '@'
 
-	autocmd FileType c,cpp	inoremap <buffer><expr> " search('^#include\%#', 'bcn')? ' ""<Left>': '""<Left>'
+	" autocmd FileType c,cpp	inoremap <buffer><expr> " search('^#include\%#', 'bcn')? ' ""<Left>': '""<Left>'
 	" 制御文直後の(は自動で間に空白を入れる
 	autocmd FileType c,cpp	inoremap <buffer><expr> ( search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\<bar>\<switch\>\)\%#', 'bcn')? ' ()<Left>': '()<Left>'
 	autocmd FileType c,cpp	inoremap <buffer><expr> : smartchr#loop(': ', '::')
@@ -646,8 +699,8 @@ augroup smartchr
 	autocmd FileType d	inoremap <buffer><expr> < smartchr#loop(' < ', ' <= ', '<' )
 	autocmd FileType d	inoremap <buffer><expr> > smartchr#loop(' > ', ' >= ', '>')
 	"何故か += , -= は出来ない
-	autocmd FileType d	inoremap <buffer><expr> + smartchr#loop(' + ', '++', '+')
-	autocmd FileType d	inoremap <buffer><expr> - smartchr#loop(' - ', '--', '-')
+	autocmd FileType d	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++', '+')
+	autocmd FileType d	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '--', '-')
 	autocmd FileType d	inoremap <buffer><expr> / smartchr#loop(' / ', '// ', '/* ', '/+ ', ' /= ', '/')
 	autocmd FileType d	inoremap <buffer><expr> * smartchr#loop('*', ' * ', ' *= ')
 	autocmd FileType d	inoremap <buffer><expr> % search('writef.*(".*\%#', 'bcn')? '%': smartchr#loop(' % ', ' %= ', '%')
@@ -661,10 +714,11 @@ augroup smartchr
 	autocmd FileType d	inoremap <buffer><expr> : smartchr#loop(': ', '::', ':')
 
 	" =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
+	" 制御文後の()中では比較優先
 	" 複合演算代入としての入力の場合は、直前のスペースを削除して=を入力
 	autocmd FileType d	inoremap <buffer><expr> = search('\(&\<bar><bar>\<bar>^\<bar>\~\<bar>+\<bar>-\<bar>/\<bar>*\<bar>%\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-								\ : smartchr#loop(' = ', ' == ', ' is ', '=')
-	autocmd FileType d	inoremap <buffer><expr> ! smartchr#loop('!', ' != ', ' !is ')
+							\ : search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\) ([^)]*\%#', 'bcn')? smartchr#loop(' == ', ' != ', '=')
+							\ : smartchr#loop(' = ', '=', ' == ', ' != ')
 
 	" 下記の文字は連続して現れることがまれなので、二回続けて入力したら改行する
 	autocmd FileType d	inoremap <buffer><expr> } smartchr#loop('}', '}<cr>')
@@ -773,6 +827,17 @@ omap if <Plug>(textobj-function-i)
 omap af <Plug>(textobj-function-a)
 vmap if <Plug>(textobj-function-i)
 vmap af <Plug>(textobj-function-a)
+
+"「
+omap ik <Plug>(textobj-jabraces-kakko-i)
+omap ak <Plug>(textobj-jabraces-kakko-a)
+vmap ik <Plug>(textobj-jabraces-kakko-i)
+vmap ak <Plug>(textobj-jabraces-kakko-a)
+"『
+omap iK <Plug>(textobj-jabraces-double-kakko-i)
+omap aK <Plug>(textobj-jabraces-double-kakko-a)
+vmap iK <Plug>(textobj-jabraces-double-kakko-i)
+vmap aK <Plug>(textobj-jabraces-double-kakko-a)
 " }}}
 " --------------------------------------------------------------------------
 " savevers.vim {{{
@@ -827,6 +892,8 @@ let howm_dir               = $DROPBOX.'/howm'
 let QFixHowm_PairLinkDir   = 'pairlink'
 " キーワード保存ファイル
 let QFixHowm_keywordfile   = $DROPBOX.'/howm/howm-keys'
+" 休日定義ファイル
+let QFixHowm_HolidayFile = $DOTVIM.'/bundle/qfixhowm/misc/Sche-Hd-0000-00-00-000000.utf8'
 "クイックメモのファイル名
 let QFixHowm_QuickMemoFile = "QMem/QMem-00-0000-00-00-000000.howm"
 "日記のファイル名
@@ -850,15 +917,33 @@ let QFixHowm_Folding               = 2
 " 階層折りたたみ設定
 let QFixHowm_FoldingMode           = 1
 " 折りたたみのパターン
-let QFixHowm_FoldingPattern        = '^[.*]'
+let QFixHowm_FoldingPattern = '^[=.*[]'
 " チャプターのタイトル行を折りたたまない
 let QFixHowm_FoldingChapterTitle   = 0
 " 折りたたみに ワイルドカードチャプターを使用する
-let QFixHowm_WildCardChapter       = 1
+let QFixHowm_WildCardChapter       = 0
 " 階層付きテキストもワイルドカードチャプター変換の対象にする
-let QFixHowm_WildCardChapterMode   = 1"
+let QFixHowm_WildCardChapterMode   = 1
 " QuickFixウィンドウでプレビューを有効にする
 let QFix_PreviewEnable = 0
+" 独自フォールディングレベル計算 
+" .で折り畳むようにする
+function! QFixHowmFoldingLevel(lnum)
+  if getline(a:lnum) =~ '^= '
+    return '>1'
+  endif
+
+  let level = matchend(getline(a:lnum), '^\.\+')
+  if level > 0
+    return '>'.level
+  endif
+
+  let level = matchend(getline(a:lnum), '^\*\+')
+  if level > 0
+    return '>'.level
+  endif
+  return '='
+endfunction
 " QFixGrepの検索時にカーソル位置の単語を拾う/拾わない
 let MyGrep_DefaultSearchWord = 1
 " プレビューや絞り込みの拡張機能有効化オプション
@@ -888,10 +973,17 @@ nnoremap <C-W>, :copen<CR>
 " 	let MyGrep_Damemoji = 0
 " endif
 
-nnoremap g,o :Unite qfixhowm:!<CR>
+" nnoremap g,o :Unite qfixhowm:!<CR>
 " }}}
 " -------------------------------------------------------------------------- 
 "" jpformat {{{
+"JpFormatAll で疑似ソフトラップ
+"JpJoinAll で疑似ソフトラップから復元
+"JpFormatAll! でハードソフトラップ
+"JpJoinAll! でハードラップを連結
+"JpExtViewer で外部ビューワーで開く
+"Jp系のコマンドを使うと自動整形が有効になる。連結マークがあるtextファイルを開
+"くと自動で自動整形が有効化される。
 " smoopyで開く
  let ExtViewer_txt = '!start "'.'e:/Soft/smoopy/smoopy.exe'.'"'.' -l%l "%f"'
 "  挿入モードでキー入力する度に自動整形を行う/行わない
@@ -900,16 +992,26 @@ nnoremap g,o :Unite qfixhowm:!<CR>
  let JpCountChars = 40
 "  原稿行数
  let JpCountLines = 16
+"40x16 ラノベ1ページ分
 "  禁則処理の最大ぶら下がり字数(-1なら全てぶら下げ)
  let JpCountOverChars = -1
-" neocomplcacheとunite-tagで宣言に飛ぶ
 "}}}
 "------------------------------------------------------------------------------
+"FoldCC"{{{
+set foldtext=FoldCCtext()
+set fillchars=vert:\|
+let g:foldCCtext_tail = 'printf(" [%4d lines Lv%-2d]", v:foldend-v:foldstart+1, v:foldlevel)'
+" 左端の折り畳み表示幅を自動で増やす
+let g:foldCCtext_enable_autofdc_adjuster = 1
+" 左端の折り畳み表示幅
+set foldcolumn=3
+""}}}
+"---------------------------------------------------------------------------
 " 検索移動まとめ{{{
-" vim-visualstar
+" vim-visualstar visualモードから検索出来るようにする
 xmap * <Plug>(visualstar-*)N
 xmap # <Plug>(visualstar-#)N
-"anzu.vim
+"anzu.vim 検索結果がいくつあるか表示する
 " n や N の代わりに使用します。
 nmap n <Plug>(anzu-n-with-echo)
 nmap N <Plug>(anzu-N-with-echo)
@@ -918,16 +1020,19 @@ nmap # <Plug>(anzu-sharp-with-echo)``
 let g:airline#extensions#anzu#enabled = 0
 " ステータス情報を statusline へと表示する
 " set statusline=%{anzu#search_status()}
-"easy-motion
+"easy-motion <S-S>(任意の文字) でジャンプ出来るようにする
 let g:EasyMotion_leader_key = '<tab>'
 nmap K <Plug>(easymotion-s)
 vmap K <Plug>(easymotion-s)
 omap K <Plug>(easymotion-s)
 inoremap <C-F> <C-O><Plug>(easymotion-s)
-
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_use_migemo = 1
 let g:EasyMotion_startofline=0
+" clever-f fFtT系をmigemoに対応させ、;,の代わりにfFtTで繰り返せるようにする
+let g:clever_f_ignore_case = 1
+let g:clever_f_use_migemo = 1
+let g:clever_f_across_no_line = 1
 "}}}
 " --------------------------------------------------------------------------
 " {{{その他
@@ -940,22 +1045,33 @@ let g:EasyMotion_startofline=0
 " <C-f>/<C-b> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
 " Default : 10
 " let g:ac_smooth_scroll_fb_sleep_time_msec = 1
+" --------------------------------------------------------------------------
+" uim
+" if has('unix')
+"   " 「日本語入力固定モード」切替キー
+"   " inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
+"   call IMState('FixMode')
+"   " IME側でvi協調モードを使わない
+"   let IM_vi_CooperativeMode = 1
+"   " <ESC>押下後のIM切替開始までの反応が遅い場合はttimeoutlenを短く設定してみてください(ミリ秒)
+"   set timeout timeoutlen=3000 ttimeoutlen=100
+" endif
 "------------------------------------------------------------------------------
 " vimshell
 nnoremap <Space>vs :VimShell<CR>
 "  ------------------------------------------------------------------------- 
-"  Gundo
+"  Gundo アンドゥーツリーを表示
 nnoremap <Space>u :<C-u>GundoToggle<CR>
 "--------------------------------------------------------------------------- 
 " hier
 "ハイライト停止
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>:HierClear<CR>:ShowMarksClearAll<CR>:QuickhlManualReset<CR>
-" quickhl
+" quickhl 複数ワードを同時にハイライト
 nmap <Space>i <Plug>(quickhl-manual-this)
 xmap <Space>i <Plug>(quickhl-manual-this)
 let g:quickhl_manual_enable_at_startup = 1
 "------------------------------------------------------------------------------------- 
-" vim-indent-guide
+" vim-indent-guide インデントを見やすくする
 if has('gui_running')
 	let g:indent_guides_enable_on_vim_startup = 1
 endif
@@ -963,7 +1079,7 @@ endif
 runtime macros/matchit.vim
 let b:match_words = "if:endif,foreach:endforeach,\<begin\>:\<end\>,<div.*>:</div>"
 " -------------------------------------------------------------------------- 
-vnoremap <F8> :ExciteTranslate<CR>
+vnoremap <F8> :ExciteTranslate<CR> 翻訳する
 " ----------------------------------------------------------------------------
 " powerline
 "source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim

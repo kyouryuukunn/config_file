@@ -1,16 +1,13 @@
 "ロワ向け-----------------------------------------------------------------------------
-function! unite#sources#outline#text#outline_info()
+function! unite#sources#outline#qfix_memo#outline_info()
   return s:outline_info
 endfunction
 
 let s:outline_info = {
 		\ 'heading' :
-		\'
-		\◆[a-zA-Z0-9]
-      		\\|オープニング
-		\\|第[0-1]*章
-		\\|^\*\+
+		\'^\*\+
 		\\|^\.\+
+		\\|^= 
 		\'
       \}
 "先頭の*または.(VerticalEditor,howm)の数で字下げ------------------------------------------------------------------------ 

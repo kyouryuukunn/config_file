@@ -168,9 +168,9 @@ if has('win32') || has('win64')
   let includecppdir = localdir.mingwdir.widgetdir.Qtdir
   let includecppoption = localoption.mingwoption.widgetoption.Qtoption
 elseif has('unix')
-  let l:ver = '4.8.1'
-  let includecppdir = '/usr/local/include,/usr/include,/usr/include/c++,/usr/include/c++/'.l:ver.',/usr/include/c++/'.l:ver.'/backward,/usr/include/c++/'.l:ver.'/i686-linux-gnu'
-  let includecppoption = '-I /usr/local/include -I /usr/include -I /usr/include/c++ -I /usr/include/c++/'.l:ver.' -I /usr/include/c++/'.l:ver.'/backward -I /usr/include/c++/'.l:ver.'/i686-linux-gnu'
+  let s:ver = '4.8'
+  let includecppdir = '/usr/include/c++,/usr/local/include,/usr/lib/clang/3.4/include,/usr/lib/gcc/x86_64-linux-gnu/'.s:ver.'/include,/usr/include/x86_64-linux-gnu,/usr/include'
+  let includecppoption = '-I/usr/include/c++ -I/usr/local/include -I/usr/lib/clang/3.4/include -I/usr/lib/gcc/x86_64-linux-gnu/'.s:ver.'/include -I/usr/include/x86_64-linux-gnu -I/usr/include'
 endif
 exe 'set path+='.includecppdir
 

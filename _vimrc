@@ -27,6 +27,7 @@ else
   let $DROPBOX = expand('~/Dropbox/etc')
   let $HELP = $DOTVIM.'/help'
   let $LLVM = expand('/usr/local/bin')
+  let $PATH = $PATH.":usr/local/bin"
 endif " }}}
 set migemo
 
@@ -49,10 +50,10 @@ function! s:ShowSign()
 		execute "sign place 134893619283 line=1 name=anchor file=".expand("%:p")
 	endif
 endfunction
-set spelllang+=cjk
-set spell
-"不可視文字の表示
-" set list listchars=tab:^_,trail:_  " }}}
+if has('unix')
+  set cmdheight=2
+endif
+ " }}}
 "------------------------------------------------------------------------------
 "スワップ,バックアップ保存場所 {{{
 if !g:portable
@@ -95,21 +96,24 @@ set showcmd
 "ルーラー表示
 set ruler
 "クリップボード共有
-set clipboard+=unnamed
+if has('win32') || has('win64')
+  set clipboard+=unnamed
+else
+  set clipboard=unnamedplus
+endif
 set display=lastline
-set ambiwidth=double
 set ignorecase
 set smartcase
 set incsearch "<C-R><C-W>に影響
 set wildmenu
 " 行を折り返す
-" set nowrap
+set wrap
 " 折り返された行を同じインデントで表示する
 set breakindent
 " 折り返し位置をbreakatに指定した文字のみにする
 set linebreak
 " 改行時にコメントしない
-setlocal formatoptions-=ro
+" set formatoptions-=ro
 " バッファを閉じる時にバッファリストから削除
 autocmd BufReadPre * setlocal bufhidden=delete
 " 括弧を入力した際、カーソル。が一瞬移動してしまう場合に設定
@@ -118,6 +122,8 @@ if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
 endif " }}}
+" 未保存でもバッファを移動できるようにする
+set hidden
 "---------------------------------------------------------------------------
 "{{{ autocmd
 augroup MyAutocmd
@@ -144,6 +150,10 @@ augroup MyAutocmd
 	" autocmd FileType d DUDCDstartServer
 " }}}
 "-------------------------------------------------------------------------------------
+" haskell {{{
+	autocmd FileType haskell nnoremap <buffer> <F1> :Ref hoogle <C-R><C-W><CR>
+" }}}
+"-------------------------------------------------------------------------------------
 " renpy {{{
 	autocmd FileType renpy setl tabstop=8
 	autocmd FileType renpy setl softtabstop=4
@@ -162,7 +172,7 @@ augroup MyAutocmd
        	" <C-Y>n で {fast}{/fast}#
 	autocmd FileType renpy inoremap <buffer> <C-Y>n  <Esc>f}a
        	" Ren'Py 起動
-	autocmd FileType renpy nnoremap <buffer> <Leader>r :RenPyExe<CR>
+	autocmd FileType renpy nnoremap <buffer> <Leader>r :RenPyExeCurrentLine<CR>
 
     function! s:MarkdownToRenPy() " {{{
         %s/^\t/\t\t/
@@ -207,6 +217,26 @@ augroup MyAutocmd
 "   ------------------------------------------------------------------------
 " Text {{{
 	autocmd FileType text setl textwidth=0
+	autocmd FileType text setl nobreakindent
+	autocmd FileType text setl  list
+	autocmd FileType text setl  listchars=tab:^\ ,trail:~
+	"不可視文字の表示
+	" 連結マーカーがあれば自動整形を有効にする
+	au BufRead,BufNewFile *.txt  silent! call JpSetAutoFormat()
+	" スペルチェックする (英文限定)
+	if has('win32') || has('win64')
+	  autocmd FileType text setl spelllang+=cjk
+	  autocmd FileType text setl spell
+	endif
+" }}}
+"   ------------------------------------------------------------------------
+" howm {{{
+	autocmd FileType qfix_memo setl textwidth=0
+	autocmd FileType qfix_memo setl nobreakindent
+	" autocmd FileType qfix_memo setl  list
+	" autocmd FileType qfix_memo setl  listchars=tab:^\ ,trail:~
+	" 連結マーカーがあれば自動整形を有効にする
+	autocmd FileType qfix_memo silent! call JpSetAutoFormat()
 " }}}
 "   ------------------------------------------------------------------------
 " snippet {{{
@@ -284,10 +314,14 @@ endfunction " }}}
 "-------------------------------------------------------------------------------------
 "括弧等を補完。 {{{
 inoremap " ""<LEFT>
-"inoremap ' ''<LEFT>
+inoremap ' ''<LEFT>
 inoremap ( ()<LEFT>
+" inoremap < <><LEFT>
 inoremap [ []<LEFT>
 inoremap { {}<LEFT>
+inoremap 「 「」<LEFT>
+inoremap 『 『』<LEFT>
+inoremap （ （）<LEFT>
 
 "augroup kakko
 	"autocmd!
@@ -351,6 +385,9 @@ nnoremap <silent> <Leader>/ :s/\\/\//g<CR>:nohlsearch<CR>
 "/から\へ置換
 vnoremap <silent> <Leader><Leader> :s+/+\\+g<CR>:nohlsearch<CR>
 nnoremap <silent> <Leader><Leader> :s+/+\\+g<CR>:nohlsearch<CR>
+"-------------------------------------------------------------------------------------
+"コマンドモード
+cnoremap <silent> <C-V> <C-r>*
 "-------------------------------------------------------------------------------------
 "再設定
 " command! Reset call s:Reset()
