@@ -1,16 +1,29 @@
 "------------------------------------------------------------------------------------- 
+let s:gccversion = fnamemodify(globpath("c:/msys64/mingw64/include/c++", '*'), ':t')
+let s:clangversion = fnamemodify(globpath("c:/msys64/mingw64/lib/clang", '*'), ':t')
 " コンパイラーオプション
-let s:mingw = 'C:/MinGw/lib/gcc/mingw32/4.8.1/include'
-let mingwdir = 
-		\s:mingw.','.
-		\s:mingw.'/c++,'.
-		\s:mingw.'/c++/mingw32,'.
-		\s:mingw.'/c++/backward,'.
-		\'C:/MinGw/include,'
+let mingwdir = '
+		\C:/msys64/mingw64/x86_64-w64-mingw32/include/c++,
+		\C:/msys64/mingw64/x86_64-w64-mingw32/include/c++/x86_64-w64-mingw32,
+		\C:/msys64/mingw64/x86_64-w64-mingw32/include/c++/backward,
+		\C:/msys64/mingw64/x86_64-w64-mingw32/include/c++/'.s:gccversion.',
+		\C:/msys64/mingw64/x86_64-w64-mingw32/include/c++/'.s:gccversion.'/x86_64-w64-mingw32,
+		\C:/msys64/mingw64/x86_64-w64-mingw32/include/c++/'.s:gccversion.'/backward,
+		\C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/'.s:gccversion.'/include/c++,
+		\C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/'.s:gccversion.'/include/c++/x86_64-w64-mingw32,
+		\C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/'.s:gccversion.'/include/c++/backward,
+		\C:/msys64/mingw64/lib/clang/'.s:clangversion.'/include,
+		\C:/msys64/mingw64/x86_64-w64-mingw32/sys-root/mingw/include,
+		\C:/msys64/mingw64/x86_64-w64-mingw32/include,
+		\C:/msys64/mingw64/include,
+		\C:/msys64/mingw64/include/c++/'.s:gccversion.',
+		\C:/msys64/mingw64/include/c++/'.s:gccversion.'/x86_64-w64-mingw32,
+		\C:/msys64/mingw64/include/c++/'.s:gccversion.'/backward,
+		\'
 let widgetdir = '
 		\C:/MinGw/msys/1.0/local/include/wx-3.0,
 		\C:/MinGw/msys/1.0/local/lib/wx/include/msw-unicode-static-3.0,'
-let localdir = 	'C:/MinGw/msys/1.0/local/include,'
+let localdir = 	'C:/msys64/usr/local/include,'
 let Qtdir = '
 		\E:/Qt/4.8.1/include,
 		\E:/Qt/4.8.1/include/ActiveQt,
@@ -38,13 +51,10 @@ let Qtdir = '
 		\E:/Qt/4.8.1/include/QtXmlPatterns,
 		\E:/Qt/4.8.1/include/phonon,
 		\E:/Qt/4.8.1/include/phonon_compat,'
-let mingwoption = 
-		\' -I '.s:mingw.
-		\' -I '.s:mingw.'/c++'.
-		\' -I '.s:mingw.'/c++/mingw32'.
-		\' -I '.s:mingw.'/c++/backward'.
-		\' -I C:/MinGw/include '
-		\
+" let mingwoption = 
+" 		\' -I '.s:mingw.'/c++'.
+" 		\' -I '.s:mingw.'/c++/mingw32'.
+" 		\' -I '.s:mingw.'/c++/backward'
 let msvcoption = '
 		\ -I "C:/Program Files/Microsoft Visual Studio 10.0/VC/include"
 		\ -I "C:/Program Files/Microsoft SDKs/Windows/v7.0A/Include"
@@ -60,7 +70,7 @@ let widgetoption = '
 
 if has('win32') || has('win64')
   let localoption ='
-  		\ -I C:/MinGw/msys/1.0/local/include
+  		\ -I C:/msys64/usr/local/include
   		\ '
 elseif has('unix')
   let localoption ='
@@ -165,8 +175,8 @@ let libboost = '
 		\ '
 
 if has('win32') || has('win64')
-  let includecppdir = localdir.mingwdir.widgetdir.Qtdir
-  let includecppoption = localoption.mingwoption.widgetoption.Qtoption
+  let includecppdir = localdir.mingwdir
+  let includecppoption = localoption
 elseif has('unix')
   let s:ver = '4.8'
   let includecppdir = '/usr/include/c++,/usr/local/include,/usr/lib/clang/3.4/include,/usr/lib/gcc/x86_64-linux-gnu/'.s:ver.'/include,/usr/include/x86_64-linux-gnu,/usr/include'

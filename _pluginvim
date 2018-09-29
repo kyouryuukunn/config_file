@@ -1,168 +1,145 @@
 scriptencoding utf-8
-""--------------------------------------------------------------------------------------
-" neocomplete {{{
-let g:neocomplete#enable_at_startup = 1 "  起動時に有効化
-" let g:neocomplete#enable_auto_select = 1
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 2
-let g:neocomplete#max_list=1000
-
-" inoremap <expr><S-CR> neocomplete#smart_close_popup()."\<CR>"
-inoremap <expr><C-h>  neocomplete#smart_close_popup()."\<C-g>u\<C-h>"
-inoremap <expr><BS>   neocomplete#smart_close_popup()."\<C-g>u\<C-h>"
-inoremap <expr><C-y>  neocomplete#cancel_popup()."\<C-Y>"
-inoremap <expr><C-e>  neocomplete#cancel_popup()."\<C-E>"
-" 1つ前の補完を取り消す
-" inoremap <expr> <C-G> neocomplete#undo_completion()
-set completeopt=menuone
-
-if !exists('g:neocomplete#keyword_patterns')
-     let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns = {
-			\'default': '\h\w*',
-			\'text': '\k\+'
-			\}
-
-"if !exists('g:neocomplete#sources#dictionary#dictionaries')
-        "let g:neocomplete#sources#dictionary#dictionaries = {}
-"endif
-"let g:neocomplete#sources#dictionary#dictionaries = {
-		"\ 'text' : $DOTVIM.'/american-english',
-		"\ }
-
-augroup completefunc
-	autocmd!
-	autocmd FileType go setlocal omnifunc=go#completions
-	autocmd FileType python setlocal omnifunc=jedi#completions
-	autocmd FileType d setlocal omnifunc=dutyl#dComplete
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType html,htm,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-augroup END
-" include用の設定 {{{
-" if has('win32') || has('win64')
-" 	let g:neocomplete_include_paths = {
-" 				\'cpp'		:includecppdir,
-" 				\'d'		:'E:/D/dmd2/src/phobos,E:/D/dmd2/src/druntime/import',
-" 				\'python'	:'C:/Python27/Lib,C:/Python27/lib/site-packages',
-" 				\}
-" elseif has('unix')
-" 	let g:neocomplcache_include_paths = {
-" 	\'cpp' :includecppdir,
-" 	\'d'   : '/usr/include/dlang/dmd',
-" 	\}
-" endif
-" let g:neocomplcache_include_patterns = {
-" 			\'d'	:'^\s*\<import'
-" 			\}
-" let g:neocomplcache_include_exprs = {
-" 			\'d'	:"substitute(v:fname, '\.', '/','g')"
-" 			\}
-" let g:neocomplcache_include_suffixes = {
-" 			\'d'	:'.d'
-" 			\}
-" }}}
-" Clang用の設定
-let g:neocomplete#force_overwrite_completefunc=1
-if !exists("g:neocomplete#force_omni_input_patterns")
-    let g:neocomplete#force_omni_input_patterns = {}
-endif
-" omnifunc が呼び出される場合の正規表現パターンを設定しておく
-let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
-let g:neocomplete#force_omni_input_patterns.c   = '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplete#force_omni_input_patterns.d   = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
-let g:neocomplete#force_omni_input_patterns.go  = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
-let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
-" }}}
-" --------------------------------------------------------------------------
-"  dutyl(Dlang) {{{
-" 開始時にDUDCDstartServer終了時にDUDCDstopServer
-" DU(v)jumpで定義にジャンプ DUupdateCtagsでタグ作成
-" DUddoc でドキュメントを開く
-augroup Duty
-  autocmd!
-  autocmd FileType d nnoremap <buffer> <F1> :DUddoc<CR>
-  autocmd FileType d nnoremap <buffer> \d :DUjump<CR>
-  autocmd BufAdd *.d DUDCDstartServer
-  autocmd BufDelete *.d DUDCDstopServer
-augroup END
-
-" DUB追加分をパスに含める
-function s:AddDubPath(paths, dub_path)
-  let s:packages = split(vimproc#system("ls ".a:dub_path), "\n")
-  let l:dub_paths = []
-  for package in s:packages
-    let l:dub_paths += [a:dub_path."/".package."/source"]
-  endfor
-
-  return a:paths + l:dub_paths
-endfunction
-
-if has('win32') || has('win64')
-  let g:dutyl_stdImportPaths=s:AddDubPath(['E:/D/dmd2/src/phobos', 'E:/D/dmd2/src/druntime/import'], "E:/D/dub/dub/packages")
-  call dutyl#register#tool('dcd-client', $DOTVIM.'/bundle/DCD/dcd-client.exe')
-  call dutyl#register#tool('dcd-server', $DOTVIM.'/bundle/DCD/dcd-server.exe')
-  call dutyl#register#tool('dscanner',   $DOTVIM.'/bundle/Dscanner/dscanner.exe')
-elseif has('unix')
-  let g:dutyl_stdImportPaths=s:AddDubPath(['usr/include/dmd/phobos', 'usr/include/dmd/druntime/import'], "E:/D/dub/dub/packages")
-  call dutyl#register#tool('dcd-client', $DOTVIM.'/bundle/DCD/bin/dcd-client')
-  call dutyl#register#tool('dcd-server', $DOTVIM.'/bundle/DCD/bin/dcd-server')
-  call dutyl#register#tool('dscanner',   $DOTVIM.'/bundle/Dscanner/bin/dscanner')
-endif
-"  }}}
-" --------------------------------------------------------------------------
-" jedi {{{
-" let g:jedi#popup_select_first = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#show_call_signatures = "0"
-let g:jedi#documentation_command = "<F1>"
-" }}}
-""------------------------------------------------------------------------------
-" Go {{{
-autocmd FileType go autocmd BufWritePre <buffer> Fmt
-autocmd FileType go nnoremap <buffer> <F1> :Godoc<CR>
-autocmd FileType godoc nnoremap <buffer> q :q<CR>
-"補完にvimprocを使用する
-if has('win32') || has('win64')
-  let g:gocomplete#system_function = 'vimproc#system'
+"--------------------------------------------------------------------------- 
+if has_key(g:plugs, 'completor.vim') " {{{
+let g:completor_auto_trigger = 1
+let g:completor_min_chars = 2
+let g:completor_completion_delay = 100
+let g:completor_complete_options = 'menuone,noselect'
+let g:completor_debug = 1
+let g:completor_enable_neoinclude = ['cpp']
+let g:completor_enable_necovim = ['vim']
+let g:completor_disable_cpp = 1
+let g:completor_disable_python = 1
+let g:completor_d_omni_trigger = '\w+(\.|->)\w*|\w+::\w*|\w+'
 endif
 " }}}
-""------------------------------------------------------------------------------
-"" clang_complete {{{
-let g:clang_exec = $LLVM.'/clang'
-let g:clang_complete_auto=0
-let g:clang_auto_select = 1
-let g:clang_use_library=1
-let g:clang_snippets=1
-let g:clang_complete_copen=0
-let g:clang_periodic_quickfix=0
-let g:clang_hl_errors=0
-if has('win32') || has('win64')
-	let g:clang_library_path = $LLVM
-elseif has('unix')
-	let g:clang_library_path = '/usr/local/lib'
+"--------------------------------------------------------------------------- 
+if has_key(g:plugs, 'vim-lsp') " {{{
+au User lsp_setup call lsp#register_server(
+	\{'name': 'pyls',
+	\'priority': 5,
+	\'cmd': { server_info->['pyls']},
+	\'whitelist': ['python']
+	\ }
+	\)
+au User lsp_setup call lsp#register_server(
+	\{'name': 'clangd',
+	\'priority': 5,
+	\'cmd': { server_info->['clangd']},
+	\'refresh_pattern': '\k\+\(\.\|->\|::\)\?\K*$',
+	\'whitelist': ['cpp']
+	\ }
+	\)
+au User lsp_setup call lsp#register_server(
+	\{'name': 'serve-d',
+	\'priority': 5,
+	\'cmd': { server_info->['serve-d']},
+	\'whitelist': ['d'],
+	\'workspace_config': {'d':{"stdlibPath": ["E:\\D\\dmd2\\src\\druntime\\import", "E:\\D\\dmd2\\src\\phobos"]}}
+	\ })
+let g:lsp_preview_keep_focus = 1
+nnoremap <F1> :<C-u>LspHover<CR>
+nnoremap gd :<C-u>LspDefinition<CR>
+" nnoremap gd :<C-u>LspTypeDefinition<CR>
+nnoremap gr :<C-u>LspRename<CR>
+nnoremap gf :<C-u>LspReferences<CR>
+" nnoremap gq <C-u>LspDocumentFormat<CR>
+" xnoremap gq <C-u>LspDocumentRangeFormat<CR>
+let g:lsp_signs_enabled = 1         " enable signs
+let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode 
+let g:lsp_signs_error = {'text': "✖"}
+let g:lsp_signs_warning = {'text': "‼"} " icons require GUI
+let g:lsp_signs_hint = {'text': "※"} " icons require GUI
+let g:lsp_signs_information = {'text': "ｉ"} " icons require GUI
+if !has_key(g:plugs, 'asyncomplete-lsp.vim') " asyncompleteがあればオムニ必要ない
+	autocmd FileType python,cpp,d setlocal omnifunc=lsp#complete
+else
+	let g:lsp_async_completion = 1
 endif
-let g:clang_user_options = includecppoption." -std=c++1y -fgnu-runtime"
+endif
 " }}}
-" ------------------------------------------------------------------------------------ 
-" スニペット {{{
-let g:neosnippet#snippets_directory = $DOTVIM.'/bundle/config_file/snippets'
-imap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Esc>\<Tab>"
-smap <expr> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
-" For snippet_complete marker.
-"if has('conceal')
-	"set conceallevel=2 concealcursor=i
-"endif
-" }}}
+"------------------------------------------------------------------------------------- 
+if has_key(g:plugs, 'ale') " {{{
+let g:ale_linters_explicit = 1
+let g:ale_linters = {
+	\}
+	" \   'd': ['dmd'],
+let g:ale_sign_error      = '✖' " エラーシンボル
+let g:ale_sign_warning    = '※' " 警告シンボル
+let g:ale_sign_info       = 'ｉ'
+" let g:ale_sign_style_error
+" let g:ale_sign_style_warning
+
+let g:ale_cpp_clang_options = " -Wall ".includecppoption
+let g:ale_cpp_gcc_options = " -Wall ".includecppoption
+endif " }}}
+"--------------------------------------------------------------------------- 
+if has_key(g:plugs, 'LanguageClient-neovim') " {{{
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+    \ 'cpp': ['clangd'],
+    \ 'd': ['serve-d'],
+    \ }
+    " \ 'haskell': ['stack', 'exec', 'hie'],
+" powershellでうまくバイナリがダウンロードできないときはgithubから直接ダウンロードしてくる
+"python:pip install python-language-server
+"cpp:pacman -S mingw-w64-x86_64-clang-tools-extra mingw-w64-x86_64-clang cppの設定はjsonで
+"d:dub fetch serve-d workspace-d dcd dfmt dscanner{{{
+"各フォルダでdub build --compiler=dmd --combined --arch=x86 --build=release
+"workspace-d, serve-dはwindowsではdmdは非対応, ldc2が必要, x86_64よりx86の方が安定している
+"コンパイル後の各実行ファイルをパスの通った場所に配置、jsonファイルからライブラリを指定
+"dubのライブラリは自動でインクルードしてくれる
+" {
+" 	"d": {
+" 		"stdlibPath": [
+" 			"E:\\D\\dmd2\\src\\druntime\\import",
+" 			"E:\\D\\dmd2\\src\\phobos"
+" 		]
+" 	}
+" }
+"}}}
+nnoremap <silent> <F1> :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> gr :call LanguageClient#textDocument_rename()<CR>
+nnoremap <silent> gu :call LanguageClient_textDocument_references()<CR>
+command! LanguageClientContextMenu call LanguageClient_contextMenu()
+autocmd FileType python,cpp,d setlocal omnifunc=LanguageClient#complete
+" nnoremap <silent> gq :call LanguageClient#textDocument_formatting()<CR>
+" xnoremap <silent> gq :call LanguageClient#textDocument_rangeFormatting()<CR>
+let g:LanguageClient_diagnosticsEnable = 1 " シンタックスチェック
+let g:LanguageClient_selectionUI = 'quickfix'
+let g:LanguageClient_settingsPath = expand($DROPBOX.'/_lsp.json')
+" let g:LanguageClient_loggingFile = expand($VIM.'/_lsplog')
+" let g:LanguageClient_serverStderr = expand($VIM.'/_lsperr')
+let g:LanguageClient_diagnosticsDisplay =   {
+	\1: {
+	\    "name": "Error",
+	\    "texthl": "ALEError",
+	\    "signText": "✖",
+	\    "signTexthl": "ALEErrorSign",
+	\},
+	\2: {
+	\    "name": "Warning",
+	\    "texthl": "ALEWarning",
+	\    "signText": "※",
+	\    "signTexthl": "ALEWarningSign",
+	\},
+	\3: {
+	\    "name": "Information",
+	\    "texthl": "ALEInfo",
+	\    "signText": "ｉ",
+	\    "signTexthl": "ALEInfoSign",
+	\},
+	\4: {
+	\    "name": "Hint",
+	\    "texthl": "ALEInfo",
+	\    "signText": "＞",
+	\    "signTexthl": "ALEInfoSign",
+	\},
+	\}
+endif " }}}
 "------------------------------------------------------------------------------
-"" unite {{{
+" unite.vim {{{
 " unite本体 {{{
 "let g:unite_data_directory = $DOTVIM.'/unite'
 " 最近開いたファイル履歴の保存数
@@ -172,22 +149,25 @@ let g:unite_source_history_yank_enable = 1
 let g:unite_source_history_yank_limit = 30
 "  インザートモードで開始する
 let g:unite_enable_start_insert = 1
-let g:unite_winwidth = 20
+let g:unite_winwidth = 30
 " line
 nnoremap <silent> <Space>l :<C-u>Unite line -create<CR>
 "  レジスタ一覧
 "nnoremap <silent> <Space>r :<C-u>Unite -vertical -winwidth=30 register<CR>
 " レジスタ履歴一覧
-nnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 -wrap history/yank<CR>
-xnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 -wrap history/yank<CR>
+nnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 -wrap register<CR>
+xnoremap <silent> <Space>r :<C-u>Unite -vertical -quick-match -create -winwidth=30 -wrap register<CR>
 "  バッファ一覧
 nnoremap <silent> <Space>b :<C-u>Unite -create -toggle buffer<CR>
 " tab一覧
 nnoremap <silent> <Space>t :<C-u>Unite -create tab<CR>
 "  最近使用したファイル一覧
-nnoremap <silent> <Space>m :<C-u>Unite -create -default-action=tabopen file_mru<CR>
+nnoremap <silent> <Space>m :<C-u>Unite -create -default-action=tabopen neomru/file<CR>
 "File
 nnoremap ,f :<C-U>Unite -vertical -create file<CR>
+"  コマンド履歴
+nnoremap <silent> <Space>; :<C-u>Unite -create history/command<CR>
+
 "  ウィンドウを分割して開く
 au FileType unite nnoremap <silent> <buffer> <expr> <C-s> unite#do_action('split')
 au FileType unite inoremap <silent> <buffer> <expr> <C-s> unite#do_action('split')
@@ -215,7 +195,7 @@ let g:unite_source_menu_menus.bookmark.command_candidates = [
       \       ['_vimrc'        , 'tabe $DROPBOX/_vimrc'],
       \       ['_gvimrc'       , 'tabe $DROPBOX/_gvimrc'],
       \       ['_pluginvim'    , 'tabe $DROPBOX/_pluginvim'],
-      \       ['_vundlevim'    , 'tabe $DROPBOX/_vundlevim'],
+      \       ['_vimplug'      , 'tabe $DROPBOX/_vimplug'],
       \       ['_include'      , 'tabe $DROPBOX/_includevim'],
       \       ['_vsvimrc'      , 'tabe $DROPBOX/_vsvimrc'],
       \       ['_vimperatorrc' , 'tabe $DROPBOX/_vimperatorrc'],
@@ -233,12 +213,12 @@ let g:unite_source_menu_menus.bookmark.command_candidates = [
       \       ['renpy'         , 'Unite file:e:/Soft/renpy/renpy'],
       \       ['renpy-dep'     , 'Unite file:d:/Box/Workspace/renpy/renpy'],
       \       ['renpy-sample'  , 'Unite file:d:/Box/Workspace/renpy/sample/game/'],
-      \       ['fault'         , 'Unite file:d:/Box/Workspace/Dropbox/Muni\ -\ Hare\ -\ Akakyouryuu/renpy-6.18.0-sdk/faultms2/game/'],
+      \       ['fault'         , 'Unite file:d:/Box/Workspace/Dropbox/Muni\ -\ Hare\ -\ Akakyouryuu/renpy-6.99.0-sdk/faultms2/game/'],
       \       ['kirikiri'      , 'Unite file:d:/Box/Workspace/kirikiri/practice/data/scenario'],
       \       ['snippet'       , 'Unite neosnippet/user neosnippet/runtime'],
-      \       ['outline'       , 'Unite file:$DOTVIM/bundle/config_file/autoload/unite/sources/outline'],
-      \       ['bundle'        , 'Unite file:$DOTVIM/bundle'],
-      \       ['msys'          , 'Unite file:c:/MinGW/msys/1.0/home/Kuma'],
+      \       ['outline'       , 'Unite file:$DOTVIM/plugins/config_file/autoload/unite/sources/outline'],
+      \       ['plugins'        , 'Unite file:$DOTVIM/plugins'],
+      \       ['msys2'          , 'Unite file:c:/msys64/home/kuma'],
       \       ['cygwin'        , 'Unite file:c:/cygwin64/home/Kuma'],
       \       ['mokuroku'      , 'Unite file:$DROPBOX/mokuroku'],
       \       ['now'           , "exe 'call vimproc#system(''e:/Softx64/Asr/AsrLoad.exe \"'.substitute(expand('%:p:h'), '/', '\\\\\\\\', 'g').'\"'')'"]
@@ -292,7 +272,7 @@ let g:unite_source_menu_menus.command.candidates = {
       \  'tweet'             : 'TweetVimSay',
       \  'mention'           : 'TweetVimMentions',
       \  'git pull upstream' : 'cd d:/Box/Workspace/renpy/renpy | call vimproc#system_bg("sh -c `git pull upstream master`")',
-      \  'vim_update'        : 'Unite neobundle/update -auto-quit',
+      \  'vim_update'        : 'PlugUpdate',
       \     }
 
 function! MyBlogMap()
@@ -314,17 +294,16 @@ let g:unite_source_menu_menus.manul = {
       \     'description' : 'manul menu',
       \ }
 let g:unite_source_menu_menus.manul.candidates = {
-      \       'C'        : 'W3mSplit http://www.c-tipsref.com/reference.html',
       \       'SDL'      : 'W3mSplit http://www.tacoworks.jp/software/SDLdoc-jp/html/',
       \       'Dx'       : 'W3mSplit http://homepage2.nifty.com/natupaji/DxLib/dxfunc.html',
-      \       'CPP'      : 'W3mSplit http://www.cppll.jp/cppreference/index.html',
+      \       'CPP'      : 'W3mSplit http://cpprefjp.github.io/reference.html',
       \       'boost'    : 'W3mSplit http://www.kmonos.net/alang/boost/',
-      \       'D'        : 'W3mSplit http://www.kmonos.net/alang/d/comparison.html',
-      \       'Dxlib'    : 'W3mSplit http://www.kmonos.net/alang/d/phobos/phobos.html#std',
+      \       'Dlang'    : 'W3mSplit http://www.kmonos.net/alang/d/comparison.html',
+      \       'phobos'   : 'W3mSplit http://www.kmonos.net/alang/d/phobos/phobos.html#std',
       \       'HTML5'    : 'W3mSplit http://www.htmq.com/html5/index.shtml',
       \       'CSS3'     : 'W3mSplit http://www.htmq.com/css3/index.shtml',
       \       'Markdown' : 'W3mSplit http://blog.2310.net/archives/6',
-      \       'renpy'    : 'W3mSplit http://www.ja.renpy.org/doc/html/index.html',
+      \       'renpy'    : 'W3mSplit http://ja.renpy.org/doc/html/',
       \       'python3'  : 'W3mSplit http://docs.python.jp/3/library/index.html',
       \       'pygame'   : 'W3mSplit http://westplain.sakuraweb.com/',
       \     }
@@ -369,11 +348,11 @@ nnoremap <silent> <Space>f :<C-u>Unite -vertical -create menu:bookmark<CR>
 nnoremap <silent> <Space>c :<C-u>Unite -vertical -create menu:command<CR>
 nnoremap <silent> <Space>h :<C-u>Unite -vertical -create menu:manul<CR>
 nnoremap <silent> <Space>e :<C-u>Unite -vertical -create menu:encode<CR>
- " }}}
+" }}}
 ""------------------------------------------------------------------------------
 " outline
-nnoremap <Space>o :Unite -vertical -winwidth=20 -create -no-quit -truncate outline:!<CR>
-" --------------------------------------------------------------------------
+nnoremap <Space>o :Unite -vertical -winwidth=30 -create -no-quit -truncate outline:!<CR>
+" " --------------------------------------------------------------------------
 " startup"{{{
 " let g:unite_source_alias_aliases = {
 " \   "startup_file_mru" : {
@@ -402,21 +381,32 @@ nnoremap <Space>o :Unite -vertical -winwidth=20 -create -no-quit -truncate outli
 " augroup END
 ""}}}
 " }}}
+" ------------------------------------------------------------------------------------ 
+"  neosnippet {{{
+let g:neosnippet#snippets_directory = $DOTVIM.'/plugins/config_file/snippets'
+imap <expr><silent> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Esc>\<Tab>"
+smap <expr><silent> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_jump_or_expand)" : "\<Tab>"
+" For snippet_complete marker.
+"if has('conceal')
+	"set conceallevel=2 concealcursor=i
+"endif
+"  }}}
 "------------------------------------------------------------------------------
-" VimFiler {{{
+"  vimfiler {{{
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
-"nnoremap ,f :<C-u>VimFilerExplorer<CR>
-" }}}
+au FileType vimfiler nnoremap <silent> <buffer> <nowait> <ESC> :close<CR>
+nnoremap <silent> ,f :<C-u>VimFilerExplorer -winwidth=30<CR>
+"  }}}
 "--------------------------------------------------------------------------- 
-" QuickRun {{{
+"  vim-quickrun {{{
 let g:quickrun_config={}
 " -------------------------------------------------------------------------- 
 "cppコンパイル {{{
 if has('win32') || has('win64')
-  let s:common_opt=" -g -static-libgcc -static-libstdc++ -Wall -std=c++11 -L C:/MinGw/msys/1.0/local/lib"
+  let s:common_opt=" -g -static -L c:/msys64/usr/local/lib"
 elseif has('unix')
-  let s:common_opt=" -g -static-libgcc -static-libstdc++ -Wall -std=c++11 -L /usr/local/lib"
+  let s:common_opt=" -g -static -L /usr/local/lib"
 endif
 
 let g:quickrun_config["cl"] = {
@@ -429,7 +419,7 @@ let g:quickrun_config["cl"] = {
 let g:quickrun_config["clang++"] = {
 	\ "exec"     	: "%c %o -o %s:p:r.exe %s:p ",
 	\ "command" 	: "clang++",
-	\ "cmdopt"  	: s:common_opt." -fgnu-runtime ".includecppoption,
+	\ "cmdopt"  	: s:common_opt.localoption,
 	\ "outputter" 	: "quickfix",
 	\ "runner" 	: "vimproc",
 \}
@@ -440,7 +430,7 @@ let g:quickrun_config["g++"] = {
 	\ "outputter" : "quickfix",
 	\ "runner" : "vimproc",
 \}
-let g:quickrun_config["cpp"] = g:quickrun_config["g++"]
+let g:quickrun_config["cpp"] = g:quickrun_config["clang++"]
 let g:quickrun_config["g++_DxLib"] = {
 	\ "exec"      : "%c %s:p %o -o %s:r.exe ",
 	\ "command" : "g++",
@@ -534,120 +524,71 @@ let g:quickrun_config["wxd"] = {
 	\ "runner"    : "vimproc",
 \}
 " }}}
-let g:quickrun_config['watchdogs_checker/_'] = {
-\       'outputter/quickfix/open_cmd' : ''
-\   }
-" }}}
-"------------------------------------------------------------------------------------- 
-" watchdogs {{{
-" {{{
-let s:watchdogs_config = {
-\
-\   "watchdogs_checker/clang++" : {
-\	"cmdopt"  : includecppoption." -Wall -std=c++1y"
-\   },
-\
-\   "watchdogs_checker/g++" : {
-\	"cmdopt"  : includecppoption
-\   },
-\
-\   "cpp/watchdogs_checker" : {
-\       "type" : "watchdogs_checker/clang++",
-\   },
-\
-\   "watchdogs_checker/flake8" : {
-\       "command" : 'flake8',
-\       "exec"    : '%c %o %s:p',
-\	"quickfix/errorformat" : '%f:%l:%m',
-\   },
-\
-\   "python/watchdogs_checker" : {
-\       "type" : "watchdogs_checker/flake8",
-\   },
-\
-\    'watchdogs_checker/mcs' : {
-\       'command'              : 'mcs',
-\       'exec'                 : '%c %o %s:p',
-\       'cmdopt'               : '--parse',
-\       'quickfix/errorformat' : '%f\\(%l\\,%c\\):\ error\ CS%n:\ %m',
-\   },
-\    'cs/watchdogs_checker'  : {
-\       'type' : 'watchdogs_checker/mcs',
-\   },
-\
-\    'watchdogs_checker/golint' : {
-\       'command'              : 'golint',
-\       'exec'                 : '%c %o %s:p',
-\       'cmdopt'               : '-min_confidence=0.8',
-\	"quickfix/errorformat" : '%f:%l:%m',
-\   },
-\    'go/watchdogs_checker'  : {
-\       'type' : 'watchdogs_checker/golint',
-\   },
-\
-\
-\    "watchdogs_checker/_" : {
-\       "hook/close_quickfix/enable_exit" : 1,
-\       "hook/u_nya_/enable"              : 1,
-\  },
-\ }
- " }}}
-call extend(g:quickrun_config,s:watchdogs_config)
-unlet s:watchdogs_config
-call watchdogs#setup(g:quickrun_config)
-" 書き込み後にシンタックスチェックを行う
-let g:watchdogs_check_BufWritePost_enables = {}
-let g:watchdogs_check_BufWritePost_enables.cpp = 1
-let g:watchdogs_check_BufWritePost_enables.python = 1
-let g:watchdogs_check_BufWritePost_enables.d = 1
-let g:watchdogs_check_BufWritePost_enables.haskell = 1
-let g:watchdogs_check_BufWritePost_enables.go = 1
-let g:watchdogs_check_BufWritePost_enables.csharp = 1
-" }}}
+" --------------------------------------------------------------------------
+" python{{{
+let g:quickrun_config["python"] = {
+	\ "exec"      : "%c %o %s:p",
+	\ "command"   : "python",
+	\ "cmdopt"    : "",
+	\ "outputter" : "quickfix",
+	\ "runner"    : "vimproc",
+	\}
+"}}}
+" --------------------------------------------------------------------------
+" haskell{{{
+let g:quickrun_config["haskell"] = {
+	\ "exec"      : "%c exec ghc %o %s:p",
+	\ "command"   : "stack",
+	\ "cmdopt"    : "",
+	\ "outputter" : "quickfix",
+	\ "runner"    : "vimproc",
+	\}
+"}}}
+" --------------------------------------------------------------------------
+" let g:quickrun_config['watchdogs_checker/_'] = {
+" \       'outputter/quickfix/open_cmd' : ''
+" \   }
+"  }}}
 " -------------------------------------------------------------------------- 
-" w3m {{{
+"  w3m.vim {{{
 nnoremap <silent> <Leader>w :<C-u>W3mSplit <C-r><C-w><CR>
+nnoremap <silent> <F3> :<C-u>W3mSplit https://ejje.weblio.jp/content/<C-r><C-w><CR><C-f>
 augroup w3m
 	autocmd!
 	autocmd FileType vim nnoremap <buffer> <F1> :help <C-R><C-W><CR>
 	autocmd FileType text	nnoremap <buffer><silent> <F1> :<C-u>W3mSplit <C-r><C-w><CR>
 	" autocmd FileType python	nnoremap <buffer><silent> <F1> :<C-u>W3mSplit python <C-r><C-w><CR>
 	autocmd FileType w3m nnoremap <buffer>q :W3mClose<CR>
-augroup end " }}}
-" -------------------------------------------------------------------------- 
-"  openbrowser{{{
-" let g:openbrowser_open_commands = ['cmd', 'firefox']
-" let g:openbrowser_open_rules = {'cmd': '"C:\Program Files\Waterfox\waterfox.exe" {openbrowser#shellescape(uri)}',
-" 			\'firefox': 'firefox {openbrowser#shellescape(uri)}',
-" 			\}
-nmap <F4> <Plug>(openbrowser-smart-search)
-vmap <F4> <Plug>(openbrowser-smart-search)
-"}}}
+augroup end
+" }}}
 ""------------------------------------------------------------------------------
-" smartchr {{{
+" vim-smartchr {{{
 " clang_complete,neocomplcache-clang_completeどちらかでもあると">"にcppファイルに設定出来ない>
 " <buffer>があるかどうかで動作が変わる
 augroup smartchr
+	autocmd!
      "cpp {{{
 	" 演算子の間に空白を入れる
-	autocmd FileType c,cpp	inoremap <buffer><expr> < search('^#include\%#', 'bcn', line("."))? ' <><Left>': smartchr#loop('<', ' < ', ' << ', ' <= ' )
-	" autocmd FileType c,cpp	inoremap <buffer><expr> <C-;> search('^#include <.*\%#', 'bcn')? '>': smartchr#loop(' > ', ' >> ', ' >= ', '>')
+	autocmd FileType c,cpp	inoremap <buffer><expr> < search('^#include\%#', 'bcn', line("."))? ' <><Left>': smartchr#loop('<', ' < ', ' <= ', ' << ' )
+	autocmd FileType c,cpp	inoremap <buffer><expr> > search('<[^>]*\%#', 'bcn')? '>': smartchr#loop(' > ', ' >= ', '>>', '>')
 	"何故か += , -= は出来ない
 	autocmd FileType c,cpp	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++')
 	autocmd FileType c,cpp	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '++')
 	autocmd FileType c,cpp	inoremap <buffer><expr> * smartchr#loop('*', ' * ', ' *= ')
-	autocmd FileType c,cpp	inoremap <buffer><expr> / search('^#include <.*\%#', 'bcn')? '/': smartchr#loop(' / ', ' /= ', '/')
+	autocmd FileType c,cpp	inoremap <buffer><expr> / search('^#include <.*\%#', 'bcn')? '/': smartchr#loop(' / ', ' // ', ' /= ', '/')
 	autocmd FileType c,cpp	inoremap <buffer><expr> % search('\(printf\<bar>format\)(".*\%#', 'bcn')? '%': smartchr#loop(' % ', ' %= ', '%')
 	" *はポインタで使うので、空白はいれない
 	" ビット演算子
 	autocmd FileType c,cpp	inoremap <buffer><expr> ~ smartchr#loop(' ~ ', ' ~= ', '~')
-	autocmd FileType c,cpp	inoremap <buffer><expr> <Bar> smartchr#loop(' <Bar> ', ' <Bar><Bar> ', '<Bar>', ' <Bar>= ')
 	autocmd FileType c,cpp	inoremap <buffer><expr> ^ smartchr#loop(' ^ ', ' ^= ', '^')
-	autocmd FileType c,cpp	inoremap <buffer><expr> & smartchr#loop('&', ' & ', ' && ', ' &= ')
+	autocmd FileType c,cpp	inoremap <buffer><expr> & search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\) ([^)]*\%#', 'bcn')? smartchr#loop(' && ', '&', ' & ')
+							\ : smartchr#loop('&', ' & ', ' && ', ' =& ')
+	autocmd FileType c,cpp	inoremap <buffer><expr> <Bar> search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\) ([^)]*\%#', 'bcn')? smartchr#loop(' <Bar><Bar> ', ' <Bar> ', '<Bar>')
+							\: smartchr#loop(' <Bar> ', ' <Bar>= ', ' <Bar><Bar> ', '<Bar>')
 	autocmd FileType c,cpp	inoremap <buffer><expr> , smartchr#loop(', ', '->', ',')
 	" 3項演算子の場合は、後ろのみ空白を入れる
 	autocmd FileType c,cpp	inoremap <buffer><expr> ? smartchr#loop('? ', '?')
-	autocmd FileType c,cpp	inoremap <buffer><expr> : smartchr#loop(': ', '::', ':')
+	autocmd FileType c,cpp	inoremap <buffer><expr> : smartchr#loop(':', '::', ': ')
 
 	" =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
 	" 制御文後の()中では比較優先
@@ -668,16 +609,14 @@ augroup smartchr
 	" autocmd FileType c,cpp	inoremap <buffer><expr> " search('^#include\%#', 'bcn')? ' ""<Left>': '""<Left>'
 	" 制御文直後の(は自動で間に空白を入れる
 	autocmd FileType c,cpp	inoremap <buffer><expr> ( search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\<bar>\<switch\>\)\%#', 'bcn')? ' ()<Left>': '()<Left>'
-	autocmd FileType c,cpp	inoremap <buffer><expr> : smartchr#loop(': ', '::')
     " }}}
     "python  {{{
 	autocmd FileType python	inoremap <buffer><expr> : smartchr#loop(':', ':<CR>')
 	autocmd FileType python	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++')
 	autocmd FileType python	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '--')
 	autocmd FileType python	inoremap <buffer><expr> / smartchr#loop(' / ', '/')
-	autocmd FileType python	inoremap <buffer><expr> * smartchr#loop(' * ', '*')
+	autocmd FileType python	inoremap <buffer><expr> * smartchr#loop('*', ' * ', '**')
 	autocmd FileType python	inoremap <buffer><expr> , smartchr#loop(', ', ',')
-	autocmd FileType python	inoremap <buffer><expr> ( smartchr#loop('(', '(  )<Left><Left>')
 	autocmd FileType python	inoremap <buffer><expr> = smartchr#loop(' = ', ' == ', ' != ', '=')
 	autocmd FileType python	inoremap <buffer><expr> < smartchr#loop(' < ', ' <= ','<')
 	autocmd FileType python	inoremap <buffer><expr> > smartchr#loop(' > ', ' >= ','>')
@@ -687,9 +626,8 @@ augroup smartchr
 	autocmd FileType renpy	inoremap <buffer><expr> + smartchr#loop('+', ' + ', ' += ', '++')
 	autocmd FileType renpy	inoremap <buffer><expr> - smartchr#loop('-', ' - ', ' -= ', '--')
 	autocmd FileType renpy	inoremap <buffer><expr> / smartchr#loop('/', ' / ')
-	autocmd FileType renpy	inoremap <buffer><expr> * smartchr#loop('*', ' * ')
+	autocmd FileType renpy	inoremap <buffer><expr> * smartchr#loop('*', ' * ', '**')
 	autocmd FileType renpy	inoremap <buffer><expr> , smartchr#loop(', ', ',')
-	autocmd FileType renpy	inoremap <buffer><expr> ( smartchr#loop('(', '(  )<Left><Left>')
 	autocmd FileType renpy	inoremap <buffer><expr> = smartchr#loop('=', ' = ', ' == ', ' != ')
 	autocmd FileType renpy	inoremap <buffer><expr> < smartchr#loop(' < ', ' <= ','<')
 	autocmd FileType renpy	inoremap <buffer><expr> > smartchr#loop(' > ', ' >= ','>')
@@ -701,17 +639,18 @@ augroup smartchr
 	"何故か += , -= は出来ない
 	autocmd FileType d	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++', '+')
 	autocmd FileType d	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '--', '-')
-	autocmd FileType d	inoremap <buffer><expr> / smartchr#loop(' / ', '// ', '/* ', '/+ ', ' /= ', '/')
+	autocmd FileType d	inoremap <buffer><expr> / smartchr#loop(' / ', ' /= ', '// ', '/')
 	autocmd FileType d	inoremap <buffer><expr> * smartchr#loop('*', ' * ', ' *= ')
 	autocmd FileType d	inoremap <buffer><expr> % search('writef.*(".*\%#', 'bcn')? '%': smartchr#loop(' % ', ' %= ', '%')
 	" ビット演算子
-	autocmd FileType d	inoremap <buffer><expr> & smartchr#loop('&', ' & ', ' && ', ' &= ')
-	autocmd FileType d	inoremap <buffer><expr> <Bar> smartchr#loop(' <Bar> ', ' <Bar><Bar> ', '<Bar>', ' <Bar>= ')
+	autocmd FileType d	inoremap <buffer><expr> & search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\) ([^)]*\%#', 'bcn')? smartchr#loop(' && ', ' & ', '&')
+							\ : smartchr#loop(' & ', ' &= ', ' && ', '&')
+	autocmd FileType d	inoremap <buffer><expr> <Bar> search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\) ([^)]*\%#', 'bcn')? smartchr#loop(' <Bar><Bar> ', ' <Bar> ', '<Bar>')
+							\: smartchr#loop(' <Bar> ', ' <Bar>= ', ' <Bar><Bar> ', '<Bar>')
 	autocmd FileType d	inoremap <buffer><expr> ^ smartchr#loop(' ^ ', ' ^= ', '^')
 	autocmd FileType d	inoremap <buffer><expr> ~ smartchr#loop(' ~ ', ' ~= ', '~')
 	" 3項演算子の場合は、後ろのみ空白を入れる
 	autocmd FileType d	inoremap <buffer><expr> ? smartchr#loop('? ', '?')
-	autocmd FileType d	inoremap <buffer><expr> : smartchr#loop(': ', '::', ':')
 
 	" =の場合、単純な代入や比較演算子として入力する場合は前後にスペースをいれる。
 	" 制御文後の()中では比較優先
@@ -725,10 +664,12 @@ augroup smartchr
 	autocmd FileType d	inoremap <buffer><expr> { smartchr#loop('{', '<CR>{<CR>}<Up><CR>')
 	autocmd FileType d	inoremap <buffer><expr> ; smartchr#loop('; ', ';<cr>')
 	" 「->」は入力しづらいので、..で置換え
-	autocmd FileType d	inoremap <buffer><expr> . search('\[[^\]]*\%#')? smartchr#loop('.', '..'): smartchr#loop('.', '->')
-	autocmd FileType d	inoremap <buffer><expr> , smartchr#loop(', ', ',')
+	" autocmd FileType d	inoremap <buffer><expr> . search('\[[^\]]*\%#')? smartchr#loop('.', '..'): smartchr#loop('.', '->')
+	autocmd FileType d	inoremap <buffer><expr> , smartchr#loop(', ', '->', ',')
 	" 行先頭での@入力で、プリプロセス命令文を入力
-	autocmd FileType d	inoremap <buffer><expr> @ smartchr#loop('import ', '@'): '@'
+	autocmd FileType d	inoremap <buffer><expr> @ search('^\%#','bcn')? smartchr#loop('import ', '@')
+							\ : search('^\s\+\%#', 'bcn')? smartchr#loop('@property', '@')
+							\ : '@'
 	" 制御文直後の(は自動で間に空白を入れる
 	autocmd FileType d	inoremap <buffer><expr> ( search('\(\<if\>\<bar>\<while\>\<bar>\<for\>\<bar>\<switch\>\<bar>\<foreach\>\)\%#', 'bcn')? ' ()<Left>': '()<Left>'
     " }}}
@@ -764,93 +705,13 @@ augroup smartchr
     " }}}
 augroup END 
 " }}}
-"------------------------------------------------------------------------------------- 
-" pcyle {{{
-command! GdbStart call s:GdbStart()
-if has('win32') || has('win64')
-	command! Gdb call vimproc#system_bg("Python C:/Python34/Scripts/pyclewn")
-endif
-command! MyPyclewn call s:MyPyclewn()
-
-function! s:GdbStart() abort
-	let l:path = expand("%:p")
-	silent! Cfile %:p:r.exe
-	"<C-O>で手動で開く
-	" silent! exe "e ".l:path
-	call s:MyPyclewn()
-endfunction
-
-function! s:MyPyclewn()
-	"ブレークポイント設定
-	nnoremap b :exe "Cbreak " . expand("%:p") . ":" . line(".")<CR>
-	"ブレークポイント解除
-	nnoremap e :exe "Cclear " . expand("%:p") . ":" . line(".")<CR>
-	"開始             
-	nnoremap r :exe "Crun"<CR>
-	"ステップオーバー 
-	nnoremap <C-N> :exe "Cnext"<CR>
-	"ステップイン     
-	nnoremap <C-S> :exe "Cstep"<CR>
-	"ステップアウト   
-	nnoremap <C-F> :exe "Cfinish"<CR>
-	"続行             
-	nnoremap <C-C> :exe "Ccontinue"<CR>
-	"変数の内容を表示
-	nnoremap p :exe "Cprint " . expand("<cword>") <CR>
-	nnoremap w :exe "Cwhere"<CR>
-	nnoremap ia :exe "Cinfo args"<CR>
-	nnoremap il :exe "Cinfo locals"<CR>
-	nnoremap ib :exe "Cinfo breakpoints"<CR>
-	nnoremap u :exe "Cup"<CR>
-	nnoremap d :exe "Cdown"<CR>
-	nnoremap q :exe "Cquit"<CR>:qa<CR>
-endfunction " }}}
 "------------------------------------------------------------------------------
-" showmarks {{{
+"  my-ShowMarks7 {{{
 let showmarks_include = "abcdefghijklmnorstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-" }}}
+nnoremap <silent> <ESC><ESC> :nohlsearch<CR>:ShowMarksClearAll<CR>:QuickhlManualReset<CR>
+"  }}}
 ""------------------------------------------------------------------------------
-" textobj {{{
-" ヤンク
-nmap YY <Plug>(operator-blockwise-yank)
-" 削除
-nmap DD <Plug>(operator-blockwise-delete)
-" 変更
-nmap CC <Plug>(operator-blockwise-change)
-
-omap ib <Plug>(textobj-between-i)
-omap ab <Plug>(textobj-between-a)
-vmap ib <Plug>(textobj-between-i)
-vmap ab <Plug>(textobj-between-a)
-
-omap if <Plug>(textobj-function-i)
-omap af <Plug>(textobj-function-a)
-vmap if <Plug>(textobj-function-i)
-vmap af <Plug>(textobj-function-a)
-
-"「
-omap ik <Plug>(textobj-jabraces-kakko-i)
-omap ak <Plug>(textobj-jabraces-kakko-a)
-vmap ik <Plug>(textobj-jabraces-kakko-i)
-vmap ak <Plug>(textobj-jabraces-kakko-a)
-"『
-omap iK <Plug>(textobj-jabraces-double-kakko-i)
-omap aK <Plug>(textobj-jabraces-double-kakko-a)
-vmap iK <Plug>(textobj-jabraces-double-kakko-i)
-vmap aK <Plug>(textobj-jabraces-double-kakko-a)
-" }}}
-" --------------------------------------------------------------------------
-" savevers.vim {{{
-" バックアップファイルの設定" savevers.vimのためにパッチモードにします
-set patchmode=.bak
-"  カンマで区切られたバックアップを作成するファイル名です "*.c,*.h,*.vim"
-let savevers_types = "*"
-"  バックアップファイルが書き込まれるディレクトリです ここでは、オプション"backupdir"と同じディレクトリにしています
-let savevers_dirs = &backupdir
-"  バックアップファイルとの比較でウィンドウのサイズを変更する場合は0
-let versdiff_no_resize=1 " }}}
-""------------------------------------------------------------------------------
-" switch.vim {{{
+"  switch.vim {{{
 let g:variable_style_switch_definitions = [
 \   {
 \     'T': {
@@ -871,17 +732,10 @@ let g:variable_style_switch_definitions = [
 \     },
 \   }
 \ ]
-nnoremap T :Switch<cr>
-" }}}
- " ------------------------------------------------------------------------- 
- " renpy {{{
-let g:renpyopen_use_vimproc=1
-if has('win32') || has('win64')
-  let g:renpy_exepath="e:/Soft/renpy/renpy.exe"
-endif
- "}}}
+nnoremap <C-s> :Switch<cr>
+"  }}}
 ""------------------------------------------------------------------------------
-" QFixhowm {{{
+"  qfixhowm {{{
 "  キーマップリーダー
 let QFixHowm_Key = 'g'
 " タイトル記号
@@ -893,7 +747,7 @@ let QFixHowm_PairLinkDir   = 'pairlink'
 " キーワード保存ファイル
 let QFixHowm_keywordfile   = $DROPBOX.'/howm/howm-keys'
 " 休日定義ファイル
-let QFixHowm_HolidayFile = $DOTVIM.'/bundle/qfixhowm/misc/Sche-Hd-0000-00-00-000000.utf8'
+let QFixHowm_HolidayFile = $DOTVIM.'/plugins/qfixhowm/misc/Sche-Hd-0000-00-00-000000.utf8'
 "クイックメモのファイル名
 let QFixHowm_QuickMemoFile = "QMem/QMem-00-0000-00-00-000000.howm"
 "日記のファイル名
@@ -953,7 +807,6 @@ let QFixWin_EnableMode = 1
 let QFix_UseLocationList = 1
 " tabで開く
 let QFix_Edit = "tab"
-nnoremap <C-W>, :copen<CR>
 
 " let use_cygwingrep = 0
 " let MyGrep_CurrentDirMode = 1
@@ -974,9 +827,10 @@ nnoremap <C-W>, :copen<CR>
 " endif
 
 " nnoremap g,o :Unite qfixhowm:!<CR>
-" }}}
+"  }}}
 " -------------------------------------------------------------------------- 
-"" jpformat {{{
+" JpFormat.vim {{{
+"JpFormat で現在行疑似ソフトラップ
 "JpFormatAll で疑似ソフトラップ
 "JpJoinAll で疑似ソフトラップから復元
 "JpFormatAll! でハードソフトラップ
@@ -985,19 +839,21 @@ nnoremap <C-W>, :copen<CR>
 "Jp系のコマンドを使うと自動整形が有効になる。連結マークがあるtextファイルを開
 "くと自動で自動整形が有効化される。
 " smoopyで開く
- let ExtViewer_txt = '!start "'.'e:/Soft/smoopy/smoopy.exe'.'"'.' -l%l "%f"'
+set formatexpr=jpfmt#formatexpr()
+let ExtViewer_txt = '!start "'.'e:/Soft/smoopy/smoopy.exe'.'"'.' -l%l "%f"'
 "  挿入モードでキー入力する度に自動整形を行う/行わない
- let JpFormatCursorMovedI = 1
+let JpFormatCursorMovedI = 1
 "  原稿文字数(全角の折り返し文字数)
- let JpCountChars = 40
+let JpCountChars = 40
 "  原稿行数
- let JpCountLines = 16
+let JpCountLines = 16
 "40x16 ラノベ1ページ分
 "  禁則処理の最大ぶら下がり字数(-1なら全てぶら下げ)
- let JpCountOverChars = -1
-"}}}
+let JpCountOverChars = -1
+""タイプライタースクロールという手もある(Jpformtのhelp参照)
+" }}}
 "------------------------------------------------------------------------------
-"FoldCC"{{{
+" foldCC.vim {{{
 set foldtext=FoldCCtext()
 set fillchars=vert:\|
 let g:foldCCtext_tail = 'printf(" [%4d lines Lv%-2d]", v:foldend-v:foldstart+1, v:foldlevel)'
@@ -1005,12 +861,25 @@ let g:foldCCtext_tail = 'printf(" [%4d lines Lv%-2d]", v:foldend-v:foldstart+1, 
 let g:foldCCtext_enable_autofdc_adjuster = 1
 " 左端の折り畳み表示幅
 set foldcolumn=3
-""}}}
+" "}}}
+"--------------------------------------------------------------------------- 
+" vim-quickhl {{{
+"ハイライト停止
+" " quickhl 複数ワードを同時にハイライト
+nmap <Space>i <Plug>(quickhl-manual-this)
+xmap <Space>i <Plug>(quickhl-manual-this)
+let g:quickhl_manual_enable_at_startup = 1
+" }}}
 "---------------------------------------------------------------------------
 " 検索移動まとめ{{{
+"---------------------------------------------------------------------------
+" vim-visualstar {{{
 " vim-visualstar visualモードから検索出来るようにする
 xmap * <Plug>(visualstar-*)N
 xmap # <Plug>(visualstar-#)N
+" }}}
+"---------------------------------------------------------------------------
+" vim-anzu {{{
 "anzu.vim 検索結果がいくつあるか表示する
 " n や N の代わりに使用します。
 nmap n <Plug>(anzu-n-with-echo)
@@ -1020,33 +889,746 @@ nmap # <Plug>(anzu-sharp-with-echo)``
 let g:airline#extensions#anzu#enabled = 0
 " ステータス情報を statusline へと表示する
 " set statusline=%{anzu#search_status()}
-"easy-motion <S-S>(任意の文字) でジャンプ出来るようにする
-let g:EasyMotion_leader_key = '<tab>'
-nmap K <Plug>(easymotion-s)
-vmap K <Plug>(easymotion-s)
-omap K <Plug>(easymotion-s)
-inoremap <C-F> <C-O><Plug>(easymotion-s)
+" }}}
+"---------------------------------------------------------------------------
+" vim-easymotion {{{
+"easy-motion <S-K>(任意の文字) でジャンプ出来るようにする
+" let g:EasyMotion_leader_key = '<tab>'
+nmap K <Plug>(easymotion-bd-w)
+xmap K <Plug>(easymotion-bd-w)
+omap K <Plug>(easymotion-bd-w)
+imap <C-F> <C-O><Plug>(easymotion-bd-w)
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_use_migemo = 1
-let g:EasyMotion_startofline=0
-" clever-f fFtT系をmigemoに対応させ、;,の代わりにfFtTで繰り返せるようにする
+let g:EasyMotion_startofline=1
+" }}}
+"---------------------------------------------------------------------------
+" clever-f.vim {{{
+" " clever-f fFtT系をmigemoに対応させ、;,の代わりにfFtTで繰り返せるようにする
 let g:clever_f_ignore_case = 1
 let g:clever_f_use_migemo = 1
 let g:clever_f_across_no_line = 1
+" }}}
+"---------------------------------------------------------------------------
+" jasegment.vim {{{
+"jasegment.vim 日本語文
+" imap <silent> <C-Left>  <C-O>B
+" imap <silent> <C-Right> <C-O>W
+" 単語削除(日本語用) アンドゥーで元の位置に戻れない 対策は無理ぽい 
+" imap <expr><silent> <C-BS> col('.')==1 ? '<BS>' : '<ESC>vBs'
+" imap <expr><silent> <C-DEL> col('.')>=strlen(getline('.')) ? '<DEL>' : '<ESC><RIGHT>vEs'
+" imap <expr><silent> <C-BS> col('.')==1 ? '<ESC>vBo<LEFT>s' : '<ESC>vBs'
+" imap <expr><silent> <C-DEL> col('.')==1 ? '<ESC>vEs' : '<ESC><RIGHT>vEs'
+" imap <expr><silent> <C-W> col('.')==1 ? '<C-g>u<BS><C-O>dB<BS>' : col('.')>strlen(getline('.')) ? '<C-g>u<C-O>dB<BS>' : '<C-g>u<C-O>dB'
+" }}}
+"}}}
+"  ------------------------------------------------------------------------- 
+"  Mundo アンドゥーツリーを表示"{{{
+nnoremap <Space>u :<C-u>MundoToggle<CR>
+" nnoremap <Space>u :<C-u>UndotreeToggle<CR>
+let g:undotree_SetFocusWhenToggle=1
+"}}}
+"------------------------------------------------------------------------------------- 
+" vim-indent-guide インデントを見やすくする"{{{
+if has('gui_running')
+	let g:indent_guides_enable_on_vim_startup = 1
+endif
 "}}}
 " --------------------------------------------------------------------------
-" {{{その他
+" air_line {{{
+if !exists('g:airline_symbols')
+ let g:airline_symbols = {}
+endif
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = ''
+let g:airline#extensions#branch#symbol = '?'
+let g:airline#extensions#readonly#symbol = '⭤'
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_idx_mode = 0
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#show_tab_type = 0
+let g:airline#extensions#tabline#show_tab_nr = 0
+let g:airline#extensions#tabline#fnamemod = ':t:r'
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline_symbols.linenr = '⭡'
+let g:airline_symbols.readonly  = '⭤'
+let g:airline_theme = 'solarized'
+let g:airline_section_a = airline#section#create(['mode', 'crypt'])
+let g:airline_section_b = "%{expand('%:p:h')}"
+let g:airline_section_c = "%f%m%{&readonly? ' '.g:airline_symbols.readonly:''}"
+let g:airline_section_x = "%{airline#extensions#branch#get_head()}"
+let g:airline_section_y = "%{strlen(&filetype)>0?&filetype:'no-ft'} | %{strlen(&fenc)>0?&fenc:'no-fe'} | %{strlen(&ff)>0?&ff:'no-ff'}"
+let g:airline_section_z = '%3p%% '.airline_symbols.linenr.'(%3l:%3c)'
+" }}}
+"------------------------------------------------------------------------------------- 
+" Qfreplace"{{{
+augroup Qfreplace
+	autocmd!
+	autocmd FileType qf nnoremap <buffer> R :<C-u>Qfreplace<CR>
+	autocmd FileType qfreplace nnoremap <buffer> <Space>w :w<CR>:close<CR>:cclose<CR>
+augroup END
+" }}}
 " --------------------------------------------------------------------------
-" accelerated-smooth-scroll
-" <C-d>/<C-u> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
-" Default : 10
-" let g:ac_smooth_scroll_du_sleep_time_msec = 1
+" winresizer{{{
+let g:winresizer_vert_resize = 1
+let g:winresizer_horiz_resize = 1
+let g:winresizer_start_key = '<C-w>r'
+"}}}
+"---------------------------------------------------------------------------
+" tcomment"{{{
+if !exists('g:tcomment_types')
+  let g:tcomment_types = {}
+endif
+let g:tcomment_types.renpy = '# %s'
+let g:tcomment_types.kirikiri = ';%s'
+let g:tcomment_types.D = '// %s'
+let g:tcomment_textobject_inlinecomment=0
+" }}}
+" -------------------------------------------------------------------------- 
+"  openbrowser{{{
+" let g:openbrowser_open_commands = ['cmd', 'firefox']
+" let g:openbrowser_open_rules = {'cmd': '"C:\Program Files\Waterfox\waterfox.exe" {openbrowser#shellescape(uri)}',
+" 			\'firefox': 'firefox {openbrowser#shellescape(uri)}',
+" 			\}
+nmap <F4> <Plug>(openbrowser-smart-search)
+xmap <F4> <Plug>(openbrowser-smart-search)
+"}}}
+""------------------------------------------------------------------------------
+" textobj {{{
+" ヤンク
+nmap YY <Plug>(operator-blockwise-yank)
+" 削除
+nmap DD <Plug>(operator-blockwise-delete)
+" 変更
+nmap CC <Plug>(operator-blockwise-change)
+
+omap ib <Plug>(textobj-between-i)
+omap ab <Plug>(textobj-between-a)
+xmap ib <Plug>(textobj-between-i)
+xmap ab <Plug>(textobj-between-a)
+
+omap if <Plug>(textobj-function-i)
+omap af <Plug>(textobj-function-a)
+xmap if <Plug>(textobj-function-i)
+xmap af <Plug>(textobj-function-a)
+
+"「」
+omap ik <Plug>(textobj-jabraces-kakko-i)
+omap ak <Plug>(textobj-jabraces-kakko-a)
+xmap ik <Plug>(textobj-jabraces-kakko-i)
+xmap ak <Plug>(textobj-jabraces-kakko-a)
+"『
+omap iK <Plug>(textobj-jabraces-double-kakko-i)
+omap aK <Plug>(textobj-jabraces-double-kakko-a)
+xmap iK <Plug>(textobj-jabraces-double-kakko-i)
+xmap aK <Plug>(textobj-jabraces-double-kakko-a)
+" }}}
+" --------------------------------------------------------------------------
+" savevers.vim {{{
+" バックアップファイルの設定" savevers.vimのためにパッチモードにします
+set patchmode=.bak
+"  カンマで区切られたバックアップを作成するファイル名です "*.c,*.h,*.vim"
+let savevers_types = "*"
+"  バックアップファイルが書き込まれるディレクトリです ここでは、オプション"backupdir"と同じディレクトリにしています
+let savevers_dirs = &backupdir
+"  バックアップファイルとの比較でウィンドウのサイズを変更する場合は0
+let versdiff_no_resize=1 " }}}
+ " ------------------------------------------------------------------------- 
+ " renpy {{{
+let g:renpyopen_use_vimproc=1
+if has('win32') || has('win64')
+  let g:renpy_exepath="E:/Soft/renpy/renpy.exe"
+endif
+augroup renpy
+	autocmd!
+	autocmd FileType renpy setl tabstop=8
+	autocmd FileType renpy setl softtabstop=4
+	autocmd FileType renpy setl shiftwidth=4
+	autocmd FileType renpy setl smarttab
+	autocmd FileType renpy setl expandtab
+	autocmd FileType renpy setl autoindent
+	autocmd FileType renpy setl nosmartindent
+	autocmd FileType renpy setl cindent
+    " autocmd FileType renpy inoremap <buffer> <expr><S-CR>  neocomplcache#smart_close_popup() . "\<CR><CR><C-D>"
+    	   " fast<C-Y>, で {fast}#{/fast}
+	autocmd FileType renpy inoremap <buffer> <C-Y>,  <Esc>vbyiX{<Left><C-H><Right><Esc>ea}{/<C-R>*}<Esc>bba
+       	" <C-Y>n で {fast}{/fast}#
+	autocmd FileType renpy inoremap <buffer> <C-Y>n  <Esc>f}a
+       	" Ren'Py 起動
+	autocmd FileType renpy nnoremap <buffer> <Leader>r :RenPyExeCurrentLine<CR>
+
+    function! s:MarkdownToRenPy()
+        %s/^\t/\t\t/
+        %s/\v^#(.*)/\tlabel \1:/
+        " %s/\v(^[^*#$	].*)  \n(.*)/\l\\n\2/
+        %s/\v  \n/\\n/
+        %s/\v^\$(.*)\n(.*)/\t\t\1 "\2"/
+        %s/\v(^[^*$#	].*)/\t\t"\1"/
+        %s/\v^\* ([^[].*)/\t\tmenu:\r\t\t\t"\1"/
+        %s/\v^\*$/\t\tmenu:\r\t\t\t"\1"/
+        %s/\v\* \[(.*)\]\((.*)\)/\t\t\t"\1":\r\t\t\t\tjump \2/
+        %s/^\t//
+        %s/\t/    /g
+    endfunction
+
+    autocmd FileType renpy command! RenPy call s:MarkdownToRenPy()
+augroup END
+"" }}}
+" ---------------------------------------------------------------------------- 
+runtime macros/matchit.vim"{{{
+let b:match_words = "if:endif,foreach:endforeach,\<begin\>:\<end\>,<div.*>:</div>""}}}
+" -------------------------------------------------------------------------- 
+if has_key(g:plugs, 'vim-changed') " {{{
+let g:changed_delay = 300
+augroup vim-changed
+	autocmd!
+	au BufReadPost  * Changed
+	au BufWritePost * Changed
+	" au CursorHold   * Changed
+	" au CursorHoldI  * Changed
+	au TextChanged  * ChangedTimerSet
+	au TextChangedI * ChangedTimerSet
+augroup END
+endif
+"}}}
+" -------------------------------------------------------------------------- 
+"  その他{{{
+let g:echodoc_enable_at_startup = 1
+xnoremap <F8> :Gtrans<CR> "翻訳する
+xnoremap <CR> :Alignta 
+"}}}
+""------------------------------------------------------------------------------
+" Out time{{{
+"--------------------------------------------------------------------------- 
+if has_key(g:plugs, 'asyncomplete.vim') " {{{
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_min_length = 1
+let g:asyncomplete_completion_delay = 100
+let g:asyncomplete_smart_completion = 0
+let g:asyncomplete_remove_duplicates = 1
+" let g:asyncomplete_force_refresh_on_context_changed = 1
+let g:asyncomplete_default_refresh_pattern = '\(\k\+$\|\k\+\.\k*$\|\k\+::\?\k*$\)'
+imap <c-space> <Plug>(asyncomplete_force_refresh)
+inoremap <expr><C-y> pumvisible() ? "\<C-e>\<C-y>" : "\<C-y>"
+" file pathの補完時のみメニューを閉じた後の<C-e>が効かない、他は大丈夫
+inoremap <expr><C-e> pumvisible() ? "\<C-e>\<C-e>" : "\<C-e>"
+inoremap <expr><CR>  pumvisible() ? "\<C-e>\<CR>" : "\<CR>"
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neoinclude#get_source_options({
+    \ 'name': 'neoinclude',
+    \ 'priority': 10,
+    \ 'whitelist': ['cpp'],
+    \ 'blacklist': ['unite'],
+    \ 'refresh_pattern': '#include [<"].*$',
+    \ 'completor': function('asyncomplete#sources#neoinclude#completor'),
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+    \ 'name': 'file',
+    \ 'priority': 6,
+    \ 'whitelist': ['*'],
+    \ 'blacklist': ['unite'],
+    \ 'completor': function('asyncomplete#sources#file#completor')
+    \ }))
+call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
+    \ 'name': 'omni',
+    \'priority': 5,
+    \ 'whitelist': ['*'],
+    \ 'blacklist': ['html','unite','vim'],
+    \ 'completor': function('asyncomplete#sources#omni#completor')
+    \  }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+    \ 'name': 'necovim',
+    \ 'priority': 5,
+    \ 'whitelist': ['vim'],
+    \ 'blacklist': ['unite'],
+    \ 'completor': function('asyncomplete#sources#necovim#completor'),
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'priority': 2,
+    \ 'whitelist': ['*'],
+    \ 'blacklist': ['go','unite'],
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necosyntax#get_source_options({
+    \ 'name': 'necosyntax',
+    \ 'priority': 1,
+    \ 'whitelist': ['*'],
+    \ 'blacklist': ['unite', 'cpp', 'python', 'd', 'vim', 'txt'],
+    \ 'completor': function('asyncomplete#sources#necosyntax#completor'),
+    \ }))
+au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+    \ 'name': 'neosnippet',
+    \ 'priority': 0,
+    \ 'whitelist': ['*'],
+    \ 'blacklist': ['unite'],
+    \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+    \ }))
+" au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#look#get_source_options({
+"     \ 'name': 'look',
+"     \ 'priority': 0,
+"     \ 'whitelist': ['txt'],
+"     \ 'blacklist': ['unite'],
+"     \ 'completor': function('asyncomplete#sources#look#completor'),
+"     \ }))
+" let g:asyncomplete_log_file=expand($VIM.'/async.log')
+endif " }}}
+"------------------------------------------------------------------------------------- 
+if has_key(g:plugs, 'neocomplete.vim') " {{{
+" そのうちasyncompleteに引っ越し
+let g:neocomplete#enable_at_startup = 1 "  起動時に有効化
+" let g:neocomplete#enable_auto_select = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#auto_completion_start_length = 2
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#max_list=1000
+let g:neocomplete#skip_auto_completion_time=''
+let g:neocomplete#auto_complete_delay = 80
+" inoremap <expr><S-CR> neocomplete#smart_close_popup()."\<CR>"
+" inoremap <expr><C-h>  neocomplete#smart_close_popup()."\<C-g>u\<C-h>"
+" inoremap <expr><BS>   neocomplete#smart_close_popup()."\<C-g>u\<BS>"
+inoremap <expr><C-y> pumvisible() ? "\<C-e>\<C-y>" : "\<C-y>"
+inoremap <expr><C-e> pumvisible() ? "\<C-e>\<C-e>" : "\<C-e>"
+ " 移動で重くなるのを防ぐ
+imap <expr><Down> neocomplete#cancel_popup()."\<Down>"
+imap <expr><Up>   neocomplete#cancel_popup()."\<Up>"
+" 1つ前の補完を取り消す
+" inoremap <expr> <C-G> neocomplete#undo_completion()
+
+" if !exists('g:neocomplete#keyword_patterns')
+"      let g:neocomplete#keyword_patterns = {}
+" endif
+" let g:neocomplete#keyword_patterns = {
+" 			\'default': '\h\w*',
+" 			\'text': '\k\+'
+" 			\}
+
+"if !exists('g:neocomplete#sources#dictionary#dictionaries')
+        "let g:neocomplete#sources#dictionary#dictionaries = {}
+"endif
+"let g:neocomplete#sources#dictionary#dictionaries = {
+		"\ 'text' : $DOTVIM.'/american-english',
+		"\ }
+
+" include用の設定 {{{
+" if has('win32') || has('win64')
+" 	let g:neocomplete_include_paths = {
+" 				\'cpp'		:includecppdir,
+" 				\'d'		:'E:/D/dmd2/src/phobos,E:/D/dmd2/src/druntime/import',
+" 				\'python'	:'C:/Python27/Lib,C:/Python27/lib/site-packages',
+" 				\}
+" elseif has('unix')
+" 	let g:neocomplcache_include_paths = {
+" 	\'cpp' :includecppdir,
+" 	\'d'   : '/usr/include/dlang/dmd',
+" 	\}
+" endif
+" let g:neocomplcache_include_patterns = {
+" 			\'d'	:'^\s*\<import'
+" 			\}
+" let g:neocomplcache_include_exprs = {
+" 			\'d'	:"substitute(v:fname, '\.', '/','g')"
+" 			\}
+" let g:neocomplcache_include_suffixes = {
+" 			\'d'	:'.d'
+" 			\}
+" }}}
+" " omnifunc用の設定{{{
+" " let g:neocomplete#force_overwrite_completefunc=1
+" if !exists("g:neocomplete#force_omni_input_patterns")
+"     let g:neocomplete#force_omni_input_patterns = {}
+" endif
+" " omnifunc が呼び出される場合の正規表現パターンを設定しておく
+" let g:neocomplete#force_omni_input_patterns.c   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+" let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+" let g:neocomplete#force_omni_input_patterns.d = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+" " let g:neocomplete#force_omni_input_patterns.go  = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+" " let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*' " pythonだけLCS側で設定されている
+" "}}}
+" omnifunc用の設定 neocompleteの機能が使用可能だけど少し遅い{{{
+" let g:neocomplete#force_overwrite_completefunc=1
+if !exists("g:neocomplete#sources#omni#input_patterns")
+    let g:neocomplete#sources#omni#input_patterns = {}
+endif
+" omnifunc が呼び出される場合の正規表現パターンを設定しておく
+let g:neocomplete#sources#omni#input_patterns.c   = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*\|\h\w*'
+let g:neocomplete#sources#omni#input_patterns.d   = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*\|\h\w*'
+let g:neocomplete#ignore_source_files = ['tag.vim', 'member.vim']
+" let g:neocomplete#sources#omni#input_patterns.go  = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+" let g:neocomplete#sources#omni#input_patterns.python = '\h\w*\|[^. \t]\.\w*' " pythonだけLCS側で設定されている
+"}}}
+" augroup completefunc
+	" autocmd!
+	" if has_key(g:plugs, 'vim-lsp')
+	" 	autocmd FileType python,cpp,d setlocal omnifunc=lsp#complete
+	" else
+	" 	autocmd FileType python,cpp,d setlocal omnifunc=LanguageClient#complete
+	" endif
+	" autocmd FileType go setlocal omnifunc=go#completions
+	" " autocmd FileType python setlocal omnifunc=jedi#completions
+	" autocmd FileType d setlocal omnifunc=dutyl#dComplete
+	" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+	" autocmd FileType html,htm,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+	" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+	" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" augroup END
+endif " }}}
+""--------------------------------------------------------------------------------------
+if has_key(g:plugs, 'deoplete.nvim') " {{{
+let g:deoplete#enable_at_startup = 1
+if has('win32') || has('win64')
+	let g:python3_host_prog = expand('C:/Python35/python.exe')
+endif
+call deoplete#custom#option({
+\ 'auto_complete_delay': 0,
+\ 'smart_case': v:true,
+\ 'max_list': 1000,
+\ })
+set pyxversion=3
+endif " }}}
+"--------------------------------------------------------------------------- 
+"vim-lsc{{{
+let g:lsc_server_commands = {
+	\'python': 'pyls',
+	\'cpp':'clangd',
+	\'d':'serve-d'}
+let g:lsc_enable_autocomplete = v:false
+"}}}
+" ----------------------------------------------------------------------------
+if has_key(g:plugs, 'denite.nvim') " {{{
+" denite本体 {{{
+call denite#custom#option('_', 'prompt', '>')
+call denite#custom#option('_', 'direction', 'topleft')
+call denite#custom#option('_', 'winwidth', '20')
+call denite#custom#source('_', 'matchers', ['matcher/regexp'])
+" call denite#custom#source('_', 'sorters', ['sorter/sublime'])
+
+" denite/insert モードのときは，C- で移動できるようにする
+call denite#custom#map('insert', "<Down>", '<denite:move_to_next_line>')
+call denite#custom#map('insert', "<Up>", '<denite:move_to_previous_line>')
+" tabopen や vsplit のキーバインドを割り当て
+call denite#custom#map('insert', "<C-t>", '<denite:do_action:tabopen>')
+call denite#custom#map('insert', "<C-v>", '<denite:do_action:vsplit>')
+call denite#custom#map('insert', "<C-s>", '<denite:do_action:split>')
+call denite#custom#map('normal', "<C-t>", '<denite:do_action:tabopen>')
+call denite#custom#map('normal', "<C-v>", '<denite:do_action:vsplit>')
+call denite#custom#map('normal', "<C-s>", '<denite:do_action:split>')
+
+" line
+nnoremap <silent> <Space>l :<C-u>Denite line<CR>
+" レジスタ履歴一覧
+nnoremap <silent> <Space>r :<C-u>Denite register<CR>
+"  バッファ一覧
+nnoremap <silent> <Space>b :<C-u>Denite -default-action='switch' buffer<CR>
+"  最近使用したファイル一覧
+nnoremap <silent> <Space>m :<C-u>Denite -default-action='tabopen' file_old<CR>
+"File
+" nnoremap ,f :<C-U>Denite -split='vertical' -post-action=suspend file<CR>
+nnoremap <silent> q: :<C-u>Denite command_history<CR>
+
+" au FileType denite nmap p <Plug>(denite_toggle_auto_preview)
+"  }}}
+"------------------------------------------------------------------------------------- 
+" menu {{{
+"------------------------------------------------------------------------------------- 
+" bookmark {{{
+let s:menus = {}
+let s:menus.bookmark = {
+      \     'description' : 'bookmark menu',
+      \ }
+let s:menus.bookmark.command_candidates = [
+      \       ['_vimrc'        , 'tabe $DROPBOX/_vimrc'],
+      \       ['_gvimrc'       , 'tabe $DROPBOX/_gvimrc'],
+      \       ['_pluginvim'    , 'tabe $DROPBOX/_pluginvim'],
+      \       ['_vimplug'      , 'tabe $DROPBOX/_vimplug'],
+      \       ['_include'      , 'tabe $DROPBOX/_includevim'],
+      \       ['_vsvimrc'      , 'tabe $DROPBOX/_vsvimrc'],
+      \       ['_vimperatorrc' , 'tabe $DROPBOX/_vimperatorrc'],
+      \       ['vimrc'         , 'tabe $VIM/vimrc'],
+      \       ['gvimrc'        , 'tabe $VIM/gvimrc'],
+      \       ['nodoka'        , 'tabe $DROPBOX/kuma.nodoka'],
+      \       ['mayu'          , 'tabe ~/.mayu'],
+      \       ['makefile'      , 'tabe d:/Box/Workspace/Makefile'],
+      \       ['workspace'     , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace'],
+      \       ['cpp'           , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/cpp'],
+      \       ['D'             , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/D'],
+      \       ['python'        , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/py'],
+      \       ['haskell'       , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/haskell'],
+      \       ['Go'            , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/go'],
+      \       ['renpy'         , 'VimFilerExplorer -winwidth=30 e:/Soft/renpy/renpy'],
+      \       ['renpy-dep'     , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/renpy/renpy'],
+      \       ['renpy-sample'  , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/renpy/sample/game/'],
+      \       ['fault'         , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/Dropbox/Muni\ -\ Hare\ -\ Akakyouryuu/renpy-6.99.0-sdk/faultms2/game/'],
+      \       ['kirikiri'      , 'VimFilerExplorer -winwidth=30 d:/Box/Workspace/kirikiri/practice/data/scenario'],
+      \       ['snippet'       , 'Denite neosnippet/user neosnippet/runtime'],
+      \       ['outline'       , 'VimFilerExplorer -winwidth=30 $DOTVIM/plugins/config_file/autoload/denite/sources/outline'],
+      \       ['plugins'       , 'VimFilerExplorer -winwidth=30 $DOTVIM/plugins'],
+      \       ['msys2'         , 'VimFilerExplorer -winwidth=30 c:/msys64/home/kuma'],
+      \       ['cygwin'        , 'VimFilerExplorer -winwidth=30 c:/cygwin64/home/Kuma'],
+      \       ['mokuroku'      , 'VimFilerExplorer -winwidth=30 $DROPBOX/mokuroku'],
+      \       ['now'           , "exe 'call vimproc#system(''e:/Softx64/Asr/AsrLoad.exe \"'.substitute(expand('%:p:h'), '/', '\\\\\\\\', 'g').'\"'')'"]
+      \     ]
+
+if has('win32')
+	call add(s:menus.bookmark.command_candidates, ["Asr", 'VimFilerExplorer -winwidth=30 e:/Soft/Asr'])
+elseif has('win64')
+	call add(s:menus.bookmark.command_candidates, ["Asr", 'VimFilerExplorer -winwidth=30 e:/Softx64/Asr'])
+endif
+
+ " }}}
+"-------------------------------------------------------------------------------------- 
+" command {{{
+let s:menus.command= {
+      \     'description' : 'command menu',
+      \ }
+let s:menus.command.command_candidates = [
+      \  ['gcc'   , 'QuickRun g++'],
+      \  ['gsdl'  , 'QuickRun g++_SDL'],
+      \  ['gdx'   , 'QuickRun g++_DxLib'],
+      \  ['gwx'   , 'QuickRun g++_widget'],
+      \  ['clang' , 'QuickRun clang++'],
+      \  ['csdl'  , 'QuickRun clang_SDL'],
+      \  ['cdx'   , 'QuickRun clang_DxLib'],
+      \  ['cwx'   , 'QuickRun clang_widget'],
+      \  ['cl'    , 'QuickRun cpp/vc'],
+      \  ['D'     , 'QuickRun d'],
+      \  ['rd'    , 'QuickRun rd'],
+      \  ['wxd'   , 'QuickRun wxd'],
+      \  ['run'   , '!% ,p,r.exe'],
+      \
+      \  ['Dstart', 'DUDCDstartServer'],
+      \  ['Dstop' , 'DUDCDstopServer'],
+      \  ['Dtags' , 'DUupdateCtags'],
+      \
+      \  ['save'              , 'BlogSave'],
+      \  ['pagelist'          , 'exe "BlogList page" | exe "nnoremap <buffer> q <C-W>q" | exe "nnoremap <buffer> E ,BlogOpen <C-R><C-W><CR>,%s/post/page/<CR>,call MyBlogMap()<CR>"'],
+      \  ['postlist'          , 'exe "BlogList post" | exe "nnoremap <buffer> q <C-W>q" | exe "nnoremap <buffer> E ,BlogOpen <C-R><C-W><CR>,call MyBlogMap()<CR>"'],
+      \  ['npage(固定ページ)' , 'exe "tabe" | exe "BlogNew page" | call MyBlogMap()'],
+      \  ['npost(投稿)'       , 'exe "tabe" | exe "BlogNew" | call MyBlogMap()'],
+      \  ['qfixhowm'          , 'denite qfixhowm/new qfixhowm,nocach -hide-source-names'],
+      \  ['html'              , 'setf html'],
+      \  ['markdown'          , 'setf markdown'],
+      \  ['timeline'          , 'TweetVimHomeTimeline'],
+      \  ['tweet'             , 'TweetVimSay'],
+      \  ['mention'           , 'TweetVimMentions'],
+      \  ['git pull upstream' , 'cd d,/Box/Workspace/renpy/renpy | call vimproc#system_bg("sh -c `git pull upstream master`")'],
+      \  ['vim_update'        , 'PlugUpdate']
+      \     ]
+
+function! MyBlogMap()
+	setf markdown
+	inoremap <buffer> <M-n> <Space><Space><CR>
+	nnoremap <buffer> Q :BlogPreview<CR>
+	nnoremap <buffer> <Space>w :BlogPreview publish<CR>
+endfunction
+ " }}}
+"------------------------------------------------------------------------------------- 
+" help {{{
+let s:menus.manul = {
+      \     'description' : 'manul menu',
+      \ }
+let s:menus.manul.command_candidates = [
+      \       ['SDL'      , 'W3mSplit http,//www.tacoworks.jp/software/SDLdoc-jp/html/'],
+      \       ['Dx'       , 'W3mSplit http,//homepage2.nifty.com/natupaji/DxLib/dxfunc.html'],
+      \       ['CPP'      , 'W3mSplit http,//cpprefjp.github.io/reference.html'],
+      \       ['boost'    , 'W3mSplit http,//www.kmonos.net/alang/boost/'],
+      \       ['Dlang'    , 'W3mSplit http,//www.kmonos.net/alang/d/comparison.html'],
+      \       ['phobos'   , 'W3mSplit http,//www.kmonos.net/alang/d/phobos/phobos.html#std'],
+      \       ['HTML5'    , 'W3mSplit http,//www.htmq.com/html5/index.shtml'],
+      \       ['CSS3'     , 'W3mSplit http,//www.htmq.com/css3/index.shtml'],
+      \       ['Markdown' , 'W3mSplit http,//blog.2310.net/archives/6'],
+      \       ['renpy'    , 'W3mSplit http,//ja.renpy.org/doc/html/'],
+      \       ['python3'  , 'W3mSplit http,//docs.python.jp/3/library/index.html'],
+      \       ['pygame'   , 'W3mSplit http,//westplain.sakuraweb.com/']
+      \     ]
+" }}}
+"------------------------------------------------------------------------------------- 
+" encode {{{
+let s:menus.encode = {
+      \     'description' : 'encode',
+      \ }
+let s:menus.encode.command_candidates = [
+      \		['rcp932'	,	'e ++enc=cp932'],
+      \		['reucjp'	,	'e ++enc=eucjp'],
+      \		['r8'		,	'e ++enc=utf-8'],
+      \		['rbe'		,	'e ++enc=utf-16'],
+      \		['rle'		,	'e ++enc=utf-16le'],
+      \		['scp932'	,	'set fenc=cp932'],
+      \		['seucjp'	,	'set fenc=eucjp'],
+      \		['s8'		,	'setlocal nobomb | set fenc=utf-8'],
+      \		['sbe'		,	'setlocal bomb | set fenc=utf-16'],
+      \		['sle'		,	'setlocal bomb | set fenc=utf-16le'],
+      \		['sdos'		,	'set ff=dos'],
+      \		['smac'		,	'set ff=mac'],
+      \		['sunix'	,	'set ff=unix'],
+      \		['rdos'		,	'e ++ff=dos'],
+      \		['rmac'		,	'e ++ff=mac'],
+      \		['runix'	,	'e ++ff=unix']
+      \     ]
+" }}}
+"------------------------------------------------------------------------------------- 
+call denite#custom#var('menu', 'menus', s:menus)
+
+nnoremap <silent> <Space>f :<C-u>Denite -split='vertical' menu:menus:bookmark<CR>
+nnoremap <silent> <Space>c :<C-u>Denite -split='vertical' menu:menus:command<CR>
+nnoremap <silent> <Space>h :<C-u>Denite -split='vertical' menu:menus:manul<CR>
+nnoremap <silent> <Space>e :<C-u>Denite -split='vertical' menu:menus:encode<CR>
+ " }}}
+""------------------------------------------------------------------------------
+" outline
+" nnoremap <Space>o :Denite -split='vertical' -winwidth=30 -post-action='none' unite:outline<CR>
+endif " }}}
+"------------------------------------------------------------------------------------- 
+" " pcyle {{{
+" command! GdbStart call s:GdbStart()
+" if has('win32') || has('win64')
+" 	command! Gdb call vimproc#system_bg("Python C:/Python34/Scripts/pyclewn")
+" endif
+" command! MyPyclewn call s:MyPyclewn()
 "
-" <C-f>/<C-b> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
-" Default : 10
-" let g:ac_smooth_scroll_fb_sleep_time_msec = 1
+" function! s:GdbStart() abort
+" 	let l:path = expand("%:p")
+" 	silent! Cfile %:p:r.exe
+" 	"<C-O>で手動で開く
+" 	" silent! exe "e ".l:path
+" 	call s:MyPyclewn()
+" endfunction
+"
+" function! s:MyPyclewn()
+" 	"ブレークポイント設定
+" 	nnoremap b :exe "Cbreak " . expand("%:p") . ":" . line(".")<CR>
+" 	"ブレークポイント解除
+" 	nnoremap e :exe "Cclear " . expand("%:p") . ":" . line(".")<CR>
+" 	"開始             
+" 	nnoremap r :exe "Crun"<CR>
+" 	"ステップオーバー 
+" 	nnoremap <C-N> :exe "Cnext"<CR>
+" 	"ステップイン     
+" 	nnoremap <C-S> :exe "Cstep"<CR>
+" 	"ステップアウト   
+" 	nnoremap <C-F> :exe "Cfinish"<CR>
+" 	"続行             
+" 	nnoremap <C-C> :exe "Ccontinue"<CR>
+" 	"変数の内容を表示
+" 	nnoremap p :exe "Cprint " . expand("<cword>") <CR>
+" 	nnoremap w :exe "Cwhere"<CR>
+" 	nnoremap ia :exe "Cinfo args"<CR>
+" 	nnoremap il :exe "Cinfo locals"<CR>
+" 	nnoremap ib :exe "Cinfo breakpoints"<CR>
+" 	nnoremap u :exe "Cup"<CR>
+" 	nnoremap d :exe "Cdown"<CR>
+" 	nnoremap q :exe "Cquit"<CR>:qa<CR>
+" endfunction " }}}
+""------------------------------------------------------------------------------
+"" clang_complete {{{
+" let g:clang_exec = $LLVM.'/clang'
+" let g:clang_complete_auto=0
+" let g:clang_auto_select = 1
+" let g:clang_use_library=1
+" let g:clang_snippets=1
+" let g:clang_complete_copen=0
+" let g:clang_periodic_quickfix=0
+" let g:clang_hl_errors=0
+" if has('win32') || has('win64')
+" 	let g:clang_library_path = $LLVM
+" elseif has('unix')
+" 	let g:clang_library_path = '/usr/local/lib'
+" endif
+" let g:clang_user_options = includecppoption." -std=c++1y -fgnu-runtime"
+" }}}
+"------------------------------------------------------------------------------------- 
+" " watchdogs {{{
+" " {{{
+" let s:watchdogs_config = {
+" \
+" \   "watchdogs_checker/clang++" : {
+" \	"cmdopt"  : includecppoption." -Wall -std=c++1z"
+" \   },
+" \
+" \   "watchdogs_checker/g++" : {
+" \	"cmdopt"  : includecppoption." -std=c++1z"
+" \   },
+" \
+" \   "cpp/watchdogs_checker" : {
+" \       "type" : "watchdogs_checker/clang++",
+" \   },
+" \
+" \   "watchdogs_checker/flake8" : {
+" \       "command" : 'flake8',
+" \       "exec"    : '%c %o %s:p',
+" \	"quickfix/errorformat" : '%f:%l:%m',
+" \   },
+" \
+" \    'watchdogs_checker/mcs' : {
+" \       'command'              : 'mcs',
+" \       'exec'                 : '%c %o %s:p',
+" \       'cmdopt'               : '--parse',
+" \       'quickfix/errorformat' : '%f\\(%l\\,%c\\):\ error\ CS%n:\ %m',
+" \   },
+" \    'cs/watchdogs_checker'  : {
+" \       'type' : 'watchdogs_checker/mcs',
+" \   },
+" \
+" \    'watchdogs_checker/golint' : {
+" \       'command'              : 'golint',
+" \       'exec'                 : '%c %o %s:p',
+" \       'cmdopt'               : '-min_confidence=0.8',
+" \	"quickfix/errorformat" : '%f:%l:%m',
+" \   },
+" \    'go/watchdogs_checker'  : {
+" \       'type' : 'watchdogs_checker/golint',
+" \   },
+" \
+" \
+" \    "watchdogs_checker/_" : {
+" \       "hook/close_quickfix/enable_exit" : 1,
+" \       "hook/u_nya_/enable"              : 1,
+" \  },
+" \ }
+" "  }}}
+" call extend(g:quickrun_config,s:watchdogs_config)
+" unlet s:watchdogs_config
+" " call watchdogs#setup(g:quickrun_config)
+" " 書き込み後にシンタックスチェックを行う
+" let g:watchdogs_check_BufWritePost_enables = {}
+" let g:watchdogs_check_BufWritePost_enables.cpp = 0
+" let g:watchdogs_check_BufWritePost_enables.python = 0
+" let g:watchdogs_check_BufWritePost_enables.d = 1
+" let g:watchdogs_check_BufWritePost_enables.haskell = 1
+" let g:watchdogs_check_BufWritePost_enables.go = 1
+" let g:watchdogs_check_BufWritePost_enables.csharp = 1
+" " }}}
 " --------------------------------------------------------------------------
-" uim
+" jedi {{{
+" let g:jedi#popup_select_first = 0
+" let g:jedi#completions_enabled = 0
+" let g:jedi#auto_vim_configuration = 0
+" let g:jedi#goto_assignments_command = "<leader>g"
+" let g:jedi#goto_definitions_command = "<leader>d"
+" let g:jedi#rename_command = "<leader>r"
+" let g:jedi#usages_command = "<leader>n"
+" let g:jedi#show_call_signatures = "0"
+" let g:jedi#documentation_command = "<F1>"
+" }}}
+" --------------------------------------------------------------------------
+"  deoplete-clang{{{
+" let g:deoplete#sources#clang#libclang_path = expand('c:/msys64/mingw64/bin/libclang.dll')
+" let g:deoplete#sources#clang#clang_header = expand('C:/msys64/mingw64/lib/clang')
+" let g:deoplete#sources#clang#flags = [
+"       \ includecppoption,
+"       \]
+" " docstringポップアップを無効化
+" augroup Deoplete-Clang
+"     autocmd!
+"     autocmd FileType cpp setlocal completeopt-=preview
+" augroup END
+"}}}
+" --------------------------------------------------------------------------
+" uim"{{{
 " if has('unix')
 "   " 「日本語入力固定モード」切替キー
 "   " inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
@@ -1055,34 +1637,14 @@ let g:clever_f_across_no_line = 1
 "   let IM_vi_CooperativeMode = 1
 "   " <ESC>押下後のIM切替開始までの反応が遅い場合はttimeoutlenを短く設定してみてください(ミリ秒)
 "   set timeout timeoutlen=3000 ttimeoutlen=100
-" endif
+" endif"}}}
 "------------------------------------------------------------------------------
-" vimshell
-nnoremap <Space>vs :VimShell<CR>
-"  ------------------------------------------------------------------------- 
-"  Gundo アンドゥーツリーを表示
-nnoremap <Space>u :<C-u>GundoToggle<CR>
-"--------------------------------------------------------------------------- 
-" hier
-"ハイライト停止
-nnoremap <silent> <ESC><ESC> :nohlsearch<CR>:HierClear<CR>:ShowMarksClearAll<CR>:QuickhlManualReset<CR>
-" quickhl 複数ワードを同時にハイライト
-nmap <Space>i <Plug>(quickhl-manual-this)
-xmap <Space>i <Plug>(quickhl-manual-this)
-let g:quickhl_manual_enable_at_startup = 1
-"------------------------------------------------------------------------------------- 
-" vim-indent-guide インデントを見やすくする
-if has('gui_running')
-	let g:indent_guides_enable_on_vim_startup = 1
-endif
-" ---------------------------------------------------------------------------- 
-runtime macros/matchit.vim
-let b:match_words = "if:endif,foreach:endforeach,\<begin\>:\<end\>,<div.*>:</div>"
-" -------------------------------------------------------------------------- 
-vnoremap <F8> :ExciteTranslate<CR> 翻訳する
-" ----------------------------------------------------------------------------
 " powerline
-"source $DOTVIM/bundle/powerline/powerline/ext/vim/source_plugin.vim
+"source $DOTVIM/plugins/powerline/powerline/ext/vim/source_plugin.vim
+"------------------------------------------------------------------------------
+" " vimshell"{{{
+" nnoremap <Space>vs :VimShell<CR>
+" "}}}
 " --------------------------------------------------------------------------
 " powerline-vim {{{
 " let g:Powerline_cache_dir = expand('~/.powerline-cache')
@@ -1094,53 +1656,13 @@ vnoremap <F8> :ExciteTranslate<CR> 翻訳する
 " set t_Co=256
 " "call Pl#Theme#InsertSegment('pwd', 'after', 'fileinfo')
 "}}}
-" --------------------------------------------------------------------------
-" air_line {{{
-if !exists('g:airline_symbols')
- let g:airline_symbols = {}
-endif
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'
-let g:airline_right_alt_sep = '⮃'
-let g:airline#extensions#branch#symbol = '⭠'
-let g:airline#extensions#readonly#symbol = '⭤'
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline#extensions#branch#enabled = 0
-let g:airline_symbols.linenr = '⭡'
-let g:airline_theme = 'solarized'
-let g:airline_section_b = "%{expand('%:p:h')}"
-let g:airline_section_c = "%f%m"
-let g:airline_section_x = "%{airline#extensions#branch#get_head()}"
-let g:airline_section_y = "%{strlen(&filetype)>0?&filetype:'no-ft'} | %{strlen(&fenc)>0?&fenc:'no-fe'} | %{strlen(&ff)>0?&ff:'no-ff'}"
-let g:airline_section_z = '%3p%% '.airline_symbols.linenr.'(%3l:%3c)'
-" }}}
-"------------------------------------------------------------------------------------- 
-" Qfreplace
-autocmd FileType qf nnoremap <buffer> R :Qfreplace<CR>
-autocmd FileType qfreplace nnoremap <buffer> <Space>w :w<CR>:close<CR>:cclose<CR>
-"---------------------------------------------------------------------------
-"nerdcommenter
-"map <tab>cc <plug>NERDCommenterComment
-" map <tab>cn <plug>NERDCommenterNested
-" map <tab>cm <plug>NERDCommenterMinimal
-" map <tab>cs <plug>NERDCommenterSexy
-" map <tab>cc <plug>NERDCommenterToggle
-"map <tab>cu <plug>NERDCommenterUncomment
-"---------------------------------------------------------------------------
-" tcomment
-if !exists('g:tcomment_types')
-  let g:tcomment_types = {}
-endif
-let g:tcomment_types.renpy = '# %s'
-let g:tcomment_types.kirikiri = ';%s'
-let g:tcomment_types.D = '// %s'
-let g:tcommentTextObjectInlineComment=0
 "------------------------------------------------------------------------------
-"twitvim
-let twitvim_count = 100
-"---------------------------------------------------------------------------
-"}}}
+" "twitvim"{{{
+" let twitvim_count = 100
+" augroup twitvim
+" 	autocmd!
+" 	autocmd FileType twitvim nnoremap q <C-W>q
+" augroup END"}}}
 "--------------------------------------------------------------------------- 
 " " 吉里吉里用 {{{
 " let g:kirikiriopen_use_vimproc = 1
@@ -2464,8 +2986,79 @@ let twitvim_count = 100
 " 	" }}} 
 " endfunction
 " "}}}
-"------------------------------------------------------------------------------------- 
+"---------------------------------------------------------------------------
+"nerdcommenter"{{{
+"map <tab>cc <plug>NERDCommenterComment
+" map <tab>cn <plug>NERDCommenterNested
+" map <tab>cm <plug>NERDCommenterMinimal
+" map <tab>cs <plug>NERDCommenterSexy
+" map <tab>cc <plug>NERDCommenterToggle
+"map <tab>cu <plug>NERDCommenterUncomment"}}}
+" --------------------------------------------------------------------------
+" accelerated-smooth-scroll"{{{
+" <C-d>/<C-u> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
+" Default : 10
+" let g:ac_smooth_scroll_du_sleep_time_msec = 1
+"
+" <C-f>/<C-b> 時のスリープ時間 (msec) : 小さくするとスクロールが早くなります。
+" Default : 10
+" let g:ac_smooth_scroll_fb_sleep_time_msec = 1"}}}
+"--------------------------------------------------------------------------- 
+"deoplete-d{{{
+" let g:deoplete#sources#d#dcd_client_binary = expand($DOTVIM.'/plugins/DCD/bin/dcd-client.exe')
+" let g:deoplete#sources#d#dcd_server_binary = expand($DOTVIM.'/plugins/DCD/bin/dcd-server.exe')
+"}}}
+" --------------------------------------------------------------------------
+" "  dutyl(Dlang) {{{
+" " 開始時にDUDCDstartServer終了時にDUDCDstopServer
+" " DU(v)jumpで定義にジャンプ DUupdateCtagsでタグ作成
+" " DUddoc でドキュメントを開く
+" augroup Duty
+"   autocmd!
+"   autocmd FileType d nnoremap <buffer> <F1> :DUddoc<CR>
+"   autocmd FileType d nnoremap <buffer> gd :DUjump<CR>
+"   autocmd BufAdd *.d DUDCDstartServer
+"   autocmd BufDelete *.d DUDCDstopServer
+" augroup END
+"
+" " DUB追加分をパスに含める
+" function s:AddDubPath(paths, dub_path)
+"   let s:packages = split(vimproc#system("ls ".a:dub_path), "\n")
+"   let l:dub_paths = []
+"   for package in s:packages
+"     let l:dub_paths += [a:dub_path."/".package."/source"]
+"   endfor
+"
+"   return a:paths + l:dub_paths
+" endfunction
+"
+" if has('win32') || has('win64')
+"   let g:dutyl_stdImportPaths=['E:/D/dmd2/src/phobos', 'E:/D/dmd2/src/druntime/import']
+"   " let g:dutyl_stdImportPaths=s:AddDubPath(['E:/D/dmd2/src/phobos', 'E:/D/dmd2/src/druntime/import'], "E:/D/dub/dub/packages")
+"   call dutyl#register#tool('dcd-client', $DOTVIM.'/plugins/DCD/bin/dcd-client.exe')
+"   call dutyl#register#tool('dcd-server', $DOTVIM.'/plugins/DCD/bin/dcd-server.exe')
+"   call dutyl#register#tool('dscanner',   $DOTVIM.'/plugins/Dscanner/bin/dscanner.exe')
+" elseif has('unix')
+"   " let g:dutyl_stdImportPaths=s:AddDubPath(['usr/include/dmd/phobos', 'usr/include/dmd/druntime/import'], "E:/D/dub/dub/packages")
+"   call dutyl#register#tool('dcd-client', $DOTVIM.'/plugins/DCD/bin/dcd-client')
+"   call dutyl#register#tool('dcd-server', $DOTVIM.'/plugins/DCD/bin/dcd-server')
+"   call dutyl#register#tool('dscanner',   $DOTVIM.'/plugins/Dscanner/bin/dscanner')
+" endif
+" " }}}
+""------------------------------------------------------------------------------
+" Go {{{
+" autocmd FileType go autocmd BufWritePre <buffer> Fmt
+" autocmd FileType go nnoremap <buffer> <F1> :Godoc<CR>
+" autocmd FileType godoc nnoremap <buffer> q :q<CR>
+" "補完にvimprocを使用する
+" if has('win32') || has('win64')
+"   let g:gocomplete#system_function = 'vimproc#system'
+" endif
+" }}}
+" --------------------------------------------------------------------------
 " vinarise
 "let g:vinarise_enable_auto_detect = 0
-"------------------------------------------------------------------------------------- 
+"}}}
+"------------------------------------------------------------------------------
+"
 " vim: nowrap foldmethod=marker textwidth=0 ft=vim

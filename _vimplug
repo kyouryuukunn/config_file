@@ -1,0 +1,245 @@
+" プラグイン
+call plug#begin(expand('$dotvim/plugins'))
+
+" if has('win32') || has('win64')
+"   set rtp+=c:/python34/pyclewn
+" endif
+"---------------------------------------------------------------------------
+"{{{言語別
+"c++{{{
+"pacman -S mingw-w64-x86_64-clang-tools-extra mingw-w64-x86_64-clang 
+"clang, gccoのバージョンが変わったら_includevimも修正
+"}}}
+"d{{{
+" ldc2, dmd2をダウンロードしてPATHを通す 要VC++
+" ldc2でないとworkspace-dはコンパイル不可
+" dubはコンパイラに付属するようになった
+Plug 'JesseKPhillips/d.vim', {'for':['d']} " シンタックスファイル
+" "}}}
+"python{{{
+" pip install jedi neovim python-language-server
+Plug 'Vimjas/vim-python-pep8-indent', {'for':['python']} " オートインデントをPEP8に対応
+Plug 'vim-scripts/python_match.vim', {'for': ['python']}
+"}}}
+"html{{{
+Plug 'othree/html5.vim',  {'for': ['html']}
+" Plug 'hokaccha/vim-html5validator', {'for': ['html']}
+"css
+" Plug 'hail2u/vim-css3-syntax',  {'for': ['css']}
+" Plug 'css_color.vim',  {'for': ['css']}
+" Plug 'mattn/emmet-vim', {'for': ['markdown', 'html']}
+"}}}
+"haskell{{{ 
+" stackをダウンロードしてPATHを通し、 
+" git clone 'haskell/haskell-ide-engine'
+" make-build-all.bat
+" haskell関係使いたいときは stack exec 'command':ex stack exec ghc
+" Plug 'kana/vim-filetype-haskell', {'for': ['haskell']}
+" Plug 'eagletmt/ghcmod-vim', {'for': ['haskell']}
+" Plug 'ujihisa/neco-ghc', {'for': ['haskell']}
+" Plug 'ujihisa/ref-hoogle', {'for': ['haskell']}
+" Plug 'ujihisa/unite-haskellimport', {'for': ['haskell']}
+"}}}
+"renpy{{{
+Plug 'kyouryuukunn/my-renpy', { 'for': ['renpy']}
+Plug 'kyouryuukunn/RenPyOpen.vim',  {'for': ['renpy']}
+" Plug 'kyouryuukunn/renpy_neocomplcache',  {'for': ['renpy']}
+"}}}
+" 吉里吉里{{{
+" Plug 'kyouryuukunn/KirikiriOpen.vim',  {'for': ['kirikiri']}
+" Plug 'kyouryuukunn/kirikiri_neocomplcache',  {'for': ['kirikiri']}
+" Plug 'tyru/kirikiri.vim',  {'for': ['kirikiri']}
+" Plug 'tyru/tjs.vim',  {'for': ['tjs']}
+"}}}
+" common lisp{{{
+" roswelをダウンロード PATHT通す
+" ros install cxxxr/cl-lsp
+"}}}
+"c#{{{
+" plug 'omnisharp/omnisharp-vim', {   'for': ['cs','csi','csx'],
+" \   'do': {
+" \     'windows': 'sh -c "git submodule update --init" && "c:/program files (x86)/msbuild/12.0/bin/msbuild.exe" server/omnisharp.sln /p:platform="any cpu"',
+" \     'mac': 'xbuild server/omnisharp.sln',
+" \     'unix': 'xbuild server/omnisharp.sln',
+" \   }
+" \ }
+"}}}
+"go{{{
+" plug 'dgryski/vim-godef',  {'for':['go']}
+" plug 'vim-jp/vim-go-extra',{'for':['go']} 
+"}}}
+""}}}
+"---------------------------------------------------------------------------
+" syntaxチェック{{{ 
+" Plug 'w0rp/ale' " lsp対応ならLanguageClient-neovimの方が早い
+"}}}
+"---------------------------------------------------------------------------
+" {{{ 補完
+" Plug 'maralla/completor.vim'"{{{
+" Plug 'maralla/completor-neosnippet'
+" Plug 'kyouryuukunn/completor-neoinclude'
+" Plug 'kyouryuukunn/completor-necovim'
+" "}}}
+" " async 現状動作しない、しても挙動がおかしい{{{
+" Plug 'prabirshrestha/asyncomplete.vim'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'prabirshrestha/asyncomplete-buffer.vim'
+" Plug 'prabirshrestha/asyncomplete-necovim.vim'
+" Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+" Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
+" Plug 'yami-beta/asyncomplete-omni.vim'
+" Plug 'kyouryuukunn/asyncomplete-file.vim', {'branch':'allow_variable_path'}
+" Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
+" " Plug 'kyouryuukunn/asyncomplete-look.vim'
+" " }}}
+Plug 'Shougo/neco-vim' " neocomplete, deoplete, async
+Plug 'Shougo/neoinclude.vim' " neocomplete, deoplete lspはInclude補完しない
+Plug 'Shougo/neosnippet' "スニペット
+Plug 'Shougo/neosnippet-snippets' "スニペット定義
+Plug 'Shougo/neco-syntax' " syntaxファイルからの補完 deoplete, async
+" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': has('win32')? 'd:/box/Workspace/Dropbox/etc/LCS.bat' : 'bash install.sh'} " lsp対応なら補完もシンタックスチェックも可能, pure vimと比べるとやや重い
+" Plug 'prabirshrestha/vim-lsp' " cppで落ちる
+" Plug 'natebosch/vim-lsc'
+" Plug 'ujihisa/neco-look', {'for': ['text']} " English 要lookと辞書 動作しない
+Plug 'Shougo/neocomplete.vim' " カーソル移動が重い以外は満足
+" Plug 'Shougo/deoplete.nvim', {'do': has('nvim')? 'UpdateRemotePlugins' : ''} " windowsでは遅い 
+" }}}
+"---------------------------------------------------------------------------
+"text-obj追加 {{{
+Plug 'kana/vim-textobj-user'
+"z: 折り畳み
+Plug 'kana/vim-textobj-fold'
+"f: 関数
+Plug 'kana/vim-textobj-function'
+"i: インデント
+Plug 'kana/vim-textobj-indent'
+"k:「,K:『, j(:（ 日本語用
+Plug 'kana/vim-textobj-jabraces'
+" Plug 'deton/textobj-nonblankchars.vim' "viWで漢字ひらがなカタカナを分ける (Utf-8のときの動作)
+"b 任意の文字
+Plug 'thinca/vim-textobj-plugins'
+",w ,e: _, 大文字,小文字,_区切り
+Plug 'vim-scripts/camelcasemotion'
+"短形選択用
+"v, V 短形選択(w, Wを短形選択で) 
+Plug 'rhysd/vim-textobj-word-column'
+
+" C-V dIw cIw (vIwはない): 矩形選択時は常時有効  osyo-manga/vim-operator-blockwiseに必要 下行にしか対応しない
+" Plug 'osyo-manga/vim-textobj-blockwise' 
+"YY,DD,CC: 横幅の違う矩形選択 YYaw エラー 下行にしか対応しない あまり直感的な動作はしない
+" Plug 'osyo-manga/vim-operator-blockwise'
+" }}}
+"---------------------------------------------------------------------------
+" 移動系 {{{
+Plug 'deton/jasegment.vim' "日本語でWEB
+Plug 'rhysd/clever-f.vim'
+Plug 'easymotion/vim-easymotion', {'on':['<Plug>(easymotion-bd-w)', '<Plug>(easymotion-s)', '<Plug>(easymotion-overwin-f2)']}
+" }}}
+" " ---------------------------------------------------------------------------- 
+" 外見改善{{{
+Plug 'vim-airline/vim-airline' "ステータスラインを見やすく
+Plug 'vim-airline/vim-airline-themes'
+Plug 'nathanaelkane/vim-indent-guides' "インデントを見やすく
+Plug 'LeafCage/foldCC.vim' "折り畳みを見やすく
+Plug 't9md/vim-quickhl', {'on':['<Plug>(quickhl-manual-this)', 'QuickhlManualReset']} "複数同時ハイライト (Space)i
+Plug 'kyouryuukunn/my-ShowMarks7' "マークする m(マークする文字)
+Plug 'kyouryuukunn/vim-changed' "変更行にマークを表示, マーク欄が開閉しない、他のマークを消さない、表示パフォーマンス改善、vimproc使用
+Plug 'osyo-manga/vim-anzu', {'on':['<Plug>(anzu-n-with-echo)', '<Plug>(anzu-N-with-echo)', '<Plug>(anzu-star-with-echo)', '<Plug>(anzu-sharp-with-echo)']} "検索結果数を表示する
+Plug 'thinca/vim-ref', {'on':'Ref'}
+" Plug 'dannyob/quickfixstatus', " カーソルがquicfixに登録されている行上にあるとき、その内容をコマンドラインに表示する
+" Plug 'cohama/vim-hier' " quicfixに登録されている行に下線を引く
+"}}}
+" -------------------------------------------------------------------------- 
+" Denite&Unite {{{
+" Plug 'Shougo/denite.nvim' "outlineがまだ未熟、tabがない 両者はUniteから借用可能, visualモードない, ジャンプ時に折り畳み開く, 早さは変らない
+Plug 'Shougo/unite.vim' "deniteからunite呼び出しのため必要, vimfilerにも
+Plug 'Shougo/neomru.vim' "履歴 (space)m
+Plug 'Shougo/unite-outline', {'on':['Denite', 'Unite']} "アウトライン表示 (Space)o
+Plug 'osyo-manga/unite-qfixhowm', {'on':['Denite', 'Unite']} "howmをuniteで表示 g,o
+Plug 'thinca/vim-unite-history', {'on':['Unite']}
+"}}}
+" -------------------------------------------------------------------------- 
+" その他{{{
+Plug 'simeji/winresizer' " <C-W>r+hjklでウィンドウサイズリサイズ
+Plug 'vim-scripts/CmdlineCompl.vim' "コマンドモード補完 (C-X)(C-P) (C-X)(C-N)
+Plug 'Shougo/vimfiler' " ファイラー
+" Plug 'Shougo/defx.nvim' " ファイラー 要python3.6以上
+Plug 'fuenor/qfixhowm' "howmメモ帳
+Plug 'fuenor/JpFormat.vim' "日本語禁則
+Plug 'h1mesuke/vim-alignta', {'on':['Alignta', 'Align']} "整形 :Alingta (文字)
+Plug 'kana/vim-smartchr' "繰り返し入力で文字変更
+Plug 'vim-scripts/savevers.vim' "バージョン毎にバックアップ
+Plug 'simnalamburt/vim-mundo', {'on': 'MundoToggle'} "アンドゥーツリーを表示 (Space)u
+Plug 'thinca/vim-qfreplace', {'on':'Qfreplace'} "grepして置換 quicfix上で(S-r),編集したら(Space)w
+Plug 'thinca/vim-quickrun', {'on':'QuickRun'} " 色々実行する \r
+Plug 'thinca/vim-visualstar', {'on':['<Plug>(visualstar-*)', '<Plug>(visualstar-*)']} "ビジュアルモードから検索出来るようにする
+Plug 'tpope/vim-surround' " 文字で囲む ys(テキストオブジェクト)(囲み文字) or ビジュアルモードで(S-s)(囲み文字) 囲み文字変更 cs(テキストオブジェ)(囲み文字)
+Plug 'tpope/vim-repeat', {'on':'<Plug>(RepeatDot)'} " .でvim-surroundの結果も繰り返せるようにする
+Plug 'AndrewRadev/switch.vim', {'on':'Switch'} "True,Falseなど特定文字をスイッチする (S-t)
+Plug 'tomtom/tcomment_vim', "{'on':['<Plug>(TComment_gcc)', '<Plug>(TComment_gc)']} コメントをトグル gcc
+Plug 'kyouryuukunn/config_file'
+Plug 'haya14busa/vim-gtrans', {'on':'Gtrans'} "翻訳 (F8)
+Plug 'tyru/open-browser.vim', {'on':'<Plug>(openbrowser-smart-search)'} "単語やurlからブラウザを開く (F4)
+Plug 'mattn/webapi-vim'
+"}}}
+" -------------------------------------------------------------------------- 
+" 特定用途{{{
+" Plug 'pacotan/VimRepress' "WordPress用
+Plug 'kyouryuukunn/vim-vebugger', {'branch': 'my-vebugger', 'for':['cpp', 'python']}
+Plug 'yuratomo/w3m.vim', {'on':['W3m', 'W3mSplit']} "ブラウジング
+" git{{{
+Plug 'cohama/agit.vim', {'on': ['Agit', 'AgitFile']} "履歴を表示 :Agit
+Plug 'tpope/vim-fugitive'
+Plug 'idanarye/vim-merginal' "ブランチ表示 :Merginal
+"}}}
+" ローグライクゲーム
+" Plug 'katono/rogue.vim'
+"}}}
+" -------------------------------------------------------------------------- 
+
+if !has('nvim') && (has_key(g:plugs, 'deoplete.nvim') || index(g:plugs_order, 'defx.nvim'))
+	Plug 'roxma/nvim-yarp'
+	Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+if has_key(g:plugs, 'asyncomplete.vim') || has_key(g:plugs, 'vim-lsp')
+	Plug 'prabirshrestha/async.vim'
+endif
+
+
+" if !g:portable
+" else
+" 	plug 'tyru/eskk.vim'
+" 	plug 'tyru/skkdict.vim'
+" endif
+
+call plug#end()
+
+" nnoremap (Space)u :Unite neobundle/update -auto-quit(CR)
+""------------------------------------------------------------------------------------- 
+
+" Plug 'vim-scripts/TwitVim'
+"Plug 'mattn/googletranslate-vim'
+"Plug 'vim-scripts/YankRing.vim'
+"Plug 'vim-scripts/Highlight-UnMatched-Brackets'
+"Plug 'tacroe/unite-mark'
+"Plug 'SearchComplete'
+"Plug 'Shougo/unite-build'
+"Plug 'Shougo/vinarise'
+"Plug 'Source-Explorer-srcexpl.vim'
+"Plug 'hsitz/VimOrganizer'
+"Plug 'ivanov/vim-ipython'
+"Plug 'migemo'
+"Plug 'mitechie/pyflakes-pathogen'
+"Plug 'nscripter.vim'
+"Plug 'osyo-manga/ref-lynx'
+"Plug 'osyo-manga/unite-boost-online-doc'
+"Plug 'taglist.vim'
+"Plug 'trinity.vim'
+"Plug 'tyru/skk.vim'
+"Plug 'vim-scripts/SingleCompile'
+"Plug 'fuenor/MyMoveWord.vim', {'stay_same' : 1}
+"Plug 'motemen/git-vim'
+
+"--------------------------------------------------------------------------- 
+" vim: nowrap foldmethod=marker textwidth=0 ft=vim
