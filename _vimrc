@@ -13,8 +13,8 @@ if has('win32') || has('win64')
   let $MSYS = 'c:/MinGW/msys/1.0/bin'
   let $CYG = 'c:/cygwin64/bin'
   let $CYGWIN = 'nodosfilewarning'
-  let $PYTHON2 = 'C:/Python27;C:/Python27/Scripts'
-  let $PYTHON3 = 'C:/Python35;C:/Python35/Scripts'
+  let $PYTHON2 = 'E:/Python27;E:/Python27/Scripts'
+  let $PYTHON3 = 'E:/Python35;E:/Python35/Scripts'
   let $DMD = 'e:/D/dmd2/windows/bin;e:/D/dm/windws/bin'
   let $LDC = 'e:/D/ldc2/bin'
   let $HASKELL = 'C:/Users/kuma/AppData/Roaming/cabal/bin;C:/Program Files (x86)/Haskell/bin;E:/Haskell/lib/extralibs/bin;E:/Haskell/bin'
@@ -245,9 +245,9 @@ augroup MyAutocmd
 " }}}
 "   ------------------------------------------------------------------------
 " quickfix {{{
-	autocmd FileType qf nnoremap <buffer> q :<C-u>cclose<CR>
-	autocmd FileType qf nnoremap <buffer> <nowait> <ESC> :<C-u>cclose<CR>
-	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
+	autocmd FileType qf nnoremap <buffer> q :<C-u>close<CR>
+	autocmd FileType qf nnoremap <buffer> <nowait> <ESC> :<C-u>close<CR>
+	" autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
 " }}}
 "  -------------------------------------------------------------------------
 " extra {{{
@@ -447,7 +447,7 @@ if has('win32') || has('win64')
 	" set grepprg=grep\ -nH
 endif
 "自動でQuickfixを開く
-autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
+" autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
 "Quickfix用設定
 "autocmd FileType qf nnoremap <buffer> q :ccl<CR>
 "Quickfix

@@ -1,16 +1,28 @@
 scriptencoding utf-8
 "--------------------------------------------------------------------------- 
 if has_key(g:plugs, 'completor.vim') " {{{
+" let g:completor_debug = 1
 let g:completor_auto_trigger = 1
 let g:completor_min_chars = 2
 let g:completor_completion_delay = 100
+" let g:completor_refresh_always = 1
+" let g:completor_fuzzy_match = 0
 let g:completor_complete_options = 'menuone,noselect'
-let g:completor_debug = 1
-let g:completor_enable_neoinclude = ['cpp']
-let g:completor_enable_necovim = ['vim']
-let g:completor_disable_cpp = 1
-let g:completor_disable_python = 1
-let g:completor_d_omni_trigger = '\w+(\.|->)\w*|\w+::\w*|\w+'
+let g:completor_disable_necosyntax = ['vim','python','cpp','d']
+" let g:completor_disable_cpp = 1
+" let g:completor_disable_python = 1
+inoremap <expr><C-y> pumvisible() ? "\<C-e>\<C-y>" : "\<C-y>"
+inoremap <expr><C-e> pumvisible() ? "\<C-e>\<C-e>" : "\<C-e>"
+inoremap <expr><CR>  pumvisible() ? "\<C-e>\<CR>" : "\<CR>"
+
+" let g:completor_d_omni_trigger = '\w+(\.|->)\w*$|\w+::\w*$|\w{2,}$'
+" let g:completor_cpp_omni_trigger = '\w+(\.|->|::)\w*$|\w{3,}$'
+" let g:completor_python_omni_trigger = '\A\w*$|[^. \t]\.\w*$'
+
+" let g:completor_shell#shell_commands = {
+"  \   'txt': ["look ^${token}"],
+"  \ }
+
 endif
 " }}}
 "--------------------------------------------------------------------------- 
@@ -351,7 +363,7 @@ nnoremap <silent> <Space>e :<C-u>Unite -vertical -create menu:encode<CR>
 " }}}
 ""------------------------------------------------------------------------------
 " outline
-nnoremap <Space>o :Unite -vertical -winwidth=30 -create -no-quit -truncate outline:!<CR>
+nnoremap <Space>o :Unite -vertical -winwidth=50 -create -no-quit -truncate -no-start-insert outline:!<CR>
 " " --------------------------------------------------------------------------
 " startup"{{{
 " let g:unite_source_alias_aliases = {
@@ -572,8 +584,8 @@ augroup smartchr
 	autocmd FileType c,cpp	inoremap <buffer><expr> < search('^#include\%#', 'bcn', line("."))? ' <><Left>': smartchr#loop('<', ' < ', ' <= ', ' << ' )
 	autocmd FileType c,cpp	inoremap <buffer><expr> > search('<[^>]*\%#', 'bcn')? '>': smartchr#loop(' > ', ' >= ', '>>', '>')
 	"何故か += , -= は出来ない
-	autocmd FileType c,cpp	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++')
-	autocmd FileType c,cpp	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '++')
+	autocmd FileType c,cpp	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++', '+')
+	autocmd FileType c,cpp	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '--', '-')
 	autocmd FileType c,cpp	inoremap <buffer><expr> * smartchr#loop('*', ' * ', ' *= ')
 	autocmd FileType c,cpp	inoremap <buffer><expr> / search('^#include <.*\%#', 'bcn')? '/': smartchr#loop(' / ', ' // ', ' /= ', '/')
 	autocmd FileType c,cpp	inoremap <buffer><expr> % search('\(printf\<bar>format\)(".*\%#', 'bcn')? '%': smartchr#loop(' % ', ' %= ', '%')
@@ -612,8 +624,8 @@ augroup smartchr
     " }}}
     "python  {{{
 	autocmd FileType python	inoremap <buffer><expr> : smartchr#loop(':', ':<CR>')
-	autocmd FileType python	inoremap <buffer><expr> + smartchr#loop(' + ', ' += ', '++')
-	autocmd FileType python	inoremap <buffer><expr> - smartchr#loop(' - ', ' -= ', '--')
+	autocmd FileType python	inoremap <buffer><expr> + smartchr#loop(' + ', '+', ' += ')
+	autocmd FileType python	inoremap <buffer><expr> - smartchr#loop(' - ', '-', ' -= ')
 	autocmd FileType python	inoremap <buffer><expr> / smartchr#loop(' / ', '/')
 	autocmd FileType python	inoremap <buffer><expr> * smartchr#loop('*', ' * ', '**')
 	autocmd FileType python	inoremap <buffer><expr> , smartchr#loop(', ', ',')
@@ -623,8 +635,8 @@ augroup smartchr
     " }}}
     "renpy  {{{
 	autocmd FileType renpy	inoremap <buffer><expr> : smartchr#loop(':', ':<CR><Tab>')
-	autocmd FileType renpy	inoremap <buffer><expr> + smartchr#loop('+', ' + ', ' += ', '++')
-	autocmd FileType renpy	inoremap <buffer><expr> - smartchr#loop('-', ' - ', ' -= ', '--')
+	autocmd FileType python	inoremap <buffer><expr> + smartchr#loop(' + ', '+', ' += ')
+	autocmd FileType python	inoremap <buffer><expr> - smartchr#loop(' - ', '-', ' -= ')
 	autocmd FileType renpy	inoremap <buffer><expr> / smartchr#loop('/', ' / ')
 	autocmd FileType renpy	inoremap <buffer><expr> * smartchr#loop('*', ' * ', '**')
 	autocmd FileType renpy	inoremap <buffer><expr> , smartchr#loop(', ', ',')

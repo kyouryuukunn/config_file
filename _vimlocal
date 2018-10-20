@@ -1,0 +1,7 @@
+let $DROPBOX = expand('d:/Box/Workspace/Dropbox/etc') 
+set backupdir=F:/vim/back
+set directory=F:/vim/swap
+
+"set pythonthreedll=E:Python/Python36/python36.dll
+"-------------------------------------------------------------------------------------
+" vim: nowrap foldmethod=marker textwidth=0 ft=vim
