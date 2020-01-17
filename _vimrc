@@ -9,12 +9,12 @@ if has('win32') || has('win64')
   let $HELP = expand($DOTVIM.'/help')
   let $MSYS2 ='c:/msys64/usr/local/bin;c:/msys64/usr/bin;c:/msys64/bin;c:/msys64/usr/bin/site_perl;c:/msys64/usr/bin/vendor_perl;c:/msys64/usr/bin/core_perl'
   let $MINGW64 = 'c:/msys64/mingw64/bin'
-  let $MINGW = 'c:/MinGW/bin'
-  let $MSYS = 'c:/MinGW/msys/1.0/bin'
-  let $CYG = 'c:/cygwin64/bin'
-  let $CYGWIN = 'nodosfilewarning'
+  " let $MINGW = 'c:/MinGW/bin'
+  " let $MSYS = 'c:/MinGW/msys/1.0/bin'
+  " let $CYG = 'c:/cygwin64/bin'
+  " let $CYGWIN = 'nodosfilewarning'
   let $PYTHON2 = 'E:/Python27;E:/Python27/Scripts'
-  let $PYTHON3 = 'E:/Python35;E:/Python35/Scripts'
+  let $PYTHON3 = 'E:/python37;E:/python37/Scripts'
   let $DMD = 'e:/D/dmd2/windows/bin;e:/D/dm/windws/bin'
   let $LDC = 'e:/D/ldc2/bin'
   let $HASKELL = 'C:/Users/kuma/AppData/Roaming/cabal/bin;C:/Program Files (x86)/Haskell/bin;E:/Haskell/lib/extralibs/bin;E:/Haskell/bin'
@@ -168,6 +168,159 @@ if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
 endif
+
+command! -nargs=0 QfMessages call s:qf_messages() " エラーをパースしてquickfixに出力
+function! s:qf_messages() "{{{
+  let str_messages = ''
+  redir => str_messages
+  silent! messages
+  redir END
+
+  let qflist = s:parse_error_messages(str_messages)
+  call setqflist(qflist, 'r')
+  cwindow
+endfunction
+
+function! s:parse_error_messages(messages) abort
+    " 戻り値。setqflistの引数に使う配列
+    let qflist = []
+    " qflistの要素になる辞書
+    let qf_info = {}
+    " qflistの要素となる辞書の配列。エラー内容がスタックトレースのときに使用
+    let qf_info_list = []
+    " 読み込んだファイルの内容をキャッシュしておくための辞書
+    let files = {}
+
+    if v:lang =~# 'ja_JP'
+        let regex_error_detect = '^.\+\ze の処理中にエラーが検出されました:$'
+        let regex_line = '^行\s\+\zs\d\+\ze:$'
+        let regex_last_set = '最後にセットしたスクリプト: \zs\f\+'
+    else
+        let regex_error_detect = '^Error detected while processing \zs.\+\ze:$'
+        let regex_line = '^line\s\+\zs\d\+\e:$'
+        let regex_last_set = 'Last set from \zs\f\+'
+    endif
+
+    for line in split(a:messages, "\n")
+        if line =~# regex_error_detect
+            " ... の処理中にエラーが検出されました:'
+            let matched = matchstr(line, regex_error_detect)
+            if matched =~# '^function'
+                " function <SNR>253_fuga の処理中にエラーが検出されました:
+                " function <SNR>253_piyo[1]..<SNR>253_fuga の処理中にエラーが検出されました:
+                let matched = matchstr(matched, '^function \zs\S*')
+                let stacks = reverse(split(matched, '\.\.'))
+                for stack in stacks
+                    let [func_name, offset] = (stack =~# '\S\+\[\d')
+                    \ ? matchlist(stack, '\(\S\+\)\[\(\d\+\)\]')[1:2]
+                    \ : [stack, 0]
+
+                    " 辞書関数の数字は{}で囲む
+                    let func_name = func_name =~# '^\d\+$' ? '{' . func_name . '}' : func_name
+
+                    redir => verbose_func
+                    execute 'silent verbose function ' . func_name
+                    redir END
+
+                    let filename = matchstr(verbose_func, regex_last_set)
+                    let filename = expand(filename)
+
+                    if !has_key(files, filename)
+                        let files[filename] = readfile(filename)
+                    endif
+
+                    if func_name =~# '{\d\+}'
+                        let func_lines = split(verbose_func, "\n")
+                        unlet func_lines[1]
+                        let max_line = len(func_lines)
+                        let func_lines[0] = '^\s*fu\%[nction]!\=\s\+\zs\S\+\.\S\+'
+
+                        for i in range(1, max_line - 2)
+                            let func_lines[i] = '^\s*' . matchstr(func_lines[i], '^\d\+\s*\zs.*')
+                        endfor
+
+                        let func_lines[max_line - 1] = '^\s*endf[unction]'
+
+                        let lnum = 0
+                        while 1
+                            let lnum = match(files[filename], func_lines[0], lnum)
+
+                            if lnum < 0
+                                throw 'No dictionary function'
+                            endif
+
+                            let find_dic_func = 1
+                            for i in range(1, max_line - 1)
+                                if files[filename][lnum + i] !~# func_lines[i]
+                                    let lnum = lnum + i
+                                    let find_dic_func = 0
+                                    break
+                                endif
+                            endfor
+
+                            if find_dic_func
+                                break
+                            endif
+                        endwhile
+
+                        let func_name = matchstr(files[filename][lnum], func_lines[0])
+                        let lnum += 1 + offset
+                    else
+                        let func_name  = substitute(func_name, '<SNR>\d\+_', 's:', '')
+                        let lnum = match(files[filename], '^\s*fu\%[nction]!\=\s\+' . func_name) + 1 + offset
+                    endif
+
+                    call add(qf_info_list, {
+                    \   'filename': filename,
+                    \   'lnum': lnum,
+                    \   'text': func_name,
+                    \})
+                endfor
+            else
+                " <filename> の処理中にエラーが検出されました:
+                let filename = expand(matchstr(line, regex_error_detect))
+                let qf_info.filename = expand(filename)
+            endif
+        elseif line =~# regex_line
+            " 行    1:
+            let lnum = matchstr(line, regex_line)
+            if len(qf_info_list) > 0
+                let qf_info_list[0]['lnum'] += lnum
+            else
+                let qf_info.lnum = lnum
+            endif
+        elseif line =~# '^E'
+            " E492: エディタのコマンドではありません: one
+            let [nr, text] = matchlist(line, '^E\(\d\+\): \(.\+\)')[1:2]
+            if len(qf_info_list) > 0
+                if len(qf_info_list) == 1
+                    let qf_info_list[0]['nr'] = nr
+                    let qf_info_list[0]['text'] = 'in ' . qf_info_list[0]['text'] . ' | ' . text
+                else
+                    let i = 0
+                    for val in qf_info_list
+                        let val['nr'] = nr
+                        let val['text'] = '#' . i . ' in ' . val['text'] . (i == 0 ? (' | ' . text) : '')
+                        let i += 1
+                    endfor
+                endif
+                let qflist += qf_info_list
+            else
+                let qf_info.nr = nr
+                let qf_info.text = text
+                call add(qflist, qf_info)
+            endif
+
+            let qf_info = {}
+            let qf_info_list = []
+        endif
+    endfor
+
+    return qflist
+endfunction
+
+"}}}
+"
 " }}}
 "---------------------------------------------------------------------------
 "{{{ autocmd
@@ -331,7 +484,7 @@ function! MyTabMove(c)
   execute ':tabmove ' . target
 endfunction " }}}
 "-------------------------------------------------------------------------------------
-"括弧等を補完 {{{
+" "括弧等を補完 {{{
 inoremap " ""<C-g>U<LEFT>
 inoremap ' ''<C-g>U<LEFT>
 inoremap ( ()<C-g>U<LEFT>
@@ -340,16 +493,17 @@ inoremap [ []<C-g>U<LEFT>
 inoremap { {}<C-g>U<LEFT>
 inoremap 「 「」<C-g>U<LEFT>
 inoremap 『 『』<C-g>U<LEFT>
-
-"augroup kakko
-	"autocmd!
-	"autocmd FileType	cpp,d,renpy,kirikiri inoremap <buffer> " ""<C-g>U<LEFT>
-	"autocmd FileType	vim,snippet,cpp,d,renpy,kirikiri inoremap <buffer> ' ''<C-g>U<LEFT>
-	"autocmd FileType	vim,snippet,cpp,d,renpy,kirikiri inoremap <buffer> ( ()<C-g>U<LEFT>
-	"autocmd FileType	vim,snippet,cpp,d,renpy,kirikiri inoremap <buffer> [ []<C-g>U<LEFT>
-	"autocmd FileType	vim,snippet inoremap <buffer> { {}<C-g>U<LEFT>
-	"autocmd FileType	cpp inoremap <buffer> { <CR>{<CR>}<Up><CR>
-"augroup END " }}}
+inoremap （ （）<C-g>U<LEFT>
+"
+" "augroup kakko
+" 	"autocmd!
+" 	"autocmd FileType	cpp,d,renpy,kirikiri inoremap <buffer> " ""<C-g>U<LEFT>
+" 	"autocmd FileType	vim,snippet,cpp,d,renpy,kirikiri inoremap <buffer> ' ''<C-g>U<LEFT>
+" 	"autocmd FileType	vim,snippet,cpp,d,renpy,kirikiri inoremap <buffer> ( ()<C-g>U<LEFT>
+" 	"autocmd FileType	vim,snippet,cpp,d,renpy,kirikiri inoremap <buffer> [ []<C-g>U<LEFT>
+" 	"autocmd FileType	vim,snippet inoremap <buffer> { {}<C-g>U<LEFT>
+" 	"autocmd FileType	cpp inoremap <buffer> { <CR>{<CR>}<Up><CR>
+" "augroup END " }}}
 "-------------------------------------------------------------------------------------
 "ビジュアルモードでのインデント操作を楽に
 xnoremap < <gv
@@ -450,8 +604,10 @@ endif
 " autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
 "Quickfix用設定
 "autocmd FileType qf nnoremap <buffer> q :ccl<CR>
-"Quickfix
+"Quickfix 
 "noremap <C-w>, :copen<CR> " }}}
+nnoremap <expr> <space>g ':grep '.substitute(expand('<cword>'), '#', '\\#', 'g').' '
+xnoremap <expr> <space>g '"9y:grep "'.substitute(@9, '#', '\\#', 'g').'" '
 "-----------------------------------------------------------------------------
 "連番機能 {{{
 nnoremap <silent> co :ContinuousNumber <C-a><CR>
@@ -463,13 +619,56 @@ set nf=alpha " }}}
 "挿入 {{{
 ab <expr> lin repeat('-',80 - col('.'))
 " }}}
+"-------------------------------------------------------------------------------------
+" " Translate-Shell{{{
+" nnoremap <silent> <F8> :call TranslateShell('n')<CR>
+" vnoremap <silent> <F8> :call TranslateShell('v')<CR>
+"
+" function! TranslateShell(mode) range "{{{
+"   let pattern =
+"         \ a:mode == 'n' ? expand('<cword>') :
+"         \ a:mode == 'v' ? s:get_selected_text() :
+"         \ ""
+"   if l:pattern == '' | return | endif
+"   new __TranslateShell__
+"   exec 'r !bash trans -b en:ja '.l:pattern
+"   call s:set_output_buffer()
+" endfunction "}}}
+"
+" function! s:get_selected_text() "{{{
+" "copy & paste from tyru's open-browser.vim
+"   let save_z = getreg('z', 1)
+"   let save_z_type = getregtype('z')
+"   try
+"     silent normal! gv"zy
+"     return substitute(@z,"\n.*",'','')
+"   finally
+"     call setreg('z', save_z, save_z_type)
+"   endtry
+" endfunction "}}}
+"
+" function! s:set_output_buffer() "{{{
+"     setlocal buftype=nofile
+"     setlocal bufhidden=hide
+"     setlocal noswapfile
+"     setlocal nobuflisted
+"     " setlocal nomodifiable
+"     setlocal filetype=
+"     setlocal nolist
+"     " setlocal nonumber
+"     " setlocal norelativenumber
+"     setlocal nowrap
+" endfunction "}}}
+" "}}}
 "------------------------------------------------------------------------------
 "}}}
 "------------------------------------------------------------------------------
 "" 外部ファイル読み込み {{{
 source $DROPBOX/_includevim
 " source $DROPBOX/_deinvim
+set noshellslash
 source $DROPBOX/_vimplug
+set shellslash
 source $DROPBOX/_pluginvim
 " source $DROPBOX/_vundlevim
 " }}}
@@ -478,6 +677,10 @@ source $DROPBOX/_pluginvim
 set whichwrap=b,s,h,l,<,>,[,]
 "日本語の行を連結時には空白を入力しない
 set formatoptions+=mM
+nmap K <Plug>(easymotion-overwin-w)
+xmap K <Plug>(easymotion-overwin-w)
+omap K <Plug>(easymotion-overwin-w)
+imap <C-F> <C-O><Plug>(easymotion-overwin-f2)
 "}}}
 "-------------------------------------------------------------------------------------
 " OutDate {{{
@@ -813,6 +1016,58 @@ let s:job = job_start(
 " 	buffer nowbuf
 " endfunction
 "}}}
+
+" test code
+" func JobStart()
+"     let conf = {
+"           \   'out_cb': {c,m->Echo(m,'out')},
+"           \   'err_cb': {c,m->Echo(m,'err')},
+"           \   'mode': 'raw',
+"           \ }
+"     return job_start(['pyls'], conf)
+" endfunction
 "
-"-------------------------------------------------------------------------------------
+" func Echo(m, type)
+" 	echom a:type.string(a:m)
+" endfunction
+"
+" func Initialize(j)
+" 	" comletor
+" 	" let l:content='{"params": {"capabilities": {"workspace": {"applyEdit ": true}}, "rootUri": "file:///D:/Box/Workspace/py", "rootPath": "D:/Box/Workspace/py"}, "method": "initialize", "jsonrpc": "2.0", "id": 1}'
+" 	" let l:request={"method":"initialize","jsonrpc":"2.0","id":1,"params":{"rootUri":"file:///F:/vim/vim","initializationOptions":{},"capabilities":{"workspace":{"applyEdit ":v:true}},"rootPath":"F:\\vim\\vim"}}
+" 	" let l:request['params']['processID']=getpid()
+" 	" let l:content=json_encode(l:request)
+" 	" vim-lsp
+" 	let l:request={"method":"initialize","jsonrpc":"2.0","id":1,"params":{"rootUri":"file:///F:/vim/vim","initializationOptions":{},"capabilities":{"workspace":{"applyEdit ":v:true}},"rootPath":"F:\\vim\\vim"}}
+" 	" let l:request['params']['processID']=getpid()
+" 	let l:content=json_encode(l:request)
+" 	let l:data='Content-Length: '.len(l:content)."\r\n\r\n".l:content
+" 	echo l:data
+" 	call ch_sendraw(job_getchannel(a:j), l:data."\n")
+" endfunction
+"
+" function DidOpen(j)
+" 	let l:request={"method":"textDocument/didOpen","jsonrpc":"2.0","params":{"textDocument":{"uri":"file:///D:/Box/Workspace/py/test.py","version":1,"languageId":"python","text":"# -*- coding: utf-8 -*-\r\n\r\nclass Test2(object):\r\n    a = 1\r\n\r\n    def __init__(self):\r\n        self._prop = 0\r\n        pass\r\n\r\n    def print(self):\r\n        a = self.prop\r\n        b = self.prop\r\n        c = self.prop\r\n        print(a)\r\n        print(b)\r\n        print(c)\r\n\r\n    @property\r\n    def prop(self):\r\n        self._prop += 1\r\n        return self._prop\r\n\r\n\r\n\r\ntest2 = Test2()\r\n\r\ndef test(a):\r\n    print(a)\r\n\r\n\r\nb = \"aaaaaa\"\r\ntest(b)\r\n"}}}
+" 	let l:content=json_encode(l:request)
+" 	let l:data='Content-Length: '.len(l:content)."\r\n\r\n".l:content
+" 	echo l:data
+" 	call ch_sendraw(job_getchannel(a:j), l:data."\n")
+" endfunction
+"
+" function DidChange(j)
+" 	let l:request={"method":"textDocument/didChange","jsonrpc":"2.0","params":{"textDocument":{"uri":"file:///D:/Box/Workspace/py/test.py","version":2},"contentChanges":[{"text":"# -*- coding: utf-8 -*-\r\n\r\nclass Test2(object):\r\n    a = 1\r\n\r\n    def __init__(self):\r\n        self._prop = 0\r\n        pass\r\n\r\n    def print(self):\r\n        a = self.prop\r\n        b = self.prop\r\n        c = self.prop\r\n        print(a)\r\n        print(b)\r\n        print(c)\r\n\r\n    @property\r\n    def prop(self):\r\n        self._prop += 1\r\n        return self._prop\r\n\r\n\r\n\r\ntest2 = Test2()\r\n\r\ndef test(a):\r\n    print(a)\r\n\r\n\r\nb = \"aaaaaa\".\r\ntest(b)\r\n"}]}}
+" 	let l:content=json_encode(l:request)
+" 	let l:data='Content-Length: '.len(l:content)."\r\n\r\n".l:content
+" 	echo l:data
+" 	call ch_sendraw(job_getchannel(a:j), l:data."\n")
+" endfunction
+"
+" function DidComplete(j)
+" 	let l:request={"method":"textDocument/completion","jsonrpc":"2.0","id":1,"params":{"textDocument":{"uri":"file:///D:/Box/Workspace/py/test.py"},"position":{"character":12,"line":30}}}
+" 	let l:content=json_encode(l:request)
+" 	let l:data='Content-Length: '.len(l:content)."\r\n\r\n".l:content
+" 	echo l:data
+" 	call ch_sendraw(job_getchannel(a:j), l:data."\n")
+" endfunction
+""-------------------------------------------------------------------------------------
 " vim: nowrap foldmethod=marker textwidth=0

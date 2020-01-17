@@ -1,16 +1,26 @@
+# オプション
+# define WITH_MSIME
+# define MULTI_DEVICE
+# define TRACK_BALL
+#-------------------------------------------------------------------------------------- 
 include "109.nodoka"
+def option mouse-event = true
 #include "tsuki3-154.nodoka" # Lock0 赤
 #include "contrib\DVORAKon109_kuma.nodoka" # Lock1 緑
 # include "window-select.nodoka"
-def option mouse-event = true
-# 複数キーボード用{{{ 
-# def option UnitID = K1 0 0 0
-# def option UnitID = K1 1133 49714 0
-# def option UnitID = K2 2131 512 0 #ReclForce
-# def option UnitID = K3 1133 49738 1 #G600
-# def option FakeUp = enable 10 00
-# }}}
-# def option CaretBlinkTime = enable 500 50
+# def option CaretBlinkTime = enable 500 50 firefox,Office,vimで未対応
+if (WITH_MSIME)
+  def option UseTSF = false
+endif
+if (MULTI_DEVICE)
+  def option FakeUp = enable 1 84 #第三引数00では反応なし、適当な値にすると正常動作するが、SKKのみ確定されてしまう。
+  include "multidevice.nodoka"
+endif
+
+if (TRACK_BALL)
+	# def option drag-threshold = 1
+endif
+#-------------------------------------------------------------------------------------- 
 #キー押しっぱ対策{{{
 # def option CheckModifier = enable 5
 # key U-*WinDownOver =  U-LWin U-RWin
@@ -21,33 +31,14 @@ def option mouse-event = true
 # }}}
 #-------------------------------------------------------------------------------------- 
 #英数からのツーストローク  {{{
-keymap2 Two_Strok_Of_CapsLocs
-mod shift += !!!Space
+keymap2 Two_Strok_Of_CapsLocs : Global
 
-key o = &WindowSetAlpha(90)
+key o = &WindowSetAlpha(80)
 key t = &WindowToggleTopMost
 key u = &LoadSetting()
 # key q = &InvestigateCommand
-# key q = &ShellExecute("open", "E:\Soft\kmmacro\KMmacro.exe",,"E:\Soft\kmmacro", ShowNormal)
 
-#key ~L0-i = &Toggle(Lock0,on) &IconColor(2)
-#key ~L1-L0-i = &Toggle(Lock0,off) &IconColor(0)
-#key  L1-L0-i = &Toggle(Lock0,off) &IconColor(4)
-#key ~L1-d = &Toggle(Lock1,on) &IconColor(4)
-#key ~L0-L1-d =   &Toggle(Lock1,off) &IconColor(0)
-#key  L0-L1-d =   &Toggle(Lock1,off) &IconColor(2)
-
-key *a = W-*_1
-key *g = W-*_2
-key *f = W-*_3
-key *n = W-*_4
-key *c = W-C-S-_5
-key *s = W-*_6
-key *d = W-*_7
-key *w = W-*_8
-key *e = W-*_9
-
-# key Semicolon = &ShellExecute("open", "E:\Soft\Sylpheed\sylpheed.exe",,, ShowNormal) #mail
+include "local.nodoka"
 
 key *h = W-*Left
 key *j = W-*Down
@@ -57,10 +48,6 @@ key *l = W-*Right
 #------------------------------------------------------------------------------------- 
 #モデルファイアー "{{{
 keymap Global
-# key K0-A = a
-# key K1-A = b
-# key K2-A = c
-# key K3-A = d
 
 mod ctrl  += !!Apps
 mod ctrl  += !!LCtrl
@@ -79,9 +66,10 @@ key *ひらがな            = *LAlt
 key *英数                = &Prefix(Two_Strok_Of_CapsLocs)
 key M8-C-*LCtrl          = Esc
 key M9-S-LShift          = $ToggleIME
-key M6-M9-S-Space           = S-Space
+key M0-M1-*Space           = S-*Space
 
 key *無変換             = *Enter
+key M0-M1-変換             = Apps
 
 key M8-C-*I               = Tab
 key M8-M6-C-S-*I          = S-Tab
@@ -126,36 +114,99 @@ key M0-*_0               = *F10
 key M0-*HyphenMinus      = *F11
 key M0-*CircumflexAccent = *F12
 
-Key M0-*a                = C-S-Esc
-Key M0-*s                 = A-*Tab
-Key M0-*f                = A-F4
-Key M0-*g                = *End
+key M0-*n                = *BS
+key M0-*m                = *Del
 Key M0-*b                = *Home
+Key M0-*g                = *End
 Key M0-*Semicolon        = *PageDown
 Key M0-*Colon            = *PageUp
-Key M0-*comma            = C-A-S-F1
-Key M0-*Period           = C-A-S-F2
-Key M0-*Slash            = LCtrl LCtrl &SetForegroundWindow(/AtokDvIn/)
-# Key M0-*Slash            = LCtrl LCtrl &ShellExecute("open", "E:\Soft\kmmacro\KMmacro.exe", "KMmacro /FILE=window_active.mac /%1="$WindowClassName,, ShowNormal)
-# Key M0-*BackSlash        = C-A-Del
 
 key M0-*h                = *Left
 key M0-*j                = *Down
 key M0-*k                = *Up
 key M0-*l                = *Right
-key M0-*n                = *BS
-key M0-*m                = *Del
 
-
-key R-*LCtrl = &Ignore # モディファイアとマウス併用対策 G600で必要, Razorで不要
+Key M0-*f                = A-F4
+Key M0-*a                = C-S-Esc
+Key M0-*s                = A-*Tab
+Key M0-*comma            = C-A-S-F1
+Key M0-*Period           = C-A-S-F2
+Key M0-*Slash            = W-B &Wait(100) Down Right Enter &Wait(200) &MouseMove(-100, 0) #Atokイミクル
+# Key M0-*Slash            = LCtrl LCtrl &SetForegroundWindow(/AtokDvIn/)
+# Key M0-*Slash            = LCtrl LCtrl &ShellExecute("open", "E:\Soft\kmmacro\KMmacro.exe", "KMmacro /FILE=window_active.mac /%1="$WindowClassName,, ShowNormal)
+Key M0-*BackSlash        = W-B &Wait(100) Down Space &Wait(100) A-Tab &Wait(100) &MouseMove(-100, 0) #どこでも詠太がタスクバー一番目にある前提
 
 # key M0-*M1-*半角/全角    = ひらがな
 # key M0-M1-*変換       = 無変換
 # key M0-M1-A-*ひらがな = ひらがな
 # }}}
 # --------------------------------------------------------------------------
+# ケース毎対応 {{{
+# -------------------------------------------------------------------------- 
+# For MSIME (Atok2017からは不要) {{{
+if (WITH_MSIME)
+  key IL-*IC-Colon = Minus
+  # key IL-*IC-SemiColon = L T
+endif
+# }}}
+#------------------------------------------------------------------------------------- 
+# mouse {{{
+# ワンショットモディファイアとマウスを併用するとき、モディファイア押下中にマウ
+# スをクリックしてもモディファイアがリピートし続ける(ダウンアップそれぞれでモディ
+# ファイアキーが押し直される)ため、アップ時にワンショットキーが暴発する問題を回避する
+# Razorではサイドボタンでリピートが発生しないため、この問題は発生しないが、クリッ
+# クと併用するには結局必要になる
 #
-# ケース毎対応{{{
+# マウス押下時にキーマップが取り溢れるときは、nodokaログの詳細にチェックすると
+# 直ることがある
+# モディファイアーの押し離しが速過ぎるとリピートが発生しないのでワンショット
+# が暴発する
+key R-*LCtrl  = &Ignore
+key R-*LShift = &Ignore
+
+# 多ボタンマウス用 マウスのソフトを使用すると不具合やら汎用性の低さやらが問題になるため
+# キーボード識別がskkと両立できないため未使用
+if (MULTI_DEVICE)
+
+	 # key K1-*A = &VK(D-RButton)
+	key K2-_1 = C-C
+	key K2-_2 = S-Insert
+	key K2-_3 = A-F4
+	key K2-_4 = C-X 
+	key K2-_5 = A-Y
+	key K2-_6 = A-N
+	key K2-_7 = VolumeDown
+	key K2-_8 = VolumeUp
+	key K2-_9 = C-Z
+
+	key K2-*A = 
+	key K2-*B = 
+	key K2-*C = 
+	key K2-*D = 
+	key K2-*E = 
+	key K2-*F = 
+	key K2-*G = 
+	key K2-*H = 
+	key K2-*I = 
+	key K2-*J = 
+	key K2-*K = 
+	key K2-*L = *F9
+endif
+# }}}
+#------------------------------------------------------------------------------------- 
+# Track Ball {{{
+# キーを押しながらのポイント移動をスクロールする
+# 一回のドラッグで1スクロールしか出来ない
+# 方向を指定できない
+if (TRACK_BALL)
+	# key D-*Drag = *WheelForward
+	key *Mute = *MButton
+endif
+# }}}
+# --------------------------------------------------------------------------
+# }}}
+# --------------------------------------------------------------------------
+# アプリ毎対応{{{
 #------------------------------------------------------------------------------------- 
 window ConsoleWindowClass /^ConsoleWindowClass$/ : Global # {{{
 
@@ -239,35 +290,11 @@ key S-*Insert = C-V
 
 # }}}
 #------------------------------------------------------------------------------------- 
-window excel /excel\.exe/ : Global # {{{
-keymap2 Two_Strok_Of_CapsLocs
-key _1 = &WaitKey(100) C-Home C-Down C-Down C-Down C-Right C-S-Down C-C C-Left Right C-V S-F9 &Wait(1500) C-S-Down C-S-Down C-C C-Right C-A-V V Enter &WaitKey(0)
-key _2 = &WaitKey(100) A-A Y _2 &Wait(1500) Enter &WaitKey(0)
-key _3 = &WaitKey(100) Enter &Wait(15000) C-Home C-Down C-Down C-Down Right C-S-Down C-S-Down C-S-Down C-C C-Right Right C-A-V V Enter Down Down G O A L Enter &WaitKey(0)
-keymap Global
-
-# }}}
-#------------------------------------------------------------------------------------- 
-# Nodoka 例外アプリ{{{
-window None
-window sotes /sotes\.exe/ :None
-window touhou /th[0-9]+\.exe/ :None
-window touhou2 /th_dnh.exe/ :None
-window RPG /RPG_RT.exe/ :None
-window oblivion /oblivion.exe/ :None
-window CLIP /CLIPStudioPaint\.exe/ :None
-#}}}
-# -------------------------------------------------------------------------- 
-# Atok IME (2017からは不要) {{{
-# key IJ-*Colon = Minus #}}}
-#------------------------------------------------------------------------------------- 
-#mouse {{{
-#mod mod7 += !!XButton1
-#key M8-*RButton = C-RButton
-#key M8-*LButton = C-LButton
-#key M9-*RButton = S-RButton
-#key M9-*LButton = S-LButton
-# key *NumLock = MButton
+# window excel /excel\.exe/ : Global # {{{
+# keymap2 Two_Strok_Of_CapsLocs
+# key _1 = &WaitKey(100) C-Home C-Down C-Down C-Down C-Right C-S-Down C-C C-Left Right C-V S-F9 &Wait(1500) C-S-Down C-S-Down C-C C-Right C-A-V V Enter &WaitKey(0)
+# key _2 = &WaitKey(100) A-A Y _2 &Wait(1500) Enter &WaitKey(0)
+# key _3 = &WaitKey(100) Enter &Wait(15000) C-Home C-Down C-Down C-Down Right C-S-Down C-S-Down C-S-Down C-C C-Right Right C-A-V V Enter Down Down G O A L Enter &WaitKey(0)
 
 # }}}
 #------------------------------------------------------------------------------------- 
@@ -286,8 +313,18 @@ window CLIP /CLIPStudioPaint\.exe/ :None
 #------------------------------------------------------------------------------------- 
 #window KirikiriDevelop ( /Vim/ && /\.ks/ ) :Global{{{
 #key C-*K = C-K &Wait(500) W-_2}}}
+#------------------------------------------------------------------------------------- 
+# Nodoka 例外アプリ{{{
+window None
+window sotes /sotes\.exe/ :None
+window touhou /th[0-9]+\.exe/ :None
+window touhou2 /th_dnh.exe/ :None
+window RPG /RPG_RT.exe/ :None
+window oblivion /oblivion.exe/ :None
+window CLIP /CLIPStudioPaint\.exe/ :None
+window Bio6 /BH6\.exe/ :None
+#}}}
 #--------------------------------------------------------------------------- 
 #}}}
-
 #--------------------------------------------------------------------------- 
 # vim: foldmethod=marker

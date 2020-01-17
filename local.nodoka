@@ -1,0 +1,24 @@
+keymap2 Two_Strok_Of_CapsLocs : Global
+
+
+# key q = &ShellExecute("open", "E:\Soft\kmmacro\KMmacro.exe",,"E:\Soft\kmmacro", ShowNormal)
+
+#key ~L0-i = &Toggle(Lock0,on) &IconColor(2)
+#key ~L1-L0-i = &Toggle(Lock0,off) &IconColor(0)
+#key  L1-L0-i = &Toggle(Lock0,off) &IconColor(4)
+#key ~L1-d = &Toggle(Lock1,on) &IconColor(4)
+#key ~L0-L1-d =   &Toggle(Lock1,off) &IconColor(0)
+#key  L0-L1-d =   &Toggle(Lock1,off) &IconColor(2)
+
+key *a = W-*_1
+key *g = W-*_2
+key *f = W-*_3
+key *n = W-*_4
+key *c = W-C-S-_5
+key *s = W-*_6
+key *d = W-*_7
+key *w = W-*_8
+key *e = W-*_9
+
+# key Semicolon = &ShellExecute("open", "E:\Soft\Sylpheed\sylpheed.exe",,, ShowNormal) #mail
+

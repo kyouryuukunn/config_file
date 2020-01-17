@@ -75,28 +75,27 @@ Plug 'kyouryuukunn/RenPyOpen.vim',  {'for': ['renpy']}
 "}}}
 "---------------------------------------------------------------------------
 " {{{ 補完
-Plug 'maralla/completor.vim' "{{{
-Plug 'maralla/completor-neosnippet'
-Plug 'kyouryuukunn/completor-necosyntax'
-Plug 'kyouryuukunn/completor-necovim'
-" Plug 'tokorom/completor-shell'
-" Plug 'masawada/completor-dictionary'
+Plug 'maralla/completor.vim'
+ Plug 'maralla/completor-typescript'
+ Plug 'maralla/completor-neosnippet'
+ Plug 'kyouryuukunn/completor-necosyntax'
+  Plug 'Shougo/neco-syntax' " syntaxファイルからの補完 deoplete, async
+ Plug 'kyouryuukunn/completor-necovim', {'for':['vim']}
+  Plug 'Shougo/neco-vim' " neocomplete, deoplete, async
+ " Plug 'tokorom/completor-shell'
+ " Plug 'masawada/completor-dictionary'
+ Plug 'Shougo/neoinclude.vim' " neocomplete, deoplete lspはInclude補完しない
+ Plug 'Shougo/neosnippet' "スニペット
+  Plug 'Shougo/neosnippet-snippets' "スニペット定義
 
-" Plug 'kyouryuukunn/completor-neoinclude'
-"}}}
-Plug 'Shougo/neco-vim' " neocomplete, deoplete, async
-Plug 'Shougo/neoinclude.vim' " neocomplete, deoplete lspはInclude補完しない
-Plug 'Shougo/neosnippet' "スニペット
-Plug 'Shougo/neosnippet-snippets' "スニペット定義
-Plug 'Shougo/neco-syntax' " syntaxファイルからの補完 deoplete, async
 Plug 'prabirshrestha/vim-lsp' " cppで落ちる
 " Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': has('win32')? 'd:/box/Workspace/Dropbox/etc/LCS.bat' : 'bash install.sh'} " lsp対応なら補完もシンタックスチェックも可能, pure vimと比べるとやや重い
 " Plug 'natebosch/vim-lsc'
 " Plug 'ujihisa/neco-look', {'for': ['text']} " English 要lookと辞書 動作しない
-
+" outdate{{{
 " Plug 'Shougo/neocomplete.vim' " カーソル移動が重い以外は満足
 " Plug 'Shougo/deoplete.nvim', {'do': has('nvim')? 'UpdateRemotePlugins' : ''} " windowsでは遅い 
-" " async 現状動作しない、しても挙動がおかしい{{{
+" " async 挙動がおかしい バッファ補完が特に日本語で変, min iengthの設定がない, snippetsが常に出る {{{
 " Plug 'prabirshrestha/asyncomplete.vim'
 " Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " Plug 'prabirshrestha/asyncomplete-buffer.vim'
@@ -108,14 +107,24 @@ Plug 'prabirshrestha/vim-lsp' " cppで落ちる
 " Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
 " " Plug 'kyouryuukunn/asyncomplete-look.vim'
 " " }}}
+"}}}
 " }}}
+" -------------------------------------------------------------------------- 
+" Denite&Unite {{{
+" Plug 'Shougo/denite.nvim' "outlineがまだ未熟、tabがない 両者はUniteから借用可能, visualモードない, ジャンプ時に折り畳み開く, 早さは変らない
+Plug 'Shougo/unite.vim', {'on':['Denite', 'Unite']} "deniteからunite呼び出しのため必要, vimfilerにも
+ Plug 'Shougo/neomru.vim', {'on':['Denite', 'Unite']} "履歴 (space)m
+ Plug 'Shougo/unite-outline', {'on':['Denite', 'Unite']} "アウトライン表示 (Space)o
+ Plug 'osyo-manga/unite-qfixhowm', {'on':['Denite', 'Unite']} "howmをuniteで表示 g,o
+ Plug 'thinca/vim-unite-history', {'on':['Unite']}
+"}}}
 "---------------------------------------------------------------------------
 "text-obj追加 {{{
 Plug 'kana/vim-textobj-user'
 "z: 折り畳み
 Plug 'kana/vim-textobj-fold'
 "f: 関数
-Plug 'kana/vim-textobj-function'
+" Plug 'kana/vim-textobj-function' " 何故か動作しない
 "i: インデント
 Plug 'kana/vim-textobj-indent'
 "k:「,K:『, j(:（ 日本語用
@@ -138,7 +147,7 @@ Plug 'rhysd/vim-textobj-word-column'
 " 移動系 {{{
 Plug 'deton/jasegment.vim' "日本語でWEB
 Plug 'rhysd/clever-f.vim'
-Plug 'easymotion/vim-easymotion', {'on':['<Plug>(easymotion-bd-w)', '<Plug>(easymotion-s)', '<Plug>(easymotion-overwin-f2)']}
+Plug 'easymotion/vim-easymotion', {'on':['<Plug>(easymotion-overwin-w)', '<Plug>(easymotion-s)', '<Plug>(easymotion-overwin-f2)']}
 " }}}
 " " ---------------------------------------------------------------------------- 
 " 外見改善{{{
@@ -155,15 +164,6 @@ Plug 'osyo-manga/vim-anzu', {'on':['<Plug>(anzu-n-with-echo)', '<Plug>(anzu-N-wi
 " Plug 'cohama/vim-hier' " quicfixに登録されている行に下線を引く
 "}}}
 " -------------------------------------------------------------------------- 
-" Denite&Unite {{{
-" Plug 'Shougo/denite.nvim' "outlineがまだ未熟、tabがない 両者はUniteから借用可能, visualモードない, ジャンプ時に折り畳み開く, 早さは変らない
-Plug 'Shougo/unite.vim', {'on':['Denite', 'Unite']} "deniteからunite呼び出しのため必要, vimfilerにも
- Plug 'Shougo/neomru.vim', {'on':['Denite', 'Unite']} "履歴 (space)m
- Plug 'Shougo/unite-outline', {'on':['Denite', 'Unite']} "アウトライン表示 (Space)o
- Plug 'osyo-manga/unite-qfixhowm', {'on':['Denite', 'Unite']} "howmをuniteで表示 g,o
- Plug 'thinca/vim-unite-history', {'on':['Unite']}
-"}}}
-" -------------------------------------------------------------------------- 
 " その他{{{
 Plug 'simeji/winresizer' " <C-W>r+hjklでウィンドウサイズリサイズ
 Plug 'vim-scripts/CmdlineCompl.vim' "コマンドモード補完 (C-X)(C-P) (C-X)(C-N)
@@ -178,32 +178,33 @@ Plug 'simnalamburt/vim-mundo', {'on': 'MundoToggle'} "アンドゥーツリー�
 Plug 'thinca/vim-qfreplace', {'on':'Qfreplace'} "grepして置換 quicfix上で(S-r),編集したら(Space)w
 Plug 'thinca/vim-quickrun', {'on':'QuickRun'} " 色々実行する \r
 Plug 'thinca/vim-visualstar', {'on':['<Plug>(visualstar-*)', '<Plug>(visualstar-*)']} "ビジュアルモードから検索出来るようにする
-Plug 'tpope/vim-surround' " 文字で囲む ys(テキストオブジェクト)(囲み文字) or ビジュアルモードで(S-s)(囲み文字) 囲み文字変更 cs(テキストオブジェ)(囲み文字)
+Plug 'tpope/vim-surround' " 文字で囲む ys(テキストオブジェクト)(囲み文字) or ビジュアルモードで(S-s)(囲み文字) 囲み文字変更 cs(テキストオブジェ)(囲み文字), 囲み文字削除ds(囲み文字)
 Plug 'tpope/vim-repeat', {'on':'<Plug>(RepeatDot)'} " .でvim-surroundの結果も繰り返せるようにする
-Plug 'AndrewRadev/switch.vim', {'on':'Switch'} "True,Falseなど特定文字をスイッチする (S-t)
+Plug 'AndrewRadev/switch.vim' " , {'on':'Switch'} True,Falseなど特定文字をスイッチする (S-t) 後で読み込むと初回動作に問題が出る
 Plug 'tomtom/tcomment_vim', "{'on':['<Plug>(TComment_gcc)', '<Plug>(TComment_gc)']} コメントをトグル gcc
 Plug 'kyouryuukunn/config_file'
-Plug 'haya14busa/vim-gtrans', {'on':'Gtrans'} "翻訳 (F8)
-Plug 'tyru/open-browser.vim', {'on':['<Plug>(openbrowser-smart-search)', 'OpenGithubFile', 'OpenGithubIssue', 'OpenGithubPullReq', 'OpenGithubProject']} "単語やurlからブラウザを開く (F4)
- Plug 'tyru/open-browser-github.vim', {'on':['OpenGithubFile', 'OpenGithubIssue', 'OpenGithubPullReq', 'OpenGithubProject']} " 現在のgitプロジェクトをブラウザで開く
-Plug 'mattn/webapi-vim'
+Plug 'kyouryuukunn/vim-vebugger', {'branch': 'my-vebugger', 'for':['cpp', 'python']}
+" Plug 'katono/rogue.vim' " ローグライクゲーム
 "}}}
 " -------------------------------------------------------------------------- 
-" 特定用途{{{
-" Plug 'pacotan/VimRepress' "WordPress用
-Plug 'kyouryuukunn/vim-vebugger', {'branch': 'my-vebugger', 'for':['cpp', 'python']}
+" ネット{{{
+" Plug 'daisuzu/translategoogle.vim'
+Plug 'tyru/open-browser.vim', {'on':['<Plug>(openbrowser-smart-search)', 'OpenGithubFile', 'OpenGithubIssue', 'OpenGithubPullReq', 'OpenGithubProject']} "単語やurlからブラウザを開く (F4)
+ Plug 'tyru/open-browser-github.vim', {'on':['OpenGithubFile', 'OpenGithubIssue', 'OpenGithubPullReq', 'OpenGithubProject']} " 現在のgitプロジェクトをブラウザで開く
 Plug 'yuratomo/w3m.vim', {'on':['W3m', 'W3mSplit']} "ブラウジング
+" Plug 'pacotan/VimRepress' "WordPress用
+" Plug 'rinx/yj-proofreading.vim', {'on':['YahooProofReader']} " 日本語校正 100kb,50000回/日 制限のため、使いにくい 一太郎使った方がよい
 " git{{{
-Plug 'tpope/vim-fugitive'
-Plug 'cohama/agit.vim', {'on': ['Agit', 'AgitFile']} "履歴を表示 :Agit
-Plug 'idanarye/vim-merginal' "ブランチ表示 :Merginal
+" それぞれ他のプラグインの機能も使えるが、アプローチが異なるので3つ必要
+Plug 'tpope/vim-fugitive' " コマンドのラッパ
+ Plug 'idanarye/vim-merginal' "ブランチ表示 :Merginal
+Plug 'cohama/agit.vim', {'on': ['Agit', 'AgitFile']} "履歴を表示 :Agit (rs ソフトリセット, rh ハードリセット)
 "}}}
-" ローグライクゲーム
-" Plug 'katono/rogue.vim'
+"  Plug 'mattn/webapi-vim'
 "}}}
 " -------------------------------------------------------------------------- 
 " 依存ライブラリ{{{
-if !has('nvim') && (has_key(g:plugs, 'deoplete.nvim') || index(g:plugs_order, 'defx.nvim'))
+if (!has('nvim') && has_key(g:plugs, 'deoplete.nvim')) || (!has('nvim') && index(g:plugs_order, 'defx.nvim') != -1)
 	Plug 'roxma/nvim-yarp'
 	Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -225,7 +226,9 @@ call plug#end()
 " nnoremap (Space)u :Unite neobundle/update -auto-quit(CR)
 ""------------------------------------------------------------------------------------- 
 
-" Plug 'vim-scripts/TwitVim'
+"OutDate{{{
+" Plug 'jiangmiao/auto-pairs' " 囲み文字の自動管理(何故か上書きできない、日本語非対応)
+"Plug 'vim-scripts/TwitVim'
 "Plug 'mattn/googletranslate-vim'
 "Plug 'vim-scripts/YankRing.vim'
 "Plug 'vim-scripts/Highlight-UnMatched-Brackets'
@@ -247,6 +250,7 @@ call plug#end()
 "Plug 'vim-scripts/SingleCompile'
 "Plug 'fuenor/MyMoveWord.vim', {'stay_same' : 1}
 "Plug 'motemen/git-vim'
+"}}}"
 
 "--------------------------------------------------------------------------- 
 " vim: nowrap foldmethod=marker textwidth=0 ft=vim
