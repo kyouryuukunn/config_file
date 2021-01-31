@@ -1,5 +1,5 @@
-# def option UnitID = K1 0 0 0 #ReclForce
+# def option UnitID = K1 0 0 0 #first
 def option UnitID = K1 2131 512 0 #ReclForce
-def option UnitID = K2 1133 49738 1 #G600
-def option UnitID = K3 1133 49714 0
-
+def option UnitID = K2 1133 49714 0 #G600 テンキーと同じ方法で出来るが反応がよくない、押したままにできないので修飾キー,クリックは使えない,修飾キーのみに使用すれば
+def option UnitID = K3 1133 49738 1 #slim blade
+def option UnitID = K4 1390 4162 0 #テンキー テンキーのみは自動でnumlockを入れるので認識できる

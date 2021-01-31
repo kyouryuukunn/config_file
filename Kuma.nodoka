@@ -1,7 +1,11 @@
 # オプション
-# define WITH_MSIME
-# define MULTI_DEVICE
+define MULTI_DEVICE
+# define ANTI_KEYREPEAT
+# define REMOTE1 # リモートデスクトップでサーバーに側で動作するとき用(帰省時)
+# define REVERSE_MOUSE
 # define TRACK_BALL
+# define TRACK_PAD
+# define WITH_MSIME
 #-------------------------------------------------------------------------------------- 
 include "109.nodoka"
 def option mouse-event = true
@@ -13,21 +17,38 @@ if (WITH_MSIME)
   def option UseTSF = false
 endif
 if (MULTI_DEVICE)
-  def option FakeUp = enable 1 84 #第三引数00では反応なし、適当な値にすると正常動作するが、SKKのみ確定されてしまう。
+  # def option FakeUp = enable 1 00 
+  #第三引数00では反応なし、適当な値にすると正常動作するが、SKKとvixenが確定されてしまう。
+  #テンキーのみnumlockオンで使える(オンの場合はキー前後に毎回numlock押しているのでFakeUp不要)
+  #テンキーはnumlockオフかつFake 00では何故かK0となって反応しない
+  #テンキーはnumlockオフかつFakeUpなしでは通常どおり2回目以降反応
   include "multidevice.nodoka"
 endif
-
 if (TRACK_BALL)
 	# def option drag-threshold = 1
 endif
 #-------------------------------------------------------------------------------------- 
 #キー押しっぱ対策{{{
-# def option CheckModifier = enable 5
-# key U-*WinDownOver =  U-LWin U-RWin
-# key U-*ShiftDownOver =  U-LShift U-RShift
-# key U-*CtrlDownOver =  U-LCtrl U-RCtrl
-# key U-*AltDownOver =  U-LAlt U-RAlt
-# key *Pause = U-LWin U-RWin U-LCtrl U-RCtrl U-LCtrl U-RCtrl U-LAlt U-RAlt
+if (ANTI_KEYREPEAT)
+	def option CheckModifier = enable 5
+	def key WinDownOver = E1-0x19
+	def key ShiftDownOver = E1-0x1a
+	def key CtrlDownOver = E1-0x1b
+	def key AltDownOver = E1-0x1c
+
+	key U-*WinDownOver =  U-*LWin U-*RWin
+	key U-*ShiftDownOver =  U-*LShift U-*RShift
+	key U-*CtrlDownOver =  U-*LCtrl U-*RCtrl
+	key U-*AltDownOver =  U-*LAlt U-*RAlt
+endif
+
+# }}}
+#-------------------------------------------------------------------------------------- 
+#単体キー置き換え{{{
+key PRINTSCREEN = W-S-S
+# key PAUSE = C-c &Wait(10) &ShellExecute("open", "rundll32.exe", 'url.dll,FileProtocolHandler https://www.google.com/search?q='+$Clipboard,, ShowNormal)
+key PAUSE = C-c &ShellExecute("open", "rundll32.exe", 'url.dll,FileProtocolHandler https://www.google.com/search?q=',, ShowNormal) &Wait(400) A-d &Wait(10) C-a C-v &Wait(10) Enter
+
 # }}}
 #-------------------------------------------------------------------------------------- 
 #英数からのツーストローク  {{{
@@ -53,7 +74,13 @@ mod ctrl  += !!Apps
 mod ctrl  += !!LCtrl
 mod shift += !!LShift
 mod shift += !!!Space
-mod Alt   += ひらがな
+if (REMOTE1)
+#サーバー側でnodokaが動作しているときひらがなキーをAltにすると押しっぱなしで
+#押しっぱ対策も効かなくる。他のキーではこうならないので日本語キー由来の問題?
+else
+	mod alt   += ひらがな
+	key *ひらがな = *LAlt
+endif
 mod mod0  += !!無変換
 mod mod1  += !!無変換
 mod mod0  += !!変換
@@ -61,7 +88,6 @@ mod mod6  += !!Space
 mod mod7  += !!Apps
 mod mod8  += !!LCtrl
 mod mod9  += !!LShift
-key *ひらがな            = *LAlt
 
 key *英数                = &Prefix(Two_Strok_Of_CapsLocs)
 key M8-C-*LCtrl          = Esc
@@ -129,6 +155,7 @@ key M0-*l                = *Right
 Key M0-*f                = A-F4
 Key M0-*a                = C-S-Esc
 Key M0-*s                = A-*Tab
+Key M0-*d                = *Insert
 Key M0-*comma            = C-A-S-F1
 Key M0-*Period           = C-A-S-F2
 Key M0-*Slash            = W-B &Wait(100) Down Right Enter &Wait(200) &MouseMove(-100, 0) #Atokイミクル
@@ -142,13 +169,6 @@ Key M0-*BackSlash        = W-B &Wait(100) Down Space &Wait(100) A-Tab &Wait(100)
 # }}}
 # --------------------------------------------------------------------------
 # ケース毎対応 {{{
-# -------------------------------------------------------------------------- 
-# For MSIME (Atok2017からは不要) {{{
-if (WITH_MSIME)
-  key IL-*IC-Colon = Minus
-  # key IL-*IC-SemiColon = L T
-endif
-# }}}
 #------------------------------------------------------------------------------------- 
 # mouse {{{
 # ワンショットモディファイアとマウスを併用するとき、モディファイア押下中にマウ
@@ -164,34 +184,41 @@ endif
 key R-*LCtrl  = &Ignore
 key R-*LShift = &Ignore
 
+if (REVERSE_MOUSE)
+	key *RButton = *LButton
+	key *LButton = *RButton
+endif
 # 多ボタンマウス用 マウスのソフトを使用すると不具合やら汎用性の低さやらが問題になるため
 # キーボード識別がskkと両立できないため未使用
-if (MULTI_DEVICE)
-
-	 # key K1-*A = &VK(D-RButton)
-	key K2-_1 = C-C
-	key K2-_2 = S-Insert
-	key K2-_3 = A-F4
-	key K2-_4 = C-X 
-	key K2-_5 = A-Y
-	key K2-_6 = A-N
-	key K2-_7 = VolumeDown
-	key K2-_8 = VolumeUp
-	key K2-_9 = C-Z
-
-	key K2-*A = 
-	key K2-*B = 
-	key K2-*C = 
-	key K2-*D = 
-	key K2-*E = 
-	key K2-*F = 
-	key K2-*G = 
-	key K2-*H = 
-	key K2-*I = 
-	key K2-*J = 
-	key K2-*K = 
-	key K2-*L = *F9
-endif
+# ホイールやクリックは判別できない
+# if (MULTI_DEVICE)
+#
+# 	key K2-Num1 = C-C
+# 	key K2-Num2 = S-Insert
+# 	key K2-Num3 = A-F4
+# 	key K2-Num4 = C-X 
+# 	key K2-Num5 = A-Y
+# 	key K2-Num6 = A-N
+# 	key K2-Num7 = VolumeDown
+# 	key K2-Num8 = VolumeUp
+# 	key K2-Num9 = C-Z
+# 	key K2-Num0 = LCtrl
+# 	key K2-NumMinus = RShift
+# 	key K2-NumPlus = LAlt
+#
+# 	key K2-*A = 
+# 	key K2-*B = 
+# 	key K2-*C = 
+# 	key K2-*D = 
+# 	key K2-*E = 
+# 	key K2-*F = 
+# 	key K2-*G = 
+# 	key K2-*H = 
+# 	key K2-*I = 
+# 	key K2-*J = 
+# 	key K2-*K = 
+# 	key K2-*L = *F9
+# endif
 # }}}
 #------------------------------------------------------------------------------------- 
 # Track Ball {{{
@@ -201,6 +228,23 @@ endif
 if (TRACK_BALL)
 	# key D-*Drag = *WheelForward
 	key *Mute = *MButton
+endif
+# }}}
+#------------------------------------------------------------------------------------- 
+# Track Pad {{{
+# キーを押しながらのポイント移動をスクロールする
+# 一回のドラッグで1スクロールしか出来ない
+# 方向を指定できない
+# if (TRACK_PAD)
+# 	# key D-*Drag = *WheelForward
+# 	key TS-*F TS-*J TS-*Space = &VK(LButton)
+# endif
+# }}}
+# -------------------------------------------------------------------------- 
+# For MSIME (Atok2017からは不要) {{{
+if (WITH_MSIME)
+  key IL-*IC-Colon = Minus
+  # key IL-*IC-SemiColon = L T
 endif
 # }}}
 # --------------------------------------------------------------------------
@@ -220,6 +264,13 @@ key A-*F4 = A-Space &Wait(100) c
 window mintty /mintty\.exe/ : Global #{{{
 key C-*V = S-Insert
 #key M7-*MButton = S-Insert
+# }}}
+#------------------------------------------------------------------------------------- 
+window reaper_arranger /reaper\.exe:REAPERwnd:REAPERTrackListWindow/ : Global #{{{
+key C-*M8-*K0-RButton = C-MButton
+# }}}
+# window reaper_arranger /reaper\.exe:REAPERwnd:REAPERmidieditorwnd:MIDIWindow/ : Global #{{{
+# key C-*M8-*K0-RButton = C-LButton
 # }}}
 #------------------------------------------------------------------------------------- 
 # window window-select /:window-select:SysListView32$/ : Global # {{{

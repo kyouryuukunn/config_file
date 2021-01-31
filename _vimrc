@@ -15,8 +15,7 @@ if has('win32') || has('win64')
   " let $CYGWIN = 'nodosfilewarning'
   let $PYTHON2 = 'E:/Python27;E:/Python27/Scripts'
   let $PYTHON3 = 'E:/python37;E:/python37/Scripts'
-  let $DMD = 'e:/D/dmd2/windows/bin;e:/D/dm/windws/bin'
-  let $LDC = 'e:/D/ldc2/bin'
+  let $DLANG = 'e:/d/dub/packages/.bin/dls-latest;e:/D/dmd2/windows/bin;e:/D/dm/windws/bin;e:/D/ldc2/bin'
   let $HASKELL = 'C:/Users/kuma/AppData/Roaming/cabal/bin;C:/Program Files (x86)/Haskell/bin;E:/Haskell/lib/extralibs/bin;E:/Haskell/bin'
   let $GOROOT = 'e:/go'
   let $GOPATH = $GOROOT.'/local'
@@ -106,6 +105,8 @@ endif
 " }}}
 """------------------------------------------------------------------------------
 " etc  {{{
+" <c-a>, <c-x>でアルファベットも変更する
+set nf=alpha
 " 折り返ししない
 set nowrap
 inoremap # X<C-H>#
@@ -156,6 +157,9 @@ set hidden
 set signcolumn=yes
 "日本語の括弧も%で移動できるように
 set matchpairs+=「:」,（:）,『:』
+"ターミナルをデフォルトでmsysにする
+"これをするとjvgrepで日本語が検索出来なくなる
+" set shell=zsh
 " ベンチマーク用タイマー
 command! -bar TimerStart let start_time = reltime()
 command! -bar TimerEnd   echo reltimestr(reltime(start_time)) | unlet start_time
@@ -385,7 +389,7 @@ augroup MyAutocmd
 "   ------------------------------------------------------------------------
 " howm {{{
 	autocmd FileType qfix_memo setl textwidth=0
-	autocmd FileType qfix_memo setl nobreakindent
+	" autocmd FileType qfix_memo setl nobreakindent
 	" autocmd FileType qfix_memo setl  list
 	" autocmd FileType qfix_memo setl  listchars=tab:^\ ,trail:~
 	" 連結マーカーがあれば自動整形を有効にする
@@ -486,7 +490,9 @@ endfunction " }}}
 "-------------------------------------------------------------------------------------
 " "括弧等を補完 {{{
 inoremap " ""<C-g>U<LEFT>
-inoremap ' ''<C-g>U<LEFT>
+" inoremap <expr> ' search('\<ren\%#', "bcn", line('.')) ? "'" : "''<C-g>U<LEFT>"
+" アルファベットの前は補完しない
+inoremap <expr> ' search('\a\%#', "bcn", line('.')) ? "'" : "''<C-g>U<LEFT>"
 inoremap ( ()<C-g>U<LEFT>
 " inoremap < <><C-g>U<LEFT>
 inoremap [ []<C-g>U<LEFT>
@@ -608,13 +614,6 @@ endif
 "noremap <C-w>, :copen<CR> " }}}
 nnoremap <expr> <space>g ':grep '.substitute(expand('<cword>'), '#', '\\#', 'g').' '
 xnoremap <expr> <space>g '"9y:grep "'.substitute(@9, '#', '\\#', 'g').'" '
-"-----------------------------------------------------------------------------
-"連番機能 {{{
-nnoremap <silent> co :ContinuousNumber <C-a><CR>
-xnoremap <silent> co :ContinuousNumber <C-a><CR>
-command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
-"十進数優先にする。必要ならset nf=octal,hex
-set nf=alpha " }}}
 "------------------------------------------------------------------------------
 "挿入 {{{
 ab <expr> lin repeat('-',80 - col('.'))
@@ -666,9 +665,9 @@ ab <expr> lin repeat('-',80 - col('.'))
 "" 外部ファイル読み込み {{{
 source $DROPBOX/_includevim
 " source $DROPBOX/_deinvim
-set noshellslash
+" set noshellslash
 source $DROPBOX/_vimplug
-set shellslash
+" set shellslash
 source $DROPBOX/_pluginvim
 " source $DROPBOX/_vundlevim
 " }}}
@@ -676,7 +675,7 @@ source $DROPBOX/_pluginvim
 "上書きされそうな設定{{{
 set whichwrap=b,s,h,l,<,>,[,]
 "日本語の行を連結時には空白を入力しない
-set formatoptions+=mM
+set formatoptions+=mMj
 nmap K <Plug>(easymotion-overwin-w)
 xmap K <Plug>(easymotion-overwin-w)
 omap K <Plug>(easymotion-overwin-w)
@@ -684,6 +683,14 @@ imap <C-F> <C-O><Plug>(easymotion-overwin-f2)
 "}}}
 "-------------------------------------------------------------------------------------
 " OutDate {{{
+"-----------------------------------------------------------------------------
+" "連番機能 {{{
+" " g<c-a>/<C-x>で代替
+" nnoremap <silent> co :ContinuousNumber <C-a><CR>
+" xnoremap <silent> co :ContinuousNumber <C-a><CR>
+" command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
+" "十進数優先にする。必要ならset nf=octal,hex
+" set nf=alpha " }}}
 "-------------------------------------------------------------------------------------
 "{{{EDGAR
 "ウィンドウを上下2つに分け下にEDGAR, 上を出力ファイルにする。出力ファイルの末尾に空行をつくり、行数-1をendlineとする
