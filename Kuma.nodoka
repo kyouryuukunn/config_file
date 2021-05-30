@@ -72,6 +72,7 @@ keymap Global
 
 mod ctrl  += !!Apps
 mod ctrl  += !!LCtrl
+mod alt   += !!LAlt
 mod shift += !!LShift
 mod shift += !!!Space
 if (REMOTE1)
@@ -91,11 +92,12 @@ mod mod9  += !!LShift
 
 key *âpêî                = &Prefix(Two_Strok_Of_CapsLocs)
 key M8-C-*LCtrl          = Esc
+key A-*Lalt               = *LWin
 key M9-S-LShift          = $ToggleIME
 key M0-M1-*Space           = S-*Space
 
 key *ñ≥ïœä∑             = *Enter
-key M0-M1-ïœä∑             = Apps
+key M0-M1-*ïœä∑             = *Space
 
 key M8-C-*I               = Tab
 key M8-M6-C-S-*I          = S-Tab

@@ -92,6 +92,12 @@ set guioptions-=e
 " if has('unix')
 "   set cmdheight=2
 " endif
+"{{{ 端末での各モードカーソル表示
+let &t_ti.="\<Esc>[1 q"
+let &t_SI.="\<Esc>[5 q"
+let &t_EI.="\<Esc>[1 q"
+let &t_te.="\<Esc>[0 q"
+"}}}
  " }}}
 "------------------------------------------------------------------------------
 "スワップ, バックアップ保存場所 {{{
@@ -109,7 +115,7 @@ endif
 set nf=alpha
 " 折り返ししない
 set nowrap
-inoremap # X<C-H>#
+" inoremap # X<C-H>#
 " #縺ｧ陦碁?ｭ縺ｫ鬟帙?ｰ縺ｪ縺?繧医≧縺ｫ
 set shellslash
 " ビープ音の代わりにビジュアルベルを使用
@@ -149,20 +155,21 @@ set linebreak
 set formatoptions-=ro
 " バッファを閉じる時にバッファリストから削除
 " autocmd BufReadPre * setlocal bufhidden=delete
-"竊?
-"k
 " 未保存でもバッファを移動できるようにする
 set hidden
 " サイン欄を常時表示
 set signcolumn=yes
 "日本語の括弧も%で移動できるように
 set matchpairs+=「:」,（:）,『:』
+" ファイル末尾に自動でEOFを作らなくする
+set nofixendofline
 "ターミナルをデフォルトでmsysにする
 "これをするとjvgrepで日本語が検索出来なくなる
 " set shell=zsh
 " ベンチマーク用タイマー
-command! -bar TimerStart let start_time = reltime()
-command! -bar TimerEnd   echo reltimestr(reltime(start_time)) | unlet start_time
+" command! -bar TimerStart let start_time = reltime()
+" command! -bar TimerEnd   echo reltimestr(reltime(start_time)) | unlet start_time
+" タイプライターモードとトグル
 set scrolloff=5
 command! TypeWriterToggle exec 'if &scrolloff==5 | set scrolloff=9999 | else | set scrolloff=5 | endif'
 

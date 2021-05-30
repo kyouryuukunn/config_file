@@ -34,35 +34,19 @@ Plug 'kyouryuukunn/RenPyOpen.vim',  {'for': ['renpy']}
 ""}}}
 "---------------------------------------------------------------------------
 " {{{ 補完
-" neosnippetでmin_charを反映すると早いもの順なのか候補には上らない、しかし反応はする
-" 日本語の補完位置がおかしい buffer, necovim で確認
-" fuzzy_match, min_charsはプラグイン側で読み込まないと動作しない
-Plug 'maralla/completor.vim'
- Plug 'maralla/completor-neosnippet'
-  Plug 'Shougo/neosnippet' "スニペット
-   Plug 'Shougo/neosnippet-snippets' "スニペット定義
- Plug 'kyouryuukunn/completor-necosyntax'
-  Plug 'Shougo/neco-syntax' " syntaxファイルからの補完 deoplete, async
- Plug 'kyouryuukunn/completor-necovim', {'for':['vim']}
-  Plug 'Shougo/neco-vim' " neocomplete, deoplete, async
- " Plug 'tokorom/completor-shell'
- " Plug 'masawada/completor-dictionary'
- Plug 'Shougo/neoinclude.vim' " neocomplete, deoplete lspはInclude補完しない
-
 " Plug 'vim-scripts/CmdlineCompl.vim' "コマンドモード補完 (C-X)(C-P) (C-X)(C-N)
 Plug 'prabirshrestha/vim-lsp' " cppで落ちる completorが補完以外のLSPに対応するまで使用
-" " async 挙動がおかしい バッファ補完が日本語の補完できない, snippetsが常に出る,c-hで {{{
-" Plug 'prabirshrestha/asyncomplete.vim'
-"  Plug 'prabirshrestha/asyncomplete-lsp.vim'
-" Plug 'prabirshrestha/asyncomplete-buffer.vim'
-" Plug 'prabirshrestha/asyncomplete-necovim.vim'
-" Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
-" Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
-" Plug 'yami-beta/asyncomplete-omni.vim'
-" Plug 'kyouryuukunn/asyncomplete-file.vim', {'branch':'allow_variable_path'}
-" Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
-" Plug 'kyouryuukunn/asyncomplete-look.vim'
-" " }}}
+
+" "Completor {{{
+Plug 'maralla/completor.vim'
+" neosnippetでmin_charを反映すると早いもの順なのか候補には上らない、しかし反応はする
+" fuzzy_match, min_charsはプラグイン側で読み込まないと動作しない
+Plug 'maralla/completor-neosnippet'
+Plug 'kyouryuukunn/completor-necosyntax'
+Plug 'kyouryuukunn/completor-necovim'
+" Plug 'tokorom/completor-shell'
+" Plug 'masawada/completor-dictionary'
+" }}}
 " }}}
 " -------------------------------------------------------------------------- 
 "Unite {{{
@@ -111,16 +95,13 @@ Plug 'nathanaelkane/vim-indent-guides' "インデントを見やすく
 Plug 'LeafCage/foldCC.vim' "折り畳みを見やすく
 Plug 't9md/vim-quickhl', {'on':['<Plug>(quickhl-manual-this)', 'QuickhlManualReset']} "複数同時ハイライト (Space)i
 Plug 'osyo-manga/vim-anzu', {'on':['<Plug>(anzu-n-with-echo)', '<Plug>(anzu-N-with-echo)', '<Plug>(anzu-star-with-echo)', '<Plug>(anzu-sharp-with-echo)']} "検索結果数を表示する
-" Plug 'thinca/vim-ref', {'on':'Ref'}
-" Plug 'dannyob/quickfixstatus', " カーソルがquicfixに登録されている行上にあるとき、その内容をコマンドラインに表示する
-" Plug 'cohama/vim-hier' " quicfixに登録されている行に下線を引く
 "}}}
 " -------------------------------------------------------------------------- 
 " その他{{{
 Plug 'simeji/winresizer' " <C-W>r+hjklでウィンドウサイズリサイズ
 Plug 'kyouryuukunn/my-ShowMarks7' "マークする m(マークする文字)
 Plug 'kyouryuukunn/vim-changed' "変更行にマークを表示, マーク欄が開閉しない、他のマークを消さない、表示パフォーマンス改善
-Plug 'Shougo/vimfiler' " ファイラー
+Plug 'Shougo/vimfiler' " ファイラー カーソルが止まる原因はシンタックスでvimfilerのせいじゃない fnamewidthで縮めれば軽くなる
 Plug 'fuenor/qfixhowm' "howmメモ帳
 Plug 'fuenor/JpFormat.vim' "日本語禁則
 Plug 'h1mesuke/vim-alignta', {'on':['Alignta', 'Align']} "整形 :Alingta (文字)
@@ -136,7 +117,6 @@ Plug 'tomtom/tcomment_vim', "{'on':['<Plug>(TComment_gcc)', '<Plug>(TComment_gc)
 Plug 'kyouryuukunn/config_file'
 Plug 'thinca/vim-quickrun', {'on':'QuickRun'} " 色々実行する \r
 Plug 'kyouryuukunn/vim-vebugger', {'branch': 'my-vebugger', 'for':['cpp', 'python']}
-" Plug 'katono/rogue.vim' " ローグライクゲーム
 "}}}
 " -------------------------------------------------------------------------- 
 " ネット{{{
@@ -144,7 +124,7 @@ Plug 'kyouryuukunn/vim-vebugger', {'branch': 'my-vebugger', 'for':['cpp', 'pytho
 Plug 'tyru/open-browser.vim', {'on':['<Plug>(openbrowser-smart-search)', 'OpenGithubFile', 'OpenGithubIssue', 'OpenGithubPullReq', 'OpenGithubProject']} "単語やurlからブラウザを開く (F4)
  Plug 'tyru/open-browser-github.vim', {'on':['OpenGithubFile', 'OpenGithubIssue', 'OpenGithubPullReq', 'OpenGithubProject']} " 現在のgitプロジェクトをブラウザで開く
 Plug 'yuratomo/w3m.vim', {'on':['W3m', 'W3mSplit']} "ブラウジング note 実在するファイルからの実行でないとリンクが開けない
-" Plug 'pacotan/VimRepress' "WordPress用
+Plug 'haoyayoi/VimWordpress'
 " Plug 'rinx/yj-proofreading.vim', {'on':['YahooProofReader']} " 日本語校正 100kb,50000回/日 制限のため、使いにくい 一太郎使った方がよい
 " git{{{
 " それぞれ他のプラグインの機能も使えるが、アプローチが異なるので3つ必要
@@ -164,6 +144,27 @@ endif
 if has_key(g:plugs, 'asyncomplete.vim') || has_key(g:plugs, 'vim-lsp')
 	Plug 'prabirshrestha/async.vim'
 endif
+
+if has_key(g:plugs, 'completor-neosnippet') || has_key(g:plugs, 'asyncomplete-neosnippet.vim')
+	Plug 'Shougo/neosnippet' "スニペット
+	Plug 'Shougo/neosnippet-snippets' "スニペット定義
+endif
+
+if has_key(g:plugs, 'completor-necosyntax') || has_key(g:plugs, 'asyncomplete-necosyntax.vim')
+	Plug 'Shougo/neco-syntax' " syntaxファイルからの補完 deoplete, async
+endif
+
+if has_key(g:plugs, 'completor-necovim') || has_key(g:plugs, 'asyncomplete-necovim.vim')
+	Plug 'Shougo/neco-vim' " neocomplete, deoplete, async
+endif
+
+if has_key(g:plugs, 'completor-necosyntax') || has_key(g:plugs, 'asyncomplete-necosyntax.vim')
+	Plug 'Shougo/neco-syntax' " syntaxファイルからの補完 deoplete, async
+endif
+
+if has_key(g:plugs, 'asyncomplete-neoinclude.vim') || has_key(g:plugs, 'asyncomplete-necosyntax.vim')
+	Plug 'Shougo/neoinclude.vim' " neocomplete, deoplete lspはInclude補完しない
+endif
 " }}}
 " -------------------------------------------------------------------------- 
 
@@ -172,6 +173,28 @@ call plug#end()
 ""------------------------------------------------------------------------------------- 
 
 "OutDate{{{
+" Plug 'Shougo/defx.nvim' " ファイラー
+" Plug 'lambdalisue/fern.vim' " set shellslashが有効だと動作しない
+" Plug 'lambdalisue/fern-hijack.vim'
+" Plug 'MrPeterLee/VimWordpress' " なぜか動かない
+" " async 挙動がおかしい バッファ補完が日本語の補完できない, snippetsが常に出る,c-hで {{{
+" Plug 'prabirshrestha/asyncomplete.vim'
+"  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'prabirshrestha/asyncomplete-buffer.vim'
+" Plug 'prabirshrestha/asyncomplete-necovim.vim'
+" Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+" Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
+" Plug 'yami-beta/asyncomplete-omni.vim'
+" Plug 'kyouryuukunn/asyncomplete-file.vim', {'branch':'allow_variable_path'}
+" Plug 'kyouryuukunn/asyncomplete-neoinclude.vim'
+" " Plug 'kyouryuukunn/asyncomplete-look.vim'
+" " }}}
+" Plug 'yuttie/comfortable-motion.vim' " スクロールを滑らかに ページ移動等でも移動量が固定しかできない
+" Plug 'thinca/vim-ref', {'on':'Ref'}
+" Plug 'dannyob/quickfixstatus', " カーソルがquicfixに登録されている行上にあるとき、その内容をコマンドラインに表示する
+" Plug 'cohama/vim-hier' " quicfixに登録されている行に下線を引く
+" Plug 'katono/rogue.vim' " ローグライクゲーム
+" Plug 'osyo-manga/vim-sugarpot', {'on':'SugarpotPreview'} " 画像表示 フォントサイズが解像度になるので実質使えない
 " Plug 'Shougo/defx.nvim' " ファイラー 要python3.6以上
 " Plug 'Shougo/denite.nvim' "outlineがまだ未熟、tabがない 両者はUniteから借用可能, visualモードない, ジャンプ時に折り畳み開く, 早さは変らない
 "outlineがまだ未熟、tabがない 両者はUniteから借用可能 早さは変らない 

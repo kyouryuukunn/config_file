@@ -1,7 +1,7 @@
 scriptencoding utf-8
 "--------------------------------------------------------------------------- 
 if has_key(g:plugs, 'completor.vim') " {{{
-let g:completor_debug = 0
+let g:completor_debug = 1
 let g:completor_auto_trigger = 1
 let g:completor_min_chars = 2
 let g:completor_completion_delay = 50
@@ -47,7 +47,7 @@ au User lsp_setup call lsp#register_server(
 	\{'name': 'pyls',
 	\'priority': 5,
 	\'cmd': { server_info->['pyls']},
-	\'whitelist': ['python']
+	\'allowlist': ['python']
 	\ }
 	\)
 au User lsp_setup call lsp#register_server(
@@ -55,14 +55,14 @@ au User lsp_setup call lsp#register_server(
 	\'priority': 5,
 	\'cmd': { server_info->['clangd']},
 	\'refresh_pattern': '\k\+\(\.\|->\|::\)\?\K*$',
-	\'whitelist': ['cpp','c']
+	\'allowlist': ['cpp','c']
 	\ }
 	\)
 au User lsp_setup call lsp#register_server(
 	\{'name': 'serve-d',
 	\'priority': 5,
 	\'cmd': { server_info->['serve-d']},
-	\'whitelist': ['d'],
+	\'allowlist': ['d'],
 	\"workspace_config": {"d":{"stdlibPath": [
 	\		"E:\\D\\dmd2\\src\\druntime\\import",
 	\		"E:\\D\\dmd2\\src\\phobos"
@@ -351,9 +351,17 @@ smap <expr><silent> <C-S> neosnippet#expandable() <Bar><Bar> neosnippet#jumpable
 "  }}}
 "------------------------------------------------------------------------------
 "  vimfiler {{{
+call vimfiler#custom#profile('default', 'context', {
+    \ 'fnamewidth' : 70,
+    \ 'toggle': 1,
+    \ })
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
-au FileType vimfiler nnoremap <silent> <buffer> <nowait> <ESC> :close<CR>
+au FileType vimfiler nmap <silent> <buffer> <nowait> <ESC> :close<CR>
+au FileType vimfiler nmap <silent> <buffer> <C-a> <Plug>(vimfiler_toggle_mark_all_lines)
+au FileType vimfiler nmap <silent> <buffer> <Enter>  <Plug>(vimfiler_execute_system_associated)
+au FileType vimfiler nmap <silent> <buffer> i <Plug>(vimfiler_preview_file)
+au FileType vimfiler nmap <silent> <buffer> f <Plug>(vimfiler_set_current_mask)
 nnoremap <silent> ,f :<C-u>VimFilerExplorer -winwidth=30<CR>
 "  }}}
 "--------------------------------------------------------------------------- 
@@ -1060,7 +1068,7 @@ let b:match_words = "if:endif,foreach:endforeach,\<begin\>:\<end\>,<div.*>:</div
 " -------------------------------------------------------------------------- 
 if has_key(g:plugs, 'vim-changed') " {{{
 " 早すぎるとneosnippetと喧嘩する
-let g:changed_delay = 900
+let g:changed_delay = 1000
 let g:changed_sign_priority = 9
 augroup vim-changed
 	autocmd!
@@ -1303,58 +1311,58 @@ inoremap <expr><CR>  pumvisible() ? "\<C-e>\<CR>" : "\<CR>"
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neoinclude#get_source_options({
     \ 'name': 'neoinclude',
     \ 'priority': 10,
-    \ 'whitelist': ['cpp'],
-    \ 'blacklist': ['unite'],
+    \ 'allowlist': ['cpp'],
+    \ 'blocklist': ['unite'],
     \ 'refresh_pattern': '#include [<"].*$',
     \ 'completor': function('asyncomplete#sources#neoinclude#completor'),
     \ }))
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
     \ 'name': 'file',
     \ 'priority': 6,
-    \ 'whitelist': ['*'],
-    \ 'blacklist': ['unite'],
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['unite'],
     \ 'completor': function('asyncomplete#sources#file#completor')
     \ }))
 call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
     \ 'name': 'omni',
     \'priority': 5,
-    \ 'whitelist': ['*'],
-    \ 'blacklist': ['html','unite','vim'],
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['html','unite','vim'],
     \ 'completor': function('asyncomplete#sources#omni#completor')
     \  }))
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
     \ 'name': 'necovim',
     \ 'priority': 5,
-    \ 'whitelist': ['vim'],
-    \ 'blacklist': ['unite'],
+    \ 'allowlist': ['vim'],
+    \ 'blocklist': ['unite'],
     \ 'completor': function('asyncomplete#sources#necovim#completor'),
     \ }))
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
     \ 'name': 'buffer',
     \ 'priority': 3,
-    \ 'whitelist': ['*'],
-    \ 'blacklist': ['go','unite'],
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['go','unite'],
     \ 'completor': function('asyncomplete#sources#buffer#completor'),
     \ }))
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necosyntax#get_source_options({
     \ 'name': 'necosyntax',
     \ 'priority': 2,
-    \ 'whitelist': ['*'],
-    \ 'blacklist': ['unite', 'cpp', 'python', 'd', 'vim', 'txt'],
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['unite', 'cpp', 'python', 'd', 'vim', 'txt'],
     \ 'completor': function('asyncomplete#sources#necosyntax#completor'),
     \ }))
 au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
     \ 'name': 'neosnippet',
     \ 'priority': 1,
-    \ 'whitelist': ['*'],
-    \ 'blacklist': ['unite'],
+    \ 'allowlist': ['*'],
+    \ 'blocklist': ['unite'],
     \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
     \ }))
 " au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#look#get_source_options({
 "     \ 'name': 'look',
 "     \ 'priority': 0,
-"     \ 'whitelist': ['txt'],
-"     \ 'blacklist': ['unite'],
+"     \ 'allowlist': ['txt'],
+"     \ 'blocklist': ['unite'],
 "     \ 'completor': function('asyncomplete#sources#look#completor'),
 "     \ }))
 " let g:asyncomplete_log_file=expand($VIM.'/async.log')
@@ -1439,6 +1447,67 @@ endif " }}}
 " let g:ale_cpp_clang_options = " -Wall ".includecppoption
 " let g:ale_cpp_gcc_options = " -Wall ".includecppoption
 " endif " }}}
+" -------------------------------------------------------------------------- 
+if has_key(g:plugs, 'defx.nvim') " {{{
+function! s:open_defx_if_directory()
+  " This throws an error if the buffer name contains unusual characters like
+  " [[buffergator]]. Desired behavior in those scenarios is to consider the
+  " buffer not to be a directory.
+  try
+    let l:full_path = expand(expand('%:p'))
+  catch
+    return
+  endtry
+
+  " If the path is a directory, delete the (useless) buffer and open defx for
+  " that directory instead.
+  if isdirectory(l:full_path)
+    execute "Defx `expand('%:p')`"
+  endif
+endfunction
+
+augroup defx_config
+  autocmd!
+  autocmd FileType defx call s:defx_my_settings()
+  " It seems like BufReadPost should work for this, but for some reason, I can't
+  " get it to fire. BufEnter seems to be more reliable.
+  autocmd BufEnter * call s:open_defx_if_directory()
+augroup END
+
+function! s:defx_my_settings() abort
+	" Define mappings
+	nnoremap <silent><buffer><expr> <CR> defx#do_action('open')
+	nnoremap <silent><buffer><expr> c defx#do_action('copy')
+	nnoremap <silent><buffer><expr> m defx#do_action('move')
+	nnoremap <silent><buffer><expr> p defx#do_action('paste')
+	nnoremap <silent><buffer><expr> l defx#do_action('open')
+	nnoremap <silent><buffer><expr> E defx#do_action('open', 'vsplit')
+	nnoremap <silent><buffer><expr> P defx#do_action('open', 'pedit')
+	nnoremap <silent><buffer><expr> o defx#do_action('open_or_close_tree')
+	nnoremap <silent><buffer><expr> K defx#do_action('new_directory')
+	nnoremap <silent><buffer><expr> N defx#do_action('new_file')
+	nnoremap <silent><buffer><expr> M defx#do_action('new_multiple_files')
+	nnoremap <silent><buffer><expr> C defx#do_action('toggle_columns', 'mark:indent:icon:filename:type:size:time')
+	nnoremap <silent><buffer><expr> S defx#do_action('toggle_sort', 'time')
+	nnoremap <silent><buffer><expr> d defx#do_action('remove')
+	nnoremap <silent><buffer><expr> r defx#do_action('rename')
+	nnoremap <silent><buffer><expr> ! defx#do_action('execute_command')
+	nnoremap <silent><buffer><expr> x defx#do_action('execute_system')
+	nnoremap <silent><buffer><expr> yy defx#do_action('yank_path')
+	nnoremap <silent><buffer><expr> . defx#do_action('toggle_ignored_files')
+	nnoremap <silent><buffer><expr> ; defx#do_action('repeat')
+	nnoremap <silent><buffer><expr> h defx#do_action('cd', ['..'])
+	nnoremap <silent><buffer><expr> ~ defx#do_action('cd')
+	nnoremap <silent><buffer><expr> q defx#do_action('quit')
+	nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
+	nnoremap <silent><buffer><expr> * defx#do_action('toggle_select_all')
+	nnoremap <silent><buffer><expr> j line('.') == line('$') ? 'gg' : 'j'
+	nnoremap <silent><buffer><expr> k line('.') == 1 ? 'G' : 'k'
+	nnoremap <silent><buffer><expr> <C-l> defx#do_action('redraw')
+	nnoremap <silent><buffer><expr> <C-g> defx#do_action('print')
+	nnoremap <silent><buffer><expr> cd defx#do_action('change_vim_cwd')
+endfunction
+endif "}}}
 "------------------------------------------------------------------------------------- 
 " if has_key(g:plugs, 'neocomplete.vim') " {{{
 " " そのうちasyncompleteに引っ越し
