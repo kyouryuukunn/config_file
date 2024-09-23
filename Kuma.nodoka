@@ -1,13 +1,17 @@
+# 既知の問題
+#
+# -DUSE109等のシンボルを処理するファイル -D(XXX)とするとdefine XXXと同じ
+include "read-keyboard-define.nodoka"
 # オプション
-define MULTI_DEVICE
+# define MULTI_DEVICE
 # define ANTI_KEYREPEAT
-# define REMOTE1 # リモートデスクトップでサーバーに側で動作するとき用(帰省時)
 # define REVERSE_MOUSE
 # define TRACK_BALL
 # define TRACK_PAD
 # define WITH_MSIME
+# define SPACE_REPEAT
+# define USE_WINDOWS_CLIP
 #-------------------------------------------------------------------------------------- 
-include "109.nodoka"
 def option mouse-event = true
 #include "tsuki3-154.nodoka" # Lock0 赤
 #include "contrib\DVORAKon109_kuma.nodoka" # Lock1 緑
@@ -47,7 +51,7 @@ endif
 #単体キー置き換え{{{
 key PRINTSCREEN = W-S-S
 # key PAUSE = C-c &Wait(10) &ShellExecute("open", "rundll32.exe", 'url.dll,FileProtocolHandler https://www.google.com/search?q='+$Clipboard,, ShowNormal)
-key PAUSE = C-c &ShellExecute("open", "rundll32.exe", 'url.dll,FileProtocolHandler https://www.google.com/search?q=',, ShowNormal) &Wait(400) A-d &Wait(10) C-a C-v &Wait(10) Enter
+# key PAUSE = C-c &ShellExecute("open", "rundll32.exe", 'url.dll,FileProtocolHandler https://www.google.com/search?q=',, ShowNormal) &Wait(400) A-d &Wait(10) C-a C-v &Wait(10) Enter
 
 # }}}
 #-------------------------------------------------------------------------------------- 
@@ -74,35 +78,86 @@ mod ctrl  += !!Apps
 mod ctrl  += !!LCtrl
 mod alt   += !!LAlt
 mod shift += !!LShift
-mod shift += !!!Space
-if (REMOTE1)
-#サーバー側でnodokaが動作しているときひらがなキーをAltにすると押しっぱなしで
-#押しっぱ対策も効かなくる。他のキーではこうならないので日本語キー由来の問題?
+if (SPACE_REPEAT)
+  mod shift += !!!Space
+else
+  mod shift += !!Space
+endif
+mod win   += !!LWin
+
+#LLモードではワンショットモディファイアーが自身にもかかる問題対策
+# ワンショットモディファイアーを使用すると、モディファイアーキーの解放が次のキー押下まで処理されない
+# C-H後にCtrlを押すとWinキーとして処理される
+# C+(X)では、Ctrl解放が処理されず(スキャンコードは検知されているが、仮想キーは送信されてない)されず、Ctrl+Ctrlつまり、Ctrl+ESCになっている。
+# 自分自身を押したときと、それ以外が判別用のモディファイアーキーを設定して判別
+
+if (USEFIXNLS) # {{{
+#リモートでデスクトップでは現状これを使用
+
+#非ドライバモード(LLフックモード) リモートデスクトップでは自動でLLモードになる。任意にするには-kオプション付きで再起動すること
+#-fオプションでリモートデスクトップでもドライバモードが有効になるが、下記のひらがな問題は変っていない
+
+#LLモード制限
+#LLではひらがなキーをAltにすると押しっぱなしになる(ひらがなキーのみUDの順で入力されて押されたままになるため)、他一部キーが正常動作しない
+#LLモードでは管理者権限のウィンドウでキーが効かない
+#マルチデバイスが動作しない
+	if (USESCANMAP)
+	#スキャンマップ置き換えモード -nオプション付きで再起動するかレジストリを編集すること
+	#LLでキーボードが正常に反応しない部分はscanmapを入れ替えると正常に動作するようになる(nodokaなしでは変更されたキーが反応しなくなる)
+	#-n オプションがあっても非LLモードではmap置き換えしないもよう。
+	#
+	#不具合
+	#リモートデスクトップを自動検知してLLモードになるが、-nオプションありでもscanmap変更しない
+	#-n -k で起動してもローカルでは動作するが、リモート先ではscanmap置き換えられていない)
+	#escape NLS key code=0のメーセージはでているが、置き換えはされていないよう
+		mod mod0  += !!E0無変換 #modキーはUSEFIXNLSを定義しても手動で再定義必要のよう
+		mod mod1  += !!E0無変換
+		mod mod2  += E0ひらがな
+		mod alt   += E0ひらがな
+		mod alt   += ひらがな
+		key *ひらがな = *LAlt
+	endif
 else
 	mod alt   += ひらがな
+	mod mod2  += ひらがな
 	key *ひらがな = *LAlt
-endif
+endif # }}}
+
+#2つあるキーの判別用
 mod mod0  += !!無変換
 mod mod1  += !!無変換
 mod mod0  += !!変換
+mod mod4  += RShift
+mod mod5  += !!RCtrl
 mod mod6  += !!Space
 mod mod7  += !!Apps
 mod mod8  += !!LCtrl
 mod mod9  += !!LShift
 
-key *英数                = &Prefix(Two_Strok_Of_CapsLocs)
-key M8-C-*LCtrl          = Esc
-key A-*Lalt               = *LWin
-key M9-S-LShift          = $ToggleIME
-key M0-M1-*Space           = S-*Space
-
 key *無変換             = *Enter
-key M0-M1-*変換             = *Space
+key M0-M1-*変換             = *Apps
+  
+key C-*LCtrl          = ~C-*Esc #自身を除外
+key M5-C-*LCtrl          = C-*Esc
 
 key M8-C-*I               = Tab
 key M8-M6-C-S-*I          = S-Tab
 key M8-M7-C-*I            = C-Tab
 key M8-M7-M6-C-S-*I       = C-S-Tab
+key M8-M5-C-*I            = C-Tab
+key M8-M5-M6-C-S-*I       = C-S-Tab
+
+key S-*Space           = ~S-*Space #自身を除外
+key M4-*Space           = S-*Space #LL modeではRshiftのM4判定ができないもよう
+key M9-*Space           = S-*Space
+key M0-M1-*Space           = S-*Space
+
+key M9-S-LShift          = $ToggleIME
+
+key A-*Lalt               = *LWin
+key W-LWin               = W-S-S
+
+key *英数                = &Prefix(Two_Strok_Of_CapsLocs)
 
 # key M0-*F1               = C-A-S-F4
 # key M0-*F2               = C-A-S-F5
@@ -128,6 +183,7 @@ key M0-*o                = *_9
 key M0-*p                = *_0
 key M0-*Atmark           = *HyphenMinus
 key M0-*OpenBracket      = *CircumflexAccent
+key M0-*Enter            = *Yen
 
 key M0-*_1               = *F1
 key M0-*_2               = *F2
@@ -142,6 +198,11 @@ key M0-*_0               = *F10
 key M0-*HyphenMinus      = *F11
 key M0-*CircumflexAccent = *F12
 
+Key M0-*a                = C-*a
+key M0-*z                = C-*z
+key M0-*x                = C-*x
+key M0-*c                = C-*c
+key M0-*v                = C-*v
 key M0-*n                = *BS
 key M0-*m                = *Del
 Key M0-*b                = *Home
@@ -155,15 +216,19 @@ key M0-*k                = *Up
 key M0-*l                = *Right
 
 Key M0-*f                = A-F4
-Key M0-*a                = C-S-Esc
 Key M0-*s                = A-*Tab
 Key M0-*d                = *Insert
-Key M0-*comma            = C-A-S-F1
-Key M0-*Period           = C-A-S-F2
+
+if (USE_WINDOWS_CLIP)
+	Key M0-*comma            = W-V
+else
+	Key M0-*comma            = C-A-*F1
+	Key M0-*Period            = C-A-S-*F1
+endif
 Key M0-*Slash            = W-B &Wait(100) Down Right Enter &Wait(200) &MouseMove(-100, 0) #Atokイミクル
 # Key M0-*Slash            = LCtrl LCtrl &SetForegroundWindow(/AtokDvIn/)
 # Key M0-*Slash            = LCtrl LCtrl &ShellExecute("open", "E:\Soft\kmmacro\KMmacro.exe", "KMmacro /FILE=window_active.mac /%1="$WindowClassName,, ShowNormal)
-Key M0-*BackSlash        = W-B &Wait(100) Down Space &Wait(100) A-Tab &Wait(100) &MouseMove(-100, 0) #どこでも詠太がタスクバー一番目にある前提
+Key M0-*BackSlash        = C-C W-B &Wait(100) Down Space &Wait(100) A-Tab &Wait(100) &MouseMove(-100, 0) #どこでも詠太がタスクバー一番目にある前提
 
 # key M0-*M1-*半角/全角    = ひらがな
 # key M0-M1-*変換       = 無変換
@@ -176,6 +241,7 @@ Key M0-*BackSlash        = W-B &Wait(100) Down Space &Wait(100) A-Tab &Wait(100)
 # ワンショットモディファイアとマウスを併用するとき、モディファイア押下中にマウ
 # スをクリックしてもモディファイアがリピートし続ける(ダウンアップそれぞれでモディ
 # ファイアキーが押し直される)ため、アップ時にワンショットキーが暴発する問題を回避する
+# ためリピートは無視するよう設定する
 # Razorではサイドボタンでリピートが発生しないため、この問題は発生しないが、クリッ
 # クと併用するには結局必要になる
 #
@@ -183,6 +249,8 @@ Key M0-*BackSlash        = W-B &Wait(100) Down Space &Wait(100) A-Tab &Wait(100)
 # 直ることがある
 # モディファイアーの押し離しが速過ぎるとリピートが発生しないのでワンショット
 # が暴発する
+#
+# この設定があるとついでに長く押して離したときにワンショットキーを無効にできる
 key R-*LCtrl  = &Ignore
 key R-*LShift = &Ignore
 
@@ -190,6 +258,19 @@ if (REVERSE_MOUSE)
 	key *RButton = *LButton
 	key *LButton = *RButton
 endif
+
+#左手マウス用
+Key A-M2-Period = C-C
+Key A-M2-Slash = C-X
+Key A-M2-BackSlash = C-Z
+Key A-M2-L = A-Y
+Key A-M2-SemiColon = C-V
+Key A-M2-Colon = A-N
+Key A-M2-*CloseBracket = *Tab
+Key A-M2-Enter = C-A
+Key A-M2-Atmark = A-F4
+Key A-M2-OpenBracket = Esc
+
 # 多ボタンマウス用 マウスのソフトを使用すると不具合やら汎用性の低さやらが問題になるため
 # キーボード識別がskkと両立できないため未使用
 # ホイールやクリックは判別できない
@@ -244,6 +325,8 @@ endif
 # }}}
 # -------------------------------------------------------------------------- 
 # For MSIME (Atok2017からは不要) {{{
+# ,./[]以外の記号はレジストリからならMSIMEでも変更可能
+# Aとaはコードは違うが機能せず
 if (WITH_MSIME)
   key IL-*IC-Colon = Minus
   # key IL-*IC-SemiColon = L T
@@ -265,6 +348,7 @@ key A-*F4 = A-Space &Wait(100) c
 #------------------------------------------------------------------------------------- 
 window mintty /mintty\.exe/ : Global #{{{
 key C-*V = S-Insert
+key M0-*v                = S-Insert
 #key M7-*MButton = S-Insert
 # }}}
 #------------------------------------------------------------------------------------- 
@@ -369,6 +453,7 @@ key S-*Insert = C-V
 #------------------------------------------------------------------------------------- 
 # Nodoka 例外アプリ{{{
 window None
+window undertale /undertale\.exe/ :None
 window sotes /sotes\.exe/ :None
 window touhou /th[0-9]+\.exe/ :None
 window touhou2 /th_dnh.exe/ :None
@@ -376,6 +461,7 @@ window RPG /RPG_RT.exe/ :None
 window oblivion /oblivion.exe/ :None
 window CLIP /CLIPStudioPaint\.exe/ :None
 window Bio6 /BH6\.exe/ :None
+window PC98 /anex86\.exe/ :None
 #}}}
 #--------------------------------------------------------------------------- 
 #}}}

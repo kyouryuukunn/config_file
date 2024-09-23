@@ -1,32 +1,34 @@
 " --------------------------------------------------------------------------
 let g:portable = 0
-source $HOME/_vimlocal
 " --------------------------------------------------------------------------
 " 各種path {{{
 "win、linux互換用
 if has('win32') || has('win64')
-  let $DOTVIM = expand($VIM.'/vimfiles')
+  if has('kaoriya')
+    let $VIMROOT = expand($VIM.'/..')
+    let $PYTHON3 = 'E:/python37;E:/python37/Scripts'
+  else
+    let $VIMROOT = $VIM
+    let $PYTHON3 = 'E:/python311;E:/python311/Scripts'
+    let $PYTHON3BIN = 'E:/python311'
+  endif
+  let $DOTVIM = expand($VIMROOT.'/vimfiles')
   let $HELP = expand($DOTVIM.'/help')
   let $MSYS2 ='c:/msys64/usr/local/bin;c:/msys64/usr/bin;c:/msys64/bin;c:/msys64/usr/bin/site_perl;c:/msys64/usr/bin/vendor_perl;c:/msys64/usr/bin/core_perl'
   let $MINGW64 = 'c:/msys64/mingw64/bin'
-  " let $MINGW = 'c:/MinGW/bin'
-  " let $MSYS = 'c:/MinGW/msys/1.0/bin'
-  " let $CYG = 'c:/cygwin64/bin'
-  " let $CYGWIN = 'nodosfilewarning'
   let $PYTHON2 = 'E:/Python27;E:/Python27/Scripts'
-  let $PYTHON3 = 'E:/python37;E:/python37/Scripts'
   let $DLANG = 'e:/d/dub/packages/.bin/dls-latest;e:/D/dmd2/windows/bin;e:/D/dm/windws/bin;e:/D/ldc2/bin'
-  let $HASKELL = 'C:/Users/kuma/AppData/Roaming/cabal/bin;C:/Program Files (x86)/Haskell/bin;E:/Haskell/lib/extralibs/bin;E:/Haskell/bin'
-  let $GOROOT = 'e:/go'
-  let $GOPATH = $GOROOT.'/local'
-  let $PATH = $PATH .';'.$PYTHON3.';'.$PYTHON2.';'.$MINGW64.';'.$MSYS2.';'.$DMD.';'.$LDC " .';'.$HASKELL.';'.$GOROOT.'/bin;'.$GOPATH.'/bin'
+  " let $HASKELL = 'C:/Users/kuma/AppData/Roaming/cabal/bin;C:/Program Files (x86)/Haskell/bin;E:/Haskell/lib/extralibs/bin;E:/Haskell/bin'
+  " let $GOROOT = 'e:/go'
+  " let $GOPATH = $GOROOT.'/local'
+  let $PATH = $PATH .';' .$VIMRUNTIME. ';'.$PYTHON3.';'.$PYTHON2.';'.$MINGW64.';'.$MSYS2.';'.$DMD.';'.$LDC " .';'.$HASKELL.';'.$GOROOT.'/bin;'.$GOPATH.'/bin'
 else
   let $DOTVIM = expand('~/.vim')
   let $HELP = $DOTVIM.'/help'
   let $LLVM = '/usr/local/bin'
   let $PATH = $PATH.':usr/local/bin'
 endif " }}}
-set migemo
+source $HOME/_vimlocal
 
 " nnoremap / g/
 " nnoremap ? g?
@@ -111,13 +113,14 @@ endif
 " }}}
 """------------------------------------------------------------------------------
 " etc  {{{
+if has("migemo") " g/ でmigemo
+  set migemo
+endif
 " <c-a>, <c-x>でアルファベットも変更する
 set nf=alpha
 " 折り返ししない
 set nowrap
 " inoremap # X<C-H>#
-" #縺ｧ陦碁?ｭ縺ｫ鬟帙?ｰ縺ｪ縺?繧医≧縺ｫ
-set shellslash
 " ビープ音の代わりにビジュアルベルを使用
 set visualbell
 "タブ数
@@ -474,6 +477,8 @@ endif " }}}
 "---------------------------------------------------------------------------
 nnoremap <C-W>Q :tabclose<CR>
 "---------------------------------------------------------------------------
+nnoremap <C-W>Q :tabclose<CR>
+"---------------------------------------------------------------------------
 " 現在のタブを右へ移動 {{{
 nnoremap <Tab>l :MyTabMoveRight<CR>
 " 現在のタブを左へ移移
@@ -550,7 +555,8 @@ xnoremap ; :
 "-------------------------------------------------------------------------------------
 " insertmode
 " 貼り
-inoremap <C-v> <C-g>u<C-r>*
+inoremap <silent> <C-v> <C-g>u<C-r>*
+" inoremap <silent> <C-v> <C-g>u<C-o>:set paste<CR><C-r>*<C-o>:set nopaste<CR>
 " Undo/Redo vimは下記二つの判別が出来ない模様多分今後も対応なし Neovimでは可能...なんでさ
 inoremap <C-S-z> <C-O><C-r> 
 inoremap <C-z> <C-O>u
@@ -581,6 +587,8 @@ nnoremap <silent> <Leader><Leader> :s+/+\\+g<CR>:nohlsearch<CR>
 "コマンドモード
 cnoremap <C-V> <C-r>*
 cnoremap <C-@> \(.\{-\}\)
+"---------------------------------------------------------------------------
+command! -range Reverse '<,'>!tac
 "------------------------------------------------------------------------------
 "help用設定 {{{
 nnoremap ,h :h<space>
@@ -667,14 +675,16 @@ ab <expr> lin repeat('-',80 - col('.'))
 " endfunction "}}}
 " "}}}
 "------------------------------------------------------------------------------
+if !has('kaoriya')
+	comman! -nargs=1 VDSplit vertical diffsplit <args>
+endif
+"------------------------------------------------------------------------------
 "}}}
 "------------------------------------------------------------------------------
 "" 外部ファイル読み込み {{{
 source $DROPBOX/_includevim
 " source $DROPBOX/_deinvim
-" set noshellslash
 source $DROPBOX/_vimplug
-" set shellslash
 source $DROPBOX/_pluginvim
 " source $DROPBOX/_vundlevim
 " }}}
@@ -683,10 +693,14 @@ source $DROPBOX/_pluginvim
 set whichwrap=b,s,h,l,<,>,[,]
 "日本語の行を連結時には空白を入力しない
 set formatoptions+=mMj
-nmap K <Plug>(easymotion-overwin-w)
-xmap K <Plug>(easymotion-overwin-w)
-omap K <Plug>(easymotion-overwin-w)
-imap <C-F> <C-O><Plug>(easymotion-overwin-f2)
+" nmap K <Plug>(easymotion-overwin-w)
+" xmap K <Plug>(easymotion-overwin-w)
+" omap K <Plug>(easymotion-overwin-w)
+" imap <C-F> <C-O><Plug>(easymotion-overwin-f2)
+" vim-plug後でないとエラー
+set shellslash 
+" noshellslashでも補間は/にする
+set completeslash=slash
 "}}}
 "-------------------------------------------------------------------------------------
 " OutDate {{{

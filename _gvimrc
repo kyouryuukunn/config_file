@@ -24,10 +24,9 @@ highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
 set guitablabel=%M%n\ %t
 "------------------------------------------------------------------------------------- 
 " 起動位置
-let s:pos_x=g:monitor_wide-180
-exec 'winpos '.s:pos_x.' 0'
+exec 'winpos '.g:window_posx.' 0'
 " 縦幅　デフォルトは24
-set lines=40
+set lines=60
 " 横幅　デフォルトは80
 if has("win32") || has("win64")
   set columns=140
